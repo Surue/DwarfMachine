@@ -43,28 +43,28 @@ find_package(Vulkan REQUIRED)
 
 include_directories(include ${CMAKE_SOURCE_DIR}/include)
 
-file(GLOB_RECURSE DM_AUDIO_SRC src/audio/*.cpp include/audio/*.h)
-file(GLOB_RECURSE DM_ENGINE_SRC src/engine/*.cpp include/engine/*.h)
-file(GLOB_RECURSE DM_EDITOR_SRC src/editor/*.cpp include/editor/*.h)
-file(GLOB_RECURSE DM_GRAPHICS_SRC src/graphics/*.cpp include/graphics/*.h)
-file(GLOB_RECURSE DM_INPUT_SRC src/input/*.cpp include/input/*.h)
-file(GLOB_RECURSE DM_PHYSICS_SRC src/physics/*.cpp include/physics/*.h)
-file(GLOB_RECURSE DM_UTILITY_SRC src/utility/*.cpp include/utility/*.h)
+file(GLOB_RECURSE DWARF_MACHINE_AUDIO_SRC src/audio/*.cpp include/audio/*.h)
+file(GLOB_RECURSE DWARF_MACHINE_ENGINE_SRC src/engine/*.cpp include/engine/*.h)
+file(GLOB_RECURSE DWARF_MACHINE_EDITOR_SRC src/editor/*.cpp include/editor/*.h)
+file(GLOB_RECURSE DWARF_MACHINE_GRAPHICS_SRC src/graphics/*.cpp include/graphics/*.h)
+file(GLOB_RECURSE DWARF_MACHINE_INPUT_SRC src/input/*.cpp include/input/*.h)
+file(GLOB_RECURSE DWARF_MACHINE_PHYSICS_SRC src/physics/*.cpp include/physics/*.h)
+file(GLOB_RECURSE DWARF_MACHINE_UTILITY_SRC src/utility/*.cpp include/utility/*.h)
 
 set_property(GLOBAL PROPERTY USE_FOLDERS On)
-SET_SOURCE_FILES_PROPERTIES( ${DM_SRC} PROPERTIES
+SET_SOURCE_FILES_PROPERTIES( ${DWARF_MACHINE_SRC} PROPERTIES
                 FOLDER "${CMAKE_SOURCE_DIR}/src" )
 
-source_group("Audio"            FILES ${DM_AUDIO_SRC})
-source_group("Engine"            FILES ${DM_ENGINE_SRC})
-source_group("Editor"            FILES ${DM_EDITOR_SRC})
-source_group("Graphics"            FILES ${DM_GRAPHICS_SRC})
-source_group("Input"            FILES ${DM_INPUT_SRC})
-source_group("Physics"            FILES ${DM_PHYSICS_SRC})
-source_group("Python"            FILES ${DM_PYTHON_SRC})
-source_group("Utility"            FILES ${DM_UTILITY_SRC})
-List(APPEND DM_SRC  ${DM_AUDIO_SRC} ${DM_ENGINE_SRC} ${DM_EDITOR_SRC} ${DM_GRAPHICS_SRC}
-${DM_INPUT_SRC} ${DM_PHYSICS_SRC}  ${DM_PYTHON_SRC} ${DM_UTILITY_SRC})
+source_group("Audio"            FILES ${DWARF_MACHINE_AUDIO_SRC})
+source_group("Engine"            FILES ${DWARF_MACHINE_ENGINE_SRC})
+source_group("Editor"            FILES ${DWARF_MACHINE_EDITOR_SRC})
+source_group("Graphics"            FILES ${DWARF_MACHINE_GRAPHICS_SRC})
+source_group("Input"            FILES ${DWARF_MACHINE_INPUT_SRC})
+source_group("Physics"            FILES ${DWARF_MACHINE_PHYSICS_SRC})
+source_group("Python"            FILES ${DWARF_MACHINE_PYTHON_SRC})
+source_group("Utility"            FILES ${DWARF_MACHINE_UTILITY_SRC})
+List(APPEND DWARF_MACHINE_SRC  ${DWARF_MACHINE_AUDIO_SRC} ${DWARF_MACHINE_ENGINE_SRC} ${DWARF_MACHINE_EDITOR_SRC} ${DWARF_MACHINE_GRAPHICS_SRC}
+${DWARF_MACHINE_INPUT_SRC} ${DWARF_MACHINE_PHYSICS_SRC}  ${DWARF_MACHINE_PYTHON_SRC} ${DWARF_MACHINE_UTILITY_SRC})
 
 #GLM
 set(GLM_DIR ${EXTERNAL_DIR}/glm)
@@ -74,19 +74,20 @@ ENDIF()
 include_directories(${GLM_DIR})
 
 #SFML
-set(SFML_DIR "${EXTERNAL_DIR}/SFML")
-	set(SFML_BUILD_EXAMPLES FALSE)
-	set(BUILD_SHARED_LIBS FALSE)
-	set(SFML_STATIC_LIBRARIES TRUE)
-	add_subdirectory(${SFML_DIR})
-	include_directories(${SFML_DIR}/include ${SFML_DIR}/src)
+find_package(glfw3 REQUIRED)
+if(NOT TARGET glfw)
+	set(_DWARF_MACHINE_ALL_SYSTEM_LIB false)
+	# Used later to define as a pre-build dependency
+	# The glfw3Config.cmake file doesn't define it automatically
+	set(glfw_FOUND false)
+	foreach(_glfw3_option "GLFW_BUILD_TESTS" "GLFW_BUILD_EXAMPLES" "GLFW_BUILD_DOCS" "GLFW_INSTALL" "GLFW_VULKAN_STATIC")
+		set(${_glfw3_option} OFF CACHE INTERNAL "")
+	endforeach()
 
-LIST(APPEND DM_LIBRARIES
-	sfml-system
-	sfml-window
-	sfml-graphics
-	sfml-audio
-	sfml-network)
+	add_subdirectory(${PROJECT_SOURCE_DIR}/externals/glfw)
+else()
+	set(glfw_FOUND true)
+endif()
 
 # SPIRV is needed (from Glslang)
 # NOTE: End-users can pass -DSPIRV_ROOT=/some/path to find the lib
@@ -126,28 +127,18 @@ add_subdirectory(${GOOGLE_TEST_DIR})
 include_directories(${GOOGLE_TEST_DIR}/include)
 set_target_properties (gtest gtest_main PROPERTIES
 		FOLDER GTest)
-		
-#SFML Imgui
-set(SFML_IMGUI ${EXTERNAL_DIR}/imgui-sfml/)
-set(IMGUI_ROOT ${EXTERNAL_DIR}/imgui/)
 
-set(SFML_ROOT ${EXTERNAL_DIR}/SFML/)
-add_subdirectory(${SFML_IMGUI})
-include_directories(imgui/${IMGUI_ROOT} ${SFML_IMGUI})
-LIST(APPEND DM_LIBRARIES
-	imgui-sfml)
-
-#COMMON
-LIST(APPEND DM_LIBRARIES)
+#DWARF_MACHINE_COMMON
+LIST(APPEND DWARF_MACHINE_LIBRARIES)
 if(UNIX AND NOT APPLE)
-	LIST(APPEND DM_LIBRARIES
+	LIST(APPEND DWARF_MACHINE_LIBRARIES
 		stdc++fs)
 ENDIF()
 
 include_directories(include/)
 include_directories(extensions/include/)
 
-file(GLOB_RECURSE DM_EXTENSIONS_SRC extensions/src/*.cpp extensions/include/*.h)
+file(GLOB_RECURSE DWARF_MACHINE_EXTENSIONS_SRC extensions/src/*.cpp extensions/include/*.h)
 
 macro(GroupSources curdir)
 	file(GLOB children RELATIVE ${CMAKE_SOURCE_DIR}/${curdir} ${CMAKE_SOURCE_DIR}/${curdir}/*)
@@ -156,8 +147,6 @@ macro(GroupSources curdir)
 				GroupSources(${curdir}/${child})
 			else()
 				string(REPLACE "/" "\\" groupname ${curdir})
-				string(REPLACE "include\\extensions" "" groupname ${groupname})
-				string(REPLACE "src" "" groupname ${groupname})
 				string(REPLACE "extensions" "Extension" groupname ${groupname})
 				source_group(${groupname} FILES ${CMAKE_SOURCE_DIR}/${curdir}/${child})
 			endif()
@@ -166,25 +155,27 @@ endmacro()
 
 # Execute the macro
 GroupSources(extensions)
-add_library(COMMON STATIC ${DM_SRC} ${DM_EXTENSIONS_SRC})
+add_library(DWARF_MACHINE_COMMON STATIC ${DWARF_MACHINE_SRC} ${DWARF_MACHINE_EXTENSIONS_SRC})
 
-#COMMON
-message("DM LIBRARIES : ${DM_LIBRARIES}")
-target_link_libraries(COMMON PUBLIC ${DM_LIBRARIES})
-set_property(TARGET COMMON PROPERTY CXX_STANDARD 17)
+#DWARF_MACHINE_COMMON
+message("DWARF MACHINE LIBRARIES : ${DWARF_MACHINE_LIBRARIES}")
+target_link_libraries(DWARF_MACHINE_COMMON PUBLIC ${DWARF_MACHINE_LIBRARIES})
+set_property(TARGET DWARF_MACHINE_COMMON PROPERTY CXX_STANDARD 17)
 
-target_link_libraries(COMMON PUBLIC Vulkan::Vulkan)
+target_link_libraries(DWARF_MACHINE_COMMON PUBLIC Vulkan::Vulkan)
 
-target_compile_definitions(COMMON PRIVATE VK_USE_PLATFORM_WIN32_KHR)
-target_compile_definitions(COMMON PUBLIC USE_SFML2=1)
+target_link_libraries(DWARF_MACHINE_COMMON PUBLIC glfw)
+
+target_compile_definitions(DWARF_MACHINE_COMMON PRIVATE VK_USE_PLATFORM_WIN32_KHR)
+target_compile_definitions(DWARF_MACHINE_COMMON PUBLIC USE_SFML2=1)
 
 #TEST
-SET(DM_TEST_DIR ${CMAKE_SOURCE_DIR}/tests)
-file(GLOB TEST_FILES ${DM_TEST_DIR}/*.cpp )
-add_executable(DM_TEST ${TEST_FILES} )
-target_link_libraries(DM_TEST gtest gtest_main COMMON)
+SET(DWARF_MACHINE_TEST_DIR ${CMAKE_SOURCE_DIR}/tests)
+file(GLOB TEST_FILES ${DWARF_MACHINE_TEST_DIR}/*.cpp )
+add_executable(DWARF_MACHINE_TEST ${TEST_FILES} )
+target_link_libraries(DWARF_MACHINE_TEST gtest gtest_main DWARF_MACHINE_COMMON)
 if(APPLE )
-	set_target_properties(DM_TEST PROPERTIES
+	set_target_properties(DWARF_MACHINE_TEST PROPERTIES
 		ARCHIVE_OUTPUT_DIRECTORY_DEBUG ${CMAKE_BINARY_DIR}
 		ARCHIVE_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR})
 ENDIF()
@@ -195,21 +186,21 @@ elseif()
 endif()
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /bigobj")
 
-#DM
-add_executable(DM src/main.cpp)
+#DWARF_MACHINE
+add_executable(DWARF_MACHINE src/main.cpp)
 
-target_link_libraries(DM PUBLIC COMMON)
-set_property(TARGET DM PROPERTY CXX_STANDARD 17)
+target_link_libraries(DWARF_MACHINE PUBLIC DWARF_MACHINE_COMMON)
+set_property(TARGET DWARF_MACHINE PROPERTY CXX_STANDARD 17)
 if(APPLE)
-	set_target_properties(DM PROPERTIES
+	set_target_properties(DWARF_MACHINE PROPERTIES
 		RUNTIME_OUTPUT_DIRECTORY_DEBUG ${CMAKE_BINARY_DIR}
 		RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR})
 ENDIF()
 
 #source
-add_custom_command(TARGET COMMON POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/sources ${CMAKE_BINARY_DIR}/sources)
+add_custom_command(TARGET DWARF_MACHINE_COMMON POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/sources ${CMAKE_BINARY_DIR}/sources)
 file(COPY sources/ DESTINATION ${CMAKE_BINARY_DIR}/sources/)
 
 #shaders
-add_custom_command(TARGET COMMON POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/shaders ${CMAKE_BINARY_DIR}/shaders)
+add_custom_command(TARGET DWARF_MACHINE_COMMON POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/shaders ${CMAKE_BINARY_DIR}/shaders)
 file(COPY shaders/ DESTINATION ${CMAKE_BINARY_DIR}/shaders/)

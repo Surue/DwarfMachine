@@ -24,14 +24,9 @@ SOFTWARE.
 #include <iostream>
 #include <gtest/gtest.h>
 
-#include <glm/glm.hpp>
-#include <SFML/Window/VideoMode.hpp>
-#include <SFML/Window/ContextSettings.hpp>
-#include <SFML/Graphics/RenderWindow.hpp>
-#include <SFML/Window/Event.hpp>
-#include <imgui-SFML.h>
-#include <vulkan/vulkan.h>
-#include <SFML/Graphics/GLCheck.hpp>
+
+#define GLFW_INCLUDE_VULKAN
+#include <GLFW/glfw3.h>
 
 #define APP_SHORT_NAME "vulkansamples_instance"
 
@@ -78,42 +73,25 @@ TEST(Engine, TestAssetImport)
 
 	/* VULKAN_KEY_END */
 
-	sf::ContextSettings settings;
-	settings.depthBits = 24;
-	settings.stencilBits = 8;
-	settings.antialiasingLevel = 4;
-	settings.majorVersion = 4;
-	settings.minorVersion = 6;
-
-	auto window = new sf::RenderWindow(sf::VideoMode(720, 720), "test", sf::Style::Default, settings);
-	ImGui::SFML::Init(*window);
-
-	auto running = true;
-	while (running)
+	glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
+	GLFWwindow* window = glfwCreateWindow(640, 480, "Window Title", NULL, NULL);
+	if (!window)
 	{
-
-		// Event management
-		sf::Event event{};
-		while (window->pollEvent(event))
-		{
-			ImGui::SFML::ProcessEvent(event);
-			if (event.type == sf::Event::Closed)
-			{
-				running = false;
-			}
-			else if (event.type == sf::Event::KeyPressed)
-			{
-				std::cout << "Key Pressed: " << event.key.code << "\n";
-
-			}
-		}
-		
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-		//switch framebuffer
-		window->display();
+		// Window or OpenGL context creation failed
 	}
-	delete window;
+
+	if (glfwVulkanSupported())
+	{
+		system("pause");
+	}
+
+	while (!glfwWindowShouldClose(window))
+	{
+		glfwSwapBuffers(window);
+		glfwPollEvents();
+	}
+	glfwDestroyWindow(window);
+	glfwTerminate();
 
 	std::cout << "success\n";
 }
