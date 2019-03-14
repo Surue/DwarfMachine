@@ -1,7 +1,7 @@
 /*
 MIT License
 
-Copyright (c) 2017 SAE Institute Switzerland AG
+Copyright (c) 2019 Nicolas Schneider
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -21,29 +21,17 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-#include <iostream>
-#include <gtest/gtest.h>
 
-#define GLFW_INCLUDE_VULKAN
-#include <GLFW/glfw3.h>
+#ifndef ENGINE_H
+#define ENGINE_H
+#include "GLFW/glfw3.h"
 
-#define GLM_FORCE_RADIANS
-#define GLM_FORCE_DEPTH_ZERO_TO_ONE
-#include <glm/vec4.hpp>
-#include <glm/mat4x4.hpp>
-
-#include <engine/engine.h>
-
-class HelloTriangleApplication
+namespace DM
+{
+class Engine
 {
 public:
-	void Run()
-	{
-		InitWindow();
-		InitVulkan();
-		MainLoop();
-		Cleanup();
-	}
+	void Run();
 private:
 	GLFWwindow* window;
 
@@ -53,62 +41,23 @@ private:
 	/**
 	 * \brief Init a GLFW window
 	 */
-	void InitWindow()
-	{
-		//Init glfw
-		glfwInit();
-
-		//Set context to null (otherwise it would be openGL)
-		glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-
-		//Lock resize function
-		glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
-
-		window = glfwCreateWindow(WIDTH, HEIGHT, "Vulkan", nullptr, nullptr);
-	}
+	void InitWindow();
 
 	/**
 	 * \brief Init Vulkan
 	 */
-	void InitVulkan()
-	{
-		
-	}
+	void InitVulkan();
 
 	/**
 	 * \brief Main loop of the game
 	 */
-	void MainLoop()
-	{
-		while(!glfwWindowShouldClose(window))
-		{
-			glfwPollEvents();
-		}
-	}
+	void MainLoop();
 
 	/**
 	 * \brief Use to cleanup vulkan's allocation
 	 */
-	void Cleanup()
-	{
-		glfwDestroyWindow(window);
-
-		glfwTerminate();
-	}
+	void Cleanup();
 };
-
-TEST(GLFW, OpeningWindow)
-{
-	DM::Engine engine;
-
-	try
-	{
-		engine.Run();
-	}catch (const std::exception& e)
-	{
-		std::cerr << e.what() << "\n";
-		//return EXIT_FAILURE;
-	}
-
-	//return EXIT_SUCCESS;
 }
+
+#endif ENGINE_H

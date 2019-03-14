@@ -48,7 +48,6 @@ file(GLOB_RECURSE DWARF_MACHINE_ENGINE_SRC src/engine/*.cpp include/engine/*.h)
 file(GLOB_RECURSE DWARF_MACHINE_EDITOR_SRC src/editor/*.cpp include/editor/*.h)
 file(GLOB_RECURSE DWARF_MACHINE_GRAPHICS_SRC src/graphics/*.cpp include/graphics/*.h)
 file(GLOB_RECURSE DWARF_MACHINE_INPUT_SRC src/input/*.cpp include/input/*.h)
-file(GLOB_RECURSE DWARF_MACHINE_PHYSICS_SRC src/physics/*.cpp include/physics/*.h)
 file(GLOB_RECURSE DWARF_MACHINE_UTILITY_SRC src/utility/*.cpp include/utility/*.h)
 
 set_property(GLOBAL PROPERTY USE_FOLDERS On)
@@ -60,11 +59,9 @@ source_group("Engine"            FILES ${DWARF_MACHINE_ENGINE_SRC})
 source_group("Editor"            FILES ${DWARF_MACHINE_EDITOR_SRC})
 source_group("Graphics"            FILES ${DWARF_MACHINE_GRAPHICS_SRC})
 source_group("Input"            FILES ${DWARF_MACHINE_INPUT_SRC})
-source_group("Physics"            FILES ${DWARF_MACHINE_PHYSICS_SRC})
-source_group("Python"            FILES ${DWARF_MACHINE_PYTHON_SRC})
 source_group("Utility"            FILES ${DWARF_MACHINE_UTILITY_SRC})
 List(APPEND DWARF_MACHINE_SRC  ${DWARF_MACHINE_AUDIO_SRC} ${DWARF_MACHINE_ENGINE_SRC} ${DWARF_MACHINE_EDITOR_SRC} ${DWARF_MACHINE_GRAPHICS_SRC}
-${DWARF_MACHINE_INPUT_SRC} ${DWARF_MACHINE_PHYSICS_SRC}  ${DWARF_MACHINE_PYTHON_SRC} ${DWARF_MACHINE_UTILITY_SRC})
+${DWARF_MACHINE_INPUT_SRC} ${DWARF_MACHINE_UTILITY_SRC})
 
 #GLM
 set(GLM_DIR ${EXTERNAL_DIR}/glm)
@@ -147,7 +144,6 @@ macro(GroupSources curdir)
 				GroupSources(${curdir}/${child})
 			else()
 				string(REPLACE "/" "\\" groupname ${curdir})
-				string(REPLACE "extensions" "Extension" groupname ${groupname})
 				source_group(${groupname} FILES ${CMAKE_SOURCE_DIR}/${curdir}/${child})
 			endif()
 	endforeach()
@@ -167,7 +163,6 @@ target_link_libraries(DWARF_MACHINE_COMMON PUBLIC Vulkan::Vulkan)
 target_link_libraries(DWARF_MACHINE_COMMON PUBLIC glfw)
 
 target_compile_definitions(DWARF_MACHINE_COMMON PRIVATE VK_USE_PLATFORM_WIN32_KHR)
-target_compile_definitions(DWARF_MACHINE_COMMON PUBLIC USE_SFML2=1)
 
 #TEST
 SET(DWARF_MACHINE_TEST_DIR ${CMAKE_SOURCE_DIR}/tests)
