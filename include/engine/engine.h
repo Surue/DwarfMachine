@@ -24,26 +24,54 @@ SOFTWARE.
 
 #ifndef ENGINE_H
 #define ENGINE_H
-#define GLFW_INCLUDE_VULKAN
-#include "GLFW/glfw3.h"
+
+#include <vulkan/vulkan.h>
+#include <GLFW/glfw3.h>
+
+#include <memory>
+#include <optional>
 
 namespace DM
 {
+class GraphicManager;
+
+inline VkResult CreateDebugUtilsMessengerEXT(const VkInstance instance, const VkDebugUtilsMessengerCreateInfoEXT* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkDebugUtilsMessengerEXT* pDebugMessenger)
+{
+	auto func = (PFN_vkCreateDebugUtilsMessengerEXT)(vkGetInstanceProcAddr(
+		instance, "vkCreateDebugUtilsMessengerEXT"));
+	if (func != nullptr)
+	{
+		return func(instance, pCreateInfo, pAllocator, pDebugMessenger);
+	}
+	else
+	{
+		return VK_ERROR_EXTENSION_NOT_PRESENT;
+	}
+}
+
+inline void DestroyDebugUtilsMessengerEXT(const VkInstance instance, VkDebugUtilsMessengerEXT debugMessenger, const VkAllocationCallbacks* pAllocator) {
+	const auto func = (PFN_vkDestroyDebugUtilsMessengerEXT)(vkGetInstanceProcAddr(
+		instance, "vkDestroyDebugUtilsMessengerEXT"));
+	if (func != nullptr) {
+		func(instance, debugMessenger, pAllocator);
+	}
+}
+
+struct QueueFamilyIndices
+{
+	std::optional<uint32_t> graphicFamily;
+
+	bool IsComplete() const
+	{
+		return graphicFamily.has_value();
+	}
+};
+
 class Engine
 {
 public:
 	void Run();
 private:
-	/**
-	 * \brief Init a GLFW window
-	 */
-	void InitWindow();
-
-	/**
-	 * \brief Init Vulkan
-	 */
-	void InitVulkan();
-
 	/**
 	 * \brief Main loop of the game
 	 */
@@ -52,21 +80,11 @@ private:
 	/**
 	 * \brief Use to cleanup vulkan's allocation
 	 */
-	void Cleanup();
+	void Destroy();
 
-	/**
-	 * \brief Create a vulkan's instance
-	 */
-	void CreateInstanceVulkan();
-
-	//WINDOW
 	GLFWwindow* m_Window = nullptr;
 
-	const int WIDTH = 800;
-	const int HEIGHT = 600;
-
-	//VULKAN
-	VkInstance m_VulkanInstance = nullptr;
+	GraphicManager* m_GraphicManager;
 };
 }
 

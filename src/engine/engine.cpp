@@ -22,36 +22,21 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 #include <engine/engine.h>
-#include <vulkan/vulkan.h>
-#include <stdexcept>
+#include <graphics/graphic_manager.h>
 
 namespace DM
 {
+
 void Engine::Run()
 {
-	InitWindow();
-	InitVulkan();
+	m_GraphicManager = new GraphicManager();
+
+	m_GraphicManager->Init();
+
+	m_Window = m_GraphicManager->GetWindow();
+
 	MainLoop();
-	Cleanup();
-}
-
-void Engine::InitWindow()
-{
-	//Init glfw
-	glfwInit();
-
-	//Set context to null (otherwise it would be openGL)
-	glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-
-	//Lock resize function
-	glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
-
-	m_Window = glfwCreateWindow(WIDTH, HEIGHT, "Vulkan", nullptr, nullptr);
-}
-
-void Engine::InitVulkan()
-{
-	//CreateInstanceVulkan();
+	Destroy();
 }
 
 void Engine::MainLoop()
@@ -62,42 +47,11 @@ void Engine::MainLoop()
 	}
 }
 
-void Engine::Cleanup()
+void Engine::Destroy()
 {
-	vkDestroyInstance(m_VulkanInstance, nullptr);
+	m_GraphicManager->Destroy();
 
-	glfwDestroyWindow(m_Window);
-
-	glfwTerminate();
+	delete(m_GraphicManager);
 }
 
-void Engine::CreateInstanceVulkan()
-{
-	//Create application info, use by the driver to do some optimization
-	VkApplicationInfo appInfo = {}; //pNext = nullptr
-	appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
-	appInfo.pApplicationName = "Vulkan application";
-	appInfo.applicationVersion = VK_MAKE_VERSION(1, 0, 0);
-	appInfo.pEngineName = "Dwarf Machine";
-	appInfo.engineVersion = VK_MAKE_VERSION(1, 0, 0);
-	appInfo.apiVersion = VK_API_VERSION_1_0;
-
-	//Store data for creating an instance
-	VkInstanceCreateInfo createInfo = {};
-	createInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
-	createInfo.pApplicationInfo = &appInfo;
-
-	//Set the layer for the api to be use by the GLFW window
-	uint32_t glfwExtensionCount = 0;
-	const auto glfwExtensions = glfwGetRequiredInstanceExtensions(&glfwExtensionCount);
-
-	createInfo.enabledExtensionCount = glfwExtensionCount;
-	createInfo.ppEnabledExtensionNames = glfwExtensions;
-
-	createInfo.enabledLayerCount = 0;
-	if(vkCreateInstance(&createInfo, nullptr, &m_VulkanInstance) != VK_SUCCESS)
-	{
-		throw std::runtime_error("failed to create instance");
-	}
-}
 }
