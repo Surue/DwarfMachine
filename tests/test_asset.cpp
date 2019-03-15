@@ -24,78 +24,12 @@ SOFTWARE.
 #include <iostream>
 #include <gtest/gtest.h>
 
-#define GLFW_INCLUDE_VULKAN
-#include <GLFW/glfw3.h>
-
 #define GLM_FORCE_RADIANS
 #define GLM_FORCE_DEPTH_ZERO_TO_ONE
 #include <glm/vec4.hpp>
 #include <glm/mat4x4.hpp>
 
 #include <engine/engine.h>
-
-class HelloTriangleApplication
-{
-public:
-	void Run()
-	{
-		InitWindow();
-		InitVulkan();
-		MainLoop();
-		Cleanup();
-	}
-private:
-	GLFWwindow* window;
-
-	const int WIDTH = 800;
-	const int HEIGHT = 600;
-
-	/**
-	 * \brief Init a GLFW window
-	 */
-	void InitWindow()
-	{
-		//Init glfw
-		glfwInit();
-
-		//Set context to null (otherwise it would be openGL)
-		glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-
-		//Lock resize function
-		glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
-
-		window = glfwCreateWindow(WIDTH, HEIGHT, "Vulkan", nullptr, nullptr);
-	}
-
-	/**
-	 * \brief Init Vulkan
-	 */
-	void InitVulkan()
-	{
-		
-	}
-
-	/**
-	 * \brief Main loop of the game
-	 */
-	void MainLoop()
-	{
-		while(!glfwWindowShouldClose(window))
-		{
-			glfwPollEvents();
-		}
-	}
-
-	/**
-	 * \brief Use to cleanup vulkan's allocation
-	 */
-	void Cleanup()
-	{
-		glfwDestroyWindow(window);
-
-		glfwTerminate();
-	}
-};
 
 TEST(GLFW, OpeningWindow)
 {

@@ -70,8 +70,8 @@ message(FATAL_ERROR "Please do git submodule update --init --recursive")
 ENDIF()
 include_directories(${GLM_DIR})
 
-#SFML
-find_package(glfw3 REQUIRED)
+#GLFW
+find_package(glfw3 3.2 REQUIRED)
 if(NOT TARGET glfw)
 	set(_DWARF_MACHINE_ALL_SYSTEM_LIB false)
 	# Used later to define as a pre-build dependency

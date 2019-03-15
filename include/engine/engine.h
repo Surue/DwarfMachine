@@ -24,6 +24,7 @@ SOFTWARE.
 
 #ifndef ENGINE_H
 #define ENGINE_H
+#define GLFW_INCLUDE_VULKAN
 #include "GLFW/glfw3.h"
 
 namespace DM
@@ -33,11 +34,6 @@ class Engine
 public:
 	void Run();
 private:
-	GLFWwindow* window;
-
-	const int WIDTH = 800;
-	const int HEIGHT = 600;
-
 	/**
 	 * \brief Init a GLFW window
 	 */
@@ -57,6 +53,20 @@ private:
 	 * \brief Use to cleanup vulkan's allocation
 	 */
 	void Cleanup();
+
+	/**
+	 * \brief Create a vulkan's instance
+	 */
+	void CreateInstanceVulkan();
+
+	//WINDOW
+	GLFWwindow* m_Window = nullptr;
+
+	const int WIDTH = 800;
+	const int HEIGHT = 600;
+
+	//VULKAN
+	VkInstance m_VulkanInstance = nullptr;
 };
 }
 
