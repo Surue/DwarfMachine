@@ -28,12 +28,21 @@ SOFTWARE.
 #include <vulkan/vulkan.h>
 #include <GLFW/glfw3.h>
 
-#include <memory>
 #include <optional>
+#include <vector>
 
 namespace DM
 {
 class GraphicManager;
+
+//Vulkan error handling
+const std::vector<const char*> validationLayer = { "VK_LAYER_LUNARG_standard_validation" };
+
+#ifdef NDEBUG
+const bool enableValidationLayers = false;
+#else
+const bool enableValidationLayers = true;
+#endif
 
 inline VkResult CreateDebugUtilsMessengerEXT(const VkInstance instance, const VkDebugUtilsMessengerCreateInfoEXT* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkDebugUtilsMessengerEXT* pDebugMessenger)
 {
@@ -57,13 +66,25 @@ inline void DestroyDebugUtilsMessengerEXT(const VkInstance instance, VkDebugUtil
 	}
 }
 
+const std::vector<const char*> deviceExtensions = {
+	VK_KHR_SWAPCHAIN_EXTENSION_NAME
+};
+
+struct SwapChainSupportDetails
+{
+	VkSurfaceCapabilitiesKHR capabilities;
+	std::vector<VkSurfaceFormatKHR> formats;
+	std::vector<VkPresentModeKHR> presentModes;
+};
+
 struct QueueFamilyIndices
 {
 	std::optional<uint32_t> graphicFamily;
+	std::optional<uint32_t> presentFamily;
 
 	bool IsComplete() const
 	{
-		return graphicFamily.has_value();
+		return graphicFamily.has_value() && presentFamily.has_value();
 	}
 };
 

@@ -85,6 +85,11 @@ private:
 	std::vector<const char*> GetRequiredExtensions() const;
 
 	/**
+	 * \brief Create a surface used to link vulkan to the GLFW window
+	 */
+	void CreateSurface();
+
+	/**
 	 * \brief Callback function for vulkan error message
 	 * \param messageSeverity Specify the severity of the message
 	 * \param messageType Type of the message
@@ -120,6 +125,51 @@ private:
 	 */
 	void CreateLogicalDevice();
 
+	/**
+	 * \brief Check if the given device support extensions
+	 * \param device to check
+	 * \return true if support extensions
+	 */
+	bool CheckDeviceExtensionSupport(VkPhysicalDevice device);
+
+	/**
+	 * \brief Create a swapchain (Act as an image buffer)
+	 */
+	void CreateSwapChain();
+
+	/**
+	 * \brief Create a swap chain struct
+	 * \param device 
+	 * \return 
+	 */
+	SwapChainSupportDetails QuerySwapChainSupport(VkPhysicalDevice device);
+
+	/**
+	 * \brief 
+	 * \param availableFormats 
+	 * \return 
+	 */
+	VkSurfaceFormatKHR ChooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats);
+
+	/**
+	 * \brief 
+	 * \param availablePresentModes 
+	 * \return 
+	 */
+	VkPresentModeKHR ChooseSwapPresentMode(const std::vector<VkPresentModeKHR>& availablePresentModes);
+
+	/**
+	 * \brief 
+	 * \param capabilities 
+	 * \return 
+	 */
+	VkExtent2D ChooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities);
+
+	/**
+	 * \brief 
+	 */
+	void CreateImageViews();
+
 	//WINDOW
 	GLFWwindow* m_Window = nullptr;
 
@@ -128,23 +178,22 @@ private:
 
 	//VULKAN
 	VkInstance m_VulkanInstance = nullptr;
+	VkDebugUtilsMessengerEXT m_DebugMessenger = nullptr;
+	VkSurfaceKHR m_Surface;
 
 	VkPhysicalDevice m_PhysicalDevice = VK_NULL_HANDLE;
-
-	const std::vector<const char*> m_ValidationLayer = { "VK_LAYER_LUNARG_standard_validation" };
-
 	VkDevice m_Device = nullptr;
 
 	VkQueue m_GraphicsQueue = nullptr;
+	VkQueue m_PresentQueue;
 
-	//vulkan error handling
-#ifdef NDEBUG
-	const bool m_EnableValidationLayers = false;
-#else
-	const bool m_EnableValidationLayers = true;
-#endif
+	VkSwapchainKHR m_SwapChain;
 
-	VkDebugUtilsMessengerEXT m_DebugMessenger = nullptr;
+	std::vector<VkImage> m_SwapChainImages;
+	VkFormat m_SwapChainImageFormat;
+	VkExtent2D m_SwapChainExtent;
+
+	std::vector<VkImageView> m_SwapChainImageViews;
 };
 }
 
