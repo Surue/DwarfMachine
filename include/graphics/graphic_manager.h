@@ -170,6 +170,11 @@ private:
 	 */
 	void CreateImageViews();
 
+	/**
+	 * \brief Create graphic pipeline
+	 */
+	void CreateGraphicPipeline();
+
 	//WINDOW
 	GLFWwindow* m_Window = nullptr;
 

@@ -57,6 +57,7 @@ void GraphicManager::InitVulkan()
 	CreateLogicalDevice();
 	CreateSwapChain();
 	CreateImageViews();
+	CreateGraphicPipeline();
 }
 
 void GraphicManager::Init()
@@ -530,5 +531,9 @@ void GraphicManager::CreateImageViews()
 			throw std::runtime_error("failed to create image view!");
 		}
 	}
+}
+
+void GraphicManager::CreateGraphicPipeline()
+{
 }
 }
