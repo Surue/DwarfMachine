@@ -36,4 +36,6 @@ TEST(GLFW, OpeningWindow)
 	{
 		std::cerr << e.what() << "\n";
 	}
+
+	system("pause");
 }

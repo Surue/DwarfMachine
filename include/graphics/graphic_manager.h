@@ -29,6 +29,8 @@ SOFTWARE.
 
 #include <engine/engine.h>
 
+#include <iostream>
+
 namespace DM
 {
 class GraphicManager
@@ -101,7 +103,12 @@ private:
 		VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
 		VkDebugUtilsMessageTypeFlagsEXT messageType,
 		const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData,
-		void* pUserData);
+		void* pUserData)
+	{
+		std::cerr << "validation layer: " << pCallbackData->pMessage << "\n";
+
+		return VK_FALSE;
+	}
 
 	/**
 	 * \brief Select a GPU
@@ -142,7 +149,7 @@ private:
 	 * \param device 
 	 * \return 
 	 */
-	SwapChainSupportDetails QuerySwapChainSupport(VkPhysicalDevice device);
+	SwapChainSupportDetails QuerySwapChainSupport(VkPhysicalDevice device) const;
 
 	/**
 	 * \brief 
@@ -156,14 +163,14 @@ private:
 	 * \param availablePresentModes 
 	 * \return 
 	 */
-	VkPresentModeKHR ChooseSwapPresentMode(const std::vector<VkPresentModeKHR>& availablePresentModes);
+	VkPresentModeKHR ChooseSwapPresentMode(const std::vector<VkPresentModeKHR>& availablePresentModes) const;
 
 	/**
 	 * \brief 
 	 * \param capabilities 
 	 * \return 
 	 */
-	VkExtent2D ChooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities);
+	VkExtent2D ChooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities) const;
 
 	/**
 	 * \brief 
@@ -174,6 +181,25 @@ private:
 	 * \brief Create graphic pipeline
 	 */
 	void CreateGraphicPipeline();
+
+	/**
+	 * \brief Read a SPIR_V shader file
+	 * \param filename SPIR-V shader
+	 * \return 
+	 */
+	static std::vector<char> ReadFile(const std::string& filename);
+
+	/**
+	 * \brief Create a shader module
+	 * \param code  buffer with bytecode
+	 * \return 
+	 */
+	VkShaderModule CreateShaderModule(const std::vector<char>& code) const;
+
+	/**
+	 * \brief 
+	 */
+	void CreateRenderPass();
 
 	//WINDOW
 	GLFWwindow* m_Window = nullptr;
@@ -199,6 +225,12 @@ private:
 	VkExtent2D m_SwapChainExtent;
 
 	std::vector<VkImageView> m_SwapChainImageViews;
+
+	VkRenderPass m_RenderPass;
+	VkPipelineLayout m_PipelineLayout;
+
+	VkPipeline m_GraphicsPipeline;
+
 };
 }
 
