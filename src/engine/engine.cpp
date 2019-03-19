@@ -44,6 +44,9 @@ void Engine::MainLoop()
 	while (!glfwWindowShouldClose(m_Window))
 	{
 		glfwPollEvents();
+
+		//Updates
+		m_GraphicManager->Update();
 	}
 }
 

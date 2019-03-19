@@ -49,6 +49,8 @@ public:
 	 */
 	void Destroy();
 
+	void Update();
+
 	/**
 	 * \brief Get the game's window
 	 * \return 
@@ -201,6 +203,25 @@ private:
 	 */
 	void CreateRenderPass();
 
+	/**
+	 * \brief 
+	 */
+	void CreateFrameBuffers();
+
+	/**
+	 * \brief 
+	 */
+	void CreateCommandPool();
+
+	/**
+	 * \brief
+	 */
+	void CreateCommandBuffers();
+
+	void CreateSemaphores();
+
+	void DrawFrame();
+
 	//WINDOW
 	GLFWwindow* m_Window = nullptr;
 
@@ -231,6 +252,13 @@ private:
 
 	VkPipeline m_GraphicsPipeline;
 
+	std::vector<VkFramebuffer> m_SwapChainFrameBuffers;
+
+	VkCommandPool m_CommandPool;
+	std::vector<VkCommandBuffer> m_CommandBuffers;
+
+	VkSemaphore m_ImageAvailableSemaphore;
+	VkSemaphore m_RenderFinishedSemaphore;
 };
 }
 
