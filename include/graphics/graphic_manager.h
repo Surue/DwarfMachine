@@ -33,6 +33,8 @@ SOFTWARE.
 
 namespace DM
 {
+const int MAX_FRAMES_IN_FLIGHT = 2;
+
 class GraphicManager
 {
 public:
@@ -218,8 +220,14 @@ private:
 	 */
 	void CreateCommandBuffers();
 
-	void CreateSemaphores();
+	/**
+	 * \brief Create semaphore and fences
+	 */
+	void CreateSyncObjects();
 
+	/**
+	 * \brief Draw the current frame
+	 */
 	void DrawFrame();
 
 	//WINDOW
@@ -257,8 +265,10 @@ private:
 	VkCommandPool m_CommandPool;
 	std::vector<VkCommandBuffer> m_CommandBuffers;
 
-	VkSemaphore m_ImageAvailableSemaphore;
-	VkSemaphore m_RenderFinishedSemaphore;
+	std::vector<VkSemaphore> m_ImageAvailableSemaphores;
+	std::vector<VkSemaphore> m_RenderFinishedSemaphores;
+	std::vector<VkFence> m_InFlightFences;
+	size_t m_CurrentFrame = 0;
 };
 }
 
