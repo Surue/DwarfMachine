@@ -26,21 +26,61 @@ SOFTWARE.
 #define GRAPHIC_MANAGER_H
 
 #include <vector>
+#include <glm/glm.hpp>
+#include <iostream>
+#include <array>
 
 #include <engine/engine.h>
 
-#include <iostream>
 
 namespace DM
 {
 const int MAX_FRAMES_IN_FLIGHT = 2;
+
+struct Vertex
+{
+	glm::vec2 pos;
+	glm::vec3 color;
+
+	static VkVertexInputBindingDescription GetBindingDescription()
+	{
+		VkVertexInputBindingDescription bindingDescription = {};
+		bindingDescription.binding = 0;
+		bindingDescription.stride = sizeof(Vertex);
+		bindingDescription.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
+
+		return bindingDescription;
+	}
+
+	static std::array<VkVertexInputAttributeDescription, 2> GetAttributeDescription()
+	{
+		std::array<VkVertexInputAttributeDescription, 2> attributeDescription = {};
+		attributeDescription[0].binding = 0;
+		attributeDescription[0].location = 0;
+		attributeDescription[0].format = VK_FORMAT_R32G32_SFLOAT;
+		attributeDescription[0].offset = offsetof(Vertex, pos);
+
+		attributeDescription[1].binding = 0;
+		attributeDescription[1].location = 1;
+		attributeDescription[1].format = VK_FORMAT_R32G32B32_SFLOAT;
+		attributeDescription[1].offset = offsetof(Vertex, color);
+
+		return attributeDescription;
+	}
+};
+
+const std::vector<Vertex> vertices = {
+	{{0.0f, -0.5f}, {1.0f, 1.0f, 1.0f}},
+	{{0.5f, 0.5f}, {0.0f, 1.0f, 0.0f}},
+	{{-0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}}
+};
 
 class GraphicManager
 {
 public:
 
 	GraphicManager();
-	~GraphicManager();
+	~GraphicManager() = default;
 	/**
 	 * \brief Init graphic manager (GLFW and Vulkan)
 	 */
@@ -65,6 +105,8 @@ private:
 	 */
 	void InitWindow();
 
+	static void FrameBufferResizeCallback(GLFWwindow* window, int width, int height);
+
 	/**
 	 * \brief Init Vulkan
 	 */
@@ -83,12 +125,12 @@ private:
 	/**
 	 * \brief Check if all requested layers are available
 	 */
-	bool CheckValidationLayerSupport() const;
+	static bool CheckValidationLayerSupport();
 
 	/**
 	 * \brief return required list of extension
 	 */
-	std::vector<const char*> GetRequiredExtensions() const;
+	static std::vector<const char*> GetRequiredExtensions();
 
 	/**
 	 * \brief Create a surface used to link vulkan to the GLFW window
@@ -123,13 +165,13 @@ private:
 	 * \brief Evaluate if a device is suitable for our operation
 	 * \param device 
 	 */
-	bool IsDeviceSuitable(VkPhysicalDevice device);
+	bool IsDeviceSuitable(VkPhysicalDevice device) const;
 
 	/**
 	 * \brief Return queue families that satisfy certain desired properties
 	 * \param device
 	 */
-	QueueFamilyIndices FindQueueFamilies(VkPhysicalDevice device);
+	QueueFamilyIndices FindQueueFamilies(VkPhysicalDevice device) const;
 
 	/**
 	 * \brief Setup logical device to interface with
@@ -141,7 +183,7 @@ private:
 	 * \param device to check
 	 * \return true if support extensions
 	 */
-	bool CheckDeviceExtensionSupport(VkPhysicalDevice device);
+	static bool CheckDeviceExtensionSupport(VkPhysicalDevice device);
 
 	/**
 	 * \brief Create a swapchain (Act as an image buffer)
@@ -160,14 +202,14 @@ private:
 	 * \param availableFormats 
 	 * \return 
 	 */
-	VkSurfaceFormatKHR ChooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats);
+	static VkSurfaceFormatKHR ChooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats);
 
 	/**
 	 * \brief 
 	 * \param availablePresentModes 
 	 * \return 
 	 */
-	VkPresentModeKHR ChooseSwapPresentMode(const std::vector<VkPresentModeKHR>& availablePresentModes) const;
+	static VkPresentModeKHR ChooseSwapPresentMode(const std::vector<VkPresentModeKHR>& availablePresentModes);
 
 	/**
 	 * \brief 
@@ -230,6 +272,17 @@ private:
 	 */
 	void DrawFrame();
 
+	/**
+	 * \brief Handle resizing of swap chain if it's not compatible anymore with the window
+	 */
+	void RecreateSwapChain();
+
+	void DestroySwapChain();
+
+	void CreateVertexBuffer();
+
+	uint32_t FindMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties) const;
+
 	//WINDOW
 	GLFWwindow* m_Window = nullptr;
 
@@ -269,6 +322,12 @@ private:
 	std::vector<VkSemaphore> m_RenderFinishedSemaphores;
 	std::vector<VkFence> m_InFlightFences;
 	size_t m_CurrentFrame = 0;
+
+	bool m_FrameBufferResized = false;
+
+	//vertex buffer
+	VkBuffer m_VertexBuffer;
+	VkDeviceMemory m_VertexBufferMemory;
 };
 }
 
