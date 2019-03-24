@@ -26,7 +26,9 @@ SOFTWARE.
 #define GRAPHIC_MANAGER_H
 
 #include <vector>
+#define GLM_FORCE_RADIANS
 #include <glm/glm.hpp>
+
 #include <iostream>
 #include <array>
 
@@ -78,6 +80,13 @@ const std::vector<Vertex> vertices = {
 
 const std::vector<uint16_t> indices = {
 	0, 1, 2, 2, 3, 0
+};
+
+struct UniformBufferObject
+{
+	alignas(16)glm::mat4 model;
+	alignas(16)glm::mat4 view;
+	alignas(16)glm::mat4 proj;
 };
 
 class GraphicManager
@@ -295,6 +304,16 @@ private:
 
 	uint32_t FindMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties) const;
 
+	void CreateDescriptorSetLayout();
+
+	void CreateUniformBuffers();
+
+	void UpdateUniformBuffer(uint32_t currentImage);
+
+	void CreateDescriptorPool();
+
+	void CreateDescriptorSets();
+
 	//WINDOW
 	GLFWwindow* m_Window = nullptr;
 
@@ -321,6 +340,7 @@ private:
 	std::vector<VkImageView> m_SwapChainImageViews;
 
 	VkRenderPass m_RenderPass;
+	VkDescriptorSetLayout m_DescriptorSetLayout;
 	VkPipelineLayout m_PipelineLayout;
 
 	VkPipeline m_GraphicsPipeline;
@@ -344,6 +364,13 @@ private:
 	//Index buffer
 	VkBuffer m_IndexBuffer;
 	VkDeviceMemory m_IndexBufferMemory;
+
+	//Uniform buffers
+	std::vector<VkBuffer> m_UniformBuffers;
+	std::vector<VkDeviceMemory> m_UniformBuffersMemory;
+
+	VkDescriptorPool m_DescriptorPool;
+	std::vector<VkDescriptorSet> m_DescriptorSets;
 };
 }
 
