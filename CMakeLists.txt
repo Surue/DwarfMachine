@@ -200,8 +200,9 @@ ENDIF()
 		# set_target_properties(DWARF_MACHINE_COMMON PROPERTIES COMPILE_FLAGS "-save-temps -ffast-math")
 
 #source
-add_custom_command(TARGET DWARF_MACHINE_COMMON POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/sources ${CMAKE_BINARY_DIR}/sources)
-file(COPY sources/ DESTINATION ${CMAKE_BINARY_DIR}/sources/)
+add_custom_command(TARGET DWARF_MACHINE_COMMON POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/ressources ${CMAKE_BINARY_DIR}/ressources)
+add_custom_command(TARGET DWARF_MACHINE_COMMON POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/ressources ${CMAKE_BINARY_DIR}/ressources)
+file(COPY ressources/ DESTINATION ${CMAKE_BINARY_DIR}/ressources/)
 
 #shaders
 add_custom_command(TARGET DWARF_MACHINE_COMMON POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/shaders ${CMAKE_BINARY_DIR}/shaders)

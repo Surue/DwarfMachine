@@ -25,6 +25,9 @@ SOFTWARE.
 #ifndef GRAPHIC_MANAGER_H
 #define GRAPHIC_MANAGER_H
 
+#define STB_IMAGE_IMPLEMENTATION
+#include <utility/stb_image.h>
+
 #include <vector>
 #define GLM_FORCE_RADIANS
 #include <glm/glm.hpp>
@@ -314,6 +317,18 @@ private:
 
 	void CreateDescriptorSets();
 
+	void CreateTextureImage();
+
+	void CreateImage(uint32_t width, uint32_t height, VkFormat format, VkImageTiling tiling, VkImageUsageFlags usage, VkMemoryPropertyFlags properties, VkImage& image, VkDeviceMemory& imageMemory);
+
+	VkCommandBuffer BeginSingleTimeCommands() const;
+
+	void EndSingleTimeCommands(VkCommandBuffer commandBuffer) const;
+
+	void TransitionImageLayout(VkImage image, VkFormat format, VkImageLayout oldLayout, VkImageLayout newLayout) const;
+
+	void CopyBufferToImage(VkBuffer buffer, VkImage image, uint32_t width, uint32_t height) const;
+
 	//WINDOW
 	GLFWwindow* m_Window = nullptr;
 
@@ -371,6 +386,10 @@ private:
 
 	VkDescriptorPool m_DescriptorPool;
 	std::vector<VkDescriptorSet> m_DescriptorSets;
+
+	//Textures
+	VkImage m_TextureImage;
+	VkDeviceMemory m_TextureImageMemory;
 };
 }
 
