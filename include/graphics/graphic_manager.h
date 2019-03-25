@@ -42,13 +42,12 @@ namespace DM
 {
 const int MAX_FRAMES_IN_FLIGHT = 2;
 
-struct Vertex
-{
+struct Vertex {
 	glm::vec2 pos;
 	glm::vec3 color;
+	glm::vec2 texCoord;
 
-	static VkVertexInputBindingDescription GetBindingDescription()
-	{
+	static VkVertexInputBindingDescription GetBindingDescription() {
 		VkVertexInputBindingDescription bindingDescription = {};
 		bindingDescription.binding = 0;
 		bindingDescription.stride = sizeof(Vertex);
@@ -57,28 +56,34 @@ struct Vertex
 		return bindingDescription;
 	}
 
-	static std::array<VkVertexInputAttributeDescription, 2> GetAttributeDescription()
-	{
-		std::array<VkVertexInputAttributeDescription, 2> attributeDescription = {};
-		attributeDescription[0].binding = 0;
-		attributeDescription[0].location = 0;
-		attributeDescription[0].format = VK_FORMAT_R32G32_SFLOAT;
-		attributeDescription[0].offset = offsetof(Vertex, pos);
+	static std::array<VkVertexInputAttributeDescription, 3> GetAttributeDescription() {
+		std::array<VkVertexInputAttributeDescription, 3> attributeDescriptions = {};
 
-		attributeDescription[1].binding = 0;
-		attributeDescription[1].location = 1;
-		attributeDescription[1].format = VK_FORMAT_R32G32B32_SFLOAT;
-		attributeDescription[1].offset = offsetof(Vertex, color);
+		attributeDescriptions[0].binding = 0;
+		attributeDescriptions[0].location = 0;
+		attributeDescriptions[0].format = VK_FORMAT_R32G32_SFLOAT;
+		attributeDescriptions[0].offset = offsetof(Vertex, pos);
 
-		return attributeDescription;
+		attributeDescriptions[1].binding = 0;
+		attributeDescriptions[1].location = 1;
+		attributeDescriptions[1].format = VK_FORMAT_R32G32B32_SFLOAT;
+		attributeDescriptions[1].offset = offsetof(Vertex, color);
+
+		attributeDescriptions[2].binding = 0;
+		attributeDescriptions[2].location = 2;
+		attributeDescriptions[2].format = VK_FORMAT_R32G32_SFLOAT;
+		attributeDescriptions[2].offset = offsetof(Vertex, texCoord);
+
+		return attributeDescriptions;
 	}
 };
 
+
 const std::vector<Vertex> vertices = {
-	{{-0.5f, -0.5f}, {1.0f, 0.0f, 0.0f}},
-	{{0.5f, -0.5f}, {0.0f, 1.0f, 0.0f}},
-	{{0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}},
-	{{-0.5f, 0.5f}, {1.0f, 1.0f, 1.0f}}
+	{{-0.5f, -0.5f}, {1.0f, 0.0f, 0.0f}, {1.0f, 0.0f}},
+	{{0.5f, -0.5f}, {0.0f, 1.0f, 0.0f}, {0.0f, 0.0f}},
+	{{0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}, {0.0f, 1.0f}},
+	{{-0.5f, 0.5f}, {1.0f, 1.0f, 1.0f}, {1.0f, 1.0f}}
 };
 
 const std::vector<uint16_t> indices = {
@@ -329,6 +334,12 @@ private:
 
 	void CopyBufferToImage(VkBuffer buffer, VkImage image, uint32_t width, uint32_t height) const;
 
+	void CreateTextureImageView();
+
+	VkImageView CreateImageView(VkImage image, VkFormat format);
+
+	void CreateTextureSampler();
+
 	//WINDOW
 	GLFWwindow* m_Window = nullptr;
 
@@ -338,31 +349,31 @@ private:
 	//VULKAN
 	VkInstance m_VulkanInstance = nullptr;
 	VkDebugUtilsMessengerEXT m_DebugMessenger = nullptr;
-	VkSurfaceKHR m_Surface;
+	VkSurfaceKHR m_Surface{};
 
 	VkPhysicalDevice m_PhysicalDevice = VK_NULL_HANDLE;
 	VkDevice m_Device = nullptr;
 
 	VkQueue m_GraphicsQueue = nullptr;
-	VkQueue m_PresentQueue;
+	VkQueue m_PresentQueue{};
 
-	VkSwapchainKHR m_SwapChain;
+	VkSwapchainKHR m_SwapChain{};
 
 	std::vector<VkImage> m_SwapChainImages;
 	VkFormat m_SwapChainImageFormat;
-	VkExtent2D m_SwapChainExtent;
+	VkExtent2D m_SwapChainExtent{};
 
 	std::vector<VkImageView> m_SwapChainImageViews;
 
-	VkRenderPass m_RenderPass;
-	VkDescriptorSetLayout m_DescriptorSetLayout;
-	VkPipelineLayout m_PipelineLayout;
+	VkRenderPass m_RenderPass{};
+	VkDescriptorSetLayout m_DescriptorSetLayout{};
+	VkPipelineLayout m_PipelineLayout{};
 
-	VkPipeline m_GraphicsPipeline;
+	VkPipeline m_GraphicsPipeline{};
 
 	std::vector<VkFramebuffer> m_SwapChainFrameBuffers;
 
-	VkCommandPool m_CommandPool;
+	VkCommandPool m_CommandPool{};
 	std::vector<VkCommandBuffer> m_CommandBuffers;
 
 	std::vector<VkSemaphore> m_ImageAvailableSemaphores;
@@ -373,23 +384,26 @@ private:
 	bool m_FrameBufferResized = false;
 
 	//vertex buffer
-	VkBuffer m_VertexBuffer;
-	VkDeviceMemory m_VertexBufferMemory;
+	VkBuffer m_VertexBuffer{};
+	VkDeviceMemory m_VertexBufferMemory{};
 
 	//Index buffer
-	VkBuffer m_IndexBuffer;
-	VkDeviceMemory m_IndexBufferMemory;
+	VkBuffer m_IndexBuffer{};
+	VkDeviceMemory m_IndexBufferMemory{};
 
 	//Uniform buffers
 	std::vector<VkBuffer> m_UniformBuffers;
 	std::vector<VkDeviceMemory> m_UniformBuffersMemory;
 
-	VkDescriptorPool m_DescriptorPool;
+	VkDescriptorPool m_DescriptorPool{};
 	std::vector<VkDescriptorSet> m_DescriptorSets;
 
 	//Textures
-	VkImage m_TextureImage;
-	VkDeviceMemory m_TextureImageMemory;
+	VkImage m_TextureImage{};
+	VkDeviceMemory m_TextureImageMemory{};
+	VkImageView m_TextureImageView;
+
+	VkSampler m_TextureSampler;
 };
 }
 

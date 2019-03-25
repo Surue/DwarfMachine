@@ -61,7 +61,7 @@ source_group("Graphics"            FILES ${DWARF_MACHINE_GRAPHICS_SRC})
 source_group("Input"            FILES ${DWARF_MACHINE_INPUT_SRC})
 source_group("Utility"            FILES ${DWARF_MACHINE_UTILITY_SRC})
 
-file(GLOB_RECURSE SHADERS_SRC shaders/${course_name}/*.vert shaders/${course_name}/*.frag)
+file(GLOB_RECURSE SHADERS_SRC shaders/*.vert shaders/*.frag)
 source_group("Shaders" FILES ${SHADERS_SRC})
 
 List(APPEND DWARF_MACHINE_SRC  ${DWARF_MACHINE_AUDIO_SRC} ${DWARF_MACHINE_ENGINE_SRC} ${DWARF_MACHINE_EDITOR_SRC} ${DWARF_MACHINE_GRAPHICS_SRC}
