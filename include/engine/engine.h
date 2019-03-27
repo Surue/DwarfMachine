@@ -32,7 +32,7 @@ SOFTWARE.
 #include <vector>
 #include <iostream>
 
-namespace DM
+namespace dm
 {
 class GraphicManager;
 
@@ -45,8 +45,9 @@ const bool enableValidationLayers = false;
 const bool enableValidationLayers = true;
 #endif
 
-inline VkResult CreateDebugUtilsMessengerEXT(VkInstance instance, const VkDebugUtilsMessengerCreateInfoEXT* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkDebugUtilsMessengerEXT* pDebugMessenger) {
-	auto func = (PFN_vkCreateDebugUtilsMessengerEXT)vkGetInstanceProcAddr(instance, "vkCreateDebugUtilsMessengerEXT");
+inline VkResult CreateDebugUtilsMessengerEXT(const VkInstance instance, const VkDebugUtilsMessengerCreateInfoEXT* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkDebugUtilsMessengerEXT* pDebugMessenger) {
+	const auto func = reinterpret_cast<PFN_vkCreateDebugUtilsMessengerEXT>(vkGetInstanceProcAddr(
+		instance, "vkCreateDebugUtilsMessengerEXT"));
 	if (func != nullptr) {
 		return func(instance, pCreateInfo, pAllocator, pDebugMessenger);
 	}
@@ -55,8 +56,8 @@ inline VkResult CreateDebugUtilsMessengerEXT(VkInstance instance, const VkDebugU
 	}
 }
 
-inline void DestroyDebugUtilsMessengerEXT(const VkInstance instance, VkDebugUtilsMessengerEXT debugMessenger, const VkAllocationCallbacks* pAllocator) {
-	const auto func = (PFN_vkDestroyDebugUtilsMessengerEXT)(vkGetInstanceProcAddr(
+inline void DestroyDebugUtilsMessengerEXT(const VkInstance instance, const VkDebugUtilsMessengerEXT debugMessenger, const VkAllocationCallbacks* pAllocator) {
+	const auto func = reinterpret_cast<PFN_vkDestroyDebugUtilsMessengerEXT>(vkGetInstanceProcAddr(
 		instance, "vkDestroyDebugUtilsMessengerEXT"));
 	if (func != nullptr) {
 		func(instance, debugMessenger, pAllocator);
@@ -102,7 +103,7 @@ private:
 
 	GLFWwindow* m_Window = nullptr;
 
-	GraphicManager* m_GraphicManager;
+	GraphicManager* m_GraphicManager = nullptr;
 };
 }
 

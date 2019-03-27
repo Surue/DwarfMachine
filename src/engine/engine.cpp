@@ -24,7 +24,7 @@ SOFTWARE.
 #include <engine/engine.h>
 #include <graphics/graphic_manager.h>
 
-namespace DM
+namespace dm
 {
 
 void Engine::Run()

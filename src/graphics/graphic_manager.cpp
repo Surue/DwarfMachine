@@ -34,7 +34,7 @@ SOFTWARE.
 
 #include <unordered_map>
 
-namespace DM
+namespace dm
 {
 GraphicManager::GraphicManager() {}
 
@@ -882,7 +882,7 @@ void GraphicManager::CreateFrameBuffers()
 
 void GraphicManager::CreateCommandPool()
 {
-	QueueFamilyIndices queueFamilyIndices = FindQueueFamilies(m_PhysicalDevice);
+	auto queueFamilyIndices = FindQueueFamilies(m_PhysicalDevice);
 
 	VkCommandPoolCreateInfo poolInfo = {};
 	poolInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
@@ -1145,7 +1145,7 @@ auto GraphicManager::CreateBuffer(const VkDeviceSize size, const VkBufferUsageFl
 
 void GraphicManager::CopyBuffer(const VkBuffer srcBuffer, const VkBuffer dstBuffer, const VkDeviceSize size) const
 {
-	VkCommandBuffer commandBuffer = BeginSingleTimeCommands();
+	const auto commandBuffer = BeginSingleTimeCommands();
 
 	VkBufferCopy copyRegion = {};
 	copyRegion.size = size;
@@ -1381,8 +1381,8 @@ void GraphicManager::CreateTextureImage()
 	vkFreeMemory(m_Device, stagingBufferMemory, nullptr);
 }
 
-void GraphicManager::CreateImage(const uint32_t width, const uint32_t height, uint32_t mipLevels, VkSampleCountFlagBits numSamples,
-                                 const VkFormat format, const VkImageTiling tiling, const VkImageUsageFlags usage, VkMemoryPropertyFlags properties, VkImage& image, VkDeviceMemory& imageMemory) const
+void GraphicManager::CreateImage(const uint32_t width, const uint32_t height, const uint32_t mipLevels, const VkSampleCountFlagBits numSamples,
+                                 const VkFormat format, const VkImageTiling tiling, const VkImageUsageFlags usage, const VkMemoryPropertyFlags properties, VkImage& image, VkDeviceMemory& imageMemory) const
 {
 	VkImageCreateInfo imageInfo = {};
 	imageInfo.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
@@ -1453,10 +1453,10 @@ void GraphicManager::EndSingleTimeCommands(VkCommandBuffer commandBuffer) const
 	vkFreeCommandBuffers(m_Device, m_CommandPool, 1, &commandBuffer);
 }
 
-void GraphicManager::TransitionImageLayout(const VkImage image, VkFormat format, const VkImageLayout oldLayout,
-                                           const VkImageLayout newLayout, uint32_t mipLevels) const
+void GraphicManager::TransitionImageLayout(const VkImage image, const VkFormat format, const VkImageLayout oldLayout,
+                                           const VkImageLayout newLayout, const uint32_t mipLevels) const
 {
-	VkCommandBuffer commandBuffer = BeginSingleTimeCommands();
+	const auto commandBuffer = BeginSingleTimeCommands();
 
 	VkImageMemoryBarrier barrier = {};
 	barrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
@@ -1603,7 +1603,7 @@ void GraphicManager::CreateTextureSampler() {
 
 void GraphicManager::CreateDepthResources()
 {
-	VkFormat depthFormat = FindDepthFormat();
+	const auto depthFormat = FindDepthFormat();
 
 	CreateImage(m_SwapChainExtent.width, m_SwapChainExtent.height, 1, m_MsaaSamples, depthFormat, VK_IMAGE_TILING_OPTIMAL, VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, m_DepthImage, m_DepthImageMemory);
 	m_DepthImageView = CreateImageView(m_DepthImage, depthFormat, VK_IMAGE_ASPECT_DEPTH_BIT, 1);
@@ -1614,7 +1614,7 @@ void GraphicManager::CreateDepthResources()
 VkFormat GraphicManager::FindSupportedFormat(const std::vector<VkFormat>& candidates, const VkImageTiling tiling,
                                              const VkFormatFeatureFlags features) const
 {
-	for (VkFormat format : candidates) {
+	for (auto format : candidates) {
 		VkFormatProperties props;
 		vkGetPhysicalDeviceFormatProperties(m_PhysicalDevice, format, &props);
 
@@ -1638,7 +1638,7 @@ VkFormat GraphicManager::FindDepthFormat() const
 	);
 }
 
-bool GraphicManager::HasStencilComponent(const VkFormat format) const
+bool GraphicManager::HasStencilComponent(const VkFormat format)
 {
 	return format == VK_FORMAT_D32_SFLOAT_S8_UINT || format == VK_FORMAT_D24_UNORM_S8_UINT;
 }
@@ -1695,7 +1695,7 @@ void GraphicManager::GenerateMipmaps(const VkImage image, const VkFormat imageFo
 		throw std::runtime_error("texture image format does not support linear blitting");
 	}
 
-	VkCommandBuffer commandBuffer = BeginSingleTimeCommands();
+	const auto commandBuffer = BeginSingleTimeCommands();
 
 	VkImageMemoryBarrier barrier = {};
 	barrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
@@ -1707,8 +1707,8 @@ void GraphicManager::GenerateMipmaps(const VkImage image, const VkFormat imageFo
 	barrier.subresourceRange.layerCount = 1;
 	barrier.subresourceRange.levelCount = 1;
 
-	int32_t mipWidth = texWidth;
-	int32_t mipHeight = texHeight;
+	auto mipWidth = texWidth;
+	auto mipHeight = texHeight;
 
 	for(uint32_t i = 1; i < mipLevels; i++)
 	{
@@ -1793,7 +1793,7 @@ VkSampleCountFlagBits GraphicManager::GetMaxUsableSampleCount() const
 
 void GraphicManager::CreateColorResources()
 {
-	VkFormat colorFormat = m_SwapChainImageFormat;
+	const auto colorFormat = m_SwapChainImageFormat;
 
 	CreateImage(m_SwapChainExtent.width, m_SwapChainExtent.height, 1, m_MsaaSamples, colorFormat, VK_IMAGE_TILING_OPTIMAL, VK_IMAGE_USAGE_TRANSIENT_ATTACHMENT_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, m_ColorImage, m_ColorImageMemory);
 	m_ColorImageView = CreateImageView(m_ColorImage, colorFormat, VK_IMAGE_ASPECT_COLOR_BIT, 1);

@@ -39,13 +39,12 @@ SOFTWARE.
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/hash.hpp>
 
-#include <iostream>
 #include <array>
 
 #include <engine/engine.h>
 
 
-namespace DM
+namespace dm
 {
 	const int MAX_FRAMES_IN_FLIGHT = 2;
 
@@ -99,14 +98,15 @@ namespace DM
 }
 
 namespace std {
-	template<> struct hash<DM::Vertex> {
-		size_t operator()(DM::Vertex const& vertex) const {
+	template<> struct hash<dm::Vertex>final
+	{
+		size_t operator()(dm::Vertex const& vertex) const {
 			return ((hash<glm::vec3>()(vertex.pos) ^ (hash<glm::vec3>()(vertex.color) << 1)) >> 1) ^ (hash<glm::vec2>()(vertex.texCoord) << 1);
 		}
 	};
 }
 
-namespace DM
+namespace dm
 {
 class GraphicManager
 {
@@ -357,7 +357,7 @@ private:
 
 	VkFormat FindDepthFormat() const;
 
-	bool HasStencilComponent(VkFormat format) const;
+	static bool HasStencilComponent(VkFormat format);
 
 	void LoadModel();
 
@@ -431,23 +431,23 @@ private:
 	std::vector<VkDescriptorSet> m_DescriptorSets;
 
 	//Textures
-	uint32_t m_MipLevels;
+	uint32_t m_MipLevels{};
 	VkImage m_TextureImage{};
 	VkDeviceMemory m_TextureImageMemory{};
-	VkImageView m_TextureImageView;
+	VkImageView m_TextureImageView{};
 
-	VkSampler m_TextureSampler;
+	VkSampler m_TextureSampler{};
 
 	//Depth
-	VkImage m_DepthImage;
-	VkDeviceMemory m_DepthImageMemory;
-	VkImageView m_DepthImageView;
+	VkImage m_DepthImage{};
+	VkDeviceMemory m_DepthImageMemory{};
+	VkImageView m_DepthImageView{};
 
 	//Multisample Anti Aliasing 
 	VkSampleCountFlagBits m_MsaaSamples = VK_SAMPLE_COUNT_1_BIT;
-	VkImage m_ColorImage;
-	VkDeviceMemory m_ColorImageMemory;
-	VkImageView m_ColorImageView;
+	VkImage m_ColorImage{};
+	VkDeviceMemory m_ColorImageMemory{};
+	VkImageView m_ColorImageView{};
 };
 }
 
