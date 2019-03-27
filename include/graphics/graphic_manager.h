@@ -335,7 +335,7 @@ private:
 
 	void CreateTextureImage();
 
-	void CreateImage(uint32_t width, uint32_t height, uint32_t mipLevels, VkFormat format, VkImageTiling tiling, VkImageUsageFlags usage, VkMemoryPropertyFlags properties, VkImage& image, VkDeviceMemory& imageMemory);
+	void CreateImage(uint32_t width, uint32_t height, uint32_t mipLevels, VkSampleCountFlagBits numSamples, VkFormat format, VkImageTiling tiling, VkImageUsageFlags usage, VkMemoryPropertyFlags properties, VkImage& image, VkDeviceMemory& imageMemory) const;
 
 	VkCommandBuffer BeginSingleTimeCommands() const;
 
@@ -362,6 +362,10 @@ private:
 	void LoadModel();
 
 	void GenerateMipmaps(VkImage image, VkFormat imageFormat, int32_t texWidth, int32_t texHeight, uint32_t mipLevels) const;
+
+	VkSampleCountFlagBits GetMaxUsableSampleCount() const;
+
+	void CreateColorResources();
 
 	//WINDOW
 	GLFWwindow* m_Window = nullptr;
@@ -438,6 +442,12 @@ private:
 	VkImage m_DepthImage;
 	VkDeviceMemory m_DepthImageMemory;
 	VkImageView m_DepthImageView;
+
+	//Multisample Anti Aliasing 
+	VkSampleCountFlagBits m_MsaaSamples = VK_SAMPLE_COUNT_1_BIT;
+	VkImage m_ColorImage;
+	VkDeviceMemory m_ColorImageMemory;
+	VkImageView m_ColorImageView;
 };
 }
 
