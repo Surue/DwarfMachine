@@ -22,17 +22,18 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 #include <stdexcept>
-
 #include <glm/gtc/matrix_transform.hpp>
-
 #include <chrono>
-
-#include <graphics/graphic_manager.h>
 #include <set>
 #include <algorithm>
 #include <fstream>
-
 #include <unordered_map>
+
+#define STB_IMAGE_IMPLEMENTATION
+#include <utility/stb_image.h>
+
+#include <graphics/graphic_manager.h>
+#include <iostream>
 
 namespace dm
 {
@@ -137,7 +138,7 @@ void GraphicManager::Destroy()
 	//Destroy device
 	vkDestroyDevice(m_Device, nullptr);
 
-	if (enableValidationLayers)
+	if (ENABLE_VALIDATION_LAYERS)
 	{
 		DestroyDebugUtilsMessengerEXT(m_VulkanInstance, m_DebugMessenger, nullptr);
 	}
@@ -162,7 +163,7 @@ GLFWwindow* GraphicManager::GetWindow() const
 
 void GraphicManager::CreateInstanceVulkan()
 {
-	if (enableValidationLayers && !CheckValidationLayerSupport())
+	if (ENABLE_VALIDATION_LAYERS && !CheckValidationLayerSupport())
 	{
 		throw std::runtime_error("validation layers requested, but not available!");
 	}
@@ -186,10 +187,10 @@ void GraphicManager::CreateInstanceVulkan()
 	createInfo.enabledExtensionCount = static_cast<uint32_t>(extensions.size());
 	createInfo.ppEnabledExtensionNames = extensions.data();
 
-	if (enableValidationLayers)
+	if (ENABLE_VALIDATION_LAYERS)
 	{
-		createInfo.enabledLayerCount = static_cast<uint32_t>(validationLayer.size());
-		createInfo.ppEnabledLayerNames = validationLayer.data();
+		createInfo.enabledLayerCount = static_cast<uint32_t>(VALIDATION_LAYER.size());
+		createInfo.ppEnabledLayerNames = VALIDATION_LAYER.data();
 	}
 	else
 	{
@@ -204,7 +205,7 @@ void GraphicManager::CreateInstanceVulkan()
 
 void GraphicManager::SetupDebugMessenger()
 {
-	if constexpr (!enableValidationLayers) return;
+	if constexpr (!ENABLE_VALIDATION_LAYERS) return;
 
 	VkDebugUtilsMessengerCreateInfoEXT createInfo = {};
 	createInfo.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT;
@@ -228,7 +229,7 @@ bool GraphicManager::CheckValidationLayerSupport()
 	std::vector<VkLayerProperties> availableLayers(layerCount);
 	vkEnumerateInstanceLayerProperties(&layerCount, availableLayers.data());
 
-	for (auto layerName : validationLayer)
+	for (auto layerName : VALIDATION_LAYER)
 	{
 		auto layerFound = false;
 
@@ -258,7 +259,7 @@ std::vector<const char*> GraphicManager::GetRequiredExtensions()
 	std::vector<const char*> extensions(glfwExtensions, glfwExtensions + glfwExtensionsCount);
 
 	//If debug mod, add an extension to handle error
-	if (enableValidationLayers)
+	if (ENABLE_VALIDATION_LAYERS)
 	{
 		extensions.push_back(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
 	}
@@ -399,13 +400,13 @@ void GraphicManager::CreateLogicalDevice()
 
 	createInfo.pEnabledFeatures = &deviceFeatures;
 
-	createInfo.enabledExtensionCount = static_cast<uint32_t>(deviceExtensions.size());
-	createInfo.ppEnabledExtensionNames = deviceExtensions.data();
+	createInfo.enabledExtensionCount = static_cast<uint32_t>(DEVICE_EXTENSIONS.size());
+	createInfo.ppEnabledExtensionNames = DEVICE_EXTENSIONS.data();
 
-	if (enableValidationLayers)
+	if (ENABLE_VALIDATION_LAYERS)
 	{
-		createInfo.enabledLayerCount = static_cast<uint32_t>(validationLayer.size());
-		createInfo.ppEnabledLayerNames = validationLayer.data();
+		createInfo.enabledLayerCount = static_cast<uint32_t>(VALIDATION_LAYER.size());
+		createInfo.ppEnabledLayerNames = VALIDATION_LAYER.data();
 	}
 	else
 	{
@@ -429,7 +430,7 @@ bool GraphicManager::CheckDeviceExtensionSupport(const VkPhysicalDevice device)
 	std::vector<VkExtensionProperties> availableExtension(extensionCount);
 	vkEnumerateDeviceExtensionProperties(device, nullptr, &extensionCount, availableExtension.data());
 
-	std::set<std::string> requiredExtension(deviceExtensions.begin(), deviceExtensions.end());
+	std::set<std::string> requiredExtension(DEVICE_EXTENSIONS.begin(), DEVICE_EXTENSIONS.end());
 
 	for (const auto& extension : availableExtension)
 	{
@@ -1104,9 +1105,9 @@ void GraphicManager::DestroySwapChain()
 	vkDestroySwapchainKHR(m_Device, m_SwapChain, nullptr);
 }
 
-auto GraphicManager::CreateBuffer(const VkDeviceSize size, const VkBufferUsageFlags usage,
+void GraphicManager::CreateBuffer(const VkDeviceSize size, const VkBufferUsageFlags usage,
                                   const VkMemoryPropertyFlags properties,
-                                  VkBuffer& buffer, VkDeviceMemory& bufferMemory) const -> void
+                                  VkBuffer& buffer, VkDeviceMemory& bufferMemory) const
 {
 	VkBufferCreateInfo bufferInfo = {};
 	bufferInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;

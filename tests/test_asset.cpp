@@ -27,7 +27,7 @@ SOFTWARE.
 
 TEST(GLFW, OpeningWindow)
 {
-	DM::Engine engine;
+	dm::Engine engine;
 
 	try
 	{

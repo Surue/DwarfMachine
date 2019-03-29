@@ -22,11 +22,12 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 #include <iostream>
-#include "engine/engine.h"
+
+#include <engine/engine.h>
 
 int main()
 {
-	DM::Engine engine;
+	dm::Engine engine;
 
 	try {
 		engine.Run();
