@@ -375,6 +375,13 @@ private:
 	VkImageView m_ColorImageView{};
 
 	Engine& m_Engine;
+
+	//Camera
+	glm::mat4 proj;
+	glm::mat4 view;
+
+	glm::vec3 rotation = glm::vec3();
+	glm::vec3 position = glm::vec3();
 };
 }
 

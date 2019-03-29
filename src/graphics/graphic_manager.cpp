@@ -92,6 +92,13 @@ void GraphicManager::Init()
 {
 	InitWindow();
 	InitVulkan();
+
+	//Camera
+	view = glm::lookAt(glm::vec3(2.0f, 2.0f, 2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	proj = glm::perspective(glm::radians(45.0f), m_SwapChainExtent.width / static_cast<float>(m_SwapChainExtent.height), 1.0f, 10.0f);
+
+	rotation = glm::vec3(0.0f, 0.0f, 0.0f);
+	position = glm::vec3(2.0f, 2.0f, 2.0f);
 }
 
 void GraphicManager::Destroy()
@@ -155,6 +162,46 @@ void GraphicManager::Destroy()
 void GraphicManager::Update()
 {
 	DrawFrame();
+
+	auto* inputManager = m_Engine.GetInputManager();
+
+	glm::vec3 camFront;
+	camFront.x = -cos(glm::radians(rotation.x)) * sin(glm::radians(rotation.y));
+	camFront.y = sin(glm::radians(rotation.x));
+	camFront.z = cos(glm::radians(rotation.x)) * cos(glm::radians(rotation.y));
+	camFront = normalize(camFront);
+
+	if(inputManager->IsKeyHeld(KeyCode::A))
+	{
+		position -= normalize(cross(camFront, glm::vec3(0.0f, 1.0f, 0.0f))) * 0.01f;
+	}
+
+	if (inputManager->IsKeyHeld(KeyCode::D))
+	{
+		position += normalize(cross(camFront, glm::vec3(0.0f, 1.0f, 0.0f)))* 0.01f;
+	}
+
+	if (inputManager->IsKeyHeld(KeyCode::S))
+	{
+		position -= camFront * 0.01f;
+	}
+
+	if (inputManager->IsKeyHeld(KeyCode::W))
+	{
+		position += camFront * 0.01f;
+	}
+
+	std::cout << position.x << ", " << position.y << ", " << position.z << "\n";
+
+	auto rotM = glm::mat4(1.0f);
+
+	rotM = rotate(rotM, glm::radians(rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
+	rotM = rotate(rotM, glm::radians(rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
+	rotM = rotate(rotM, glm::radians(rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
+
+	const auto transM = translate(glm::mat4(1.0f), position);
+
+	view = rotM * transM;
 }
 
 GLFWwindow* GraphicManager::GetWindow() const
@@ -1263,15 +1310,10 @@ void GraphicManager::CreateUniformBuffers()
 
 void GraphicManager::UpdateUniformBuffer(const uint32_t currentImage)
 {
-	static auto startTime = std::chrono::high_resolution_clock::now();
-
-	const auto currentTime = std::chrono::high_resolution_clock::now();
-	const auto time = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();
-
 	UniformBufferObject ubo = {};
 	ubo.model = glm::identity<glm::mat4>();
-	ubo.view = glm::lookAt(glm::vec3(2.0f, 2.0f, 2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-	ubo.proj = glm::perspective(glm::radians(45.0f), m_SwapChainExtent.width / static_cast<float>(m_SwapChainExtent.height), 1.0f, 10.0f);
+	ubo.view = view;
+	ubo.proj = proj;
 	ubo.proj[1][1] *= -1; //Because glm was designed for openGl the y axis is inversed
 
 	void* data;
