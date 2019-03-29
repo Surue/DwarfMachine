@@ -25,26 +25,42 @@ SOFTWARE.
 #ifndef INPUT_H
 #define INPUT_H
 
-#include <engine/engine.h>
-#include <iostream>
 #include <vector>
-#include <map>
+
+#include <engine/engine.h>
+
+#include <engine/vector.h>
 
 namespace dm
 {
 
-enum class KeyCode : unsigned short
+/**
+ * \brief Enum representing all key on an US keyboard
+ */
+enum class KeyCode
 {
 	SPACE = GLFW_KEY_SPACE,
+	A = GLFW_KEY_A,
+	D = GLFW_KEY_D,
+	E = GLFW_KEY_E,
 	Q = GLFW_KEY_Q,
 	W = GLFW_KEY_W,
-	E = GLFW_KEY_E,
-	A = GLFW_KEY_A,
 	S = GLFW_KEY_S,
-	D = GLFW_KEY_D
+	R = GLFW_KEY_R
 };
 
-struct KeyPressedStatus { unsigned char previousKeyPressed; unsigned char keyPressed; };
+enum class ButtonCode
+{
+	LEFT = GLFW_MOUSE_BUTTON_LEFT,
+	RIGHT = GLFW_MOUSE_BUTTON_RIGHT,
+	MIDDLE = GLFW_MOUSE_BUTTON_MIDDLE,
+};
+
+struct KeyPressedStatus final
+{
+	unsigned char previousKeyPressed; 
+	unsigned char keyPressed;
+};
 
 class InputManager
 {
@@ -61,10 +77,19 @@ public:
 	bool IsKeyUp(KeyCode key);
 
 	bool IsKeyHeld(KeyCode key);
+
+	Vec2i GetMousePosition() const;
+
+	bool IsButtonDown(ButtonCode button) const;
+
+	bool IsButtonReleased(ButtonCode button) const;
+
+	bool IsButtonHeld(ButtonCode button) const;
 private:
 	Engine& m_Engine;
 
-	std::vector<KeyPressedStatus> m_KeyPressedStatus{GLFW_KEY_LAST};
+	std::vector<KeyPressedStatus> m_KeyPressedStatus{ GLFW_KEY_LAST };
+	std::vector<KeyPressedStatus> m_ButtonPressedStatus{ GLFW_MOUSE_BUTTON_LAST };
 
 	GLFWwindow* m_Window;
 	

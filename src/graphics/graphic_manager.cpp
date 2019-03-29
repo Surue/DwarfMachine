@@ -155,11 +155,6 @@ void GraphicManager::Destroy()
 void GraphicManager::Update()
 {
 	DrawFrame();
-
-	if(m_Engine.GetInputManager()->IsKeyDown(KeyCode::SPACE))
-	{
-		std::cout << "space down\n";
-	}
 }
 
 GLFWwindow* GraphicManager::GetWindow() const
