@@ -21,53 +21,42 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-#include <engine/engine.h>
 
-#include <graphics/graphic_manager.h>
 #include <engine/Input.h>
 
 namespace dm
 {
 
-void Engine::Run()
+InputManager::InputManager(Engine& engine) : m_Engine(engine)
 {
-	m_GraphicManager = new GraphicManager(*this);
-	m_InputManager = new InputManager(*this);
-
-	m_GraphicManager->Init();
-	m_Window = m_GraphicManager->GetWindow();
-
-	m_InputManager->Init(m_Window);
-
-
-	MainLoop();
-	Destroy();
 }
 
-InputManager* Engine::GetInputManager()
+void InputManager::Init(GLFWwindow* window)
 {
-	return m_InputManager;
+	m_Window = window;
 }
 
-void Engine::MainLoop()
+void InputManager::Update()
 {
-	while (!glfwWindowShouldClose(m_Window))
+	for (auto i = 0; i < GLFW_KEY_LAST; i++)
 	{
-		glfwPollEvents();
-		m_InputManager->Update();
-
-		//Updates
-		m_GraphicManager->Update();
-
-		
+		m_KeyPressedStatus[i].previousKeyPressed = m_KeyPressedStatus[i].keyPressed;
+		m_KeyPressedStatus[i].keyPressed = glfwGetKey(m_Window, i);
 	}
 }
 
-void Engine::Destroy()
+bool InputManager::IsKeyDown(KeyCode key)
 {
-	m_GraphicManager->Destroy();
-
-	delete(m_GraphicManager);
+	return m_KeyPressedStatus[static_cast<int>(key)].previousKeyPressed != GLFW_PRESS && m_KeyPressedStatus[static_cast<int>(key)].keyPressed == GLFW_PRESS;
 }
 
+bool InputManager::IsKeyUp(KeyCode key)
+{
+	return m_KeyPressedStatus[static_cast<int>(key)].previousKeyPressed == GLFW_PRESS && m_KeyPressedStatus[static_cast<int>(key)].keyPressed != GLFW_PRESS;
+}
+
+bool InputManager::IsKeyHeld(KeyCode key)
+{
+	return m_KeyPressedStatus[static_cast<int>(key)].keyPressed == GLFW_PRESS;
+}
 }

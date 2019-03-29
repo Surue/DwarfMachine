@@ -31,11 +31,14 @@ SOFTWARE.
 namespace dm
 {
 class GraphicManager;
+class InputManager;
 
 class Engine
 {
 public:
 	void Run();
+
+	InputManager* GetInputManager();
 private:
 	/**
 	 * \brief Main loop of the game
@@ -50,6 +53,7 @@ private:
 	GLFWwindow* m_Window = nullptr;
 
 	GraphicManager* m_GraphicManager = nullptr;
+	InputManager* m_InputManager = nullptr;
 };
 }
 

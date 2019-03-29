@@ -37,7 +37,7 @@ class GraphicManager
 {
 public:
 
-	GraphicManager();
+	GraphicManager(Engine& engine);
 	~GraphicManager() = default;
 	/**
 	 * \brief Init graphic manager (GLFW and Vulkan)
@@ -298,8 +298,8 @@ private:
 	const int WIDTH = 800;
 	const int HEIGHT = 600;
 
-	const std::string MODEL_PATH = "ressources/models/chalet.obj";
-	const std::string TEXTURE_PATH = "ressources/textures/chalet.jpg";
+	const std::string MODEL_PATH = "ressources/models/Tentacle_lp.obj";
+	const std::string TEXTURE_PATH = "ressources/textures/Tentacle_lp_defaultMat_BaseColor.png";
 
 	//VULKAN
 	VkInstance m_VulkanInstance = nullptr;
@@ -373,6 +373,8 @@ private:
 	VkImage m_ColorImage{};
 	VkDeviceMemory m_ColorImageMemory{};
 	VkImageView m_ColorImageView{};
+
+	Engine& m_Engine;
 };
 }
 

@@ -21,53 +21,53 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-#include <engine/engine.h>
 
-#include <graphics/graphic_manager.h>
-#include <engine/Input.h>
+#ifndef INPUT_H
+#define INPUT_H
+
+#include <engine/engine.h>
+#include <iostream>
+#include <vector>
+#include <map>
 
 namespace dm
 {
 
-void Engine::Run()
+enum class KeyCode : unsigned short
 {
-	m_GraphicManager = new GraphicManager(*this);
-	m_InputManager = new InputManager(*this);
+	SPACE = GLFW_KEY_SPACE,
+	Q = GLFW_KEY_Q,
+	W = GLFW_KEY_W,
+	E = GLFW_KEY_E,
+	A = GLFW_KEY_A,
+	S = GLFW_KEY_S,
+	D = GLFW_KEY_D
+};
 
-	m_GraphicManager->Init();
-	m_Window = m_GraphicManager->GetWindow();
+struct KeyPressedStatus { unsigned char previousKeyPressed; unsigned char keyPressed; };
 
-	m_InputManager->Init(m_Window);
-
-
-	MainLoop();
-	Destroy();
-}
-
-InputManager* Engine::GetInputManager()
+class InputManager
 {
-	return m_InputManager;
-}
+public:
+	InputManager(Engine& engine);
+	~InputManager() = default;
 
-void Engine::MainLoop()
-{
-	while (!glfwWindowShouldClose(m_Window))
-	{
-		glfwPollEvents();
-		m_InputManager->Update();
+	void Init(GLFWwindow* window);
 
-		//Updates
-		m_GraphicManager->Update();
+	void Update();
 
-		
-	}
-}
+	bool IsKeyDown(KeyCode key);
 
-void Engine::Destroy()
-{
-	m_GraphicManager->Destroy();
+	bool IsKeyUp(KeyCode key);
 
-	delete(m_GraphicManager);
-}
+	bool IsKeyHeld(KeyCode key);
+private:
+	Engine& m_Engine;
 
-}
+	std::vector<KeyPressedStatus> m_KeyPressedStatus{GLFW_KEY_LAST};
+
+	GLFWwindow* m_Window;
+	
+ };
+};
+#endif INPUT_H
