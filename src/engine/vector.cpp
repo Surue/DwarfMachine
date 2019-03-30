@@ -114,4 +114,159 @@ float Vec2i::Dot(const Vec2i& v1, const Vec2i& v2)
 {
 	return v1.x*v2.x + v1.y*v2.y;
 }
+
+Vec2f::Vec2f(): x(0), y(0){}
+
+Vec2f::Vec2f(const float x, const float y) : x(x), y (y){}
+
+Vec2f::Vec2f(const Vec2i v)
+{
+	x = v.x;
+	y = v.y;
+}
+
+bool Vec2f::operator==(const Vec2f& rhs) const
+{
+	return x == rhs.x && y == rhs.y;
+}
+
+bool Vec2f::operator!=(const Vec2f& rhs) const
+{
+	return x != rhs.x || y != rhs.y;
+}
+
+bool Vec2f::operator==(const Vec2i& rhs) const
+{
+	return x == rhs.x && y == rhs.y;
+}
+
+bool Vec2f::operator!=(const Vec2i& rhs) const
+{
+	return x != rhs.x || y != rhs.y;
+}
+
+Vec2f Vec2f::operator+(const Vec2f& rhs) const
+{
+	return Vec2f(x + rhs.x, y + rhs.y);
+}
+
+Vec2f& Vec2f::operator+=(const Vec2f& rhs)
+{
+	x += rhs.x;
+	y += rhs.y;
+
+	return *this;
+}
+
+Vec2f Vec2f::operator+(const Vec2i& rhs) const
+{
+	return Vec2f(x + rhs.x, y + rhs.y);
+}
+
+Vec2f& Vec2f::operator+=(const Vec2i& rhs)
+{
+	x += rhs.x;
+	y += rhs.y;
+
+	return *this;
+}
+
+Vec2f Vec2f::operator-(const Vec2f& rhs) const
+{
+	return Vec2f(x - rhs.x, y - rhs.y);
+}
+
+Vec2f& Vec2f::operator-=(const Vec2f& rhs)
+{
+	x -= rhs.x;
+	y -= rhs.y;
+
+	return *this;
+}
+
+Vec2f Vec2f::operator-(const Vec2i& rhs) const
+{
+	return Vec2f(x - rhs.x, y - rhs.y);
+}
+
+Vec2f& Vec2f::operator-=(const Vec2i& rhs)
+{
+	x -= rhs.x;
+	y -= rhs.y;
+
+	return *this;
+}
+
+Vec2f Vec2f::operator*(const int rhs) const
+{
+	return Vec2f(x * rhs, y * rhs);
+}
+
+Vec2f& Vec2f::operator*=(const int rhs)
+{
+	x *= rhs;
+	y *= rhs;
+
+	return *this;
+}
+
+Vec2f Vec2f::operator*(const float rhs) const
+{
+	return Vec2f(x * rhs, y * rhs);
+}
+
+Vec2f& Vec2f::operator*=(const float rhs)
+{
+	x *= rhs;
+	y *= rhs;
+
+	return *this;
+}
+
+Vec2f Vec2f::operator/(const float rhs) const
+{
+	return Vec2f(x / rhs, y / rhs);
+}
+
+Vec2f& Vec2f::operator/=(const float rhs)
+{
+	x /= rhs;
+	y /= rhs;
+
+	return *this;
+}
+
+float Vec2f::GetMagnitude() const
+{
+	return sqrt(x * x + y * y);
+}
+
+Vec2f Vec2f::Normalized() const
+{
+	const auto magnitude = GetMagnitude();
+
+	if (magnitude != 0) {
+		return Vec2f(x / magnitude, y / magnitude);
+	}else
+	{
+		return Vec2f(x, y);
+	}
+}
+
+Vec2f Vec2f::Lerp(const Vec2f& v1, const Vec2f& v2, const float t)
+{
+	return v1 + (v2 - v1)*t;
+}
+
+float Vec2f::AngleBetween(const Vec2f& v1, const Vec2f& v2)
+{
+	const auto dot = Dot(v1, v2);
+	const float angle = acosf(dot) / M_PI * 180.0f;
+	return (dot < 0.0f ? -1.0f : 1.0f) * angle;
+}
+
+float Vec2f::Dot(const Vec2f& v1, const Vec2f& v2)
+{
+	return v1.x*v2.x + v1.y*v2.y;
+}
 }

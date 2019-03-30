@@ -163,6 +163,8 @@ void GraphicManager::Update()
 {
 	DrawFrame();
 
+	//Camera
+
 	auto* inputManager = m_Engine.GetInputManager();
 
 	glm::vec3 camFront;
@@ -170,6 +172,39 @@ void GraphicManager::Update()
 	camFront.y = sin(glm::radians(rotation.x));
 	camFront.z = cos(glm::radians(rotation.x)) * cos(glm::radians(rotation.y));
 	camFront = normalize(camFront);
+
+	static Vec2i originalPos;
+	static Vec2i lastPos;
+
+	if (inputManager->IsButtonDown(ButtonCode::MIDDLE))
+	{
+		originalPos = inputManager->GetMousePosition();
+		lastPos = originalPos;
+	}
+
+
+	if(inputManager->IsButtonHeld(ButtonCode::MIDDLE))
+	{
+		Vec2f offset(inputManager->GetMousePosition() - originalPos);
+
+		if (lastPos != inputManager->GetMousePosition()) {
+			offset = offset.Normalized();
+
+			position.x += offset.x * 0.015f;
+			position.y += offset.y * -0.015f;
+
+			lastPos = inputManager->GetMousePosition();
+		}else
+		{
+			originalPos = inputManager->GetMousePosition();
+			lastPos = originalPos;
+		}
+	}
+
+	if(inputManager->IsButtonReleased(ButtonCode::MIDDLE))
+	{
+		
+	}
 
 	if(inputManager->IsKeyHeld(KeyCode::A))
 	{
@@ -1577,7 +1612,7 @@ void GraphicManager::CopyBufferToImage(const VkBuffer buffer, const VkImage imag
 {
 	const auto commandBuffer = BeginSingleTimeCommands();
 
-	VkBufferImageCopy region = {};
+	VkBufferImageCopy region;
 	region.bufferOffset = 0;
 	region.bufferRowLength = 0;
 	region.bufferImageHeight = 0;

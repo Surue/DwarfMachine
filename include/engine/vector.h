@@ -58,5 +58,48 @@ public:
 	static float AngleBetween(const Vec2i& v1, const Vec2i& v2);
 	static float Dot(const Vec2i& v1, const Vec2i& v2);
 };
+
+class Vec2f final
+{
+public:
+	float x;
+	float y;
+
+	Vec2f();
+	Vec2f(float x, float y);
+	explicit Vec2f(Vec2i v);
+
+	~Vec2f() = default;
+
+	bool operator==(const Vec2f &rhs) const;
+	bool operator!=(const Vec2f &rhs) const;
+	bool operator==(const Vec2i &rhs) const;
+	bool operator!=(const Vec2i &rhs) const;
+
+	Vec2f operator+(const Vec2f &rhs) const;
+	Vec2f& operator+=(const Vec2f &rhs);
+	Vec2f operator+(const Vec2i &rhs) const;
+	Vec2f& operator+=(const Vec2i &rhs);
+
+	Vec2f operator-(const Vec2f &rhs) const;
+	Vec2f& operator-=(const Vec2f &rhs);
+	Vec2f operator-(const Vec2i &rhs) const;
+	Vec2f& operator-=(const Vec2i &rhs);
+
+	Vec2f operator*(int rhs) const;
+	Vec2f& operator*=(int rhs);
+	Vec2f operator*(float rhs) const;
+	Vec2f& operator*=(float rhs);
+
+	Vec2f operator/(float rhs) const;
+	Vec2f& operator/=(float rhs);
+
+	float GetMagnitude() const;
+	Vec2f Normalized() const;
+
+	static Vec2f Lerp(const Vec2f& v1, const Vec2f& v2, float t);
+	static float AngleBetween(const Vec2f& v1, const Vec2f& v2);
+	static float Dot(const Vec2f& v1, const Vec2f& v2);
+};
 }
 #endif VECTOR_H

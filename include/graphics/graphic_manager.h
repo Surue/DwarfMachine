@@ -33,6 +33,47 @@ SOFTWARE.
 
 namespace dm
 {
+/**
+ * \brief Create a vulkan's validation layer. The validation layer is used to catch vulkan's specific error
+ * \param instance It's the current vulkan instance
+ * \param pCreateInfo Information used to create the validation layer
+ * \param pAllocator custom allocator 
+ * \param pDebugMessenger ptr that will store new messenger
+ * \return if succeeded return a new messenger, otherwise return VK_ERROR_EXTENSION_NOT_PRESENT
+ */
+inline VkResult CreateDebugUtilsMessengerEXT(const VkInstance instance,
+	const VkDebugUtilsMessengerCreateInfoEXT* pCreateInfo,
+	const VkAllocationCallbacks* pAllocator,
+	VkDebugUtilsMessengerEXT* pDebugMessenger)
+{
+	const auto func = reinterpret_cast<PFN_vkCreateDebugUtilsMessengerEXT>(vkGetInstanceProcAddr(
+		instance, "vkCreateDebugUtilsMessengerEXT"));
+	if (func != nullptr)
+	{
+		return func(instance, pCreateInfo, pAllocator, pDebugMessenger);
+	}
+	else
+	{
+		return VK_ERROR_EXTENSION_NOT_PRESENT;
+	}
+}
+
+/**
+ * \brief Destroy a messenger acting as the validation layer
+ * \param instance The current Vulkan Instance
+ * \param debugMessenger ptr to delete
+ * \param pAllocator custom allocator
+ */
+inline void DestroyDebugUtilsMessengerEXT(const VkInstance instance, const VkDebugUtilsMessengerEXT debugMessenger,
+	const VkAllocationCallbacks* pAllocator)
+{
+	const auto func = reinterpret_cast<PFN_vkDestroyDebugUtilsMessengerEXT>(vkGetInstanceProcAddr(
+		instance, "vkDestroyDebugUtilsMessengerEXT"));
+	if (func != nullptr)
+	{
+		func(instance, debugMessenger, pAllocator);
+	}
+}
 class GraphicManager
 {
 public:
