@@ -94,11 +94,11 @@ void GraphicManager::Init()
 	InitVulkan();
 
 	//Camera
-	view = glm::lookAt(glm::vec3(2.0f, 2.0f, 2.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-	proj = glm::perspective(glm::radians(45.0f), m_SwapChainExtent.width / static_cast<float>(m_SwapChainExtent.height), 1.0f, 10.0f);
+	view = glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	proj = glm::perspective(glm::radians(45.0f), m_SwapChainExtent.width / static_cast<float>(m_SwapChainExtent.height), 0.1f, 100.0f);
 
 	rotation = glm::vec3(0.0f, 0.0f, 0.0f);
-	position = glm::vec3(2.0f, 2.0f, 2.0f);
+	position = glm::vec3(0.0f, 0.0f, -10.0f);
 }
 
 void GraphicManager::Destroy()
@@ -163,6 +163,9 @@ void GraphicManager::Update()
 {
 	DrawFrame();
 
+	if(glfwGetKey(m_Window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+		glfwSetWindowShouldClose(m_Window, true);
+
 	//Camera
 
 	auto* inputManager = m_Engine.GetInputManager();
@@ -175,6 +178,8 @@ void GraphicManager::Update()
 
 	static Vec2i originalPos;
 	static Vec2i lastPos;
+
+	float moveSpeed = 0.01f;
 
 	if (inputManager->IsButtonDown(ButtonCode::MIDDLE))
 	{
@@ -190,8 +195,8 @@ void GraphicManager::Update()
 		if (lastPos != inputManager->GetMousePosition()) {
 			offset = offset.Normalized();
 
-			position.x += offset.x * 0.015f;
-			position.y += offset.y * -0.015f;
+			position.x += offset.x * moveSpeed;
+			position.y += offset.y * -moveSpeed;
 
 			lastPos = inputManager->GetMousePosition();
 		}else
@@ -206,27 +211,89 @@ void GraphicManager::Update()
 		
 	}
 
+	if(inputManager->IsKeyHeld(KeyCode::SHIFT_LEFT))
+	{
+		moveSpeed *= 2;
+	}
+
+	if(inputManager->IsKeyHeld(KeyCode::LEFT))
+	{
+		position -= normalize(cross(camFront, glm::vec3(0.0f, 1.0f, 0.0f))) * moveSpeed;
+	}
+
+	if (inputManager->IsKeyHeld(KeyCode::RIGHT))
+	{
+		position += normalize(cross(camFront, glm::vec3(0.0f, 1.0f, 0.0f)))* moveSpeed;
+	}
+
+	if (inputManager->IsKeyHeld(KeyCode::DOWN))
+	{
+		position -= camFront * moveSpeed;
+	}
+
+	if (inputManager->IsKeyHeld(KeyCode::UP))
+	{
+		position += camFront * moveSpeed;
+	}
+
+	if(InputManager::scrollY > 0.1f)
+	{
+		position += camFront;
+	}else if(InputManager::scrollY < -0.1f)
+	{
+		position -= camFront;
+	}
+
+	//std::cout << position.x << ", " << position.y << ", " << position.z << "\n";
+
+	static Vec2i originalRot;
+	static Vec2i lastRot;
+
+	if (inputManager->IsButtonDown(ButtonCode::RIGHT))
+	{
+		originalRot = inputManager->GetMousePosition();
+		lastRot = originalRot;
+	}
+
+	if (inputManager->IsButtonHeld(ButtonCode::RIGHT))
+	{
+		Vec2f offset(inputManager->GetMousePosition() - originalRot);
+
+		if (lastRot != inputManager->GetMousePosition()) {
+			offset = offset.Normalized();
+
+			rotation.x += offset.y * -0.2f;
+			rotation.y += offset.x * 0.2f;
+
+			lastRot = inputManager->GetMousePosition();
+		}
+		else
+		{
+			originalRot = inputManager->GetMousePosition();
+			lastRot = originalRot;
+		}
+	}
+
 	if(inputManager->IsKeyHeld(KeyCode::A))
 	{
-		position -= normalize(cross(camFront, glm::vec3(0.0f, 1.0f, 0.0f))) * 0.01f;
+		rotation.y -= 0.01f;
 	}
 
 	if (inputManager->IsKeyHeld(KeyCode::D))
 	{
-		position += normalize(cross(camFront, glm::vec3(0.0f, 1.0f, 0.0f)))* 0.01f;
-	}
-
-	if (inputManager->IsKeyHeld(KeyCode::S))
-	{
-		position -= camFront * 0.01f;
+		rotation.y += 0.01f;
 	}
 
 	if (inputManager->IsKeyHeld(KeyCode::W))
 	{
-		position += camFront * 0.01f;
+		rotation.x += 0.01f;
 	}
 
-	std::cout << position.x << ", " << position.y << ", " << position.z << "\n";
+	if (inputManager->IsKeyHeld(KeyCode::S))
+	{
+		rotation.x -= 0.01f;
+	}
+
 
 	auto rotM = glm::mat4(1.0f);
 

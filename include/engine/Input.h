@@ -30,6 +30,7 @@ SOFTWARE.
 #include <engine/engine.h>
 
 #include <engine/vector.h>
+#include <iostream>
 
 namespace dm
 {
@@ -46,7 +47,12 @@ enum class KeyCode
 	Q = GLFW_KEY_Q,
 	W = GLFW_KEY_W,
 	S = GLFW_KEY_S,
-	R = GLFW_KEY_R
+	R = GLFW_KEY_R,
+	UP = GLFW_KEY_UP,
+	DOWN = GLFW_KEY_DOWN,
+	LEFT = GLFW_KEY_LEFT,
+	RIGHT = GLFW_KEY_RIGHT,
+	SHIFT_LEFT = GLFW_KEY_LEFT_SHIFT
 };
 
 enum class ButtonCode
@@ -85,6 +91,10 @@ public:
 	bool IsButtonReleased(ButtonCode button) const;
 
 	bool IsButtonHeld(ButtonCode button) const;
+
+	inline static int scrollX = 0;
+	inline static int scrollY = 0;
+	inline static int scrollUpdate = false;
 private:
 	Engine& m_Engine;
 
@@ -94,5 +104,12 @@ private:
 	GLFWwindow* m_Window;
 	
  };
+
+inline void ScrollCallback(GLFWwindow* window, double xoffset, double yoffset)
+{
+	InputManager::scrollX = xoffset;
+	InputManager::scrollY = yoffset;
+	InputManager::scrollUpdate = true;
+}
 };
 #endif INPUT_H

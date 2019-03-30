@@ -35,6 +35,8 @@ InputManager::InputManager(Engine& engine) : m_Engine(engine)
 void InputManager::Init(GLFWwindow* window)
 {
 	m_Window = window;
+
+	glfwSetScrollCallback(window, ScrollCallback);
 }
 
 void InputManager::Update()
@@ -49,6 +51,14 @@ void InputManager::Update()
 	{
 		m_ButtonPressedStatus[i].previousKeyPressed = m_ButtonPressedStatus[i].keyPressed;
 		m_ButtonPressedStatus[i].keyPressed = glfwGetMouseButton(m_Window, i);
+	}
+
+	if (!scrollUpdate) {
+		scrollX = 0;
+		scrollY = 0;
+	}else
+	{
+		scrollUpdate = false;
 	}
 }
 
