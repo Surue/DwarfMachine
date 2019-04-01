@@ -32,13 +32,18 @@ namespace dm
 {
 class GraphicManager;
 class InputManager;
+class EntityManager;
 
 class Engine
 {
 public:
-	void Run();
+	void Init();
+
+	void Start();
 
 	InputManager* GetInputManager();
+
+	EntityManager* GetEntityManager();
 private:
 	/**
 	 * \brief Main loop of the game
@@ -54,6 +59,7 @@ private:
 
 	GraphicManager* m_GraphicManager = nullptr;
 	InputManager* m_InputManager = nullptr;
+	EntityManager* m_EntityManager = nullptr;
 };
 }
 

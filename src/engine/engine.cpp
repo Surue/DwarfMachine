@@ -25,21 +25,24 @@ SOFTWARE.
 
 #include <graphics/graphic_manager.h>
 #include <engine/Input.h>
+#include <engine/entity.h>
 
 namespace dm
 {
-
-void Engine::Run()
+void Engine::Init()
 {
 	m_GraphicManager = new GraphicManager(*this);
 	m_InputManager = new InputManager(*this);
+	m_EntityManager = new EntityManager(*this);
 
 	m_GraphicManager->Init();
 	m_Window = m_GraphicManager->GetWindow();
 
 	m_InputManager->Init(m_Window);
+}
 
-
+void Engine::Start()
+{
 	MainLoop();
 	Destroy();
 }
@@ -47,6 +50,11 @@ void Engine::Run()
 InputManager* Engine::GetInputManager()
 {
 	return m_InputManager;
+}
+
+EntityManager* Engine::GetEntityManager()
+{
+	return m_EntityManager;
 }
 
 void Engine::MainLoop()
@@ -58,8 +66,6 @@ void Engine::MainLoop()
 
 		//Updates
 		m_GraphicManager->Update();
-
-		
 	}
 }
 

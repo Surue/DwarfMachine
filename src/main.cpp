@@ -30,7 +30,7 @@ int main()
 	dm::Engine engine;
 
 	try {
-		engine.Run();
+		engine.Start();
 	}
 	catch (const std::exception& e) {
 		std::cerr << e.what() << std::endl;

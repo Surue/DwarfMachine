@@ -262,8 +262,8 @@ void GraphicManager::Update()
 		if (lastRot != inputManager->GetMousePosition()) {
 			offset = offset.Normalized();
 
-			rotation.x += offset.y * -0.2f;
-			rotation.y += offset.x * 0.2f;
+			rotation.x += offset.y * 0.5f;
+			rotation.y += offset.x * 0.5f;
 
 			lastRot = inputManager->GetMousePosition();
 		}
