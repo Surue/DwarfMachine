@@ -22,12 +22,27 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#ifndef COMPONENT_H
-#define COMPONENT_H
+#include <engine/component.h>
+#include <iostream>
 
 namespace dm
 {
-
+ComponentBaseManager::ComponentBaseManager()
+{
+	m_Component.resize(INIT_COMPONENT_NMB);
 }
 
-#endif COMPONENT_H
+void ComponentBaseManager::AddComponent(Entity entity, ComponentBase& componentBase)
+{
+	m_Component[entity - 1] = componentBase;
+
+	std::cout << "resize component vector\n";
+	m_Component.resize(m_Component.size() + INIT_COMPONENT_NMB);
+		
+}
+
+void ComponentBaseManager::DestroyComponent(const Entity entity)
+{
+	//TODO s'assurer que les système soient à jour
+}
+}

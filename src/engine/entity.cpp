@@ -55,9 +55,10 @@ Entity EntityManager::CreateEntity()
 			std::cout << "move last entity\n";
 			for(int i = m_LastEntity; i < m_Entities.size(); i++)
 			{
-				if(m_Entities[i] != INVALID_ENTITY)
+				if(m_Entities[i] == INVALID_ENTITY)
 				{
 					m_LastEntity = i;
+					break;
 				}
 			}
 		}

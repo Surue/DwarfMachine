@@ -21,3 +21,33 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
+
+#ifndef COMPONENT_H
+#define COMPONENT_H
+#include "entity.h"
+
+#define INIT_COMPONENT_NMB 10
+
+namespace dm
+{
+struct ComponentBase {};
+
+class ComponentBaseManager
+{
+public:
+	ComponentBaseManager();
+	~ComponentBaseManager() = default;
+
+	virtual void Init(){}
+
+	virtual void Update(){};
+
+	void AddComponent(Entity entity, ComponentBase& componentBase);
+	void DestroyComponent(Entity entity);
+
+private:
+	std::vector<ComponentBase> m_Component;
+};
+}
+
+#endif COMPONENT_H
