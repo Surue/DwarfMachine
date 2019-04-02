@@ -22,50 +22,30 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#ifndef COMPONENT_MANAGER_H
-#define COMPONENT_MANAGER_H
+#include <graphics/camera.h>
 
-#include <engine/transform.h>
-
-namespace dm {
-
-	class ComponentManager
-	{
-	public:
-		ComponentManager()
-		{
-			m_TransformManager = new TransformManager();
-		}
-
-		template<class T>
-		void AddComponent(Entity entity, T& component)
-		{
-			if (typeid(T).raw_name() == typeid(Transform).raw_name())
-			{
-				m_TransformManager->AddComponent(entity, component);
-			}
-			else {
-				std::runtime_error("Fail to bind component to its own component manager");
-			}
-		}
-
-		template<class T>
-		T* GetComponent(const Entity entity)
-		{
-			if(typeid(T).raw_name() == typeid(Transform).raw_name())
-			{
-				return m_TransformManager->GetComponent(entity);
-			}
-
-			std::runtime_error("Fail to bind component to its own component manager");
-			return nullptr;
-		}
-
-		void DestroyComponent(ComponentType componentType);
-
-	private:
-		TransformManager* m_TransformManager;
-	};
+namespace dm
+{
+void CameraManager::Init()
+{
+	
 }
 
-#endif COMPONENT_MANAGER_H
+void CameraManager::Update()
+{
+}
+
+void CameraManager::AddComponent(const Entity entity, Camera& componentBase)
+{
+	m_Components[entity - 1] = componentBase;
+}
+
+void CameraManager::DestroyComponent(Entity entity)
+{
+}
+
+Camera* CameraManager::GetComponent(const Entity entity)
+{
+	return &m_Components[entity - 1];
+}
+}

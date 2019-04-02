@@ -22,50 +22,27 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#ifndef COMPONENT_MANAGER_H
-#define COMPONENT_MANAGER_H
+#ifndef CAMERA_H
+#define CAMERA_H
+#include <glm/mat4x2.hpp>
 
-#include <engine/transform.h>
+#include <engine/component.h>
 
 namespace dm {
+struct Camera
+{
+	glm::mat4 proj;
+	glm::mat4 view;
+};
 
-	class ComponentManager
-	{
-	public:
-		ComponentManager()
-		{
-			m_TransformManager = new TransformManager();
-		}
-
-		template<class T>
-		void AddComponent(Entity entity, T& component)
-		{
-			if (typeid(T).raw_name() == typeid(Transform).raw_name())
-			{
-				m_TransformManager->AddComponent(entity, component);
-			}
-			else {
-				std::runtime_error("Fail to bind component to its own component manager");
-			}
-		}
-
-		template<class T>
-		T* GetComponent(const Entity entity)
-		{
-			if(typeid(T).raw_name() == typeid(Transform).raw_name())
-			{
-				return m_TransformManager->GetComponent(entity);
-			}
-
-			std::runtime_error("Fail to bind component to its own component manager");
-			return nullptr;
-		}
-
-		void DestroyComponent(ComponentType componentType);
-
-	private:
-		TransformManager* m_TransformManager;
-	};
+class CameraManager : ComponentBaseManager<Camera>
+{
+public:
+	void Init() override;
+	void Update() override;
+	void AddComponent(Entity entity, Camera& componentBase) override;
+	void DestroyComponent(Entity entity) override;
+	Camera* GetComponent(Entity entity) override;
+};
 }
-
-#endif COMPONENT_MANAGER_H
+#endif

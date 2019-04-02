@@ -105,7 +105,7 @@ private:
 	
  };
 
-inline void ScrollCallback(GLFWwindow* window, double xoffset, double yoffset)
+inline void ScrollCallback(GLFWwindow* window, const double xoffset, const double yoffset)
 {
 	InputManager::scrollX = xoffset;
 	InputManager::scrollY = yoffset;

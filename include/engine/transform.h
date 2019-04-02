@@ -64,7 +64,6 @@ public:
 	{
 		return &m_Components[entity - 1];
 	}
-private:
 };
 }
 
