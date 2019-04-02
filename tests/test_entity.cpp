@@ -27,6 +27,8 @@ SOFTWARE.
 #include <engine/engine.h>
 #include <engine/entity.h>
 
+#include <engine/transform.h>
+
 TEST(Entity, CreateEntity)
 {
 	dm::Engine engine;
@@ -96,9 +98,33 @@ TEST(Entity, CreateAndDestroyEntity)
 		entityManager->DestroyEntity(e1);
 		const auto e2 = entityManager->CreateEntity();
 		std::cout << "e2 = " << e2 << "\n";
-
-		entityManager->DestroyEntity(199);
 		
+		engine.Start();
+	}
+	catch (const std::exception& e)
+	{
+		std::cerr << e.what() << "\n";
+	}
+}
+
+TEST(Entity, TransformComponentEntity)
+{
+	dm::Engine engine;
+	engine.Init();
+
+	auto entityManager = engine.GetEntityManager();
+
+	const auto e0 = entityManager->CreateEntity();
+
+	dm::Transform transformInfo{};
+	transformInfo.x = 1;
+	transformInfo.y = 2;
+	transformInfo.z = 3;
+
+	entityManager->AddComponent(e0, dm::ComponentType::TRANSFORM, transformInfo);
+
+	try
+	{
 		engine.Start();
 	}
 	catch (const std::exception& e)

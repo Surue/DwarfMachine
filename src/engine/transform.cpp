@@ -21,66 +21,22 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-#include <engine/engine.h>
 
-#include <graphics/graphic_manager.h>
-#include <engine/Input.h>
-#include <engine/entity.h>
 #include <engine/transform.h>
+#include <iostream>
 
 namespace dm
 {
-void Engine::Init()
+void TransformManager::Init()
 {
-	m_GraphicManager = new GraphicManager(*this);
-	m_InputManager = new InputManager(*this);
-	m_EntityManager = new EntityManager(*this);
-	m_TransformManager = new TransformManager();
-
-	m_GraphicManager->Init();
-	m_Window = m_GraphicManager->GetWindow();
-
-	m_InputManager->Init(m_Window);
+	
 }
 
-void Engine::Start()
+void TransformManager::Update()
 {
-	MainLoop();
-	Destroy();
-}
-
-InputManager* Engine::GetInputManager()
-{
-	return m_InputManager;
-}
-
-EntityManager* Engine::GetEntityManager()
-{
-	return m_EntityManager;
-}
-
-TransformManager* Engine::GetTransformManager()
-{
-	return m_TransformManager;
-}
-
-void Engine::MainLoop()
-{
-	while (!glfwWindowShouldClose(m_Window))
+	for (auto& component : m_Components)
 	{
-		glfwPollEvents();
-		m_InputManager->Update();
-
-		//Updates
-		m_GraphicManager->Update();
+		//std::cout << component <<"\n";
 	}
 }
-
-void Engine::Destroy()
-{
-	m_GraphicManager->Destroy();
-
-	delete(m_GraphicManager);
-}
-
 }

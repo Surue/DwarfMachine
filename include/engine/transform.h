@@ -21,66 +21,51 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-#include <engine/engine.h>
 
-#include <graphics/graphic_manager.h>
-#include <engine/Input.h>
-#include <engine/entity.h>
-#include <engine/transform.h>
+#ifndef TRANSFORM_H
+#define TRANSFORM_H
+
+#include <engine/component.h>
+#include <string>
 
 namespace dm
 {
-void Engine::Init()
+struct Transform final
 {
-	m_GraphicManager = new GraphicManager(*this);
-	m_InputManager = new InputManager(*this);
-	m_EntityManager = new EntityManager(*this);
-	m_TransformManager = new TransformManager();
+	float x;
+	float y;
+	float z;
 
-	m_GraphicManager->Init();
-	m_Window = m_GraphicManager->GetWindow();
-
-	m_InputManager->Init(m_Window);
-}
-
-void Engine::Start()
-{
-	MainLoop();
-	Destroy();
-}
-
-InputManager* Engine::GetInputManager()
-{
-	return m_InputManager;
-}
-
-EntityManager* Engine::GetEntityManager()
-{
-	return m_EntityManager;
-}
-
-TransformManager* Engine::GetTransformManager()
-{
-	return m_TransformManager;
-}
-
-void Engine::MainLoop()
-{
-	while (!glfwWindowShouldClose(m_Window))
+	/*friend std::ostream & operator<<(std::ostream & out, const Transform transform)
 	{
-		glfwPollEvents();
-		m_InputManager->Update();
+		out << "(" << transform.x << ", " << transform.y << ", "<< transform.z << ")";
+		return out;
+	}*/
+};
 
-		//Updates
-		m_GraphicManager->Update();
-	}
-}
-
-void Engine::Destroy()
+class TransformManager : ComponentBaseManager<Transform>
 {
-	m_GraphicManager->Destroy();
+public:
+	void Init() override;
 
-	delete(m_GraphicManager);
+	void Update() override;
+
+	void AddComponent(const Entity entity, Transform& componentBase) override
+	{
+		m_Components[entity - 1] = componentBase;
+	}
+
+	void DestroyComponent(Entity entity) override
+	{
+		
+	}
+
+	Transform* GetComponent(const Entity entity) override
+	{
+		return &m_Components[entity - 1];
+	}
+private:
+};
 }
 
-}
+#endif TRANSFORM_H

@@ -24,29 +24,46 @@ SOFTWARE.
 
 #ifndef COMPONENT_H
 #define COMPONENT_H
-#include "entity.h"
+#include <engine/entity.h>
 
 #define INIT_COMPONENT_NMB 10
 
 namespace dm
 {
-struct ComponentBase {};
+enum class ComponentType : int {
+	TRANSFORM = 1 << 0
+};
 
+template<typename T>
 class ComponentBaseManager
 {
 public:
-	ComponentBaseManager();
-	~ComponentBaseManager() = default;
+	ComponentBaseManager()
+	{
+		
+	}
 
-	virtual void Init(){}
+	virtual ~ComponentBaseManager()
+	{
+		m_Components.clear();
+	};
 
-	virtual void Update(){};
+	virtual void Init() = 0;
+	 
+	virtual void Update() = 0;
 
-	void AddComponent(Entity entity, ComponentBase& componentBase);
-	void DestroyComponent(Entity entity);
+	virtual void AddComponent(Entity entity, T& componentBase) = 0;
+	virtual void DestroyComponent(Entity entity) = 0;
 
-private:
-	std::vector<ComponentBase> m_Component;
+	virtual T* GetComponent(Entity entity) = 0;
+
+	std::vector<T>& GetComponents()
+	{
+		return m_Components;
+	}
+
+protected:
+	std::vector<T> m_Components;
 };
 }
 

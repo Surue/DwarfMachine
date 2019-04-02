@@ -33,6 +33,7 @@ namespace dm
 class GraphicManager;
 class InputManager;
 class EntityManager;
+class TransformManager;
 
 class Engine
 {
@@ -44,6 +45,8 @@ public:
 	InputManager* GetInputManager();
 
 	EntityManager* GetEntityManager();
+
+	TransformManager* GetTransformManager();
 private:
 	/**
 	 * \brief Main loop of the game
@@ -60,6 +63,7 @@ private:
 	GraphicManager* m_GraphicManager = nullptr;
 	InputManager* m_InputManager = nullptr;
 	EntityManager* m_EntityManager = nullptr;
+	TransformManager* m_TransformManager = nullptr;
 };
 }
 
