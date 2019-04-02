@@ -22,21 +22,13 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#include <engine/transform.h>
-#include <iostream>
+#include <engine/entity_handle.h>
 
 namespace dm
 {
-void TransformManager::Init()
+EntityHandle::EntityHandle(const Entity entity, Engine& engine) : m_Engine(engine)
 {
-	
-}
-
-void TransformManager::Update()
-{
-	for (auto& component : m_Components)
-	{
-		std::cout << component <<"\n";
-	}
+	m_Entity = entity;
+	m_ComponentManager = m_Engine.GetComponentManager();
 }
 }

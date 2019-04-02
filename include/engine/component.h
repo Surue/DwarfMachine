@@ -30,9 +30,6 @@ SOFTWARE.
 
 namespace dm
 {
-enum class ComponentType : int {
-	TRANSFORM = 1 << 0
-};
 
 template<typename T>
 class ComponentBaseManager
@@ -63,7 +60,7 @@ public:
 	}
 
 protected:
-	std::vector<T> m_Components;
+	std::vector<T> m_Components{INIT_COMPONENT_NMB};
 };
 }
 

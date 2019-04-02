@@ -22,21 +22,49 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
+#ifndef COMPONENT_MANAGER_H
+#define COMPONENT_MANAGER_H
+
 #include <engine/transform.h>
-#include <iostream>
 
-namespace dm
-{
-void TransformManager::Init()
-{
-	
-}
+namespace dm {
 
-void TransformManager::Update()
-{
-	for (auto& component : m_Components)
+	class ComponentManager
 	{
-		std::cout << component <<"\n";
-	}
+	public:
+		ComponentManager()
+		{
+			m_TransformManager = new TransformManager();
+		}
+
+		template<class T>
+		void AddComponent(Entity entity, T& component)
+		{
+			if (typeid(T).raw_name() == typeid(Transform).raw_name())
+			{
+				m_TransformManager->AddComponent(entity, component);
+			}
+			else {
+				std::runtime_error("Fail to bind component to its own component manager");
+			}
+		}
+
+		template<class T>
+		T* GetComponent(const Entity entity)
+		{
+			if(typeid(T).raw_name() == typeid(Transform).raw_name())
+			{
+				return m_TransformManager->GetComponent(entity);
+			}
+
+			std::runtime_error("Fail to bind component to its own component manager");
+		}
+
+		void DestroyComponent(ComponentType componentType);
+
+	private:
+		TransformManager* m_TransformManager;
+	};
 }
-}
+
+#endif COMPONENT_MANAGER_H

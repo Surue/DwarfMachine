@@ -27,6 +27,7 @@ SOFTWARE.
 #include <engine/Input.h>
 #include <engine/entity.h>
 #include <engine/transform.h>
+#include <engine/component_manager.h>
 
 namespace dm
 {
@@ -35,7 +36,7 @@ void Engine::Init()
 	m_GraphicManager = new GraphicManager(*this);
 	m_InputManager = new InputManager(*this);
 	m_EntityManager = new EntityManager(*this);
-	m_TransformManager = new TransformManager();
+	m_ComponentManager = new ComponentManager();
 
 	m_GraphicManager->Init();
 	m_Window = m_GraphicManager->GetWindow();
@@ -49,19 +50,19 @@ void Engine::Start()
 	Destroy();
 }
 
-InputManager* Engine::GetInputManager()
+InputManager* Engine::GetInputManager() const
 {
 	return m_InputManager;
 }
 
-EntityManager* Engine::GetEntityManager()
+EntityManager* Engine::GetEntityManager() const
 {
 	return m_EntityManager;
 }
 
-TransformManager* Engine::GetTransformManager()
+ComponentManager* Engine::GetComponentManager() const
 {
-	return m_TransformManager;
+	return m_ComponentManager;
 }
 
 void Engine::MainLoop()

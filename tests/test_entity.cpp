@@ -28,6 +28,7 @@ SOFTWARE.
 #include <engine/entity.h>
 
 #include <engine/transform.h>
+#include "engine/entity_handle.h"
 
 TEST(Entity, CreateEntity)
 {
@@ -115,13 +116,18 @@ TEST(Entity, TransformComponentEntity)
 	auto entityManager = engine.GetEntityManager();
 
 	const auto e0 = entityManager->CreateEntity();
+	auto entity = dm::EntityHandle(e0, engine);
 
 	dm::Transform transformInfo{};
 	transformInfo.x = 1;
 	transformInfo.y = 2;
 	transformInfo.z = 3;
 
-	entityManager->AddComponent(e0, dm::ComponentType::TRANSFORM, transformInfo);
+	entity.AddComponent<dm::Transform>(transformInfo);
+
+	auto* transform = entity.GetComponent<dm::Transform>();
+
+	std::cout << *transform << "\n";
 
 	try
 	{

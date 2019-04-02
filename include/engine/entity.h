@@ -27,7 +27,7 @@ SOFTWARE.
 #include <vector>
 
 #include <engine/engine.h>
-#include <engine/transform.h>
+#include <engine/component_type.h>
 #define INIT_ENTITY_NMB 10
 
 namespace dm
@@ -43,17 +43,7 @@ public:
 	Entity CreateEntity();
 	void DestroyEntity(Entity entity);
 
-	template<typename T>
-	void AddComponent(Entity e, const ComponentType componentType, T component)
-	{
-		switch(componentType)
-		{
-		case ComponentType::TRANSFORM: 
-			m_Engine.GetTransformManager()->AddComponent(e, component);
-			break;
-		default: ;
-		}
-	}
+	void AddComponent(ComponentType componentType);
 
 private:
 	unsigned int m_LastEntity = 0;

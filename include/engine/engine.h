@@ -33,7 +33,7 @@ namespace dm
 class GraphicManager;
 class InputManager;
 class EntityManager;
-class TransformManager;
+class ComponentManager;
 
 class Engine
 {
@@ -42,11 +42,11 @@ public:
 
 	void Start();
 
-	InputManager* GetInputManager();
+	InputManager* GetInputManager() const;
 
-	EntityManager* GetEntityManager();
+	EntityManager* GetEntityManager() const;
 
-	TransformManager* GetTransformManager();
+	ComponentManager* GetComponentManager() const;
 private:
 	/**
 	 * \brief Main loop of the game
@@ -63,7 +63,7 @@ private:
 	GraphicManager* m_GraphicManager = nullptr;
 	InputManager* m_InputManager = nullptr;
 	EntityManager* m_EntityManager = nullptr;
-	TransformManager* m_TransformManager = nullptr;
+	ComponentManager* m_ComponentManager = nullptr;
 };
 }
 

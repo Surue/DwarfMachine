@@ -36,11 +36,11 @@ struct Transform final
 	float y;
 	float z;
 
-	/*friend std::ostream & operator<<(std::ostream & out, const Transform transform)
+	friend std::ostream & operator<<(std::ostream & out, const Transform transform)
 	{
 		out << "(" << transform.x << ", " << transform.y << ", "<< transform.z << ")";
 		return out;
-	}*/
+	}
 };
 
 class TransformManager : ComponentBaseManager<Transform>

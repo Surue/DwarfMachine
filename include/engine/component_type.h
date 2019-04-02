@@ -22,21 +22,9 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#include <engine/transform.h>
-#include <iostream>
-
-namespace dm
-{
-void TransformManager::Init()
-{
-	
-}
-
-void TransformManager::Update()
-{
-	for (auto& component : m_Components)
-	{
-		std::cout << component <<"\n";
-	}
-}
-}
+#ifndef COMPONENT_TYPE_H
+#define COMPONENT_TYPE_H
+enum class ComponentType : int {
+	TRANSFORM = 1 << 0
+};
+#endif COMPONENT_TYPE_H
