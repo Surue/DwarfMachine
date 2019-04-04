@@ -34,9 +34,6 @@ void TransformManager::Init()
 
 void TransformManager::Update()
 {
-	for (auto& component : m_Components)
-	{
-		std::cout << component <<"\n";
-	}
+
 }
 }

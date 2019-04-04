@@ -31,6 +31,11 @@ SOFTWARE.
 namespace dm
 {
 
+struct ComponentBase
+{
+	ComponentType componentType = ComponentType::NONE;
+};
+
 template<typename T>
 class ComponentBaseManager
 {
@@ -49,10 +54,20 @@ public:
 	 
 	virtual void Update() = 0;
 
-	virtual void AddComponent(Entity entity, T& componentBase) = 0;
+	virtual T* CreateComponent(Entity) = 0;
+
+	T* AddComponent(const Entity entity, T& componentBase)
+	{
+		m_Components[entity - 1] = componentBase;
+		return &m_Components[entity - 1];
+	};
+
 	virtual void DestroyComponent(Entity entity) = 0;
 
-	virtual T* GetComponent(Entity entity) = 0;
+	T* GetComponent(const Entity entity)
+	{
+		return &m_Components[entity - 1];
+	};
 
 	std::vector<T>& GetComponents()
 	{

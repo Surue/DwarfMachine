@@ -28,6 +28,7 @@ SOFTWARE.
 #include <engine/entity.h>
 #include <engine/component_manager.h>
 #include <engine/component_type.h>
+#include <map>
 
 namespace dm
 {
@@ -39,20 +40,31 @@ public:
 	EntityHandle(Entity entity, Engine& engine);
 
 	template<class T>
-	void AddComponent(T& component)
+	T* AddComponent(T& component)
 	{
-		m_ComponentManager->AddComponent<T>(m_Entity, component);
+		m_EntityManager->AddComponent(m_Entity, component.componentType);
+
+		return static_cast<T*>(m_ComponentManager->AddComponent(m_Entity, component));
+	}
+
+	template<class T>
+	T* CreateComponent(const ComponentType componentType) const
+	{
+		m_EntityManager->AddComponent(m_Entity, componentType);
+
+		return static_cast<T*>(m_ComponentManager->CreateComponent(m_Entity, componentType));
 	}
 
 	template<class T>
 	T* GetComponent()
 	{
-		return m_ComponentManager->GetComponent<T>(m_Entity);
+		return static_cast<T*>(m_ComponentManager->GetComponent<T>(m_Entity));
 	}
 
 private:
 	Entity m_Entity;
 	ComponentManager* m_ComponentManager = nullptr;
+	EntityManager* m_EntityManager = nullptr;
 	Engine& m_Engine;
 };
 }

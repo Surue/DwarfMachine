@@ -30,39 +30,42 @@ SOFTWARE.
 
 namespace dm
 {
-struct Transform final
+struct Transform final : ComponentBase
 {
 	float x;
 	float y;
 	float z;
 
-	friend std::ostream & operator<<(std::ostream & out, const Transform transform)
-	{
-		out << "(" << transform.x << ", " << transform.y << ", "<< transform.z << ")";
-		return out;
-	}
+	//friend std::ostream & operator<<(std::ostream & out, const Transform transform)
+	//{
+	//	out << "(" << transform.x << ", " << transform.y << ", "<< transform.z << ")";
+	//	return out;
+	//}
 };
 
-class TransformManager : ComponentBaseManager<Transform>
+class TransformManager : public ComponentBaseManager<Transform>
 {
 public:
 	void Init() override;
 
 	void Update() override;
 
-	void AddComponent(const Entity entity, Transform& componentBase) override
+	Transform* CreateComponent(const Entity entity) override
 	{
-		m_Components[entity - 1] = componentBase;
+		Transform t;
+		t.componentType = ComponentType::TRANSFORM;
+		t.x = 0;
+		t.y = 0;
+		t.z = 0;
+
+		m_Components[entity -1] = t;
+
+		return &m_Components[entity - 1];
 	}
 
 	void DestroyComponent(Entity entity) override
 	{
 		
-	}
-
-	Transform* GetComponent(const Entity entity) override
-	{
-		return &m_Components[entity - 1];
 	}
 };
 }

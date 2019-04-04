@@ -31,7 +31,8 @@ namespace dm
 EntityManager::EntityManager(Engine& engine) : m_Engine(engine)
 {
 	std::cout << "Entity Manager build\n";
-	m_Entities.resize(INIT_ENTITY_NMB, INVALID_ENTITY);
+	m_EntityInfos.resize(INIT_ENTITY_NMB, INVALID_ENTITY);
+	m_EntityMask.resize(INIT_ENTITY_NMB, static_cast<int>(ComponentType::NONE));
 }
 
 Entity EntityManager::CreateEntity()
@@ -39,23 +40,23 @@ Entity EntityManager::CreateEntity()
 	Entity newEntity = INVALID_ENTITY;
 
 	//Add a new entity if vector not full
-	if(m_LastEntity < m_Entities.size())
+	if(m_LastEntity < m_EntityInfos.size())
 	{
-		m_Entities[m_LastEntity] = m_LastEntity + 1;
-		newEntity = m_Entities[m_LastEntity];
+		m_EntityInfos[m_LastEntity] = m_LastEntity + 1;
+		newEntity = m_EntityInfos[m_LastEntity];
 
 		m_LastEntity++;
-		if (m_LastEntity == m_Entities.size()) //Resize vector if it's full
+		if (m_LastEntity == m_EntityInfos.size()) //Resize vector if it's full
 		{
 			std::cout << "resize after adding new entity\n";
-			m_Entities.resize(m_Entities.size() + INIT_ENTITY_NMB, INVALID_ENTITY);
+			ResizeEntity();
 		}
-		else if (m_Entities[m_LastEntity] != INVALID_ENTITY) //Find next free index
+		else if (m_EntityInfos[m_LastEntity] != INVALID_ENTITY) //Find next free index
 		{
 			std::cout << "move last entity\n";
-			for(int i = m_LastEntity; i < m_Entities.size(); i++)
+			for(int i = m_LastEntity; i < m_EntityInfos.size(); i++)
 			{
-				if(m_Entities[i] == INVALID_ENTITY)
+				if(m_EntityInfos[i] == INVALID_ENTITY)
 				{
 					m_LastEntity = i;
 					break;
@@ -67,10 +68,10 @@ Entity EntityManager::CreateEntity()
 	{
 		std::cout << "resize before adding new entity\n";
 
-		m_Entities.resize(m_Entities.size() + INIT_ENTITY_NMB, INVALID_ENTITY);
+		ResizeEntity();
 
-		m_Entities[m_LastEntity] = m_LastEntity + 1;
-		newEntity = m_Entities[m_LastEntity];
+		m_EntityInfos[m_LastEntity] = m_LastEntity + 1;
+		newEntity = m_EntityInfos[m_LastEntity];
 
 		m_LastEntity++;
 	}
@@ -80,14 +81,14 @@ Entity EntityManager::CreateEntity()
 
 void EntityManager::DestroyEntity(const Entity entity)
 {
-	if(entity <= 0 || entity >= m_Entities.size())
+	if(entity <= 0 || entity >= m_EntityMask.size())
 	{
 		throw std::runtime_error("Try to remove non existing entity: " + std::to_string(entity));
 	}
 
 	//Remove entity
 	std::cout << "delete entity\n";
-	m_Entities[entity - 1] = INVALID_ENTITY;
+	m_EntityMask[entity - 1] = INVALID_ENTITY;
 	m_LastEntity = entity - 1;
 
 	//Update all components manager
@@ -96,5 +97,36 @@ void EntityManager::DestroyEntity(const Entity entity)
 	//Update all systems
 	//TODO update systems
 	
+}
+
+void EntityManager::AddComponent(const Entity entity, ComponentType componentType)
+{
+	m_EntityMask[entity - 1] = m_EntityMask[entity - 1] | static_cast<int>(componentType);
+}
+
+void EntityManager::DestroyComponent(const Entity entity, ComponentType componentType)
+{
+	m_EntityMask[entity - 1] &= ~static_cast<int>(componentType);
+}
+
+bool EntityManager::HasComponent(const Entity entity, ComponentType componentType)
+{
+	return (m_EntityMask[entity - 1] & static_cast<int>(componentType)) == static_cast<int>(componentType);
+}
+
+void EntityManager::ResizeEntity(const size_t newSize)
+{
+	m_EntityMask.resize(newSize, INVALID_ENTITY);
+	m_EntityInfos.resize(newSize, static_cast<int>(ComponentType::NONE));
+
+	//TODO resize les components containers et les systèmes containers
+}
+
+void EntityManager::ResizeEntity()
+{
+	m_EntityMask.resize(m_EntityMask.size() + INIT_ENTITY_NMB, INVALID_ENTITY);
+	m_EntityInfos.resize(m_EntityInfos.size() + INIT_ENTITY_NMB, static_cast<int>(ComponentType::NONE));
+
+	//TODO resize les components containers et les systèmes containers
 }
 }

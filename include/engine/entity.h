@@ -35,6 +35,8 @@ namespace dm
 using Entity = unsigned int ;
 const Entity INVALID_ENTITY = 0U;
 
+using EntityMask = int;
+
 class EntityManager
 {
 public:
@@ -43,12 +45,19 @@ public:
 	Entity CreateEntity();
 	void DestroyEntity(Entity entity);
 
-	void AddComponent(ComponentType componentType);
+	void AddComponent(Entity entity, ComponentType componentType);
+	void DestroyComponent(Entity entity, ComponentType componentType);
+
+	bool HasComponent(Entity entity, ComponentType componentType);
+
+	void ResizeEntity(size_t newSize);
 
 private:
-	unsigned int m_LastEntity = 0;
+	void ResizeEntity();
 
-	std::vector<Entity> m_Entities;
+	unsigned int m_LastEntity = 0;
+	std::vector<Entity> m_EntityInfos;
+	std::vector<EntityMask> m_EntityMask;
 
 	Engine& m_Engine;
 };

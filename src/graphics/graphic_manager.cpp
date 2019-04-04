@@ -195,8 +195,8 @@ void GraphicManager::Update()
 		if (lastPos != inputManager->GetMousePosition()) {
 			offset = offset.Normalized();
 
-			position.x += offset.x * moveSpeed;
-			position.y += offset.y * -moveSpeed;
+			position.x += offset.x * 0.25f;
+			position.y += offset.y * -0.25f;
 
 			lastPos = inputManager->GetMousePosition();
 		}else

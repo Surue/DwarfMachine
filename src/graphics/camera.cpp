@@ -35,17 +35,7 @@ void CameraManager::Update()
 {
 }
 
-void CameraManager::AddComponent(const Entity entity, Camera& componentBase)
-{
-	m_Components[entity - 1] = componentBase;
-}
-
 void CameraManager::DestroyComponent(Entity entity)
 {
-}
-
-Camera* CameraManager::GetComponent(const Entity entity)
-{
-	return &m_Components[entity - 1];
 }
 }

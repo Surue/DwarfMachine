@@ -29,20 +29,28 @@ SOFTWARE.
 #include <engine/component.h>
 
 namespace dm {
-struct Camera
+struct Camera final : ComponentBase
 {
-	glm::mat4 proj;
-	glm::mat4 view;
+	glm::mat4 proj{};
+	glm::mat4 view{};
 };
 
-class CameraManager : ComponentBaseManager<Camera>
+class CameraManager : public ComponentBaseManager<Camera>
 {
 public:
 	void Init() override;
 	void Update() override;
-	void AddComponent(Entity entity, Camera& componentBase) override;
+
+	Camera* CreateComponent(const Entity entity) override
+	{
+		Camera c;
+		c.componentType = ComponentType::CAMERA;
+		m_Components[entity - 1] = c;
+
+		return &m_Components[entity - 1];
+	}
+
 	void DestroyComponent(Entity entity) override;
-	Camera* GetComponent(Entity entity) override;
 };
 }
 #endif

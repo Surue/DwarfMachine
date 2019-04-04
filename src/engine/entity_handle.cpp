@@ -29,6 +29,8 @@ namespace dm
 EntityHandle::EntityHandle(const Entity entity, Engine& engine) : m_Engine(engine)
 {
 	m_Entity = entity;
+
 	m_ComponentManager = m_Engine.GetComponentManager();
+	m_EntityManager = m_Engine.GetEntityManager();
 }
 }

@@ -26,6 +26,7 @@ SOFTWARE.
 #define COMPONENT_MANAGER_H
 
 #include <engine/transform.h>
+#include <graphics/camera.h>
 
 namespace dm {
 
@@ -34,18 +35,39 @@ namespace dm {
 	public:
 		ComponentManager()
 		{
-			m_TransformManager = new TransformManager();
+			m_TransformManager = TransformManager();
+			m_CameraManager = CameraManager();
 		}
 
-		template<class T>
-		void AddComponent(Entity entity, T& component)
+		ComponentBase* CreateComponent(const Entity entity, const ComponentType componentType)
 		{
-			if (typeid(T).raw_name() == typeid(Transform).raw_name())
-			{
-				m_TransformManager->AddComponent(entity, component);
+			switch (componentType) {
+			case ComponentType::NONE:
+				throw std::runtime_error("Impossible to add a ComponentType::NONE to an entity");
+				break;
+			case ComponentType::TRANSFORM:
+				return m_TransformManager.CreateComponent(entity);
+				break;
+			case ComponentType::CAMERA:
+				return m_CameraManager.CreateComponent(entity);
+				break;
+			default:
+				throw std::runtime_error("Fail to bind component to its own component manager");
+				break;
 			}
-			else {
-				std::runtime_error("Fail to bind component to its own component manager");
+		}
+
+		ComponentBase* AddComponent(const Entity entity, ComponentBase& component)
+		{
+			switch(component.componentType) { 
+				case ComponentType::NONE: 
+					throw std::runtime_error("Impossible to add a ComponentType::NONE to an entity");
+				case ComponentType::TRANSFORM: 
+					return static_cast<ComponentBase*>(m_TransformManager.AddComponent(entity, static_cast<Transform&>(component)));
+				case ComponentType::CAMERA: 
+					return static_cast<ComponentBase*>(m_CameraManager.AddComponent(entity, static_cast<Camera&>(component)));
+				default: 
+					throw std::runtime_error("Fail to bind component to its own component manager");
 			}
 		}
 
@@ -54,7 +76,7 @@ namespace dm {
 		{
 			if(typeid(T).raw_name() == typeid(Transform).raw_name())
 			{
-				return m_TransformManager->GetComponent(entity);
+				return m_TransformManager.GetComponent(entity);
 			}
 
 			std::runtime_error("Fail to bind component to its own component manager");
@@ -64,7 +86,8 @@ namespace dm {
 		void DestroyComponent(ComponentType componentType);
 
 	private:
-		TransformManager* m_TransformManager;
+		TransformManager m_TransformManager;
+		CameraManager m_CameraManager;
 	};
 }
 

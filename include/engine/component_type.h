@@ -25,6 +25,8 @@ SOFTWARE.
 #ifndef COMPONENT_TYPE_H
 #define COMPONENT_TYPE_H
 enum class ComponentType : int {
-	TRANSFORM = 1 << 0
+	NONE = 0,
+	TRANSFORM = 1 << 0,
+	CAMERA = 1 << 1
 };
 #endif COMPONENT_TYPE_H

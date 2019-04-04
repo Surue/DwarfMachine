@@ -117,17 +117,34 @@ TEST(Entity, TransformComponentEntity)
 
 	const auto e0 = entityManager->CreateEntity();
 	auto entity = dm::EntityHandle(e0, engine);
+	//dm::Transform* t = static_cast<dm::Transform*>(entity.CreateComponent(ComponentType::TRANSFORM));
 
-	dm::Transform transformInfo{};
-	transformInfo.x = 1;
-	transformInfo.y = 2;
-	transformInfo.z = 3;
-
-	entity.AddComponent<dm::Transform>(transformInfo);
+	std::cout << "Create component Transform at 1, 2, 3\n";
+	auto* t = entity.CreateComponent<dm::Transform>(ComponentType::TRANSFORM);
+	t->x = 1;
+	t->y = 2; 
+	t->z = 3;
 
 	auto* transform = entity.GetComponent<dm::Transform>();
 
-	std::cout << *transform << "\n";
+	std::cout << "(" << transform->x << ", " << transform->y << ", " << transform->z << ")\n";
+
+	const auto e1 = entityManager->CreateEntity();
+	auto entity1 = dm::EntityHandle(e1, engine);
+	std::cout << "Add component Transform at 4, 5, 6\n";
+
+	dm::Transform transformInfo;
+	transformInfo.componentType = ComponentType::TRANSFORM;
+	transformInfo.x = 4;
+	transformInfo.y = 5;
+	transformInfo.z = 6;
+	auto* t2 = entity1.AddComponent<dm::Transform>(transformInfo);
+
+	auto* transform2 = entity1.GetComponent<dm::Transform>();
+
+	std::cout << "transformInfo : (" << transformInfo.x << ", " << transformInfo.y << ", " << transformInfo.z << ")\n";
+	std::cout << "returned : (" << t2->x << ", " << t2->y << ", " << t2->z << ")\n";
+	std::cout << "get : (" << transform2->x << ", " << transform2->y << ", " << transform2->z << ")\n";
 
 	try
 	{
