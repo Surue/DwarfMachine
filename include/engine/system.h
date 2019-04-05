@@ -22,33 +22,44 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#include <engine/entity_handle.h>
+#ifndef SYSTEM_H
+#define SYSTEM_H
+#include <vector>
+#include <engine/entity.h>
+#include <engine/component_mask.h>
 
 namespace dm
 {
-EntityHandle::EntityHandle(const Entity entity, Engine& engine) : m_Engine(engine)
-{
-	m_Entity = entity;
+class Engine;
 
-	m_ComponentManager = m_Engine.GetComponentManager();
-	m_EntityManager = m_Engine.GetEntityManager();
+class System
+{
+public:
+	System(Engine* engine);
+	virtual ~System() = default;
+	System(const System &) = default;
+	System &operator=(const System &) = default;
+	System(System &&) = default;
+	System &operator=(System &&) = default;
+
+	virtual void Init() = 0;
+	virtual void Update() = 0;
+	virtual void Draw() = 0;
+	void Destroy();
+
+	void RegisterEntity(const Entity entity);
+
+	void UnRegisterEntity(const Entity entity);
+
+	ComponentMask GetSignature() const;
+
+private:
+	Engine* m_Engine = nullptr;
+
+	std::vector<Entity> m_RegisteredEntities;
+
+	ComponentMask m_Signature;
+};
 }
 
-bool EntityHandle::HasComponent(const ComponentType componentType) const
-{
-	return (m_EntityManager->HasComponent(m_Entity, componentType));
-}
-
-void EntityHandle::DestroyComponent(const ComponentType componentType) const
-{
-	m_EntityManager->DestroyComponent(m_Entity, componentType);
-	//TODO Update systems
-	m_ComponentManager->DestroyComponent(m_Entity, componentType);
-}
-
-void EntityHandle::Destroy()
-{
-	m_EntityManager->DestroyEntity(m_Entity);
-	//TODO Updates systems
-}
-}
+#endif

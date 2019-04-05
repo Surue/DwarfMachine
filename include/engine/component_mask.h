@@ -22,33 +22,28 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#include <engine/entity_handle.h>
+#ifndef COMPONENT_MASK_H
+#define COMPONENT_MASK_H
+
+#include <engine/component_type.h>
 
 namespace dm
 {
-EntityHandle::EntityHandle(const Entity entity, Engine& engine) : m_Engine(engine)
-{
-	m_Entity = entity;
 
-	m_ComponentManager = m_Engine.GetComponentManager();
-	m_EntityManager = m_Engine.GetEntityManager();
-}
-
-bool EntityHandle::HasComponent(const ComponentType componentType) const
+struct ComponentMask
 {
-	return (m_EntityManager->HasComponent(m_Entity, componentType));
-}
+	unsigned int mask = 0;
 
-void EntityHandle::DestroyComponent(const ComponentType componentType) const
-{
-	m_EntityManager->DestroyComponent(m_Entity, componentType);
-	//TODO Update systems
-	m_ComponentManager->DestroyComponent(m_Entity, componentType);
+	void AddComponent(ComponentType componentType);
+
+	void RemoveComponent(ComponentType componentType);
+
+	bool Matches(const ComponentMask systemMask) const;
+
+	bool IsNewMatch(ComponentMask oldMask, const ComponentMask systemMask) const;
+
+	bool IsNoLongerMatch(ComponentMask oldMask, const ComponentMask systemMask) const;
+};
 }
 
-void EntityHandle::Destroy()
-{
-	m_EntityManager->DestroyEntity(m_Entity);
-	//TODO Updates systems
-}
-}
+#endif COMPONENT_MASK_H

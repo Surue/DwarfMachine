@@ -37,10 +37,16 @@ const Entity INVALID_ENTITY = 0U;
 
 using EntityMask = int;
 
-class EntityManager
+class EntityManager final
 {
 public:
 	EntityManager(Engine& engine);
+
+	~EntityManager() = default;
+
+	EntityManager& operator=(const EntityManager&) = delete;
+	EntityManager(EntityManager &&) = default; //move constructor
+	EntityManager(const EntityManager &) = delete; //delete copy constructor
 
 	Entity CreateEntity();
 	void DestroyEntity(Entity entity);

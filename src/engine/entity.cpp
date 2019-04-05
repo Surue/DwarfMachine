@@ -30,7 +30,6 @@ namespace dm
 {
 EntityManager::EntityManager(Engine& engine) : m_Engine(engine)
 {
-	std::cout << "Entity Manager build\n";
 	m_EntityInfos.resize(INIT_ENTITY_NMB, INVALID_ENTITY);
 	m_EntityMask.resize(INIT_ENTITY_NMB, static_cast<int>(ComponentType::NONE));
 }
@@ -83,16 +82,8 @@ void EntityManager::DestroyEntity(const Entity entity)
 	}
 
 	//Remove entity
-	std::cout << "delete entity\n";
 	m_EntityMask[entity - 1] = INVALID_ENTITY;
 	m_LastEntity = entity - 1;
-
-	//Update all components manager
-	//TODO remove all components
-
-	//Update all systems
-	//TODO update systems
-	
 }
 
 void EntityManager::AddComponent(const Entity entity, ComponentType componentType)

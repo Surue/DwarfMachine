@@ -130,3 +130,24 @@ TEST(Entity, HasComponentEntity)
 
 	ASSERT_FALSE(entity.HasComponent(ComponentType::CAMERA));
 }
+
+TEST(Entity, DestroyComponentEntity)
+{
+	dm::Engine engine;
+	engine.Init();
+
+	auto entityManager = engine.GetEntityManager();
+
+	const auto e0 = entityManager->CreateEntity();
+	auto entity = dm::EntityHandle(e0, engine);
+
+	std::cout << "Create component Transform at 1, 2, 3\n";
+	entity.CreateComponent<dm::Transform>(ComponentType::TRANSFORM);
+
+	ASSERT_TRUE(entity.HasComponent(ComponentType::TRANSFORM));
+
+	std::cout << "Delete component Transform\n";
+	entity.DestroyComponent(ComponentType::TRANSFORM);
+
+	ASSERT_FALSE(entity.HasComponent(ComponentType::TRANSFORM));
+}

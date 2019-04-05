@@ -22,33 +22,32 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#include <engine/entity_handle.h>
+#include <engine/component_mask.h>
 
 namespace dm
 {
-EntityHandle::EntityHandle(const Entity entity, Engine& engine) : m_Engine(engine)
+void ComponentMask::AddComponent(ComponentType componentType)
 {
-	m_Entity = entity;
-
-	m_ComponentManager = m_Engine.GetComponentManager();
-	m_EntityManager = m_Engine.GetEntityManager();
+	mask |= (1 << static_cast<int>(componentType));
 }
 
-bool EntityHandle::HasComponent(const ComponentType componentType) const
+void ComponentMask::RemoveComponent(ComponentType componentType)
 {
-	return (m_EntityManager->HasComponent(m_Entity, componentType));
+	mask &= ~(1 << static_cast<int>(componentType));
 }
 
-void EntityHandle::DestroyComponent(const ComponentType componentType) const
+bool ComponentMask::Matches(const ComponentMask systemMask) const
 {
-	m_EntityManager->DestroyComponent(m_Entity, componentType);
-	//TODO Update systems
-	m_ComponentManager->DestroyComponent(m_Entity, componentType);
+	return ((mask & systemMask.mask) == systemMask.mask);
 }
 
-void EntityHandle::Destroy()
+bool ComponentMask::IsNewMatch(ComponentMask oldMask, const ComponentMask systemMask) const
 {
-	m_EntityManager->DestroyEntity(m_Entity);
-	//TODO Updates systems
+	return Matches(systemMask) && !oldMask.Matches(systemMask);
+}
+
+bool ComponentMask::IsNoLongerMatch(ComponentMask oldMask, const ComponentMask systemMask) const
+{
+	return oldMask.Matches(systemMask) && !Matches(systemMask);
 }
 }

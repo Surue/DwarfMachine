@@ -43,7 +43,7 @@ public:
 	T* AddComponent(T& component)
 	{
 		m_EntityManager->AddComponent(m_Entity, component.componentType);
-
+		//TODO Update system
 		return static_cast<T*>(m_ComponentManager->AddComponent(m_Entity, component));
 	}
 
@@ -51,7 +51,7 @@ public:
 	T* CreateComponent(const ComponentType componentType) const
 	{
 		m_EntityManager->AddComponent(m_Entity, componentType);
-
+		//TODO Update system
 		return static_cast<T*>(m_ComponentManager->CreateComponent(m_Entity, componentType));
 	}
 
@@ -61,10 +61,12 @@ public:
 		return static_cast<T*>(m_ComponentManager->GetComponent<T>(m_Entity));
 	}
 
-	bool HasComponent(const ComponentType componentType) const
-	{
-		return (m_EntityManager->HasComponent(m_Entity, componentType));
-	}
+	bool HasComponent(const ComponentType componentType) const;
+
+	void DestroyComponent(const ComponentType componentType) const;
+
+	void Destroy();
+
 
 private:
 	Entity m_Entity;

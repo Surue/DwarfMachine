@@ -22,33 +22,40 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#include <engine/entity_handle.h>
+#include <engine/system.h>
 
 namespace dm
 {
-EntityHandle::EntityHandle(const Entity entity, Engine& engine) : m_Engine(engine)
-{
-	m_Entity = entity;
+System::System(Engine* engine) : m_Engine(engine){}
 
-	m_ComponentManager = m_Engine.GetComponentManager();
-	m_EntityManager = m_Engine.GetEntityManager();
+void System::Destroy()
+{
+	m_RegisteredEntities.clear();
 }
 
-bool EntityHandle::HasComponent(const ComponentType componentType) const
+void System::RegisterEntity(const Entity entity)
 {
-	return (m_EntityManager->HasComponent(m_Entity, componentType));
+	m_RegisteredEntities.push_back(entity);
+	//TODO Remove push back and use index
 }
 
-void EntityHandle::DestroyComponent(const ComponentType componentType) const
+void System::UnRegisterEntity(const Entity entity)
 {
-	m_EntityManager->DestroyComponent(m_Entity, componentType);
-	//TODO Update systems
-	m_ComponentManager->DestroyComponent(m_Entity, componentType);
+	for (auto it = m_RegisteredEntities.begin(); it != m_RegisteredEntities.end(); ++it)
+	{
+		const auto e = *it;
+
+		if (e == entity)
+		{
+			m_RegisteredEntities.erase(it);
+			return;
+		}
+	}
+	//TODO remove iterator and use index
 }
 
-void EntityHandle::Destroy()
+ComponentMask System::GetSignature() const
 {
-	m_EntityManager->DestroyEntity(m_Entity);
-	//TODO Updates systems
+	return m_Signature;
 }
 }
