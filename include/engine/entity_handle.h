@@ -61,6 +61,11 @@ public:
 		return static_cast<T*>(m_ComponentManager->GetComponent<T>(m_Entity));
 	}
 
+	bool HasComponent(const ComponentType componentType) const
+	{
+		return (m_EntityManager->HasComponent(m_Entity, componentType));
+	}
+
 private:
 	Entity m_Entity;
 	ComponentManager* m_ComponentManager = nullptr;

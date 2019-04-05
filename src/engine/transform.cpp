@@ -36,4 +36,19 @@ void TransformManager::Update()
 {
 
 }
+
+Transform* TransformManager::CreateComponent(const Entity entity)
+{
+	Transform t;
+	t.componentType = ComponentType::TRANSFORM;
+	t.x = 0;
+	t.y = 0;
+	t.z = 0;
+
+	m_Components[entity - 1] = t;
+
+	return &m_Components[entity - 1];
+}
+
+void TransformManager::DestroyComponent(Entity entity) { }
 }

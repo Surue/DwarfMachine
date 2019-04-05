@@ -37,7 +37,7 @@ EntityManager::EntityManager(Engine& engine) : m_Engine(engine)
 
 Entity EntityManager::CreateEntity()
 {
-	Entity newEntity = INVALID_ENTITY;
+	auto newEntity = INVALID_ENTITY;
 
 	//Add a new entity if vector not full
 	if(m_LastEntity < m_EntityInfos.size())
@@ -48,12 +48,10 @@ Entity EntityManager::CreateEntity()
 		m_LastEntity++;
 		if (m_LastEntity == m_EntityInfos.size()) //Resize vector if it's full
 		{
-			std::cout << "resize after adding new entity\n";
 			ResizeEntity();
 		}
 		else if (m_EntityInfos[m_LastEntity] != INVALID_ENTITY) //Find next free index
 		{
-			std::cout << "move last entity\n";
 			for(int i = m_LastEntity; i < m_EntityInfos.size(); i++)
 			{
 				if(m_EntityInfos[i] == INVALID_ENTITY)
@@ -66,8 +64,6 @@ Entity EntityManager::CreateEntity()
 	}
 	else //Resize the vector
 	{
-		std::cout << "resize before adding new entity\n";
-
 		ResizeEntity();
 
 		m_EntityInfos[m_LastEntity] = m_LastEntity + 1;

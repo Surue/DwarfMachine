@@ -35,6 +35,15 @@ void CameraManager::Update()
 {
 }
 
+Camera* CameraManager::CreateComponent(const Entity entity)
+{
+	Camera c;
+	c.componentType = ComponentType::CAMERA;
+	m_Components[entity - 1] = c;
+
+	return &m_Components[entity - 1];
+}
+
 void CameraManager::DestroyComponent(Entity entity)
 {
 }

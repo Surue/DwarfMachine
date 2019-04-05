@@ -30,13 +30,5 @@ TEST(GLFW, OpeningWindow)
 	dm::Engine engine;
 	engine.Init();
 
-	try
-	{
-		engine.Start();
-	}catch (const std::exception& e)
-	{
-		std::cerr << e.what() << "\n";
-	}
-
-	system("pause");
+	ASSERT_NO_THROW(engine.Start());
 }

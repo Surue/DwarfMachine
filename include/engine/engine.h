@@ -42,6 +42,8 @@ public:
 
 	void Start();
 
+	void Stop() const;
+
 	InputManager* GetInputManager() const;
 
 	EntityManager* GetEntityManager() const;

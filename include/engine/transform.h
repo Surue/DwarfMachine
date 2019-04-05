@@ -43,30 +43,16 @@ struct Transform final : ComponentBase
 	//}
 };
 
-class TransformManager : public ComponentBaseManager<Transform>
+class TransformManager final : public ComponentBaseManager<Transform>
 {
 public:
 	void Init() override;
 
 	void Update() override;
 
-	Transform* CreateComponent(const Entity entity) override
-	{
-		Transform t;
-		t.componentType = ComponentType::TRANSFORM;
-		t.x = 0;
-		t.y = 0;
-		t.z = 0;
+	Transform* CreateComponent(const Entity entity) override;
 
-		m_Components[entity -1] = t;
-
-		return &m_Components[entity - 1];
-	}
-
-	void DestroyComponent(Entity entity) override
-	{
-		
-	}
+	void DestroyComponent(Entity entity) override;
 };
 }
 

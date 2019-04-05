@@ -50,6 +50,11 @@ void Engine::Start()
 	Destroy();
 }
 
+void Engine::Stop() const
+{
+	glfwSetWindowShouldClose(m_Window, true);
+}
+
 InputManager* Engine::GetInputManager() const
 {
 	return m_InputManager;
@@ -82,6 +87,9 @@ void Engine::Destroy()
 	m_GraphicManager->Destroy();
 
 	delete(m_GraphicManager);
+	delete(m_InputManager);
+	delete(m_ComponentManager);
+	delete(m_EntityManager);
 }
 
 }

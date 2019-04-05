@@ -30,7 +30,7 @@ SOFTWARE.
 
 namespace dm {
 
-	class ComponentManager
+	class ComponentManager final
 	{
 	public:
 		ComponentManager()
@@ -39,37 +39,9 @@ namespace dm {
 			m_CameraManager = CameraManager();
 		}
 
-		ComponentBase* CreateComponent(const Entity entity, const ComponentType componentType)
-		{
-			switch (componentType) {
-			case ComponentType::NONE:
-				throw std::runtime_error("Impossible to add a ComponentType::NONE to an entity");
-				break;
-			case ComponentType::TRANSFORM:
-				return m_TransformManager.CreateComponent(entity);
-				break;
-			case ComponentType::CAMERA:
-				return m_CameraManager.CreateComponent(entity);
-				break;
-			default:
-				throw std::runtime_error("Fail to bind component to its own component manager");
-				break;
-			}
-		}
+		ComponentBase* CreateComponent(Entity entity, ComponentType componentType);
 
-		ComponentBase* AddComponent(const Entity entity, ComponentBase& component)
-		{
-			switch(component.componentType) { 
-				case ComponentType::NONE: 
-					throw std::runtime_error("Impossible to add a ComponentType::NONE to an entity");
-				case ComponentType::TRANSFORM: 
-					return static_cast<ComponentBase*>(m_TransformManager.AddComponent(entity, static_cast<Transform&>(component)));
-				case ComponentType::CAMERA: 
-					return static_cast<ComponentBase*>(m_CameraManager.AddComponent(entity, static_cast<Camera&>(component)));
-				default: 
-					throw std::runtime_error("Fail to bind component to its own component manager");
-			}
-		}
+		ComponentBase* AddComponent(Entity entity, ComponentBase& component);
 
 		template<class T>
 		T* GetComponent(const Entity entity)
@@ -79,11 +51,10 @@ namespace dm {
 				return m_TransformManager.GetComponent(entity);
 			}
 
-			std::runtime_error("Fail to bind component to its own component manager");
-			return nullptr;
+			throw std::runtime_error("Fail to bind component to its own component manager");
 		}
 
-		void DestroyComponent(ComponentType componentType);
+		void DestroyComponent(const Entity entity, ComponentType componentType);
 
 	private:
 		TransformManager m_TransformManager;

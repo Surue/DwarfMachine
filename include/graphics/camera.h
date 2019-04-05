@@ -35,20 +35,13 @@ struct Camera final : ComponentBase
 	glm::mat4 view{};
 };
 
-class CameraManager : public ComponentBaseManager<Camera>
+class CameraManager final : public ComponentBaseManager<Camera>
 {
 public:
 	void Init() override;
 	void Update() override;
 
-	Camera* CreateComponent(const Entity entity) override
-	{
-		Camera c;
-		c.componentType = ComponentType::CAMERA;
-		m_Components[entity - 1] = c;
-
-		return &m_Components[entity - 1];
-	}
+	Camera* CreateComponent(const Entity entity) override;
 
 	void DestroyComponent(Entity entity) override;
 };
