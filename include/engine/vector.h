@@ -101,5 +101,45 @@ public:
 	static float AngleBetween(const Vec2f& v1, const Vec2f& v2);
 	static float Dot(const Vec2f& v1, const Vec2f& v2);
 };
+
+class Vec3f final
+{
+public:
+	float x;
+	float y;
+	float z;
+
+	Vec3f();
+	Vec3f(float x, float y, float z);
+	explicit Vec3f(Vec2i v);
+	explicit Vec3f(Vec2f v);
+
+	~Vec3f() = default;
+
+	bool operator==(const Vec3f &rhs) const;
+	bool operator!=(const Vec3f &rhs) const;
+
+	Vec3f operator+(const Vec3f &rhs) const;
+	Vec3f& operator+=(const Vec3f &rhs);
+
+	Vec3f operator-(const Vec3f &rhs) const;
+	Vec3f& operator-=(const Vec3f &rhs);
+
+	Vec3f operator*(int rhs) const;
+	Vec3f& operator*=(int rhs);
+	Vec3f operator*(float rhs) const;
+	Vec3f& operator*=(float rhs);
+
+	Vec3f operator/(float rhs) const;
+	Vec3f& operator/=(float rhs);
+
+	float GetMagnitude() const;
+	Vec3f Normalized() const;
+
+	static Vec3f Lerp(const Vec3f& v1, const Vec3f& v2, float t);
+	static float AngleBetween(const Vec3f& v1, const Vec3f& v2);
+	static float Dot(const Vec3f& v1, const Vec3f& v2);
+	static Vec3f Cross(const Vec3f& v1, const Vec3f& v2);
+};
 }
 #endif VECTOR_H

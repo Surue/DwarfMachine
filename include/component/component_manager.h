@@ -27,6 +27,7 @@ SOFTWARE.
 
 #include <component/transform.h>
 #include <component/camera.h>
+#include <component/control_type.h>
 
 namespace dm {
 
@@ -41,22 +42,15 @@ public:
 
 	ComponentBase* AddComponent(Entity entity, ComponentBase& component);
 
-	template<class T>
-	T* GetComponent(const Entity entity)
-	{
-		if(typeid(T).raw_name() == typeid(Transform).raw_name())
-		{
-			return m_TransformManager.GetComponent(entity);
-		}
 
-		throw std::runtime_error("Fail to bind component to its own component manager");
-	}
+	ComponentBase* GetComponent(const Entity entity, const ComponentType componentType);
 
 	void DestroyComponent(const Entity entity, ComponentType componentType);
 
 private:
 	TransformManager m_TransformManager;
 	CameraManager m_CameraManager;
+	ControllerTypeManager m_ControllerTypeManager;
 
 	Engine& m_Engine;
 };

@@ -27,6 +27,7 @@ SOFTWARE.
 enum class ComponentType : int {
 	NONE = 0,
 	TRANSFORM = 1 << 0,
-	CAMERA = 1 << 1
+	CAMERA = 1 << 1,
+	CONTROL_TYPE = 1 << 2
 };
 #endif COMPONENT_TYPE_H

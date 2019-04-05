@@ -25,20 +25,21 @@ SOFTWARE.
 #ifndef TRANSFORM_H
 #define TRANSFORM_H
 
-#include <component/component.h>
 #include <string>
+
+#include <component/component.h>
+#include <engine/vector.h>
 
 namespace dm
 {
 struct Transform final : ComponentBase
 {
-	float x;
-	float y;
-	float z;
+	Vec3f position;
+	Vec3f rotation;
 
 	friend std::ostream & operator<<(std::ostream & out, const Transform transform)
 	{
-		out << "(" << transform.x << ", " << transform.y << ", "<< transform.z << ")";
+		out << "(" << transform.position.x << ", " << transform.position.y << ", "<< transform.position.z << ")";
 		return out;
 	}
 };

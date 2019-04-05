@@ -30,7 +30,7 @@ SOFTWARE.
 namespace dm
 {
 
-struct ComponentMask
+struct ComponentMask final
 {
 	unsigned int mask = 0;
 

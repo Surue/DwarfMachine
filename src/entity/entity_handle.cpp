@@ -32,23 +32,28 @@ EntityHandle::EntityHandle(const Entity entity, Engine& engine) : m_Engine(engin
 
 	m_ComponentManager = m_Engine.GetComponentManager();
 	m_EntityManager = m_Engine.GetEntityManager();
+	m_SystemManager = m_Engine.GetSystemManager();
 }
 
 bool EntityHandle::HasComponent(const ComponentType componentType) const
 {
-	return (m_EntityManager->HasComponent(m_Entity, componentType));
+	return m_EntityManager->HasComponent(m_Entity, componentType);
 }
 
 void EntityHandle::DestroyComponent(const ComponentType componentType) const
 {
+	const auto oldMask = m_EntityManager->GetEntityMask(m_Entity);
+
 	m_EntityManager->DestroyComponent(m_Entity, componentType);
-	//TODO Update systems
+	m_SystemManager->DestroyComponent(m_Entity, oldMask, m_EntityManager->GetEntityMask(m_Entity));
 	m_ComponentManager->DestroyComponent(m_Entity, componentType);
 }
 
 void EntityHandle::Destroy()
 {
+	const auto oldMask = m_EntityManager->GetEntityMask(m_Entity);
+
 	m_EntityManager->DestroyEntity(m_Entity);
-	//TODO Updates systems
+	m_SystemManager->DestroyComponent(m_Entity, oldMask, m_EntityManager->GetEntityMask(m_Entity));
 }
 }

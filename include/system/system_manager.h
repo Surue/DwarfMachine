@@ -26,6 +26,7 @@ SOFTWARE.
 #define SYSTEM_MANAGER_H
 #include <vector>
 #include <system/system.h>
+#include <iostream>
 
 namespace dm
 {
@@ -41,10 +42,34 @@ public:
 	void Update();
 	void Destroy();
 
+	void AddComponent(const Entity entity, const ComponentMask oldMask, ComponentMask newMask)
+	{
+		for (auto system : m_Systems)
+		{
+			const auto systemMask = system->GetSignature();
+			if(newMask.IsNewMatch(oldMask, systemMask))
+			{
+				system->RegisterEntity(entity);
+			}
+		}
+	}
+
+	void DestroyComponent(const Entity entity, const ComponentMask oldMask, ComponentMask newMask)
+	{
+		for (auto system : m_Systems)
+		{
+			const auto systemMask = system->GetSignature();
+			if (newMask.IsNoLongerMatch(oldMask, systemMask))
+			{
+				system->RegisterEntity(entity);
+			}
+		}
+	}
+
 private:
 	Engine& m_Engine;
 
-	std::vector<System> m_Systems;
+	std::vector<System*> m_Systems;
 
 };
 }

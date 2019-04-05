@@ -22,37 +22,21 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#include <component/transform.h>
+#ifndef INPUT_CONTROLLER_H
+#define INPUT_CONTROLLER_H
+
+#include <system/system.h>
 
 namespace dm
 {
-void TransformManager::Init()
+class InputController : public System
 {
-	
+public:
+	InputController(Engine& engine);
+
+	void Update() override;
+private:
+};
 }
 
-void TransformManager::Update()
-{
-
-}
-
-Transform* TransformManager::CreateComponent(const Entity entity)
-{
-	auto t = Transform();
-	t.componentType = ComponentType::TRANSFORM;
-
-	t.position.x = 0;
-	t.position.y = 0;
-	t.position.z = 0;
-
-	t.rotation.x = 0;
-	t.rotation.y = 0;
-	t.rotation.z = 0;
-
-	m_Components[entity - 1] = t;
-
-	return &m_Components[entity - 1];
-}
-
-void TransformManager::DestroyComponent(Entity entity) { }
-}
+#endif

@@ -27,6 +27,7 @@ SOFTWARE.
 #include <vector>
 #include <entity/entity.h>
 #include <component/component_mask.h>
+#include <iostream>
 
 namespace dm
 {
@@ -35,16 +36,15 @@ class Engine;
 class System
 {
 public:
-	System(Engine* engine);
+	System(Engine& engine);
 	virtual ~System() = default;
-	System(const System &) = default;
-	System &operator=(const System &) = default;
-	System(System &&) = default;
-	System &operator=(System &&) = default;
 
-	virtual void Init() = 0;
-	virtual void Update() = 0;
-	virtual void Draw() = 0;
+	virtual void Init(){}
+	virtual void Update()
+	{
+		std::cout << "parent update\n";
+	}
+	virtual void Draw(){}
 	void Destroy();
 
 	void RegisterEntity(const Entity entity);
@@ -53,8 +53,8 @@ public:
 
 	ComponentMask GetSignature() const;
 
-private:
-	Engine* m_Engine = nullptr;
+protected:
+	Engine& m_Engine;
 
 	std::vector<Entity> m_RegisteredEntities;
 

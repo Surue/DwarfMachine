@@ -30,6 +30,7 @@ ComponentManager::ComponentManager(Engine& engine): m_Engine(engine)
 {
 	m_TransformManager = TransformManager();
 	m_CameraManager = CameraManager();
+	m_ControllerTypeManager = ControllerTypeManager();
 }
 
 ComponentBase* ComponentManager::CreateComponent(const Entity entity, const ComponentType componentType)
@@ -42,6 +43,8 @@ ComponentBase* ComponentManager::CreateComponent(const Entity entity, const Comp
 		return m_TransformManager.CreateComponent(entity);
 	case ComponentType::CAMERA:
 		return m_CameraManager.CreateComponent(entity);
+	case ComponentType::CONTROL_TYPE: 
+		return m_ControllerTypeManager.CreateComponent(entity);
 	default:
 		throw std::runtime_error("Fail to bind component to its own component manager");
 	}
@@ -57,9 +60,26 @@ ComponentBase* ComponentManager::AddComponent(const Entity entity, ComponentBase
 		return static_cast<ComponentBase*>(m_TransformManager.AddComponent(entity, static_cast<Transform&>(component)));
 	case ComponentType::CAMERA:
 		return static_cast<ComponentBase*>(m_CameraManager.AddComponent(entity, static_cast<Camera&>(component)));
+	case ComponentType::CONTROL_TYPE:
+		return static_cast<ComponentBase*>(m_ControllerTypeManager.AddComponent(entity, static_cast<ControllerType&>(component)));
 	default:
 		throw std::runtime_error("Fail to bind component to its own component manager");
 	}
+}
+
+ComponentBase* ComponentManager::GetComponent(const Entity entity, const ComponentType componentType)
+{
+	switch (componentType)
+	{
+	case ComponentType::TRANSFORM:
+		return m_TransformManager.GetComponent(entity);
+	case ComponentType::CAMERA:
+		return m_CameraManager.GetComponent(entity);
+	case ComponentType::CONTROL_TYPE:
+		return m_ControllerTypeManager.GetComponent(entity);
+	}
+
+	throw std::runtime_error("Try to get non existent component");
 }
 
 void ComponentManager::DestroyComponent(const Entity entity, const ComponentType componentType)

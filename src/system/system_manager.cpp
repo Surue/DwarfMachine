@@ -23,8 +23,16 @@ SOFTWARE.
 */
 
 #include <system/system_manager.h>
+#include <system/camera_view.h>
+#include <system/input_controller.h>
+#include <iostream>
+
 namespace dm {
-	SystemManager::SystemManager(Engine& engine) : m_Engine(engine) {}
+	SystemManager::SystemManager(Engine& engine) : m_Engine(engine)
+	{
+		m_Systems.push_back(new CameraView(engine));
+		m_Systems.push_back(new InputController(engine));
+	}
 
 	void SystemManager::Init()
 	{
@@ -33,11 +41,17 @@ namespace dm {
 
 	void SystemManager::Update()
 	{
-		
+		for (auto system : m_Systems)
+		{
+			system->Update();
+		}
 	}
 
 	void SystemManager::Destroy()
 	{
-		
+		for (auto system : m_Systems)
+		{
+			delete(system);
+		}
 	}
 }

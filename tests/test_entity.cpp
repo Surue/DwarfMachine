@@ -77,7 +77,7 @@ TEST(Entity, CreateAndDestroyEntity)
 	engine.Init();
 
 	const auto entityManager = engine.GetEntityManager();
-	ASSERT_NO_THROW(CreateAndDelete(entityManager));
+	GTEST_TEST_NO_THROW_(CreateAndDelete(entityManager), GTEST_FATAL_FAILURE_);
 }
 
 TEST(Entity, TransformComponentEntity)
@@ -96,20 +96,32 @@ TEST(Entity, TransformComponentEntity)
 
 	dm::Transform transformInfo;
 	transformInfo.componentType = ComponentType::TRANSFORM;
-	transformInfo.x = x;
-	transformInfo.y = y;
-	transformInfo.z = z;
+	transformInfo.position.x = x;
+	transformInfo.position.y = y;
+	transformInfo.position.z = z;
+
+	transformInfo.rotation.x = 0;
+	transformInfo.rotation.y = 0;
+	transformInfo.rotation.z = 0;
 	auto* t2 = entity1.AddComponent<dm::Transform>(transformInfo);
 
-	auto* transform2 = entity1.GetComponent<dm::Transform>();
+	auto* transform2 = entity1.GetComponent<dm::Transform>(ComponentType::TRANSFORM);
 
-	ASSERT_FLOAT_EQ(x, transform2->x);
-	ASSERT_FLOAT_EQ(y, transform2->y);
-	ASSERT_FLOAT_EQ(z, transform2->z);
+	ASSERT_FLOAT_EQ(x, transform2->position.x);
+	ASSERT_FLOAT_EQ(y, transform2->position.y);
+	ASSERT_FLOAT_EQ(z, transform2->position.z);
 
-	ASSERT_FLOAT_EQ(x, t2->x);
-	ASSERT_FLOAT_EQ(y, t2->y);
-	ASSERT_FLOAT_EQ(z, t2->z);
+	ASSERT_FLOAT_EQ(x, t2->position.x);
+	ASSERT_FLOAT_EQ(y, t2->position.y);
+	ASSERT_FLOAT_EQ(z, t2->position.z);
+
+	ASSERT_FLOAT_EQ(0, transform2->rotation.x);
+	ASSERT_FLOAT_EQ(0, transform2->rotation.y);
+	ASSERT_FLOAT_EQ(0, transform2->rotation.z);
+
+	ASSERT_FLOAT_EQ(0, t2->rotation.x);
+	ASSERT_FLOAT_EQ(0, t2->rotation.y);
+	ASSERT_FLOAT_EQ(0, t2->rotation.z);
 }
 
 TEST(Entity, HasComponentEntity)
@@ -122,7 +134,6 @@ TEST(Entity, HasComponentEntity)
 	const auto e0 = entityManager->CreateEntity();
 	auto entity = dm::EntityHandle(e0, engine);
 
-	std::cout << "Create component Transform at 1, 2, 3\n";
 	entity.CreateComponent<dm::Transform>(ComponentType::TRANSFORM);
 
 	ASSERT_TRUE(entity.HasComponent(ComponentType::TRANSFORM));
@@ -140,7 +151,7 @@ TEST(Entity, DestroyComponentEntity)
 	const auto e0 = entityManager->CreateEntity();
 	auto entity = dm::EntityHandle(e0, engine);
 
-	std::cout << "Create component Transform at 1, 2, 3\n";
+	std::cout << "Create component Transform\n";
 	entity.CreateComponent<dm::Transform>(ComponentType::TRANSFORM);
 
 	ASSERT_TRUE(entity.HasComponent(ComponentType::TRANSFORM));
@@ -149,4 +160,29 @@ TEST(Entity, DestroyComponentEntity)
 	entity.DestroyComponent(ComponentType::TRANSFORM);
 
 	ASSERT_FALSE(entity.HasComponent(ComponentType::TRANSFORM));
+}
+
+TEST(Entity, SystemAddComponent)
+{
+	dm::Engine engine;
+	engine.Init();
+
+	auto entityManager = engine.GetEntityManager();
+
+	const auto e0 = entityManager->CreateEntity();
+	auto entity = dm::EntityHandle(e0, engine);
+
+	auto t = entity.CreateComponent<dm::Transform>(ComponentType::TRANSFORM);
+	auto c = entity.CreateComponent<dm::Camera>(ComponentType::CAMERA);
+	auto controller = entity.CreateComponent<dm::ControllerType>(ComponentType::CONTROL_TYPE);
+	controller->type = dm::ControllerType::ControllerTypeEnum::CAMERA_EDITOR;
+
+	try
+	{
+		engine.Start();
+	}
+	catch (const std::exception& e)
+	{
+		std::cerr << e.what() << "\n";
+	}
 }

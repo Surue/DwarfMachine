@@ -26,7 +26,7 @@ SOFTWARE.
 
 namespace dm
 {
-System::System(Engine* engine) : m_Engine(engine){}
+System::System(Engine& engine) : m_Engine(engine){}
 
 void System::Destroy()
 {

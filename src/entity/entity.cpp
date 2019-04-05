@@ -29,8 +29,11 @@ namespace dm
 {
 EntityManager::EntityManager(Engine& engine) : m_Engine(engine)
 {
+	ComponentMask emptyMask;
+	emptyMask.mask = static_cast<int>(ComponentType::NONE);
+
 	m_EntityInfos.resize(INIT_ENTITY_NMB, INVALID_ENTITY);
-	m_EntityMask.resize(INIT_ENTITY_NMB, static_cast<int>(ComponentType::NONE));
+	m_EntityMask.resize(INIT_ENTITY_NMB, emptyMask);
 }
 
 Entity EntityManager::CreateEntity()
@@ -81,36 +84,46 @@ void EntityManager::DestroyEntity(const Entity entity)
 	}
 
 	//Remove entity
-	m_EntityMask[entity - 1] = INVALID_ENTITY;
+	m_EntityMask[entity - 1].mask = static_cast<int>(ComponentType::NONE);
 	m_LastEntity = entity - 1;
 }
 
-void EntityManager::AddComponent(const Entity entity, ComponentType componentType)
+void EntityManager::AddComponent(const Entity entity, const ComponentType componentType)
 {
-	m_EntityMask[entity - 1] = m_EntityMask[entity - 1] | static_cast<int>(componentType);
+	m_EntityMask[entity - 1].AddComponent(componentType);
 }
 
-void EntityManager::DestroyComponent(const Entity entity, ComponentType componentType)
+void EntityManager::DestroyComponent(const Entity entity, const ComponentType componentType)
 {
-	m_EntityMask[entity - 1] &= ~static_cast<int>(componentType);
+	m_EntityMask[entity - 1].RemoveComponent(componentType);
 }
 
-bool EntityManager::HasComponent(const Entity entity, ComponentType componentType)
+bool EntityManager::HasComponent(const Entity entity, const ComponentType componentType)
 {
-	return (m_EntityMask[entity - 1] & static_cast<int>(componentType)) == static_cast<int>(componentType);
+	ComponentMask tmpComponentMask;
+	tmpComponentMask.AddComponent(componentType);
+	return m_EntityMask[entity - 1].Matches(tmpComponentMask);
 }
 
 void EntityManager::ResizeEntity(const size_t newSize)
 {
-	m_EntityMask.resize(newSize, INVALID_ENTITY);
+	m_EntityMask.resize(newSize);
 	m_EntityInfos.resize(newSize, static_cast<int>(ComponentType::NONE));
 
 	//TODO resize les components containers et les systèmes containers
 }
 
+ComponentMask EntityManager::GetEntityMask(const Entity entity)
+{
+	return m_EntityMask[entity - 1];
+}
+
 void EntityManager::ResizeEntity()
 {
-	m_EntityMask.resize(m_EntityMask.size() + INIT_ENTITY_NMB, INVALID_ENTITY);
+	ComponentMask emptyMask;
+	emptyMask.mask = static_cast<int>(ComponentType::NONE);
+
+	m_EntityMask.resize(m_EntityMask.size() + INIT_ENTITY_NMB, emptyMask);
 	m_EntityInfos.resize(m_EntityInfos.size() + INIT_ENTITY_NMB, static_cast<int>(ComponentType::NONE));
 
 	//TODO resize les components containers et les systèmes containers

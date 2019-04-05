@@ -50,6 +50,8 @@ public:
 	EntityManager* GetEntityManager() const;
 
 	ComponentManager* GetComponentManager() const;
+
+	SystemManager* GetSystemManager() const;
 private:
 	/**
 	 * \brief Main loop of the game

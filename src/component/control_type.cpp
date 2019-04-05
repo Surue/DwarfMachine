@@ -22,37 +22,23 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#include <component/transform.h>
+#include <component/control_type.h>
 
 namespace dm
 {
-void TransformManager::Init()
+void ControllerTypeManager::Init() {}
+void ControllerTypeManager::Update() {}
+ControllerType* ControllerTypeManager::CreateComponent(const Entity entity)
+{
+	auto controllerType = ControllerType();
+	controllerType.componentType = ComponentType::CONTROL_TYPE;
+	controllerType.type = ControllerType::ControllerTypeEnum::CAMERA_EDITOR;
+
+	m_Components[entity - 1] = controllerType;
+	return &m_Components[entity - 1];
+}
+void ControllerTypeManager::DestroyComponent(Entity entity)
 {
 	
 }
-
-void TransformManager::Update()
-{
-
-}
-
-Transform* TransformManager::CreateComponent(const Entity entity)
-{
-	auto t = Transform();
-	t.componentType = ComponentType::TRANSFORM;
-
-	t.position.x = 0;
-	t.position.y = 0;
-	t.position.z = 0;
-
-	t.rotation.x = 0;
-	t.rotation.y = 0;
-	t.rotation.z = 0;
-
-	m_Components[entity - 1] = t;
-
-	return &m_Components[entity - 1];
-}
-
-void TransformManager::DestroyComponent(Entity entity) { }
 }

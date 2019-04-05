@@ -22,37 +22,25 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#include <component/transform.h>
+#include <system/camera_view.h>
+#include <component/camera.h>
+#include "entity/entity_handle.h"
 
 namespace dm
 {
-void TransformManager::Init()
+CameraView::CameraView(Engine& engine) : System(engine)
 {
-	
+	m_Signature.AddComponent(ComponentType::TRANSFORM);
+	m_Signature.AddComponent(ComponentType::CAMERA);
 }
 
-void TransformManager::Update()
+void CameraView::Update()
 {
-
+	for (auto registeredEntity : m_RegisteredEntities)
+	{
+		auto entity = EntityHandle(registeredEntity, m_Engine);
+		auto camera = entity.GetComponent<Camera>(ComponentType::CAMERA);
+		auto transform = entity.GetComponent<Transform>(ComponentType::TRANSFORM);
+	}
 }
-
-Transform* TransformManager::CreateComponent(const Entity entity)
-{
-	auto t = Transform();
-	t.componentType = ComponentType::TRANSFORM;
-
-	t.position.x = 0;
-	t.position.y = 0;
-	t.position.z = 0;
-
-	t.rotation.x = 0;
-	t.rotation.y = 0;
-	t.rotation.z = 0;
-
-	m_Components[entity - 1] = t;
-
-	return &m_Components[entity - 1];
-}
-
-void TransformManager::DestroyComponent(Entity entity) { }
 }

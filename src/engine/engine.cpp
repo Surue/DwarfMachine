@@ -71,6 +71,11 @@ ComponentManager* Engine::GetComponentManager() const
 	return m_ComponentManager;
 }
 
+SystemManager* Engine::GetSystemManager() const
+{
+	return m_SystemManager;
+}
+
 void Engine::MainLoop()
 {
 	while (!glfwWindowShouldClose(m_Window))
@@ -79,6 +84,7 @@ void Engine::MainLoop()
 		m_InputManager->Update();
 
 		//Updates
+		m_SystemManager->Update();
 		m_GraphicManager->Update();
 	}
 }
@@ -86,11 +92,13 @@ void Engine::MainLoop()
 void Engine::Destroy()
 {
 	m_GraphicManager->Destroy();
+	m_SystemManager->Destroy();
 
 	delete(m_GraphicManager);
 	delete(m_InputManager);
 	delete(m_ComponentManager);
 	delete(m_EntityManager);
+	delete(m_SystemManager);
 }
 
 }

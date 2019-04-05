@@ -28,14 +28,13 @@ SOFTWARE.
 
 #include <engine/engine.h>
 #include <component/component_type.h>
+#include "component/component_mask.h"
 #define INIT_ENTITY_NMB 10
 
 namespace dm
 {
 using Entity = unsigned int ;
 const Entity INVALID_ENTITY = 0U;
-
-using EntityMask = int;
 
 class EntityManager final
 {
@@ -58,12 +57,14 @@ public:
 
 	void ResizeEntity(size_t newSize);
 
+	ComponentMask GetEntityMask(Entity entity);
+
 private:
 	void ResizeEntity();
 
 	unsigned int m_LastEntity = 0;
 	std::vector<Entity> m_EntityInfos;
-	std::vector<EntityMask> m_EntityMask;
+	std::vector<ComponentMask> m_EntityMask;
 
 	Engine& m_Engine;
 };

@@ -28,10 +28,10 @@ SOFTWARE.
 #include <entity/entity.h>
 #include <component/component_manager.h>
 #include <component/component_type.h>
+#include <system/system_manager.h>
 
 namespace dm
 {
-class ComponentManager;
 
 class EntityHandle
 {
@@ -41,23 +41,27 @@ public:
 	template<class T>
 	T* AddComponent(T& component)
 	{
+		const auto oldMask = m_EntityManager->GetEntityMask(m_Entity);
+
 		m_EntityManager->AddComponent(m_Entity, component.componentType);
-		//TODO Update system
+		m_SystemManager->AddComponent(m_Entity, oldMask, m_EntityManager->GetEntityMask(m_Entity));
 		return static_cast<T*>(m_ComponentManager->AddComponent(m_Entity, component));
 	}
 
 	template<class T>
 	T* CreateComponent(const ComponentType componentType) const
 	{
+		const auto oldMask = m_EntityManager->GetEntityMask(m_Entity);
+
 		m_EntityManager->AddComponent(m_Entity, componentType);
-		//TODO Update system
+		m_SystemManager->AddComponent(m_Entity, oldMask, m_EntityManager->GetEntityMask(m_Entity));
 		return static_cast<T*>(m_ComponentManager->CreateComponent(m_Entity, componentType));
 	}
 
 	template<class T>
-	T* GetComponent()
+	T* GetComponent(const ComponentType componentType)
 	{
-		return static_cast<T*>(m_ComponentManager->GetComponent<T>(m_Entity));
+		return static_cast<T*>(m_ComponentManager->GetComponent(m_Entity, componentType));
 	}
 
 	bool HasComponent(ComponentType componentType) const;
@@ -71,6 +75,7 @@ private:
 	Entity m_Entity;
 	ComponentManager* m_ComponentManager = nullptr;
 	EntityManager* m_EntityManager = nullptr;
+	SystemManager* m_SystemManager = nullptr;
 	Engine& m_Engine;
 };
 }

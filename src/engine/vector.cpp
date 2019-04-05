@@ -269,4 +269,134 @@ float Vec2f::Dot(const Vec2f& v1, const Vec2f& v2)
 {
 	return v1.x*v2.x + v1.y*v2.y;
 }
+
+Vec3f::Vec3f() : x(0), y(0), z(0) {}
+
+Vec3f::Vec3f(const float x, const float y, const float z) : x(x), y(y), z(z){}
+
+Vec3f::Vec3f(const Vec2i v)
+{
+	x = v.x;
+	y = v.y;
+	z = 0;
+}
+
+Vec3f::Vec3f(const Vec2f v)
+{
+	x = v.x;
+	y = v.y;
+	z = 0;
+}
+
+bool Vec3f::operator==(const Vec3f& rhs) const
+{
+	return x == rhs.x && y == rhs.y && z == rhs.z;
+}
+
+bool Vec3f::operator!=(const Vec3f& rhs) const
+{
+	return x != rhs.x || y != rhs.y || z != rhs.z;
+}
+
+Vec3f Vec3f::operator+(const Vec3f& rhs) const
+{
+	return Vec3f(x + rhs.x, y + rhs.y, z + rhs.z);
+}
+
+Vec3f& Vec3f::operator+=(const Vec3f& rhs)
+{
+	x += rhs.x;
+	y += rhs.y;
+	z += rhs.z;
+
+	return *this;
+}
+
+Vec3f Vec3f::operator-(const Vec3f& rhs) const
+{
+	return Vec3f(x - rhs.x, y - rhs.y, z - rhs.z);
+}
+
+Vec3f& Vec3f::operator-=(const Vec3f& rhs)
+{
+	x -= rhs.x;
+	y -= rhs.y;
+	z -= rhs.z;
+
+	return *this;
+}
+
+Vec3f Vec3f::operator*(const int rhs) const
+{
+	return Vec3f(x * rhs, y * rhs, z * rhs);
+}
+
+Vec3f& Vec3f::operator*=(const int rhs)
+{
+	x *= rhs;
+	y *= rhs;
+	z *= rhs;
+
+	return *this;
+}
+
+Vec3f Vec3f::operator*(const float rhs) const
+{
+	return Vec3f(x * rhs, y * rhs, z * rhs);
+}
+
+Vec3f& Vec3f::operator*=(const float rhs)
+{
+	x *= rhs;
+	y *= rhs;
+	z *= rhs;
+
+	return *this;
+}
+
+Vec3f Vec3f::operator/(const float rhs) const
+{
+	return Vec3f(x / rhs, y / rhs, z / rhs);
+}
+
+Vec3f& Vec3f::operator/=(const float rhs)
+{
+	x /= rhs;
+	y /= rhs;
+	z /= rhs;
+
+	return *this;
+}
+
+float Vec3f::GetMagnitude() const
+{
+	return sqrt(x * x + y * y + z * z);
+}
+
+Vec3f Vec3f::Normalized() const
+{
+	return *this / GetMagnitude();
+}
+
+Vec3f Vec3f::Lerp(const Vec3f& v1, const Vec3f& v2, float t)
+{
+	return v1 + (v2 - v1)*t;
+}
+
+float Vec3f::AngleBetween(const Vec3f& v1, const Vec3f& v2)
+{
+	const auto dot = Dot(v1, v2);
+	const float angle = acosf(dot) / M_PI * 180.0f;
+	return (dot < 0.0f ? -1.0f : 1.0f) * angle;
+}
+
+float Vec3f::Dot(const Vec3f& v1, const Vec3f& v2)
+{
+	return v1.x*v2.x + v1.y*v2.y + v1.z * v2.z;
+}
+
+Vec3f Vec3f::Cross(const Vec3f& v1, const Vec3f& v2)
+{
+	return Vec3f(v1.y * v2.z - v1.z * v2.y, v1.z * v2.x - v1.x * v2.z, v1.x * v2.y - v1.y * v2.x);
+}
 }

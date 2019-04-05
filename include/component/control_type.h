@@ -22,37 +22,30 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#include <component/transform.h>
+#ifndef CONTROLLER_TYPE_H
+#define CONTROLLER_TYPE_H
+#include <component/component.h>
 
-namespace dm
+namespace dm {
+struct ControllerType final : ComponentBase
 {
-void TransformManager::Init()
+	enum class ControllerTypeEnum {
+		CAMERA_EDITOR
+	};
+
+	ControllerTypeEnum type = ControllerTypeEnum::CAMERA_EDITOR;
+	//TODO rajouter plus de type de contrôls (FPS, TOP_DOWN)
+};
+
+class ControllerTypeManager final : public ComponentBaseManager<ControllerType>
 {
-	
+public:
+	void Init() override;
+	void Update() override;
+
+	ControllerType* CreateComponent(const Entity entity) override;
+
+	void DestroyComponent(Entity entity) override;
+};
 }
-
-void TransformManager::Update()
-{
-
-}
-
-Transform* TransformManager::CreateComponent(const Entity entity)
-{
-	auto t = Transform();
-	t.componentType = ComponentType::TRANSFORM;
-
-	t.position.x = 0;
-	t.position.y = 0;
-	t.position.z = 0;
-
-	t.rotation.x = 0;
-	t.rotation.y = 0;
-	t.rotation.z = 0;
-
-	m_Components[entity - 1] = t;
-
-	return &m_Components[entity - 1];
-}
-
-void TransformManager::DestroyComponent(Entity entity) { }
-}
+#endif CONTROLLER_TYPE_H
