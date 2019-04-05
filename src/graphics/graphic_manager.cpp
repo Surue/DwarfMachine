@@ -96,6 +96,7 @@ void GraphicManager::Init()
 	//Camera
 	view = glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 	proj = glm::perspective(glm::radians(45.0f), m_SwapChainExtent.width / static_cast<float>(m_SwapChainExtent.height), 0.1f, 100.0f);
+	std::cout << m_SwapChainExtent.width << ", " << m_SwapChainExtent.height << "\n";
 
 	rotation = glm::vec3(0.0f, 0.0f, 0.0f);
 	position = glm::vec3(0.0f, 0.0f, -10.0f);

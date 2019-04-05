@@ -22,7 +22,12 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
+#define GLM_FORCE_RADIANS
+#define FLM_FORCE_DEPTH_ZERO_TO_ONE
+#include <glm/glm.hpp>
+
 #include <component/camera.h>
+#include <glm/ext/matrix_clip_space.inl>
 
 namespace dm
 {
@@ -39,6 +44,9 @@ Camera* CameraManager::CreateComponent(const Entity entity)
 {
 	auto c = Camera();
 	c.componentType = ComponentType::CAMERA;
+	c.proj = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
+	//TODO mettre les valeurs depuis l'exterieur
+
 	m_Components[entity - 1] = c;
 
 	return &m_Components[entity - 1];
