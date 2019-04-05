@@ -22,30 +22,22 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#ifndef SYSTEM_MANAGER_H
-#define SYSTEM_MANAGER_H
-#include <vector>
-#include <engine/system.h>
+#include <system/system_manager.h>
+namespace dm {
+	SystemManager::SystemManager(Engine& engine) : m_Engine(engine) {}
 
-namespace dm
-{
-class Engine;
+	void SystemManager::Init()
+	{
+		
+	}
 
-class SystemManager final
-{
-public:
-	SystemManager(Engine* engine);
-	~SystemManager() = default;
+	void SystemManager::Update()
+	{
+		
+	}
 
-	void Init();
-	void Update();
-	void Destroy();
-
-private:
-	Engine* m_Engine;
-
-	std::vector<System> m_Systems;
-
-};
+	void SystemManager::Destroy()
+	{
+		
+	}
 }
-#endif SYSTEM_MANAGER_H

@@ -101,14 +101,14 @@ private:
 	std::vector<KeyPressedStatus> m_KeyPressedStatus{ GLFW_KEY_LAST };
 	std::vector<KeyPressedStatus> m_ButtonPressedStatus{ GLFW_MOUSE_BUTTON_LAST };
 
-	GLFWwindow* m_Window;
+	GLFWwindow* m_Window = nullptr;
 	
  };
 
-inline void ScrollCallback(GLFWwindow* window, const double xoffset, const double yoffset)
+inline void ScrollCallback(GLFWwindow* window, const double offsetX, const double offsetY)
 {
-	InputManager::scrollX = xoffset;
-	InputManager::scrollY = yoffset;
+	InputManager::scrollX = offsetX;
+	InputManager::scrollY = offsetY;
 	InputManager::scrollUpdate = true;
 }
 };

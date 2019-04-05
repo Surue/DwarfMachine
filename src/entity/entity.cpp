@@ -22,8 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#include <engine/entity.h>
-#include <iostream>
+#include <entity/entity.h>
 #include <string>
 
 namespace dm

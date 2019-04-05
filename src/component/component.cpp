@@ -22,44 +22,9 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#ifndef SYSTEM_H
-#define SYSTEM_H
-#include <vector>
-#include <engine/entity.h>
-#include <engine/component_mask.h>
+#include <component/component.h>
 
 namespace dm
 {
-class Engine;
 
-class System
-{
-public:
-	System(Engine* engine);
-	virtual ~System() = default;
-	System(const System &) = default;
-	System &operator=(const System &) = default;
-	System(System &&) = default;
-	System &operator=(System &&) = default;
-
-	virtual void Init() = 0;
-	virtual void Update() = 0;
-	virtual void Draw() = 0;
-	void Destroy();
-
-	void RegisterEntity(const Entity entity);
-
-	void UnRegisterEntity(const Entity entity);
-
-	ComponentMask GetSignature() const;
-
-private:
-	Engine* m_Engine = nullptr;
-
-	std::vector<Entity> m_RegisteredEntities;
-
-	ComponentMask m_Signature;
-};
 }
-
-#endif

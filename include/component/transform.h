@@ -22,61 +22,38 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#ifndef COMPONENT_H
-#define COMPONENT_H
-#include <engine/entity.h>
+#ifndef TRANSFORM_H
+#define TRANSFORM_H
 
-#define INIT_COMPONENT_NMB 10
+#include <component/component.h>
+#include <string>
 
 namespace dm
 {
-
-struct ComponentBase
+struct Transform final : ComponentBase
 {
-	ComponentType componentType = ComponentType::NONE;
+	float x;
+	float y;
+	float z;
+
+	friend std::ostream & operator<<(std::ostream & out, const Transform transform)
+	{
+		out << "(" << transform.x << ", " << transform.y << ", "<< transform.z << ")";
+		return out;
+	}
 };
 
-template<typename T>
-class ComponentBaseManager
+class TransformManager final : public ComponentBaseManager<Transform>
 {
 public:
-	ComponentBaseManager()
-	{
-		
-	}
+	void Init() override;
 
-	virtual ~ComponentBaseManager()
-	{
-		m_Components.clear();
-	};
+	void Update() override;
 
-	virtual void Init() = 0;
-	 
-	virtual void Update() = 0;
+	Transform* CreateComponent(const Entity entity) override;
 
-	virtual T* CreateComponent(Entity) = 0;
-
-	T* AddComponent(const Entity entity, T& componentBase)
-	{
-		m_Components[entity - 1] = componentBase;
-		return &m_Components[entity - 1];
-	};
-
-	virtual void DestroyComponent(Entity entity) = 0;
-
-	T* GetComponent(const Entity entity)
-	{
-		return &m_Components[entity - 1];
-	};
-
-	std::vector<T>& GetComponents()
-	{
-		return m_Components;
-	}
-
-protected:
-	std::vector<T> m_Components{INIT_COMPONENT_NMB};
+	void DestroyComponent(Entity entity) override;
 };
 }
 
-#endif COMPONENT_H
+#endif TRANSFORM_H

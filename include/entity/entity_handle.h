@@ -22,51 +22,57 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#ifndef ENTITY_H
-#define ENTITY_H
-#include <vector>
+#ifndef ENTITY_HANDLE_H
+#define ENTITY_HANDLE_H
 
-#include <engine/engine.h>
-#include <engine/component_type.h>
-#define INIT_ENTITY_NMB 10
+#include <entity/entity.h>
+#include <component/component_manager.h>
+#include <component/component_type.h>
 
 namespace dm
 {
-using Entity = unsigned int ;
-const Entity INVALID_ENTITY = 0U;
+class ComponentManager;
 
-using EntityMask = int;
-
-class EntityManager final
+class EntityHandle
 {
 public:
-	EntityManager(Engine& engine);
+	EntityHandle(Entity entity, Engine& engine);
 
-	~EntityManager() = default;
+	template<class T>
+	T* AddComponent(T& component)
+	{
+		m_EntityManager->AddComponent(m_Entity, component.componentType);
+		//TODO Update system
+		return static_cast<T*>(m_ComponentManager->AddComponent(m_Entity, component));
+	}
 
-	EntityManager& operator=(const EntityManager&) = delete;
-	EntityManager(EntityManager &&) = default; //move constructor
-	EntityManager(const EntityManager &) = delete; //delete copy constructor
+	template<class T>
+	T* CreateComponent(const ComponentType componentType) const
+	{
+		m_EntityManager->AddComponent(m_Entity, componentType);
+		//TODO Update system
+		return static_cast<T*>(m_ComponentManager->CreateComponent(m_Entity, componentType));
+	}
 
-	Entity CreateEntity();
-	void DestroyEntity(Entity entity);
+	template<class T>
+	T* GetComponent()
+	{
+		return static_cast<T*>(m_ComponentManager->GetComponent<T>(m_Entity));
+	}
 
-	void AddComponent(Entity entity, ComponentType componentType);
-	void DestroyComponent(Entity entity, ComponentType componentType);
+	bool HasComponent(ComponentType componentType) const;
 
-	bool HasComponent(Entity entity, ComponentType componentType);
+	void DestroyComponent(ComponentType componentType) const;
 
-	void ResizeEntity(size_t newSize);
+	void Destroy();
+
 
 private:
-	void ResizeEntity();
-
-	unsigned int m_LastEntity = 0;
-	std::vector<Entity> m_EntityInfos;
-	std::vector<EntityMask> m_EntityMask;
-
+	Entity m_Entity;
+	ComponentManager* m_ComponentManager = nullptr;
+	EntityManager* m_EntityManager = nullptr;
 	Engine& m_Engine;
 };
 }
 
-#endif ENTITY_H
+#endif ENTITY_HANDLE_H

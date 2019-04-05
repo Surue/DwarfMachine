@@ -22,40 +22,32 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#include <engine/system.h>
+#include <component/component_mask.h>
 
 namespace dm
 {
-System::System(Engine* engine) : m_Engine(engine){}
-
-void System::Destroy()
+void ComponentMask::AddComponent(ComponentType componentType)
 {
-	m_RegisteredEntities.clear();
+	mask |= (1 << static_cast<int>(componentType));
 }
 
-void System::RegisterEntity(const Entity entity)
+void ComponentMask::RemoveComponent(ComponentType componentType)
 {
-	m_RegisteredEntities.push_back(entity);
-	//TODO Remove push back and use index
+	mask &= ~(1 << static_cast<int>(componentType));
 }
 
-void System::UnRegisterEntity(const Entity entity)
+bool ComponentMask::Matches(const ComponentMask systemMask) const
 {
-	for (auto it = m_RegisteredEntities.begin(); it != m_RegisteredEntities.end(); ++it)
-	{
-		const auto e = *it;
-
-		if (e == entity)
-		{
-			m_RegisteredEntities.erase(it);
-			return;
-		}
-	}
-	//TODO remove iterator and use index
+	return ((mask & systemMask.mask) == systemMask.mask);
 }
 
-ComponentMask System::GetSignature() const
+bool ComponentMask::IsNewMatch(ComponentMask oldMask, const ComponentMask systemMask) const
 {
-	return m_Signature;
+	return Matches(systemMask) && !oldMask.Matches(systemMask);
+}
+
+bool ComponentMask::IsNoLongerMatch(ComponentMask oldMask, const ComponentMask systemMask) const
+{
+	return oldMask.Matches(systemMask) && !Matches(systemMask);
 }
 }

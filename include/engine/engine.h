@@ -34,6 +34,7 @@ class GraphicManager;
 class InputManager;
 class EntityManager;
 class ComponentManager;
+class SystemManager;
 
 class Engine
 {
@@ -66,6 +67,7 @@ private:
 	InputManager* m_InputManager = nullptr;
 	EntityManager* m_EntityManager = nullptr;
 	ComponentManager* m_ComponentManager = nullptr;
+	SystemManager* m_SystemManager = nullptr;
 };
 }
 

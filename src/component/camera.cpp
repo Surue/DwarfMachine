@@ -22,32 +22,29 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#include <engine/component_mask.h>
+#include <component/camera.h>
 
 namespace dm
 {
-void ComponentMask::AddComponent(ComponentType componentType)
+void CameraManager::Init()
 {
-	mask |= (1 << static_cast<int>(componentType));
+	
 }
 
-void ComponentMask::RemoveComponent(ComponentType componentType)
+void CameraManager::Update()
 {
-	mask &= ~(1 << static_cast<int>(componentType));
 }
 
-bool ComponentMask::Matches(const ComponentMask systemMask) const
+Camera* CameraManager::CreateComponent(const Entity entity)
 {
-	return ((mask & systemMask.mask) == systemMask.mask);
+	auto c = Camera();
+	c.componentType = ComponentType::CAMERA;
+	m_Components[entity - 1] = c;
+
+	return &m_Components[entity - 1];
 }
 
-bool ComponentMask::IsNewMatch(ComponentMask oldMask, const ComponentMask systemMask) const
+void CameraManager::DestroyComponent(Entity entity)
 {
-	return Matches(systemMask) && !oldMask.Matches(systemMask);
-}
-
-bool ComponentMask::IsNoLongerMatch(ComponentMask oldMask, const ComponentMask systemMask) const
-{
-	return oldMask.Matches(systemMask) && !Matches(systemMask);
 }
 }

@@ -22,33 +22,63 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#include <engine/transform.h>
-#include <iostream>
+#ifndef COMPONENT_H
+#define COMPONENT_H
+#include <entity/entity.h>
+#include <component/component_type.h>
+
+#define INIT_COMPONENT_NMB 10
 
 namespace dm
 {
-void TransformManager::Init()
+
+struct ComponentBase
 {
-	
-}
+	ComponentType componentType = ComponentType::NONE;
+	//TODO corriger cette connerie qui augmente la taille de tout les components
+};
 
-void TransformManager::Update()
+template<typename T>
+class ComponentBaseManager
 {
+public:
+	ComponentBaseManager()
+	{
+		
+	}
 
+	virtual ~ComponentBaseManager()
+	{
+		m_Components.clear();
+	};
+
+	virtual void Init() = 0;
+	 
+	virtual void Update() = 0;
+
+	virtual T* CreateComponent(Entity) = 0;
+
+	T* AddComponent(const Entity entity, T& componentBase)
+	{
+		m_Components[entity - 1] = componentBase;
+		return &m_Components[entity - 1];
+	};
+
+	virtual void DestroyComponent(Entity entity) = 0;
+
+	T* GetComponent(const Entity entity)
+	{
+		return &m_Components[entity - 1];
+	};
+
+	std::vector<T>& GetComponents()
+	{
+		return m_Components;
+	}
+
+protected:
+	std::vector<T> m_Components{INIT_COMPONENT_NMB};
+};
 }
 
-Transform* TransformManager::CreateComponent(const Entity entity)
-{
-	Transform t;
-	t.componentType = ComponentType::TRANSFORM;
-	t.x = 0;
-	t.y = 0;
-	t.z = 0;
-
-	m_Components[entity - 1] = t;
-
-	return &m_Components[entity - 1];
-}
-
-void TransformManager::DestroyComponent(Entity entity) { }
-}
+#endif COMPONENT_H

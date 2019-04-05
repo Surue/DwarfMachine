@@ -44,28 +44,34 @@ find_package(Vulkan REQUIRED)
 include_directories(include ${CMAKE_SOURCE_DIR}/include)
 
 file(GLOB_RECURSE DWARF_MACHINE_AUDIO_SRC src/audio/*.cpp include/audio/*.h)
-file(GLOB_RECURSE DWARF_MACHINE_ENGINE_SRC src/engine/*.cpp include/engine/*.h)
+file(GLOB_RECURSE DWARF_MACHINE_COMPONENT_SRC src/component/*.cpp include/component/*.h)
 file(GLOB_RECURSE DWARF_MACHINE_EDITOR_SRC src/editor/*.cpp include/editor/*.h)
+file(GLOB_RECURSE DWARF_MACHINE_ENGINE_SRC src/engine/*.cpp include/engine/*.h)
+file(GLOB_RECURSE DWARF_MACHINE_ENTITY_SRC src/entity/*.cpp include/entity/*.h)
 file(GLOB_RECURSE DWARF_MACHINE_GRAPHICS_SRC src/graphics/*.cpp include/graphics/*.h)
 file(GLOB_RECURSE DWARF_MACHINE_INPUT_SRC src/input/*.cpp include/input/*.h)
+file(GLOB_RECURSE DWARF_MACHINE_SYSTEM_SRC src/system/*.cpp include/system/*.h)
 file(GLOB_RECURSE DWARF_MACHINE_UTILITY_SRC src/utility/*.cpp include/utility/*.h)
 
 set_property(GLOBAL PROPERTY USE_FOLDERS On)
 SET_SOURCE_FILES_PROPERTIES( ${DWARF_MACHINE_SRC} PROPERTIES
                 FOLDER "${CMAKE_SOURCE_DIR}/src" )
 
-source_group("Audio"            FILES ${DWARF_MACHINE_AUDIO_SRC})
-source_group("Engine"            FILES ${DWARF_MACHINE_ENGINE_SRC})
-source_group("Editor"            FILES ${DWARF_MACHINE_EDITOR_SRC})
+source_group("Audio"               FILES ${DWARF_MACHINE_AUDIO_SRC})
+source_group("Component"           FILES ${DWARF_MACHINE_COMPONENT_SRC})
+source_group("Editor"              FILES ${DWARF_MACHINE_EDITOR_SRC})
+source_group("Engine"              FILES ${DWARF_MACHINE_ENGINE_SRC})
+source_group("Entity"              FILES ${DWARF_MACHINE_ENTITY_SRC})
 source_group("Graphics"            FILES ${DWARF_MACHINE_GRAPHICS_SRC})
-source_group("Input"            FILES ${DWARF_MACHINE_INPUT_SRC})
-source_group("Utility"            FILES ${DWARF_MACHINE_UTILITY_SRC})
+source_group("Input"               FILES ${DWARF_MACHINE_INPUT_SRC})
+source_group("System"              FILES ${DWARF_MACHINE_SYSTEM_SRC})
+source_group("Utility"             FILES ${DWARF_MACHINE_UTILITY_SRC})
 
 file(GLOB_RECURSE SHADERS_SRC shaders/*.vert shaders/*.frag)
 source_group("Shaders" FILES ${SHADERS_SRC})
 
-List(APPEND DWARF_MACHINE_SRC  ${DWARF_MACHINE_AUDIO_SRC} ${DWARF_MACHINE_ENGINE_SRC} ${DWARF_MACHINE_EDITOR_SRC} ${DWARF_MACHINE_GRAPHICS_SRC}
-${DWARF_MACHINE_INPUT_SRC} ${DWARF_MACHINE_UTILITY_SRC} ${SHADERS_SRC})
+List(APPEND DWARF_MACHINE_SRC  ${DWARF_MACHINE_AUDIO_SRC} ${DWARF_MACHINE_COMPONENT_SRC} ${DWARF_MACHINE_EDITOR_SRC} ${DWARF_MACHINE_ENGINE_SRC} ${DWARF_MACHINE_ENTITY_SRC} 
+${DWARF_MACHINE_GRAPHICS_SRC} ${DWARF_MACHINE_SYSTEM_SRC} ${DWARF_MACHINE_INPUT_SRC} ${DWARF_MACHINE_UTILITY_SRC} ${SHADERS_SRC})
 
 #GLM
 set(GLM_DIR ${EXTERNAL_DIR}/glm)

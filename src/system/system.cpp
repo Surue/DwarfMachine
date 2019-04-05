@@ -22,38 +22,40 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#ifndef TRANSFORM_H
-#define TRANSFORM_H
-
-#include <engine/component.h>
-#include <string>
+#include <system/system.h>
 
 namespace dm
 {
-struct Transform final : ComponentBase
+System::System(Engine* engine) : m_Engine(engine){}
+
+void System::Destroy()
 {
-	float x;
-	float y;
-	float z;
-
-	//friend std::ostream & operator<<(std::ostream & out, const Transform transform)
-	//{
-	//	out << "(" << transform.x << ", " << transform.y << ", "<< transform.z << ")";
-	//	return out;
-	//}
-};
-
-class TransformManager final : public ComponentBaseManager<Transform>
-{
-public:
-	void Init() override;
-
-	void Update() override;
-
-	Transform* CreateComponent(const Entity entity) override;
-
-	void DestroyComponent(Entity entity) override;
-};
+	m_RegisteredEntities.clear();
 }
 
-#endif TRANSFORM_H
+void System::RegisterEntity(const Entity entity)
+{
+	m_RegisteredEntities.push_back(entity);
+	//TODO Remove push back and use index
+}
+
+void System::UnRegisterEntity(const Entity entity)
+{
+	for (auto it = m_RegisteredEntities.begin(); it != m_RegisteredEntities.end(); ++it)
+	{
+		const auto e = *it;
+
+		if (e == entity)
+		{
+			m_RegisteredEntities.erase(it);
+			return;
+		}
+	}
+	//TODO remove iterator and use index
+}
+
+ComponentMask System::GetSignature() const
+{
+	return m_Signature;
+}
+}

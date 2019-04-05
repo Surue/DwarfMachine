@@ -22,22 +22,51 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#include <engine/system_manager.h>
-namespace dm {
-	SystemManager::SystemManager(Engine* engine) : m_Engine(engine) {}
+#ifndef ENTITY_H
+#define ENTITY_H
+#include <vector>
 
-	void SystemManager::Init()
-	{
-		
-	}
+#include <engine/engine.h>
+#include <component/component_type.h>
+#define INIT_ENTITY_NMB 10
 
-	void SystemManager::Update()
-	{
-		
-	}
+namespace dm
+{
+using Entity = unsigned int ;
+const Entity INVALID_ENTITY = 0U;
 
-	void SystemManager::Destroy()
-	{
-		
-	}
+using EntityMask = int;
+
+class EntityManager final
+{
+public:
+	EntityManager(Engine& engine);
+
+	~EntityManager() = default;
+
+	EntityManager& operator=(const EntityManager&) = delete;
+	EntityManager(EntityManager &&) = default; //move constructor
+	EntityManager(const EntityManager &) = delete; //delete copy constructor
+
+	Entity CreateEntity();
+	void DestroyEntity(Entity entity);
+
+	void AddComponent(Entity entity, ComponentType componentType);
+	void DestroyComponent(Entity entity, ComponentType componentType);
+
+	bool HasComponent(Entity entity, ComponentType componentType);
+
+	void ResizeEntity(size_t newSize);
+
+private:
+	void ResizeEntity();
+
+	unsigned int m_LastEntity = 0;
+	std::vector<Entity> m_EntityInfos;
+	std::vector<EntityMask> m_EntityMask;
+
+	Engine& m_Engine;
+};
 }
+
+#endif ENTITY_H

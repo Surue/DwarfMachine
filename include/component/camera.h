@@ -26,7 +26,7 @@ SOFTWARE.
 #define CAMERA_H
 #include <glm/mat4x2.hpp>
 
-#include <engine/component.h>
+#include <component/component.h>
 
 namespace dm {
 struct Camera final : ComponentBase

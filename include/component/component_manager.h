@@ -22,29 +22,44 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#include <graphics/camera.h>
+#ifndef COMPONENT_MANAGER_H
+#define COMPONENT_MANAGER_H
 
-namespace dm
+#include <component/transform.h>
+#include <component/camera.h>
+
+namespace dm {
+
+class Engine;
+
+class ComponentManager final
 {
-void CameraManager::Init()
-{
-	
+public:
+	ComponentManager(Engine& engine);
+
+	ComponentBase* CreateComponent(Entity entity, ComponentType componentType);
+
+	ComponentBase* AddComponent(Entity entity, ComponentBase& component);
+
+	template<class T>
+	T* GetComponent(const Entity entity)
+	{
+		if(typeid(T).raw_name() == typeid(Transform).raw_name())
+		{
+			return m_TransformManager.GetComponent(entity);
+		}
+
+		throw std::runtime_error("Fail to bind component to its own component manager");
+	}
+
+	void DestroyComponent(const Entity entity, ComponentType componentType);
+
+private:
+	TransformManager m_TransformManager;
+	CameraManager m_CameraManager;
+
+	Engine& m_Engine;
+};
 }
 
-void CameraManager::Update()
-{
-}
-
-Camera* CameraManager::CreateComponent(const Entity entity)
-{
-	Camera c;
-	c.componentType = ComponentType::CAMERA;
-	m_Components[entity - 1] = c;
-
-	return &m_Components[entity - 1];
-}
-
-void CameraManager::DestroyComponent(Entity entity)
-{
-}
-}
+#endif COMPONENT_MANAGER_H

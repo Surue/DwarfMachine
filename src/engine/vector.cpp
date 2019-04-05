@@ -98,14 +98,14 @@ float Vec2i::GetMagnitude() const
 	return sqrtf(x * x + y * y);
 }
 
-Vec2i Vec2i::Lerp(const Vec2i& v1, const Vec2i& v2, float t)
+Vec2i Vec2i::Lerp(const Vec2i& v1, const Vec2i& v2, const float t)
 {
 	return v1 + (v2 - v1)*t;
 }
 
 float Vec2i::AngleBetween(const Vec2i& v1, const Vec2i& v2)
 {
-	const auto dot = Vec2i::Dot(v1, v2);
+	const auto dot = Dot(v1, v2);
 	const float angle = acosf(dot) / M_PI * 180.0f;
 	return (dot < 0.0f ? -1.0f : 1.0f) * angle;
 }

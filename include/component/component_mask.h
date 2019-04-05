@@ -21,3 +21,29 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
+
+#ifndef COMPONENT_MASK_H
+#define COMPONENT_MASK_H
+
+#include <component/component_type.h>
+
+namespace dm
+{
+
+struct ComponentMask
+{
+	unsigned int mask = 0;
+
+	void AddComponent(ComponentType componentType);
+
+	void RemoveComponent(ComponentType componentType);
+
+	bool Matches(const ComponentMask systemMask) const;
+
+	bool IsNewMatch(ComponentMask oldMask, const ComponentMask systemMask) const;
+
+	bool IsNoLongerMatch(ComponentMask oldMask, const ComponentMask systemMask) const;
+};
+}
+
+#endif COMPONENT_MASK_H

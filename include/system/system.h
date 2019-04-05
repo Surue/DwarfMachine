@@ -22,28 +22,44 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#ifndef COMPONENT_MASK_H
-#define COMPONENT_MASK_H
-
-#include <engine/component_type.h>
+#ifndef SYSTEM_H
+#define SYSTEM_H
+#include <vector>
+#include <entity/entity.h>
+#include <component/component_mask.h>
 
 namespace dm
 {
+class Engine;
 
-struct ComponentMask
+class System
 {
-	unsigned int mask = 0;
+public:
+	System(Engine* engine);
+	virtual ~System() = default;
+	System(const System &) = default;
+	System &operator=(const System &) = default;
+	System(System &&) = default;
+	System &operator=(System &&) = default;
 
-	void AddComponent(ComponentType componentType);
+	virtual void Init() = 0;
+	virtual void Update() = 0;
+	virtual void Draw() = 0;
+	void Destroy();
 
-	void RemoveComponent(ComponentType componentType);
+	void RegisterEntity(const Entity entity);
 
-	bool Matches(const ComponentMask systemMask) const;
+	void UnRegisterEntity(const Entity entity);
 
-	bool IsNewMatch(ComponentMask oldMask, const ComponentMask systemMask) const;
+	ComponentMask GetSignature() const;
 
-	bool IsNoLongerMatch(ComponentMask oldMask, const ComponentMask systemMask) const;
+private:
+	Engine* m_Engine = nullptr;
+
+	std::vector<Entity> m_RegisteredEntities;
+
+	ComponentMask m_Signature;
 };
 }
 
-#endif COMPONENT_MASK_H
+#endif

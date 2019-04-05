@@ -25,9 +25,9 @@ SOFTWARE.
 
 #include <graphics/graphic_manager.h>
 #include <engine/Input.h>
-#include <engine/entity.h>
-#include <engine/transform.h>
-#include <engine/component_manager.h>
+#include <entity/entity.h>
+#include <component/component_manager.h>
+#include <system/system_manager.h>
 
 namespace dm
 {
@@ -36,7 +36,8 @@ void Engine::Init()
 	m_GraphicManager = new GraphicManager(*this);
 	m_InputManager = new InputManager(*this);
 	m_EntityManager = new EntityManager(*this);
-	m_ComponentManager = new ComponentManager();
+	m_ComponentManager = new ComponentManager(*this);
+	m_SystemManager = new SystemManager(*this);
 
 	m_GraphicManager->Init();
 	m_Window = m_GraphicManager->GetWindow();

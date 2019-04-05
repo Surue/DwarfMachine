@@ -22,10 +22,16 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#include <engine/component_manager.h>
+#include <component/component_manager.h>
 
 namespace dm
 {
+ComponentManager::ComponentManager(Engine& engine): m_Engine(engine)
+{
+	m_TransformManager = TransformManager();
+	m_CameraManager = CameraManager();
+}
+
 ComponentBase* ComponentManager::CreateComponent(const Entity entity, const ComponentType componentType)
 {
 	switch (componentType)

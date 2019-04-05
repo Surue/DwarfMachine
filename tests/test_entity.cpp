@@ -25,10 +25,9 @@ SOFTWARE.
 #include <gtest/gtest.h>
 
 #include <engine/engine.h>
-#include <engine/entity.h>
 
-#include <engine/transform.h>
-#include "engine/entity_handle.h"
+#include <component/transform.h>
+#include <entity/entity_handle.h>
 
 TEST(Entity, CreateEntity)
 {

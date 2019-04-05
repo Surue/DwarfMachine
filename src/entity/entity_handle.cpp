@@ -22,44 +22,33 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#ifndef COMPONENT_MANAGER_H
-#define COMPONENT_MANAGER_H
+#include <entity/entity_handle.h>
 
-#include <engine/transform.h>
-#include <graphics/camera.h>
+namespace dm
+{
+EntityHandle::EntityHandle(const Entity entity, Engine& engine) : m_Engine(engine)
+{
+	m_Entity = entity;
 
-namespace dm {
-
-	class ComponentManager final
-	{
-	public:
-		ComponentManager()
-		{
-			m_TransformManager = TransformManager();
-			m_CameraManager = CameraManager();
-		}
-
-		ComponentBase* CreateComponent(Entity entity, ComponentType componentType);
-
-		ComponentBase* AddComponent(Entity entity, ComponentBase& component);
-
-		template<class T>
-		T* GetComponent(const Entity entity)
-		{
-			if(typeid(T).raw_name() == typeid(Transform).raw_name())
-			{
-				return m_TransformManager.GetComponent(entity);
-			}
-
-			throw std::runtime_error("Fail to bind component to its own component manager");
-		}
-
-		void DestroyComponent(const Entity entity, ComponentType componentType);
-
-	private:
-		TransformManager m_TransformManager;
-		CameraManager m_CameraManager;
-	};
+	m_ComponentManager = m_Engine.GetComponentManager();
+	m_EntityManager = m_Engine.GetEntityManager();
 }
 
-#endif COMPONENT_MANAGER_H
+bool EntityHandle::HasComponent(const ComponentType componentType) const
+{
+	return (m_EntityManager->HasComponent(m_Entity, componentType));
+}
+
+void EntityHandle::DestroyComponent(const ComponentType componentType) const
+{
+	m_EntityManager->DestroyComponent(m_Entity, componentType);
+	//TODO Update systems
+	m_ComponentManager->DestroyComponent(m_Entity, componentType);
+}
+
+void EntityHandle::Destroy()
+{
+	m_EntityManager->DestroyEntity(m_Entity);
+	//TODO Updates systems
+}
+}

@@ -22,33 +22,32 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#include <engine/entity_handle.h>
+#include <component/transform.h>
 
 namespace dm
 {
-EntityHandle::EntityHandle(const Entity entity, Engine& engine) : m_Engine(engine)
+void TransformManager::Init()
 {
-	m_Entity = entity;
-
-	m_ComponentManager = m_Engine.GetComponentManager();
-	m_EntityManager = m_Engine.GetEntityManager();
+	
 }
 
-bool EntityHandle::HasComponent(const ComponentType componentType) const
+void TransformManager::Update()
 {
-	return (m_EntityManager->HasComponent(m_Entity, componentType));
+
 }
 
-void EntityHandle::DestroyComponent(const ComponentType componentType) const
+Transform* TransformManager::CreateComponent(const Entity entity)
 {
-	m_EntityManager->DestroyComponent(m_Entity, componentType);
-	//TODO Update systems
-	m_ComponentManager->DestroyComponent(m_Entity, componentType);
+	auto t = Transform();
+	t.componentType = ComponentType::TRANSFORM;
+	t.x = 0;
+	t.y = 0;
+	t.z = 0;
+
+	m_Components[entity - 1] = t;
+
+	return &m_Components[entity - 1];
 }
 
-void EntityHandle::Destroy()
-{
-	m_EntityManager->DestroyEntity(m_Entity);
-	//TODO Updates systems
-}
+void TransformManager::DestroyComponent(Entity entity) { }
 }
