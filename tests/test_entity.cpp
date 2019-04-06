@@ -28,6 +28,9 @@ SOFTWARE.
 
 #include <component/transform.h>
 #include <entity/entity_handle.h>
+#include <glm/ext/matrix_clip_space.inl>
+#include <glm/detail/func_trigonometric.inl>
+#include <glm/ext/matrix_transform.inl>
 
 TEST(Entity, CreateEntity)
 {
@@ -173,7 +176,16 @@ TEST(Entity, SystemAddComponent)
 	auto entity = dm::EntityHandle(e0, engine);
 
 	auto t = entity.CreateComponent<dm::Transform>(ComponentType::TRANSFORM);
-	auto c = entity.CreateComponent<dm::Camera>(ComponentType::CAMERA);
+	t->position = dm::Vec3f(0, 0, -10.0f);
+
+	dm::Camera cameraInfo;
+	cameraInfo.componentType = ComponentType::CAMERA;
+	cameraInfo.isMainCamera = true;
+	cameraInfo.view = lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	cameraInfo.proj = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
+
+	auto camera = entity.AddComponent<dm::Camera>(cameraInfo);
+
 	auto controller = entity.CreateComponent<dm::ControllerType>(ComponentType::CONTROL_TYPE);
 	controller->type = dm::ControllerType::ControllerTypeEnum::CAMERA_EDITOR;
 

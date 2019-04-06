@@ -45,6 +45,8 @@ public:
 
 	void Stop() const;
 
+	GraphicManager* GetGraphicManager() const;
+
 	InputManager* GetInputManager() const;
 
 	EntityManager* GetEntityManager() const;

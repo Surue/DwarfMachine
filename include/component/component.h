@@ -42,10 +42,7 @@ template<typename T>
 class ComponentBaseManager
 {
 public:
-	ComponentBaseManager()
-	{
-		
-	}
+	ComponentBaseManager(Engine& engine) : m_Engine(engine) {}
 
 	virtual ~ComponentBaseManager()
 	{
@@ -58,7 +55,7 @@ public:
 
 	virtual T* CreateComponent(Entity) = 0;
 
-	T* AddComponent(const Entity entity, T& componentBase)
+	virtual T* AddComponent(const Entity entity, T& componentBase)
 	{
 		m_Components[entity - 1] = componentBase;
 		return &m_Components[entity - 1];
@@ -78,6 +75,8 @@ public:
 
 protected:
 	std::vector<T> m_Components{INIT_COMPONENT_NMB};
+
+	Engine& m_Engine;
 };
 }
 

@@ -38,19 +38,21 @@ class ComponentManager final
 public:
 	ComponentManager(Engine& engine);
 
-	ComponentBase* CreateComponent(Entity entity, ComponentType componentType);
-
-	ComponentBase* AddComponent(Entity entity, ComponentBase& component);
+	void Destroy();
 
 
-	ComponentBase* GetComponent(const Entity entity, const ComponentType componentType);
+	ComponentBase* CreateComponent(Entity entity, ComponentType componentType) const;
 
-	void DestroyComponent(const Entity entity, ComponentType componentType);
+	ComponentBase* AddComponent(Entity entity, ComponentBase& component) const;
+
+	ComponentBase* GetComponent(const Entity entity, const ComponentType componentType) const;
+
+	void DestroyComponent(const Entity entity, ComponentType componentType) const;
 
 private:
-	TransformManager m_TransformManager;
-	CameraManager m_CameraManager;
-	ControllerTypeManager m_ControllerTypeManager;
+	TransformManager* m_TransformManager;
+	CameraManager* m_CameraManager;
+	ControllerTypeManager* m_ControllerTypeManager;
 
 	Engine& m_Engine;
 };

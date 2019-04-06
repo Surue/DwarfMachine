@@ -26,6 +26,10 @@ SOFTWARE.
 
 namespace dm
 {
+ControllerTypeManager::ControllerTypeManager(Engine& engine) : ComponentBaseManager<ControllerType>(engine)
+{
+}
+
 void ControllerTypeManager::Init() {}
 void ControllerTypeManager::Update() {}
 ControllerType* ControllerTypeManager::CreateComponent(const Entity entity)

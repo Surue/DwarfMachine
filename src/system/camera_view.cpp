@@ -56,6 +56,8 @@ void CameraView::Update()
 		const auto transM = translate(glm::mat4(1.0f), glm::vec3(transform->position.x, transform->position.y, transform->position.z));
 
 		camera->view = rotM * transM;
+
+		//std::cout << *transform << "\n";
 	}
 }
 }

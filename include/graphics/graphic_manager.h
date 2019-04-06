@@ -30,6 +30,7 @@ SOFTWARE.
 
 #include <engine/engine.h>
 #include <graphics/vulkan_utilities.h>
+#include <component/camera.h>
 
 namespace dm
 {
@@ -91,6 +92,8 @@ public:
 	void Destroy();
 
 	void Update();
+
+	void SetMainCamera(Camera* camera);
 
 	/**
 	 * \brief Get the game's window
@@ -418,11 +421,7 @@ private:
 	Engine& m_Engine;
 
 	//Camera
-	glm::mat4 proj;
-	glm::mat4 view;
-
-	glm::vec3 rotation = glm::vec3();
-	glm::vec3 position = glm::vec3();
+	Camera* m_MainCamera = nullptr;
 };
 }
 

@@ -47,6 +47,8 @@ struct Transform final : ComponentBase
 class TransformManager final : public ComponentBaseManager<Transform>
 {
 public:
+	TransformManager(Engine& engine);
+
 	void Init() override;
 
 	void Update() override;

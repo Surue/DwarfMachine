@@ -92,14 +92,6 @@ void GraphicManager::Init()
 {
 	InitWindow();
 	InitVulkan();
-
-	//Camera
-	view = glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-	proj = glm::perspective(glm::radians(45.0f), m_SwapChainExtent.width / static_cast<float>(m_SwapChainExtent.height), 0.1f, 100.0f);
-	std::cout << m_SwapChainExtent.width << ", " << m_SwapChainExtent.height << "\n";
-
-	rotation = glm::vec3(0.0f, 0.0f, 0.0f);
-	position = glm::vec3(0.0f, 0.0f, -10.0f);
 }
 
 void GraphicManager::Destroy()
@@ -166,145 +158,11 @@ void GraphicManager::Update()
 
 	if(glfwGetKey(m_Window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		glfwSetWindowShouldClose(m_Window, true);
+}
 
-	//Camera
-
-	auto* inputManager = m_Engine.GetInputManager();
-
-	glm::vec3 camFront;
-	camFront.x = -cos(glm::radians(rotation.x)) * sin(glm::radians(rotation.y));
-	camFront.y = sin(glm::radians(rotation.x));
-	camFront.z = cos(glm::radians(rotation.x)) * cos(glm::radians(rotation.y));
-	camFront = normalize(camFront);
-
-	static Vec2i originalPos;
-	static Vec2i lastPos;
-
-	float moveSpeed = 0.01f;
-
-	if (inputManager->IsButtonDown(ButtonCode::MIDDLE))
-	{
-		originalPos = inputManager->GetMousePosition();
-		lastPos = originalPos;
-	}
-
-
-	if(inputManager->IsButtonHeld(ButtonCode::MIDDLE))
-	{
-		Vec2f offset(inputManager->GetMousePosition() - originalPos);
-
-		if (lastPos != inputManager->GetMousePosition()) {
-			offset = offset.Normalized();
-
-			position.x += offset.x * 0.25f;
-			position.y += offset.y * -0.25f;
-
-			lastPos = inputManager->GetMousePosition();
-		}else
-		{
-			originalPos = inputManager->GetMousePosition();
-			lastPos = originalPos;
-		}
-	}
-
-	if(inputManager->IsButtonReleased(ButtonCode::MIDDLE))
-	{
-		
-	}
-
-	if(inputManager->IsKeyHeld(KeyCode::SHIFT_LEFT))
-	{
-		moveSpeed *= 2;
-	}
-
-	if(inputManager->IsKeyHeld(KeyCode::LEFT))
-	{
-		position -= normalize(cross(camFront, glm::vec3(0.0f, 1.0f, 0.0f))) * moveSpeed;
-	}
-
-	if (inputManager->IsKeyHeld(KeyCode::RIGHT))
-	{
-		position += normalize(cross(camFront, glm::vec3(0.0f, 1.0f, 0.0f)))* moveSpeed;
-	}
-
-	if (inputManager->IsKeyHeld(KeyCode::DOWN))
-	{
-		position -= camFront * moveSpeed;
-	}
-
-	if (inputManager->IsKeyHeld(KeyCode::UP))
-	{
-		position += camFront * moveSpeed;
-	}
-
-	if(InputManager::scrollY > 0.1f)
-	{
-		position += camFront;
-	}else if(InputManager::scrollY < -0.1f)
-	{
-		position -= camFront;
-	}
-
-	//std::cout << position.x << ", " << position.y << ", " << position.z << "\n";
-
-	static Vec2i originalRot;
-	static Vec2i lastRot;
-
-	if (inputManager->IsButtonDown(ButtonCode::RIGHT))
-	{
-		originalRot = inputManager->GetMousePosition();
-		lastRot = originalRot;
-	}
-
-	if (inputManager->IsButtonHeld(ButtonCode::RIGHT))
-	{
-		Vec2f offset(inputManager->GetMousePosition() - originalRot);
-
-		if (lastRot != inputManager->GetMousePosition()) {
-			offset = offset.Normalized();
-
-			rotation.x += offset.y * 0.5f;
-			rotation.y += offset.x * 0.5f;
-
-			lastRot = inputManager->GetMousePosition();
-		}
-		else
-		{
-			originalRot = inputManager->GetMousePosition();
-			lastRot = originalRot;
-		}
-	}
-
-	if(inputManager->IsKeyHeld(KeyCode::A))
-	{
-		rotation.y -= 0.01f;
-	}
-
-	if (inputManager->IsKeyHeld(KeyCode::D))
-	{
-		rotation.y += 0.01f;
-	}
-
-	if (inputManager->IsKeyHeld(KeyCode::W))
-	{
-		rotation.x += 0.01f;
-	}
-
-	if (inputManager->IsKeyHeld(KeyCode::S))
-	{
-		rotation.x -= 0.01f;
-	}
-
-
-	auto rotM = glm::mat4(1.0f);
-
-	rotM = rotate(rotM, glm::radians(rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
-	rotM = rotate(rotM, glm::radians(rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
-	rotM = rotate(rotM, glm::radians(rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
-
-	const auto transM = translate(glm::mat4(1.0f), position);
-
-	view = rotM * transM;
+void GraphicManager::SetMainCamera(Camera* camera)
+{
+	m_MainCamera = camera;
 }
 
 GLFWwindow* GraphicManager::GetWindow() const
@@ -1415,8 +1273,8 @@ void GraphicManager::UpdateUniformBuffer(const uint32_t currentImage)
 {
 	UniformBufferObject ubo = {};
 	ubo.model = glm::identity<glm::mat4>();
-	ubo.view = view;
-	ubo.proj = proj;
+	ubo.view = m_MainCamera->view;
+	ubo.proj = m_MainCamera->proj;
 	ubo.proj[1][1] *= -1; //Because glm was designed for openGl the y axis is inversed
 
 	void* data;

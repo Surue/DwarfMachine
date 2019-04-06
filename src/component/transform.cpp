@@ -26,6 +26,8 @@ SOFTWARE.
 
 namespace dm
 {
+TransformManager::TransformManager(Engine& engine) : ComponentBaseManager<Transform>(engine) { }
+
 void TransformManager::Init()
 {
 	

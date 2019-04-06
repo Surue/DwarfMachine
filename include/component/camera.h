@@ -33,17 +33,26 @@ struct Camera final : ComponentBase
 {
 	glm::mat4 proj{};
 	glm::mat4 view{};
+
+	bool isMainCamera;
 };
 
 class CameraManager final : public ComponentBaseManager<Camera>
 {
 public:
+	CameraManager(Engine& engine);
+
 	void Init() override;
 	void Update() override;
 
 	Camera* CreateComponent(const Entity entity) override;
 
+	Camera* AddComponent(const Entity entity, Camera& componentBase) override;
+
 	void DestroyComponent(Entity entity) override;
+
+private:
+	GraphicManager* m_GraphicManager;
 };
 }
 #endif

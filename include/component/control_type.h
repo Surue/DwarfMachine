@@ -40,6 +40,8 @@ struct ControllerType final : ComponentBase
 class ControllerTypeManager final : public ComponentBaseManager<ControllerType>
 {
 public:
+	ControllerTypeManager(Engine& engine);
+
 	void Init() override;
 	void Update() override;
 
