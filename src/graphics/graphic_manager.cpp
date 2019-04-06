@@ -48,7 +48,8 @@ void GraphicManager::InitWindow()
 	//Set context to null (otherwise it would be openGL)
 	glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
 
-	m_Window = glfwCreateWindow(WIDTH, HEIGHT, "Vulkan", nullptr, nullptr);
+	const auto windowSize = m_Engine.GetSettings().windowSize;
+	m_Window = glfwCreateWindow(windowSize.x, windowSize.y, "Vulkan", nullptr, nullptr);
 	glfwSetWindowUserPointer(m_Window, this);
 	glfwSetFramebufferSizeCallback(m_Window, FrameBufferResizeCallback);
 }
@@ -1051,7 +1052,19 @@ void GraphicManager::DrawFrame()
 	if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR || m_FrameBufferResized)
 	{
 		m_FrameBufferResized = false;
+
+		auto width = 0, height = 0;
+		while (width == 0 || height == 0)
+		{
+			glfwGetFramebufferSize(m_Window, &width, &height);
+			glfwWaitEvents();
+		}
+
+		m_Engine.GetSettings().windowSize = Vec2i(width, height);
+
 		RecreateSwapChain();
+		UpdateMainCamera();
+
 	}
 	else if (result != VK_SUCCESS)
 	{
@@ -1063,13 +1076,6 @@ void GraphicManager::DrawFrame()
 
 void GraphicManager::RecreateSwapChain()
 {
-	auto width = 0, height = 0;
-	while (width == 0 || height == 0)
-	{
-		glfwGetFramebufferSize(m_Window, &width, &height);
-		glfwWaitEvents();
-	}
-
 	vkDeviceWaitIdle(m_Device);
 
 	DestroySwapChain();
@@ -1804,5 +1810,11 @@ void GraphicManager::CreateColorResources()
 	m_ColorImageView = CreateImageView(m_ColorImage, colorFormat, VK_IMAGE_ASPECT_COLOR_BIT, 1);
 
 	TransitionImageLayout(m_ColorImage, colorFormat, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL, 1);
+}
+
+void GraphicManager::UpdateMainCamera() const
+{
+	const auto windowSize = m_Engine.GetSettings().windowSize;
+	m_MainCamera->proj = glm::perspective(glm::radians(45.0f), windowSize.x / static_cast<float>(windowSize.y), 0.1f, 100.0f);
 }
 }

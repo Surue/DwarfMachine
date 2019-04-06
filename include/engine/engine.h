@@ -27,6 +27,7 @@ SOFTWARE.
 
 #define GLFW_INCLUDE_VULKAN
 #include <GLFW/glfw3.h>
+#include <engine/vector.h>
 
 namespace dm
 {
@@ -36,9 +37,17 @@ class EntityManager;
 class ComponentManager;
 class SystemManager;
 
+struct EngineSettings
+{
+	Vec2i windowSize;
+};
+
 class Engine
 {
 public:
+	Engine();
+	Engine(EngineSettings engineSettings);
+
 	void Init();
 
 	void Start();
@@ -54,16 +63,17 @@ public:
 	ComponentManager* GetComponentManager() const;
 
 	SystemManager* GetSystemManager() const;
+
+	EngineSettings& GetSettings();
 private:
 	/**
 	 * \brief Main loop of the game
 	 */
 	void MainLoop();
 
-	/**
-	 * \brief Use to cleanup vulkan's allocation
-	 */
 	void Destroy();
+
+	EngineSettings m_Settings;
 
 	GLFWwindow* m_Window = nullptr;
 

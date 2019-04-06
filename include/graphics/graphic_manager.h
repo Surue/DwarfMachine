@@ -336,11 +336,10 @@ private:
 
 	void CreateColorResources();
 
+	void UpdateMainCamera() const;
+
 	//WINDOW
 	GLFWwindow* m_Window = nullptr;
-
-	const int WIDTH = 800;
-	const int HEIGHT = 600;
 
 	const std::string MODEL_PATH = "ressources/models/Tentacle_lp.obj";
 	const std::string TEXTURE_PATH = "ressources/textures/Tentacle_lp_defaultMat_BaseColor.png";

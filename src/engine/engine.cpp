@@ -31,14 +31,31 @@ SOFTWARE.
 
 namespace dm
 {
-void Engine::Init()
+Engine::Engine()
 {
+	m_Settings = EngineSettings();
+	m_Settings.windowSize = Vec2i(800, 600);
+
 	m_GraphicManager = new GraphicManager(*this);
 	m_InputManager = new InputManager(*this);
 	m_EntityManager = new EntityManager(*this);
 	m_ComponentManager = new ComponentManager(*this);
 	m_SystemManager = new SystemManager(*this);
+}
 
+Engine::Engine(const EngineSettings engineSettings)
+{
+	m_Settings = engineSettings;
+
+	m_GraphicManager = new GraphicManager(*this);
+	m_InputManager = new InputManager(*this);
+	m_EntityManager = new EntityManager(*this);
+	m_ComponentManager = new ComponentManager(*this);
+	m_SystemManager = new SystemManager(*this);
+}
+
+void Engine::Init()
+{
 	m_GraphicManager->Init();
 	m_Window = m_GraphicManager->GetWindow();
 
@@ -79,6 +96,11 @@ ComponentManager* Engine::GetComponentManager() const
 SystemManager* Engine::GetSystemManager() const
 {
 	return m_SystemManager;
+}
+
+EngineSettings& Engine::GetSettings()
+{
+	return m_Settings;
 }
 
 void Engine::MainLoop()
