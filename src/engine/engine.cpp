@@ -108,6 +108,9 @@ void Engine::MainLoop()
 	while (!glfwWindowShouldClose(m_Window))
 	{
 		glfwPollEvents();
+		if (glfwGetKey(m_Window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+			glfwSetWindowShouldClose(m_Window, true);
+
 		m_InputManager->Update();
 
 		//Updates
