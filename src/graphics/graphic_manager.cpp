@@ -62,8 +62,8 @@ void GraphicManager::FrameBufferResizeCallback(GLFWwindow* window, int width, in
 
 void GraphicManager::InitVulkan()
 {
-	CreateInstanceVulkan();
-	SetupDebugMessenger();
+	m_Instance = new Instance();
+
 	CreateSurface();
 	PickPhysicalDevice();
 	CreateLogicalDevice();
@@ -140,13 +140,9 @@ void GraphicManager::Destroy()
 	//Destroy device
 	vkDestroyDevice(m_Device, nullptr);
 
-	if (ENABLE_VALIDATION_LAYERS)
-	{
-		DestroyDebugUtilsMessengerEXT(m_VulkanInstance, m_DebugMessenger, nullptr);
-	}
+	vkDestroySurfaceKHR(*m_Instance, m_Surface, nullptr);
 
-	vkDestroySurfaceKHR(m_VulkanInstance, m_Surface, nullptr);
-	vkDestroyInstance(m_VulkanInstance, nullptr);
+	delete(m_Instance);
 
 	glfwDestroyWindow(m_Window);
 
@@ -171,115 +167,9 @@ GLFWwindow* GraphicManager::GetWindow() const
 	return m_Window;
 }
 
-void GraphicManager::CreateInstanceVulkan()
-{
-	if (ENABLE_VALIDATION_LAYERS && !CheckValidationLayerSupport())
-	{
-		throw std::runtime_error("validation layers requested, but not available!");
-	}
-
-	//Create application info, use by the driver to do some optimization
-	VkApplicationInfo appInfo = {}; //pNext = nullptr
-	appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
-	appInfo.pApplicationName = "Vulkan application";
-	appInfo.applicationVersion = VK_MAKE_VERSION(1, 0, 0);
-	appInfo.pEngineName = "Dwarf Machine";
-	appInfo.engineVersion = VK_MAKE_VERSION(1, 0, 0);
-	appInfo.apiVersion = VK_API_VERSION_1_0;
-
-	//Store data for creating an instance
-	VkInstanceCreateInfo createInfo = {};
-	createInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
-	createInfo.pApplicationInfo = &appInfo;
-
-	//Set the layer for the api to be use by the GLFW window
-	auto extensions = GetRequiredExtensions();
-	createInfo.enabledExtensionCount = static_cast<uint32_t>(extensions.size());
-	createInfo.ppEnabledExtensionNames = extensions.data();
-
-	if (ENABLE_VALIDATION_LAYERS)
-	{
-		createInfo.enabledLayerCount = static_cast<uint32_t>(VALIDATION_LAYER.size());
-		createInfo.ppEnabledLayerNames = VALIDATION_LAYER.data();
-	}
-	else
-	{
-		createInfo.enabledLayerCount = 0;
-	}
-
-	if (vkCreateInstance(&createInfo, nullptr, &m_VulkanInstance) != VK_SUCCESS)
-	{
-		throw std::runtime_error("failed to create instance");
-	}
-}
-
-void GraphicManager::SetupDebugMessenger()
-{
-	if constexpr (!ENABLE_VALIDATION_LAYERS) return;
-
-	VkDebugUtilsMessengerCreateInfoEXT createInfo = {};
-	createInfo.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT;
-	createInfo.messageSeverity = VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT |
-		VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT;
-	createInfo.messageType = VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT |
-		VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT;
-	createInfo.pfnUserCallback = DebugCallback;
-
-	if (CreateDebugUtilsMessengerEXT(m_VulkanInstance, &createInfo, nullptr, &m_DebugMessenger) != VK_SUCCESS)
-	{
-		throw std::runtime_error("failed to set up debug messenger!");
-	}
-}
-
-bool GraphicManager::CheckValidationLayerSupport()
-{
-	uint32_t layerCount;
-	vkEnumerateInstanceLayerProperties(&layerCount, nullptr);
-
-	std::vector<VkLayerProperties> availableLayers(layerCount);
-	vkEnumerateInstanceLayerProperties(&layerCount, availableLayers.data());
-
-	for (auto layerName : VALIDATION_LAYER)
-	{
-		auto layerFound = false;
-
-		for (const auto& layerProperties : availableLayers)
-		{
-			if (strcmp(layerName, layerProperties.layerName) == 0)
-			{
-				layerFound = true;
-				break;
-			}
-		}
-
-		if (!layerFound)
-		{
-			return false;
-		}
-	}
-
-	return true;
-}
-
-std::vector<const char*> GraphicManager::GetRequiredExtensions()
-{
-	uint32_t glfwExtensionsCount = 0;
-	const auto glfwExtensions = glfwGetRequiredInstanceExtensions(&glfwExtensionsCount);
-
-	std::vector<const char*> extensions(glfwExtensions, glfwExtensions + glfwExtensionsCount);
-
-	//If debug mod, add an extension to handle error
-	if (ENABLE_VALIDATION_LAYERS)
-	{
-		extensions.push_back(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
-	}
-
-	return extensions;
-}
-
 void GraphicManager::CreateSurface()
 {
-	if (glfwCreateWindowSurface(m_VulkanInstance, m_Window, nullptr, &m_Surface) != VK_SUCCESS)
+	if (glfwCreateWindowSurface(*m_Instance, m_Window, nullptr, &m_Surface) != VK_SUCCESS)
 	{
 		throw std::runtime_error("failed to create window surface");
 	}
@@ -298,7 +188,7 @@ VkBool32 GraphicManager::DebugCallback(VkDebugUtilsMessageSeverityFlagBitsEXT me
 void GraphicManager::PickPhysicalDevice()
 {
 	uint32_t deviceCount = 0;
-	vkEnumeratePhysicalDevices(m_VulkanInstance, &deviceCount, nullptr);
+	vkEnumeratePhysicalDevices(*m_Instance, &deviceCount, nullptr);
 
 	if (deviceCount == 0)
 	{
@@ -306,7 +196,7 @@ void GraphicManager::PickPhysicalDevice()
 	}
 
 	std::vector<VkPhysicalDevice> devices(deviceCount);
-	vkEnumeratePhysicalDevices(m_VulkanInstance, &deviceCount, devices.data());
+	vkEnumeratePhysicalDevices(*m_Instance, &deviceCount, devices.data());
 
 	for (const auto& device : devices)
 	{

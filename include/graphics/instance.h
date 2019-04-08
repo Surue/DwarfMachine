@@ -74,7 +74,7 @@ public:
 	const std::vector<const char*> &GetDeviceExtensions() const { return m_DeviceExtensions; }
 	const VkInstance &GetInstance() const { return m_Instance; }
 private:
-	bool SetupLayers();
+	void SetupLayers();
 	void SetupExtensions();
 	void CreateInstance();
 	void CreateDebugCallback();

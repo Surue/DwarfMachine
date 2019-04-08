@@ -31,6 +31,7 @@ SOFTWARE.
 #include <engine/engine.h>
 #include <graphics/vulkan_utilities.h>
 #include <component/camera.h>
+#include "instance.h"
 
 namespace dm
 {
@@ -113,26 +114,6 @@ private:
 	 * \brief Init Vulkan
 	 */
 	void InitVulkan();
-
-	/**
-	 * \brief Create a vulkan's instance
-	 */
-	void CreateInstanceVulkan();
-
-	/**
-	 * \brief Setup the messenger for handling error callback in vulkan
-	 */
-	void SetupDebugMessenger();
-
-	/**
-	 * \brief Check if all requested layers are available
-	 */
-	static bool CheckValidationLayerSupport();
-
-	/**
-	 * \brief return required list of extension
-	 */
-	static std::vector<const char*> GetRequiredExtensions();
 
 	/**
 	 * \brief Create a surface used to link vulkan to the GLFW window
@@ -345,9 +326,9 @@ private:
 	const std::string TEXTURE_PATH = "ressources/textures/Tentacle_lp_defaultMat_BaseColor.png";
 
 	//VULKAN
-	VkInstance m_VulkanInstance = nullptr;
-	VkDebugUtilsMessengerEXT m_DebugMessenger = nullptr;
 	VkSurfaceKHR m_Surface{};
+
+	Instance* m_Instance = nullptr;
 
 	VkPhysicalDevice m_PhysicalDevice = VK_NULL_HANDLE;
 	VkDevice m_Device = nullptr;

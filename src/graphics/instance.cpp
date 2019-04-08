@@ -45,9 +45,9 @@ VkBool32 DebugCallback(VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
 
 Instance::Instance() : m_DebugMessenger(VK_NULL_HANDLE), m_Instance(VK_NULL_HANDLE)
 {
-	if (ENABLE_VALIDATION_LAYERS && !SetupLayers())
+	if (ENABLE_VALIDATION_LAYERS)
 	{
-		throw std::runtime_error("validation layers requested, but not available!");
+		SetupLayers();
 	}
 	SetupExtensions();
 	CreateInstance();
@@ -116,7 +116,7 @@ uint32_t Instance::FindMemoryTypeIndex(const VkPhysicalDeviceMemoryProperties* d
 	throw std::runtime_error("Couldn't find a proper memory type");
 }
 
-bool Instance::SetupLayers()
+void Instance::SetupLayers()
 {
 	uint32_t layerCount;
 	vkEnumerateInstanceLayerProperties(&layerCount, nullptr);
@@ -139,7 +139,7 @@ bool Instance::SetupLayers()
 
 		if (!layerFound)
 		{
-			return false;
+			throw std::runtime_error("Vulkan validation layer not found: \n");
 		}
 
 		m_InstanceLayer.emplace_back(layerName);
@@ -149,8 +149,6 @@ bool Instance::SetupLayers()
 	{
 		m_DeviceExtensions.emplace_back(layerName);
 	}
-
-	return true;
 }
 
 void Instance::SetupExtensions()
@@ -160,9 +158,15 @@ void Instance::SetupExtensions()
 
 	m_InstanceExtensions = std::vector<const char*>(glfwExtensions, glfwExtensions + glfwExtensionsCount);
 
+	//If debug mod, add an extension to handle error
+	if (ENABLE_VALIDATION_LAYERS)
+	{
+		m_InstanceExtensions.push_back(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
+	}
+
 	for (const auto &instanceExtension : InstanceExtensions)
 	{
-		m_InstanceExtensions.emplace_back(instanceExtension);
+		m_InstanceExtensions.push_back(instanceExtension);
 	}
 }
 
@@ -171,7 +175,7 @@ void Instance::CreateInstance()
 	//Create application info, use by the driver to do some optimization
 	VkApplicationInfo appInfo = {}; //pNext = nullptr
 	appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
-	appInfo.pApplicationName = "Dwarf machine application";
+	appInfo.pApplicationName = "Vulkan application";
 	appInfo.applicationVersion = VK_MAKE_VERSION(1, 0, 0);
 	appInfo.pEngineName = "Dwarf Machine";
 	appInfo.engineVersion = VK_MAKE_VERSION(1, 0, 0);
@@ -181,8 +185,11 @@ void Instance::CreateInstance()
 	VkInstanceCreateInfo createInfo = {};
 	createInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
 	createInfo.pApplicationInfo = &appInfo;
-	createInfo.enabledExtensionCount = static_cast<uint32_t>(m_InstanceExtensions.size());
-	createInfo.ppEnabledExtensionNames = m_InstanceExtensions.data();
+
+	//Set the layer for the api to be use by the GLFW window
+	auto extensions = m_InstanceExtensions;
+	createInfo.enabledExtensionCount = static_cast<uint32_t>(extensions.size());
+	createInfo.ppEnabledExtensionNames = extensions.data();
 
 	if (ENABLE_VALIDATION_LAYERS)
 	{
