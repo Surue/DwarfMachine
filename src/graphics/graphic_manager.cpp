@@ -72,7 +72,9 @@ void GraphicManager::InitVulkan()
 	CreateRenderPass();
 	CreateDescriptorSetLayout();
 	CreateGraphicPipeline();
-	CreateCommandPool();
+
+	m_CommandPool = new CommandPool(m_LogicalDevice);
+
 	CreateColorResources();
 	CreateDepthResources();
 	CreateFrameBuffers();
@@ -134,9 +136,7 @@ void GraphicManager::Destroy()
 		vkDestroyFence(m_LogicalDevice->GetLogicalDevice(), m_InFlightFences[i], nullptr);
 	}
 
-	//Destroy command pool
-	vkDestroyCommandPool(m_LogicalDevice->GetLogicalDevice(), m_CommandPool, nullptr);
-
+	delete(m_CommandPool);
 	delete(m_LogicalDevice);
 	delete(m_PhysicalDevice);
 	delete(m_Surface);
@@ -661,46 +661,14 @@ void GraphicManager::CreateFrameBuffers()
 	}
 }
 
-void GraphicManager::CreateCommandPool()
-{
-	auto queueFamilyIndices = FindQueueFamilies(m_PhysicalDevice->GetPhysicalDevice());
-
-	VkCommandPoolCreateInfo poolInfo = {};
-	poolInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
-	poolInfo.queueFamilyIndex = queueFamilyIndices.graphicFamily.value();
-	poolInfo.flags = 0;
-
-	if (vkCreateCommandPool(m_LogicalDevice->GetLogicalDevice(), &poolInfo, nullptr, &m_CommandPool) != VK_SUCCESS)
-	{
-		throw std::runtime_error("failed to create command pool");
-	}
-}
-
 void GraphicManager::CreateCommandBuffers()
 {
 	m_CommandBuffers.resize(m_SwapChainFrameBuffers.size());
 
-	VkCommandBufferAllocateInfo allocInfo = {};
-	allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
-	allocInfo.commandPool = m_CommandPool;
-	allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-	allocInfo.commandBufferCount = static_cast<uint32_t>(m_CommandBuffers.size());
-
-	if (vkAllocateCommandBuffers(m_LogicalDevice->GetLogicalDevice(), &allocInfo, m_CommandBuffers.data()) != VK_SUCCESS)
-	{
-		throw std::runtime_error("failed to allocate command buffers!");
-	}
-
 	for (size_t i = 0; i < m_CommandBuffers.size(); i++)
 	{
-		VkCommandBufferBeginInfo beginInfo = {};
-		beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-		beginInfo.flags = VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT;
-
-		if (vkBeginCommandBuffer(m_CommandBuffers[i], &beginInfo) != VK_SUCCESS)
-		{
-			throw std::runtime_error("failed to begin recording command buffer!");
-		}
+		m_CommandBuffers[i] = new CommandBuffer(m_CommandPool, m_LogicalDevice);
+		m_CommandBuffers[i]->Begin(VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT);
 
 		VkRenderPassBeginInfo renderPassInfo = {};
 		renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
@@ -716,23 +684,20 @@ void GraphicManager::CreateCommandBuffers()
 		renderPassInfo.clearValueCount = static_cast<uint32_t>(clearValues.size());
 		renderPassInfo.pClearValues = clearValues.data();
 
-		vkCmdBeginRenderPass(m_CommandBuffers[i], &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
+		vkCmdBeginRenderPass(*m_CommandBuffers[i], &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
 
-		vkCmdBindPipeline(m_CommandBuffers[i], VK_PIPELINE_BIND_POINT_GRAPHICS, m_GraphicsPipeline);
+		vkCmdBindPipeline(*m_CommandBuffers[i], VK_PIPELINE_BIND_POINT_GRAPHICS, m_GraphicsPipeline);
 
 		VkBuffer vertexBuffers[] = {m_VertexBuffer};
 		VkDeviceSize offsets[] = {0};
-		vkCmdBindVertexBuffers(m_CommandBuffers[i], 0, 1, vertexBuffers, offsets);
-		vkCmdBindIndexBuffer(m_CommandBuffers[i], m_IndexBuffer, 0, VK_INDEX_TYPE_UINT32);
-		vkCmdBindDescriptorSets(m_CommandBuffers[i], VK_PIPELINE_BIND_POINT_GRAPHICS, m_PipelineLayout, 0, 1, &m_DescriptorSets[i], 0, nullptr);
-		vkCmdDrawIndexed(m_CommandBuffers[i], static_cast<uint32_t>(m_Indices.size()), 1, 0, 0, 0);
+		vkCmdBindVertexBuffers(*m_CommandBuffers[i], 0, 1, vertexBuffers, offsets);
+		vkCmdBindIndexBuffer(*m_CommandBuffers[i], m_IndexBuffer, 0, VK_INDEX_TYPE_UINT32);
+		vkCmdBindDescriptorSets(*m_CommandBuffers[i], VK_PIPELINE_BIND_POINT_GRAPHICS, m_PipelineLayout, 0, 1, &m_DescriptorSets[i], 0, nullptr);
+		vkCmdDrawIndexed(*m_CommandBuffers[i], static_cast<uint32_t>(m_Indices.size()), 1, 0, 0, 0);
 
-		vkCmdEndRenderPass(m_CommandBuffers[i]);
+		vkCmdEndRenderPass(*m_CommandBuffers[i]);
 
-		if (vkEndCommandBuffer(m_CommandBuffers[i]) != VK_SUCCESS)
-		{
-			throw std::runtime_error("failed to record command buffer!");
-		}
+		m_CommandBuffers[i]->End();
 	}
 }
 
@@ -782,28 +747,11 @@ void GraphicManager::DrawFrame()
 
 	UpdateUniformBuffer(imageIndex);
 
-	//Submitting the command buffer
-	VkSubmitInfo submitInfo = {};
-	submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
-
 	VkSemaphore waitSemaphores[] = {m_ImageAvailableSemaphores[m_CurrentFrame]};
-	VkPipelineStageFlags waitStages[] = {VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT};
-	submitInfo.waitSemaphoreCount = 1;
-	submitInfo.pWaitSemaphores = waitSemaphores;
-	submitInfo.pWaitDstStageMask = waitStages;
-	submitInfo.commandBufferCount = 1;
-	submitInfo.pCommandBuffers = &m_CommandBuffers[imageIndex];
 
 	VkSemaphore signalSemaphores[] = {m_RenderFinishedSemaphores[m_CurrentFrame]};
-	submitInfo.signalSemaphoreCount = 1;
-	submitInfo.pSignalSemaphores = signalSemaphores;
-
-	vkResetFences(m_LogicalDevice->GetLogicalDevice(), 1, &m_InFlightFences[m_CurrentFrame]);
-
-	if (vkQueueSubmit(m_LogicalDevice->GetGraphicsQueue(), 1, &submitInfo, m_InFlightFences[m_CurrentFrame]) != VK_SUCCESS)
-	{
-		throw std::runtime_error("failed to submit draw command buffer");
-	}
+	
+	m_CommandBuffers[imageIndex]->Submit(waitSemaphores[0], signalSemaphores[0], m_InFlightFences[m_CurrentFrame]);
 
 	//Presentation
 	VkPresentInfoKHR presentInfo = {};
@@ -875,8 +823,10 @@ void GraphicManager::DestroySwapChain()
 		vkDestroyFramebuffer(m_LogicalDevice->GetLogicalDevice(), frameBuffer, nullptr);
 	}
 
-	vkFreeCommandBuffers(m_LogicalDevice->GetLogicalDevice(), m_CommandPool, static_cast<uint32_t>(m_CommandBuffers.size()),
-	                     m_CommandBuffers.data());
+	for (auto commandBuffer : m_CommandBuffers)
+	{
+		delete(commandBuffer);
+	}
 
 	vkDestroyPipeline(m_LogicalDevice->GetLogicalDevice(), m_GraphicsPipeline, nullptr);
 	vkDestroyPipelineLayout(m_LogicalDevice->GetLogicalDevice(), m_PipelineLayout, nullptr);
@@ -1204,7 +1154,7 @@ VkCommandBuffer GraphicManager::BeginSingleTimeCommands() const
 	VkCommandBufferAllocateInfo allocInfo = {};
 	allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
 	allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-	allocInfo.commandPool = m_CommandPool;
+	allocInfo.commandPool = *m_CommandPool;
 	allocInfo.commandBufferCount = 1;
 
 	VkCommandBuffer commandBuffer;
@@ -1231,7 +1181,7 @@ void GraphicManager::EndSingleTimeCommands(VkCommandBuffer commandBuffer) const
 	vkQueueSubmit(m_LogicalDevice->GetGraphicsQueue(), 1, &submitInfo, VK_NULL_HANDLE);
 	vkQueueWaitIdle(m_LogicalDevice->GetGraphicsQueue());
 
-	vkFreeCommandBuffers(m_LogicalDevice->GetLogicalDevice(), m_CommandPool, 1, &commandBuffer);
+	vkFreeCommandBuffers(m_LogicalDevice->GetLogicalDevice(), *m_CommandPool, 1, &commandBuffer);
 }
 
 void GraphicManager::TransitionImageLayout(const VkImage image, const VkFormat format, const VkImageLayout oldLayout,

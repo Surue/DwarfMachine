@@ -35,6 +35,7 @@ SOFTWARE.
 #include <graphics/surface.h>
 #include <graphics/physical_device.h>
 #include <graphics/logical_device.h>
+#include <graphics/command_buffer.h>
 
 namespace dm
 {
@@ -199,11 +200,6 @@ private:
 	void CreateFrameBuffers();
 
 	/**
-	 * \brief 
-	 */
-	void CreateCommandPool();
-
-	/**
 	 * \brief
 	 */
 	void CreateCommandBuffers();
@@ -315,8 +311,9 @@ private:
 
 	std::vector<VkFramebuffer> m_SwapChainFrameBuffers;
 
-	VkCommandPool m_CommandPool{};
-	std::vector<VkCommandBuffer> m_CommandBuffers;
+	CommandPool* m_CommandPool = nullptr;
+	//std::vector<VkCommandBuffer> m_OldCommandBuffers;
+	std::vector<CommandBuffer*> m_CommandBuffers;
 
 	std::vector<VkSemaphore> m_ImageAvailableSemaphores;
 	std::vector<VkSemaphore> m_RenderFinishedSemaphores;
