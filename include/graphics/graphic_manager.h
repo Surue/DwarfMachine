@@ -31,7 +31,9 @@ SOFTWARE.
 #include <engine/engine.h>
 #include <graphics/vulkan_utilities.h>
 #include <component/camera.h>
-#include "instance.h"
+#include <graphics/instance.h>
+#include <graphics/surface.h>
+#include <graphics/physical_device.h>
 
 namespace dm
 {
@@ -326,11 +328,9 @@ private:
 	const std::string TEXTURE_PATH = "ressources/textures/Tentacle_lp_defaultMat_BaseColor.png";
 
 	//VULKAN
-	VkSurfaceKHR m_Surface{};
-
 	Instance* m_Instance = nullptr;
-
-	VkPhysicalDevice m_PhysicalDevice = VK_NULL_HANDLE;
+	Surface* m_Surface = nullptr;
+	PhysicalDevice* m_PhysicalDevice = nullptr;
 	VkDevice m_Device = nullptr;
 
 	VkQueue m_GraphicsQueue = nullptr;
@@ -393,7 +393,6 @@ private:
 	VkImageView m_DepthImageView{};
 
 	//Multisample Anti Aliasing 
-	VkSampleCountFlagBits m_MsaaSamples = VK_SAMPLE_COUNT_1_BIT;
 	VkImage m_ColorImage{};
 	VkDeviceMemory m_ColorImageMemory{};
 	VkImageView m_ColorImageView{};

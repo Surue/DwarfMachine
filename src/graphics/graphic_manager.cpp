@@ -63,9 +63,9 @@ void GraphicManager::FrameBufferResizeCallback(GLFWwindow* window, int width, in
 void GraphicManager::InitVulkan()
 {
 	m_Instance = new Instance();
+	m_PhysicalDevice = new PhysicalDevice(m_Instance);
+	m_Surface = new Surface(m_Instance, m_PhysicalDevice, m_Window);
 
-	CreateSurface();
-	PickPhysicalDevice();
 	CreateLogicalDevice();
 	CreateSwapChain();
 	CreateImageViews();
@@ -140,7 +140,9 @@ void GraphicManager::Destroy()
 	//Destroy device
 	vkDestroyDevice(m_Device, nullptr);
 
-	vkDestroySurfaceKHR(*m_Instance, m_Surface, nullptr);
+	delete(m_PhysicalDevice);
+
+	delete(m_Surface);
 
 	delete(m_Instance);
 
@@ -167,14 +169,6 @@ GLFWwindow* GraphicManager::GetWindow() const
 	return m_Window;
 }
 
-void GraphicManager::CreateSurface()
-{
-	if (glfwCreateWindowSurface(*m_Instance, m_Window, nullptr, &m_Surface) != VK_SUCCESS)
-	{
-		throw std::runtime_error("failed to create window surface");
-	}
-}
-
 VkBool32 GraphicManager::DebugCallback(VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
                                        VkDebugUtilsMessageTypeFlagsEXT messageType,
                                        const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData,
@@ -183,35 +177,6 @@ VkBool32 GraphicManager::DebugCallback(VkDebugUtilsMessageSeverityFlagBitsEXT me
 	std::cerr << "validation layer: " << pCallbackData->pMessage << "\n";
 
 	return VK_FALSE;
-}
-
-void GraphicManager::PickPhysicalDevice()
-{
-	uint32_t deviceCount = 0;
-	vkEnumeratePhysicalDevices(*m_Instance, &deviceCount, nullptr);
-
-	if (deviceCount == 0)
-	{
-		throw std::runtime_error("failed to find GPUs with Vulkan support!");
-	}
-
-	std::vector<VkPhysicalDevice> devices(deviceCount);
-	vkEnumeratePhysicalDevices(*m_Instance, &deviceCount, devices.data());
-
-	for (const auto& device : devices)
-	{
-		if (IsDeviceSuitable(device))
-		{
-			m_PhysicalDevice = device;
-			m_MsaaSamples = GetMaxUsableSampleCount();
-			break;
-		}
-	}
-
-	if (m_PhysicalDevice == VK_NULL_HANDLE)
-	{
-		throw std::runtime_error("failed to find a suitable GPU!");
-	}
 }
 
 bool GraphicManager::IsDeviceSuitable(const VkPhysicalDevice device) const
@@ -252,7 +217,7 @@ QueueFamilyIndices GraphicManager::FindQueueFamilies(const VkPhysicalDevice devi
 		}
 
 		VkBool32 presentSupport = false;
-		vkGetPhysicalDeviceSurfaceSupportKHR(device, i, m_Surface, &presentSupport);
+		vkGetPhysicalDeviceSurfaceSupportKHR(device, i, m_Surface->GetSurface(), &presentSupport);
 
 		if (queueFamily.queueCount > 0 && presentSupport)
 		{
@@ -272,7 +237,7 @@ QueueFamilyIndices GraphicManager::FindQueueFamilies(const VkPhysicalDevice devi
 
 void GraphicManager::CreateLogicalDevice()
 {
-	auto indices = FindQueueFamilies(m_PhysicalDevice);
+	auto indices = FindQueueFamilies(m_PhysicalDevice->GetPhysicalDevice());
 
 	std::vector<VkDeviceQueueCreateInfo> queueCreateInfos;
 	std::set<uint32_t> uniqueQueueFamilies = {indices.graphicFamily.value(), indices.presentFamily.value()};
@@ -313,7 +278,7 @@ void GraphicManager::CreateLogicalDevice()
 		createInfo.enabledLayerCount = 0;
 	}
 
-	if (vkCreateDevice(m_PhysicalDevice, &createInfo, nullptr, &m_Device) != VK_SUCCESS)
+	if (vkCreateDevice(m_PhysicalDevice->GetPhysicalDevice(), &createInfo, nullptr, &m_Device) != VK_SUCCESS)
 	{
 		throw std::runtime_error("failed to create logical device!");
 	}
@@ -342,7 +307,7 @@ bool GraphicManager::CheckDeviceExtensionSupport(const VkPhysicalDevice device)
 
 void GraphicManager::CreateSwapChain()
 {
-	const auto swapChainSupport = QuerySwapChainSupport(m_PhysicalDevice);
+	const auto swapChainSupport = QuerySwapChainSupport(m_PhysicalDevice->GetPhysicalDevice());
 
 	const auto surfaceFormat = ChooseSwapSurfaceFormat(swapChainSupport.formats);
 	const auto presentMode = ChooseSwapPresentMode(swapChainSupport.presentModes);
@@ -358,7 +323,7 @@ void GraphicManager::CreateSwapChain()
 
 	VkSwapchainCreateInfoKHR createInfo = {};
 	createInfo.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
-	createInfo.surface = m_Surface;
+	createInfo.surface = m_Surface->GetSurface();
 
 	createInfo.minImageCount = imageCount;
 	createInfo.imageFormat = surfaceFormat.format;
@@ -368,7 +333,7 @@ void GraphicManager::CreateSwapChain()
 	createInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
 	//If want tu use post process use VK_IMAGE_USAGE_TRANSFER_DST_BIT
 
-	auto indices = FindQueueFamilies(m_PhysicalDevice);
+	auto indices = FindQueueFamilies(m_PhysicalDevice->GetPhysicalDevice());
 	uint32_t queueFamilyIndices[] = {indices.graphicFamily.value(), indices.presentFamily.value()};
 
 	if (indices.graphicFamily != indices.presentFamily)
@@ -409,24 +374,24 @@ SwapChainSupportDetails GraphicManager::QuerySwapChainSupport(const VkPhysicalDe
 {
 	SwapChainSupportDetails details;
 
-	vkGetPhysicalDeviceSurfaceCapabilitiesKHR(device, m_Surface, &details.capabilities);
+	vkGetPhysicalDeviceSurfaceCapabilitiesKHR(device, m_Surface->GetSurface(), &details.capabilities);
 
 	uint32_t formatCount;
-	vkGetPhysicalDeviceSurfaceFormatsKHR(device, m_Surface, &formatCount, nullptr);
+	vkGetPhysicalDeviceSurfaceFormatsKHR(device, m_Surface->GetSurface(), &formatCount, nullptr);
 
 	if (formatCount != 0)
 	{
 		details.formats.resize(formatCount);
-		vkGetPhysicalDeviceSurfaceFormatsKHR(device, m_Surface, &formatCount, details.formats.data());
+		vkGetPhysicalDeviceSurfaceFormatsKHR(device, m_Surface->GetSurface(), &formatCount, details.formats.data());
 	}
 
 	uint32_t presentModeCount;
-	vkGetPhysicalDeviceSurfacePresentModesKHR(device, m_Surface, &presentModeCount, nullptr);
+	vkGetPhysicalDeviceSurfacePresentModesKHR(device, m_Surface->GetSurface(), &presentModeCount, nullptr);
 
 	if (presentModeCount != 0)
 	{
 		details.presentModes.resize(presentModeCount);
-		vkGetPhysicalDeviceSurfacePresentModesKHR(device, m_Surface, &presentModeCount, details.presentModes.data());
+		vkGetPhysicalDeviceSurfacePresentModesKHR(device, m_Surface->GetSurface(), &presentModeCount, details.presentModes.data());
 	}
 
 	return details;
@@ -575,7 +540,7 @@ void GraphicManager::CreateGraphicPipeline()
 	VkPipelineMultisampleStateCreateInfo multiSampling = {};
 	multiSampling.sType = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO;
 	multiSampling.sampleShadingEnable = VK_TRUE;
-	multiSampling.rasterizationSamples = m_MsaaSamples;
+	multiSampling.rasterizationSamples = m_PhysicalDevice->GetMsaaSamples();
 	multiSampling.minSampleShading = 0.2f;
 
 	VkPipelineColorBlendAttachmentState colorBlendAttachment = {};
@@ -682,7 +647,7 @@ void GraphicManager::CreateRenderPass()
 {
 	VkAttachmentDescription colorAttachment = {};
 	colorAttachment.format = m_SwapChainImageFormat;
-	colorAttachment.samples = m_MsaaSamples;
+	colorAttachment.samples = m_PhysicalDevice->GetMsaaSamples();
 	colorAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
 	colorAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
 	colorAttachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
@@ -702,7 +667,7 @@ void GraphicManager::CreateRenderPass()
 
 	VkAttachmentDescription depthAttachment = {};
 	depthAttachment.format = FindDepthFormat();
-	depthAttachment.samples = m_MsaaSamples;
+	depthAttachment.samples = m_PhysicalDevice->GetMsaaSamples();
 	depthAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
 	depthAttachment.storeOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
 	depthAttachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
@@ -783,7 +748,7 @@ void GraphicManager::CreateFrameBuffers()
 
 void GraphicManager::CreateCommandPool()
 {
-	auto queueFamilyIndices = FindQueueFamilies(m_PhysicalDevice);
+	auto queueFamilyIndices = FindQueueFamilies(m_PhysicalDevice->GetPhysicalDevice());
 
 	VkCommandPoolCreateInfo poolInfo = {};
 	poolInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
@@ -1112,7 +1077,7 @@ void GraphicManager::CreateIndexBuffer()
 uint32_t GraphicManager::FindMemoryType(const uint32_t typeFilter, const VkMemoryPropertyFlags properties) const
 {
 	VkPhysicalDeviceMemoryProperties memProperties;
-	vkGetPhysicalDeviceMemoryProperties(m_PhysicalDevice, &memProperties);
+	vkGetPhysicalDeviceMemoryProperties(m_PhysicalDevice->GetPhysicalDevice(), &memProperties);
 
 	for (uint32_t i = 0; i < memProperties.memoryTypeCount; i++)
 	{
@@ -1506,7 +1471,7 @@ void GraphicManager::CreateDepthResources()
 {
 	const auto depthFormat = FindDepthFormat();
 
-	CreateImage(m_SwapChainExtent.width, m_SwapChainExtent.height, 1, m_MsaaSamples, depthFormat, VK_IMAGE_TILING_OPTIMAL, VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, m_DepthImage, m_DepthImageMemory);
+	CreateImage(m_SwapChainExtent.width, m_SwapChainExtent.height, 1, m_PhysicalDevice->GetMsaaSamples(), depthFormat, VK_IMAGE_TILING_OPTIMAL, VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, m_DepthImage, m_DepthImageMemory);
 	m_DepthImageView = CreateImageView(m_DepthImage, depthFormat, VK_IMAGE_ASPECT_DEPTH_BIT, 1);
 
 	TransitionImageLayout(m_DepthImage, depthFormat, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL, 1);
@@ -1517,7 +1482,7 @@ VkFormat GraphicManager::FindSupportedFormat(const std::vector<VkFormat>& candid
 {
 	for (auto format : candidates) {
 		VkFormatProperties props;
-		vkGetPhysicalDeviceFormatProperties(m_PhysicalDevice, format, &props);
+		vkGetPhysicalDeviceFormatProperties(m_PhysicalDevice->GetPhysicalDevice(), format, &props);
 
 		if (tiling == VK_IMAGE_TILING_LINEAR && (props.linearTilingFeatures & features) == features) {
 			return format;
@@ -1589,7 +1554,7 @@ void GraphicManager::GenerateMipmaps(const VkImage image, const VkFormat imageFo
 	//TODO ce genre de fonction ne devrait pas être fait en runtime, il faudrait trouver un autre moyen pour stocker les mipmaps
 
 	VkFormatProperties formatProperties;
-	vkGetPhysicalDeviceFormatProperties(m_PhysicalDevice, imageFormat, &formatProperties);
+	vkGetPhysicalDeviceFormatProperties(m_PhysicalDevice->GetPhysicalDevice(), imageFormat, &formatProperties);
 
 	if(!(formatProperties.optimalTilingFeatures & VK_FORMAT_FEATURE_SAMPLED_IMAGE_FILTER_LINEAR_BIT))
 	{
@@ -1678,7 +1643,7 @@ void GraphicManager::GenerateMipmaps(const VkImage image, const VkFormat imageFo
 VkSampleCountFlagBits GraphicManager::GetMaxUsableSampleCount() const
 {
 	VkPhysicalDeviceProperties physicalDeviceProperties;
-	vkGetPhysicalDeviceProperties(m_PhysicalDevice, &physicalDeviceProperties);
+	vkGetPhysicalDeviceProperties(m_PhysicalDevice->GetPhysicalDevice(), &physicalDeviceProperties);
 
 	const auto counts = std::min(physicalDeviceProperties.limits.framebufferColorSampleCounts, physicalDeviceProperties.limits.framebufferDepthSampleCounts);
 
@@ -1696,7 +1661,7 @@ void GraphicManager::CreateColorResources()
 {
 	const auto colorFormat = m_SwapChainImageFormat;
 
-	CreateImage(m_SwapChainExtent.width, m_SwapChainExtent.height, 1, m_MsaaSamples, colorFormat, VK_IMAGE_TILING_OPTIMAL, VK_IMAGE_USAGE_TRANSIENT_ATTACHMENT_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, m_ColorImage, m_ColorImageMemory);
+	CreateImage(m_SwapChainExtent.width, m_SwapChainExtent.height, 1, m_PhysicalDevice->GetMsaaSamples(), colorFormat, VK_IMAGE_TILING_OPTIMAL, VK_IMAGE_USAGE_TRANSIENT_ATTACHMENT_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, m_ColorImage, m_ColorImageMemory);
 	m_ColorImageView = CreateImageView(m_ColorImage, colorFormat, VK_IMAGE_ASPECT_COLOR_BIT, 1);
 
 	TransitionImageLayout(m_ColorImage, colorFormat, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL, 1);
