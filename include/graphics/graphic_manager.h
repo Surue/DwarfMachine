@@ -34,6 +34,7 @@ SOFTWARE.
 #include <graphics/instance.h>
 #include <graphics/surface.h>
 #include <graphics/physical_device.h>
+#include <graphics/logical_device.h>
 
 namespace dm
 {
@@ -118,45 +119,10 @@ private:
 	void InitVulkan();
 
 	/**
-	 * \brief Create a surface used to link vulkan to the GLFW window
-	 */
-	void CreateSurface();
-
-	/**
-	 * \brief Callback function for vulkan error message
-	 * \param messageSeverity Specify the severity of the message
-	 * \param messageType Type of the message
-	 * \param pCallbackData Contains the details of the message
-	 * \param pUserData Allow to pass own data
-	 * \return 
-	 */
-	static VKAPI_ATTR VkBool32 VKAPI_CALL DebugCallback(
-		VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
-		VkDebugUtilsMessageTypeFlagsEXT messageType,
-		const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData,
-		void* pUserData);
-
-	/**
-	 * \brief Select a GPU
-	 */
-	void PickPhysicalDevice();
-
-	/**
-	 * \brief Evaluate if a device is suitable for our operation
-	 * \param device 
-	 */
-	bool IsDeviceSuitable(VkPhysicalDevice device) const;
-
-	/**
 	 * \brief Return queue families that satisfy certain desired properties
 	 * \param device
 	 */
 	QueueFamilyIndices FindQueueFamilies(VkPhysicalDevice device) const;
-
-	/**
-	 * \brief Setup logical device to interface with
-	 */
-	void CreateLogicalDevice();
 
 	/**
 	 * \brief Check if the given device support extensions
@@ -331,10 +297,7 @@ private:
 	Instance* m_Instance = nullptr;
 	Surface* m_Surface = nullptr;
 	PhysicalDevice* m_PhysicalDevice = nullptr;
-	VkDevice m_Device = nullptr;
-
-	VkQueue m_GraphicsQueue = nullptr;
-	VkQueue m_PresentQueue{};
+	LogicalDevice* m_LogicalDevice = nullptr;
 
 	VkSwapchainKHR m_SwapChain{};
 

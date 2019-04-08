@@ -26,6 +26,7 @@ SOFTWARE.
 #define SURFACE_H
 
 #include <vulkan/vulkan.h>
+#include <GLFW/glfw3.h>
 
 namespace dm
 {

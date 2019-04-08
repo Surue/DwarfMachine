@@ -51,28 +51,6 @@ const std::vector<const char*> VALIDATION_LAYER = { "VK_LAYER_LUNARG_standard_va
 	const bool ENABLE_VALIDATION_LAYERS = true;
 #endif
 
-///**
-// * \brief Create a vulkan's validation layer. The validation layer is used to catch vulkan's specific error
-// * \param instance It's the current vulkan instance
-// * \param pCreateInfo Information used to create the validation layer
-// * \param pAllocator custom allocator 
-// * \param pDebugMessenger ptr that will store new messenger
-// * \return if succeeded return a new messenger, otherwise return VK_ERROR_EXTENSION_NOT_PRESENT
-// */
-//inline VkResult CreateDebugUtilsMessengerEXT(const VkInstance instance,
-//                                             const VkDebugUtilsMessengerCreateInfoEXT* pCreateInfo,
-//                                             const VkAllocationCallbacks* pAllocator,
-//                                             VkDebugUtilsMessengerEXT* pDebugMessenger);
-//
-///**
-// * \brief Destroy a messenger acting as the validation layer
-// * \param instance The current Vulkan Instance
-// * \param debugMessenger ptr to delete
-// * \param pAllocator custom allocator
-// */
-//inline void DestroyDebugUtilsMessengerEXT(const VkInstance instance, const VkDebugUtilsMessengerEXT debugMessenger,
-//                                          const VkAllocationCallbacks* pAllocator);
-
 /**
  * \brief Contain all needed extension in a device to run the engine§
  */
