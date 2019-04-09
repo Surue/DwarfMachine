@@ -311,9 +311,9 @@ private:
 
 	std::vector<VkFramebuffer> m_SwapChainFrameBuffers;
 
-	CommandPool* m_CommandPool = nullptr;
+	std::shared_ptr<CommandPool> m_CommandPool = nullptr;
 	//std::vector<VkCommandBuffer> m_OldCommandBuffers;
-	std::vector<CommandBuffer*> m_CommandBuffers;
+	std::vector< std::unique_ptr<CommandBuffer>> m_CommandBuffers;
 
 	std::vector<VkSemaphore> m_ImageAvailableSemaphores;
 	std::vector<VkSemaphore> m_RenderFinishedSemaphores;

@@ -73,7 +73,7 @@ void GraphicManager::InitVulkan()
 	CreateDescriptorSetLayout();
 	CreateGraphicPipeline();
 
-	m_CommandPool = new CommandPool(m_LogicalDevice);
+	m_CommandPool = std::make_shared<CommandPool>(m_LogicalDevice);
 
 	CreateColorResources();
 	CreateDepthResources();
@@ -99,44 +99,43 @@ void GraphicManager::Init()
 
 void GraphicManager::Destroy()
 {
-	vkDeviceWaitIdle(m_LogicalDevice->GetLogicalDevice());
+	vkDeviceWaitIdle(*m_LogicalDevice);
 
 	//Destroy swap chain
 	DestroySwapChain();
 
-	vkDestroySampler(m_LogicalDevice->GetLogicalDevice(), m_TextureSampler, nullptr);
-	vkDestroyImageView(m_LogicalDevice->GetLogicalDevice(), m_TextureImageView, nullptr);
+	vkDestroySampler(*m_LogicalDevice, m_TextureSampler, nullptr);
+	vkDestroyImageView(*m_LogicalDevice, m_TextureImageView, nullptr);
 
-	vkDestroyImage(m_LogicalDevice->GetLogicalDevice(), m_TextureImage, nullptr);
-	vkFreeMemory(m_LogicalDevice->GetLogicalDevice(), m_TextureImageMemory, nullptr);
+	vkDestroyImage(*m_LogicalDevice, m_TextureImage, nullptr);
+	vkFreeMemory(*m_LogicalDevice, m_TextureImageMemory, nullptr);
 
-	vkDestroyDescriptorPool(m_LogicalDevice->GetLogicalDevice(), m_DescriptorPool, nullptr);
+	vkDestroyDescriptorPool(*m_LogicalDevice, m_DescriptorPool, nullptr);
 
 	//Destroy all bindings
-	vkDestroyDescriptorSetLayout(m_LogicalDevice->GetLogicalDevice(), m_DescriptorSetLayout, nullptr);
+	vkDestroyDescriptorSetLayout(*m_LogicalDevice, m_DescriptorSetLayout, nullptr);
 	for(size_t i = 0; i < m_SwapChainImages.size(); i++)
 	{
-		vkDestroyBuffer(m_LogicalDevice->GetLogicalDevice(), m_UniformBuffers[i], nullptr);
-		vkFreeMemory(m_LogicalDevice->GetLogicalDevice(), m_UniformBuffersMemory[i], nullptr);
+		vkDestroyBuffer(*m_LogicalDevice, m_UniformBuffers[i], nullptr);
+		vkFreeMemory(*m_LogicalDevice, m_UniformBuffersMemory[i], nullptr);
 	}
 
 	//Destroy index buffer and its memory
-	vkDestroyBuffer(m_LogicalDevice->GetLogicalDevice(), m_IndexBuffer, nullptr);
-	vkFreeMemory(m_LogicalDevice->GetLogicalDevice(), m_IndexBufferMemory, nullptr);
+	vkDestroyBuffer(*m_LogicalDevice, m_IndexBuffer, nullptr);
+	vkFreeMemory(*m_LogicalDevice, m_IndexBufferMemory, nullptr);
 
 	//Destroy vertex buffer and its memory
-	vkDestroyBuffer(m_LogicalDevice->GetLogicalDevice(), m_VertexBuffer, nullptr);
-	vkFreeMemory(m_LogicalDevice->GetLogicalDevice(), m_VertexBufferMemory, nullptr);
+	vkDestroyBuffer(*m_LogicalDevice, m_VertexBuffer, nullptr);
+	vkFreeMemory(*m_LogicalDevice, m_VertexBufferMemory, nullptr);
 
 	//Destroy semaphores
 	for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++)
 	{
-		vkDestroySemaphore(m_LogicalDevice->GetLogicalDevice(), m_RenderFinishedSemaphores[i], nullptr);
-		vkDestroySemaphore(m_LogicalDevice->GetLogicalDevice(), m_ImageAvailableSemaphores[i], nullptr);
-		vkDestroyFence(m_LogicalDevice->GetLogicalDevice(), m_InFlightFences[i], nullptr);
+		vkDestroySemaphore(*m_LogicalDevice, m_RenderFinishedSemaphores[i], nullptr);
+		vkDestroySemaphore(*m_LogicalDevice, m_ImageAvailableSemaphores[i], nullptr);
+		vkDestroyFence(*m_LogicalDevice, m_InFlightFences[i], nullptr);
 	}
 
-	delete(m_CommandPool);
 	delete(m_LogicalDevice);
 	delete(m_PhysicalDevice);
 	delete(m_Surface);
@@ -667,7 +666,7 @@ void GraphicManager::CreateCommandBuffers()
 
 	for (size_t i = 0; i < m_CommandBuffers.size(); i++)
 	{
-		m_CommandBuffers[i] = new CommandBuffer(m_CommandPool, m_LogicalDevice);
+		m_CommandBuffers[i] = std::make_unique<CommandBuffer>(m_CommandPool.get(), m_LogicalDevice);
 		m_CommandBuffers[i]->Begin(VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT);
 
 		VkRenderPassBeginInfo renderPassInfo = {};
@@ -823,10 +822,7 @@ void GraphicManager::DestroySwapChain()
 		vkDestroyFramebuffer(m_LogicalDevice->GetLogicalDevice(), frameBuffer, nullptr);
 	}
 
-	for (auto commandBuffer : m_CommandBuffers)
-	{
-		delete(commandBuffer);
-	}
+	m_CommandBuffers.clear();
 
 	vkDestroyPipeline(m_LogicalDevice->GetLogicalDevice(), m_GraphicsPipeline, nullptr);
 	vkDestroyPipelineLayout(m_LogicalDevice->GetLogicalDevice(), m_PipelineLayout, nullptr);
