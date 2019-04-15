@@ -290,7 +290,7 @@ private:
 	const std::string TEXTURE_PATH = "ressources/textures/Tentacle_lp_defaultMat_BaseColor.png";
 
 	//VULKAN
-	Instance* m_Instance = nullptr;
+	std::unique_ptr<Instance> m_Instance = nullptr;
 	Surface* m_Surface = nullptr;
 	PhysicalDevice* m_PhysicalDevice = nullptr;
 	LogicalDevice* m_LogicalDevice = nullptr;

@@ -62,10 +62,10 @@ void GraphicManager::FrameBufferResizeCallback(GLFWwindow* window, int width, in
 
 void GraphicManager::InitVulkan()
 {
-	m_Instance = new Instance();
-	m_PhysicalDevice = new PhysicalDevice(m_Instance);
-	m_Surface = new Surface(m_Instance, m_PhysicalDevice, m_Window);
-	m_LogicalDevice = new LogicalDevice(m_Instance, m_PhysicalDevice, m_Surface);
+	m_Instance = std::make_unique<Instance>();
+	m_PhysicalDevice = new PhysicalDevice(m_Instance.get());
+	m_Surface = new Surface(m_Instance.get(), m_PhysicalDevice, m_Window);
+	m_LogicalDevice = new LogicalDevice(m_Instance.get(), m_PhysicalDevice, m_Surface);
 
 	CreateSwapChain();
 	CreateImageViews();
@@ -139,7 +139,6 @@ void GraphicManager::Destroy()
 	delete(m_LogicalDevice);
 	delete(m_PhysicalDevice);
 	delete(m_Surface);
-	delete(m_Instance);
 
 	glfwDestroyWindow(m_Window);
 
