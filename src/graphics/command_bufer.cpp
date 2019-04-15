@@ -27,7 +27,7 @@ SOFTWARE.
 
 namespace dm
 {
-CommandBuffer::CommandBuffer(CommandPool* commandPool, LogicalDevice* logicalDevice, const VkQueueFlagBits& queueType,
+CommandBuffer::CommandBuffer(const std::shared_ptr<CommandPool> commandPool, LogicalDevice* logicalDevice, const VkQueueFlagBits& queueType,
 		const VkCommandBufferLevel& bufferLevel):
 	m_CommandPool(commandPool),
 	m_QueueType(queueType), 
@@ -119,7 +119,7 @@ void CommandBuffer::SubmitIdle()
 
 void CommandBuffer::Submit(const VkSemaphore& waitSemaphore, const VkSemaphore& signalSemaphore, VkFence fence)
 {
-	auto queueSelected = GetQueue();
+	const auto queueSelected = GetQueue();
 
 	if(m_Running)
 	{

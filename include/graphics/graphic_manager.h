@@ -291,9 +291,9 @@ private:
 
 	//VULKAN
 	std::unique_ptr<Instance> m_Instance = nullptr;
-	Surface* m_Surface = nullptr;
-	PhysicalDevice* m_PhysicalDevice = nullptr;
-	LogicalDevice* m_LogicalDevice = nullptr;
+	std::unique_ptr<Surface> m_Surface = nullptr;
+	std::unique_ptr<PhysicalDevice> m_PhysicalDevice = nullptr;
+	std::unique_ptr<LogicalDevice> m_LogicalDevice = nullptr;
 
 	VkSwapchainKHR m_SwapChain{};
 

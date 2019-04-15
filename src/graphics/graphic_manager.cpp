@@ -63,9 +63,9 @@ void GraphicManager::FrameBufferResizeCallback(GLFWwindow* window, int width, in
 void GraphicManager::InitVulkan()
 {
 	m_Instance = std::make_unique<Instance>();
-	m_PhysicalDevice = new PhysicalDevice(m_Instance.get());
-	m_Surface = new Surface(m_Instance.get(), m_PhysicalDevice, m_Window);
-	m_LogicalDevice = new LogicalDevice(m_Instance.get(), m_PhysicalDevice, m_Surface);
+	m_PhysicalDevice = std::make_unique<PhysicalDevice>(m_Instance.get());
+	m_Surface = std::make_unique<Surface>(m_Instance.get(), m_PhysicalDevice.get(), m_Window);
+	m_LogicalDevice = std::make_unique<LogicalDevice>(m_Instance.get(), m_PhysicalDevice.get(), m_Surface.get());
 
 	CreateSwapChain();
 	CreateImageViews();
@@ -73,7 +73,7 @@ void GraphicManager::InitVulkan()
 	CreateDescriptorSetLayout();
 	CreateGraphicPipeline();
 
-	m_CommandPool = std::make_shared<CommandPool>(m_LogicalDevice);
+	m_CommandPool = std::make_shared<CommandPool>(m_LogicalDevice.get());
 
 	CreateColorResources();
 	CreateDepthResources();
@@ -135,10 +135,6 @@ void GraphicManager::Destroy()
 		vkDestroySemaphore(*m_LogicalDevice, m_ImageAvailableSemaphores[i], nullptr);
 		vkDestroyFence(*m_LogicalDevice, m_InFlightFences[i], nullptr);
 	}
-
-	delete(m_LogicalDevice);
-	delete(m_PhysicalDevice);
-	delete(m_Surface);
 
 	glfwDestroyWindow(m_Window);
 
@@ -665,7 +661,7 @@ void GraphicManager::CreateCommandBuffers()
 
 	for (size_t i = 0; i < m_CommandBuffers.size(); i++)
 	{
-		m_CommandBuffers[i] = std::make_unique<CommandBuffer>(m_CommandPool.get(), m_LogicalDevice);
+		m_CommandBuffers[i] = std::make_unique<CommandBuffer>(m_CommandPool, m_LogicalDevice.get());
 		m_CommandBuffers[i]->Begin(VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT);
 
 		VkRenderPassBeginInfo renderPassInfo = {};
@@ -726,11 +722,11 @@ void GraphicManager::CreateSyncObjects()
 void GraphicManager::DrawFrame()
 {
 	//Wait end of previous frame
-	vkWaitForFences(m_LogicalDevice->GetLogicalDevice(), 1, &m_InFlightFences[m_CurrentFrame], VK_TRUE, std::numeric_limits<uint64_t>::max());
+	vkWaitForFences(*m_LogicalDevice, 1, &m_InFlightFences[m_CurrentFrame], VK_TRUE, std::numeric_limits<uint64_t>::max());
 
 	//Acquire an image from the swap chain
 	uint32_t imageIndex;
-	auto result = vkAcquireNextImageKHR(m_LogicalDevice->GetLogicalDevice(), m_SwapChain, std::numeric_limits<uint64_t>::max(),
+	auto result = vkAcquireNextImageKHR(*m_LogicalDevice, m_SwapChain, std::numeric_limits<uint64_t>::max(),
 	                                        m_ImageAvailableSemaphores[m_CurrentFrame], VK_NULL_HANDLE, &imageIndex);
 
 	if (result == VK_ERROR_OUT_OF_DATE_KHR)
@@ -808,31 +804,29 @@ void GraphicManager::RecreateSwapChain()
 
 void GraphicManager::DestroySwapChain()
 {
-	vkDestroyImageView(m_LogicalDevice->GetLogicalDevice(), m_ColorImageView, nullptr);
-	vkDestroyImage(m_LogicalDevice->GetLogicalDevice(), m_ColorImage, nullptr);
-	vkFreeMemory(m_LogicalDevice->GetLogicalDevice(), m_ColorImageMemory, nullptr);
+	vkDestroyImageView(*m_LogicalDevice, m_ColorImageView, nullptr);
+	vkDestroyImage(*m_LogicalDevice, m_ColorImage, nullptr);
+	vkFreeMemory(*m_LogicalDevice, m_ColorImageMemory, nullptr);
 
-	vkDestroyImageView(m_LogicalDevice->GetLogicalDevice(), m_DepthImageView, nullptr);
-	vkDestroyImage(m_LogicalDevice->GetLogicalDevice(), m_DepthImage, nullptr);
-	vkFreeMemory(m_LogicalDevice->GetLogicalDevice(), m_DepthImageMemory, nullptr);
+	vkDestroyImageView(*m_LogicalDevice, m_DepthImageView, nullptr);
+	vkDestroyImage(*m_LogicalDevice, m_DepthImage, nullptr);
+	vkFreeMemory(*m_LogicalDevice, m_DepthImageMemory, nullptr);
 
 	for (auto frameBuffer : m_SwapChainFrameBuffers)
 	{
-		vkDestroyFramebuffer(m_LogicalDevice->GetLogicalDevice(), frameBuffer, nullptr);
+		vkDestroyFramebuffer(*m_LogicalDevice, frameBuffer, nullptr);
 	}
 
-	m_CommandBuffers.clear();
-
-	vkDestroyPipeline(m_LogicalDevice->GetLogicalDevice(), m_GraphicsPipeline, nullptr);
-	vkDestroyPipelineLayout(m_LogicalDevice->GetLogicalDevice(), m_PipelineLayout, nullptr);
-	vkDestroyRenderPass(m_LogicalDevice->GetLogicalDevice(), m_RenderPass, nullptr);
+	vkDestroyPipeline(*m_LogicalDevice, m_GraphicsPipeline, nullptr);
+	vkDestroyPipelineLayout(*m_LogicalDevice, m_PipelineLayout, nullptr);
+	vkDestroyRenderPass(*m_LogicalDevice, m_RenderPass, nullptr);
 
 	for (auto imageView : m_SwapChainImageViews)
 	{
-		vkDestroyImageView(m_LogicalDevice->GetLogicalDevice(), imageView, nullptr);
+		vkDestroyImageView(*m_LogicalDevice, imageView, nullptr);
 	}
 
-	vkDestroySwapchainKHR(m_LogicalDevice->GetLogicalDevice(), m_SwapChain, nullptr);
+	vkDestroySwapchainKHR(*m_LogicalDevice, m_SwapChain, nullptr);
 }
 
 void GraphicManager::CreateBuffer(const VkDeviceSize size, const VkBufferUsageFlags usage,
