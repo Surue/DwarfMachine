@@ -161,6 +161,8 @@ GLFWwindow* GraphicManager::GetWindow() const
 
 QueueFamilyIndices GraphicManager::FindQueueFamilies(const VkPhysicalDevice device) const
 {
+	std::cout << "hola\n";
+
 	QueueFamilyIndices indices;
 
 	uint32_t queueFamilyCount = 0;
@@ -308,6 +310,7 @@ SwapChainSupportDetails GraphicManager::QuerySwapChainSupport(const VkPhysicalDe
 
 VkSurfaceFormatKHR GraphicManager::ChooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats)
 {
+	std::cout << "ICI\n";
 	if (availableFormats.size() == 1 && availableFormats[0].format == VK_FORMAT_UNDEFINED)
 	{
 		return {VK_FORMAT_B8G8R8A8_UNORM, VK_COLOR_SPACE_SRGB_NONLINEAR_KHR};
@@ -930,6 +933,8 @@ void GraphicManager::CreateIndexBuffer()
 
 uint32_t GraphicManager::FindMemoryType(const uint32_t typeFilter, const VkMemoryPropertyFlags properties) const
 {
+	std::cout << "ICI\n";
+
 	VkPhysicalDeviceMemoryProperties memProperties;
 	vkGetPhysicalDeviceMemoryProperties(m_PhysicalDevice->GetPhysicalDevice(), &memProperties);
 
@@ -1492,23 +1497,6 @@ void GraphicManager::GenerateMipmaps(const VkImage image, const VkFormat imageFo
 		1, &barrier);
 
 	EndSingleTimeCommands(commandBuffer);
-}
-
-VkSampleCountFlagBits GraphicManager::GetMaxUsableSampleCount() const
-{
-	VkPhysicalDeviceProperties physicalDeviceProperties;
-	vkGetPhysicalDeviceProperties(m_PhysicalDevice->GetPhysicalDevice(), &physicalDeviceProperties);
-
-	const auto counts = std::min(physicalDeviceProperties.limits.framebufferColorSampleCounts, physicalDeviceProperties.limits.framebufferDepthSampleCounts);
-
-	if (counts & VK_SAMPLE_COUNT_64_BIT) { return VK_SAMPLE_COUNT_64_BIT; }
-	if (counts & VK_SAMPLE_COUNT_32_BIT) { return VK_SAMPLE_COUNT_32_BIT; }
-	if (counts & VK_SAMPLE_COUNT_16_BIT) { return VK_SAMPLE_COUNT_16_BIT; }
-	if (counts & VK_SAMPLE_COUNT_8_BIT) { return VK_SAMPLE_COUNT_8_BIT; }
-	if (counts & VK_SAMPLE_COUNT_4_BIT) { return VK_SAMPLE_COUNT_4_BIT; }
-	if (counts & VK_SAMPLE_COUNT_2_BIT) { return VK_SAMPLE_COUNT_2_BIT; }
-
-	return VK_SAMPLE_COUNT_1_BIT;
 }
 
 void GraphicManager::CreateColorResources()
