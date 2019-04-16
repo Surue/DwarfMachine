@@ -35,10 +35,7 @@ Surface::Surface(const Instance* instance, const PhysicalDevice* physicalDevice,
 	m_Capabilities({}),
 	m_Format({})
 {
-	if (window->CreateSurface(*m_Instance, nullptr, &m_Surface))
-	{
-		throw std::runtime_error("failed to create window surface");
-	}
+	window->CreateSurface(*m_Instance, nullptr, &m_Surface);
 
 	uint32_t formatCount = 0;
 	vkGetPhysicalDeviceSurfaceFormatsKHR(*m_PhysicalDevice, m_Surface, &formatCount, nullptr);

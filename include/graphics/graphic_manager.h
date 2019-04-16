@@ -37,6 +37,8 @@ SOFTWARE.
 #include <graphics/logical_device.h>
 #include <graphics/command_buffer.h>
 
+#include <SDL.h>
+
 namespace dm
 {
 /**
@@ -80,6 +82,7 @@ inline void DestroyDebugUtilsMessengerEXT(const VkInstance instance, const VkDeb
 		func(instance, debugMessenger, pAllocator);
 	}
 }
+
 class GraphicManager
 {
 public:
@@ -112,7 +115,7 @@ private:
 	 */
 	void InitWindow();
 
-	static void FrameBufferResizeCallback(GLFWwindow* window, int width, int height);
+	static void FrameBufferResizeCallback(SDL_Window* window, int width, int height);
 
 	/**
 	 * \brief Init Vulkan

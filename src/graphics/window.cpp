@@ -28,11 +28,6 @@ SOFTWARE.
 
 namespace dm
 {
-void CallbackFrame(GLFWwindow *window, int32_t width, int32_t height)
-{
-	//Window::Get()->m_aspectRatio = static_cast<float>(width) / static_cast<float>(height);
-	std::cout << "Resize\n";
-}
 
 Window::Window(Engine& engine) : m_Engine(engine)
 {
@@ -41,44 +36,63 @@ Window::Window(Engine& engine) : m_Engine(engine)
 
 Window::~Window()
 {
-	glfwDestroyWindow(m_Window);
-
-	glfwTerminate();
+	SDL_DestroyWindow(m_Window);
+	SDL_Quit();
 }
 
 void Window::Init()
 {
-	//Init glfw
-	glfwInit();
+	SDL_Init(SDL_INIT_VIDEO);
 
-	//Set context to null (otherwise it would be openGL)
-	glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
 
 	const auto windowSize = m_Engine.GetSettings().windowSize;
-	m_Window = glfwCreateWindow(windowSize.x, windowSize.y, "Vulkan", nullptr, nullptr);
-	glfwSetWindowUserPointer(m_Window, this);
+	m_Window = SDL_CreateWindow(
+		"An SDL2 Vulkan window",                  // window title
+		SDL_WINDOWPOS_UNDEFINED,           // initial x position
+		SDL_WINDOWPOS_UNDEFINED,           // initial y position
+		windowSize.x,                               // width, in pixels
+		windowSize.y,                               // height, in pixels
+		SDL_WINDOW_VULKAN | SDL_WINDOW_RESIZABLE               // flags - see below
+	);
 
-	glfwSetFramebufferSizeCallback(m_Window, CallbackFrame);
+	if (m_Window == nullptr) {
+		// In the case that the window could not be made...
+		printf("Could not create window: %s\n", SDL_GetError());
+		throw std::runtime_error("");
+	}
+	SDL_GetWindowData(m_Window, "Dwarf Machine");
+}
+
+void Window::PollEvents()
+{
+	SDL_PollEvent(&m_Event);
+}
+
+void Window::WaitEvents()
+{
+	SDL_WaitEvent(&m_Event);
 }
 
 bool Window::ShouldClose() const
 {
-	return glfwWindowShouldClose(m_Window);
+	return m_ShouldQuit;
 }
 
-void Window::SetShouldClose() const
+void Window::SetShouldClose()
 {
-	glfwSetWindowShouldClose(m_Window, true);
+	m_ShouldQuit = true;
 }
 
 void Window::GetFramebufferSize(int* width, int* height) const
 {
-	glfwGetFramebufferSize(m_Window, width, height);
+	SDL_Vulkan_GetDrawableSize(m_Window, width, height);
 }
 
-VkResult Window::CreateSurface(const VkInstance& instance, const VkAllocationCallbacks* allocator,
+void Window::CreateSurface(const VkInstance& instance, const VkAllocationCallbacks* allocator,
 	VkSurfaceKHR* surface) const
 {
-	return glfwCreateWindowSurface(instance, m_Window, allocator, surface);
+	if (!SDL_Vulkan_CreateSurface(m_Window, instance, surface)) {
+		throw std::runtime_error("Failed to create window surface!");
+	}
 }
 }

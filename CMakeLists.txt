@@ -80,6 +80,14 @@ message(FATAL_ERROR "Please do git submodule update --init --recursive")
 ENDIF()
 include_directories(${GLM_DIR})
 
+#SDL
+set(SDL_VERSION 2.0.9)
+set(SDL_DIR ${EXTERNAL_DIR}/SDL2-${SDL_VERSION}/)
+set(SDL_STATIC ON)
+set(SDL_SHARED OFF)
+add_subdirectory(${SDL_DIR})
+include_directories(${SDL2_DIR}/include ${SDL2_DIR}/src)
+
 #GLFW
 find_package(glfw3 3.2 REQUIRED)
 if(NOT TARGET glfw)
@@ -172,6 +180,12 @@ set_property(TARGET DWARF_MACHINE_COMMON PROPERTY CXX_STANDARD 17)
 target_link_libraries(DWARF_MACHINE_COMMON PUBLIC Vulkan::Vulkan)
 
 target_link_libraries(DWARF_MACHINE_COMMON PUBLIC glfw)
+
+target_link_libraries(DWARF_MACHINE_COMMON PUBLIC SDL2-static)
+
+if(MSVC)
+target_link_libraries(DWARF_MACHINE_COMMON PUBLIC SDL2main)
+endif(MSVC)
 
 target_compile_definitions(DWARF_MACHINE_COMMON PRIVATE VK_USE_PLATFORM_WIN32_KHR)
 

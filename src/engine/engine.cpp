@@ -71,7 +71,7 @@ void Engine::Start()
 
 void Engine::Stop() const
 {
-	glfwSetWindowShouldClose(m_Window->GetWindow(), true);
+	m_Window->SetShouldClose();
 }
 
 GraphicManager* Engine::GetGraphicManager() const

@@ -22,8 +22,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#include <GLFW/glfw3.h>
-
 #include <graphics/instance.h>
 #include <iostream>
 
@@ -155,6 +153,7 @@ void Instance::SetupExtensions()
 {
 	uint32_t glfwExtensionsCount = 0;
 	const auto glfwExtensions = glfwGetRequiredInstanceExtensions(&glfwExtensionsCount);
+	//TODO finir ça
 
 	m_InstanceExtensions = std::vector<const char*>(glfwExtensions, glfwExtensions + glfwExtensionsCount);
 

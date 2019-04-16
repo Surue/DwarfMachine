@@ -25,8 +25,9 @@ SOFTWARE.
 #ifndef WINDOW_H
 #define WINDOW_H
 
-#define GLFW_INCLUDE_VULKAN
-#include <GLFW/glfw3.h>
+#include <SDL.h>
+#include <SDL_vulkan.h>
+
 #include <vulkan/vulkan.h>
 #include "engine/engine.h"
 
@@ -40,33 +41,28 @@ public:
 
 	void Init();
 
-	operator const GLFWwindow &() const { return *m_Window; }
+	operator const SDL_Window &() const { return *m_Window; }
 
-	GLFWwindow* GetWindow() { return m_Window; }
+	SDL_Window* GetWindow() const { return m_Window; }
 
-	static void PollEvents()
-	{
-		glfwPollEvents();
-	}
+	void PollEvents();
 
-	static void WaitEvents()
-	{
-		glfwWaitEvents();
-	}
+	void WaitEvents();
 
 	bool ShouldClose() const;
 
-	void SetShouldClose() const;
+	void SetShouldClose();
 
 	void GetFramebufferSize(int* width, int* height) const;
 
-	VkResult CreateSurface(const VkInstance &instance, const VkAllocationCallbacks *allocator, VkSurfaceKHR *surface) const;
+	void CreateSurface(const VkInstance &instance, const VkAllocationCallbacks *allocator, VkSurfaceKHR *surface) const;
 private:
-	friend void CallbackFrame(GLFWwindow *window, int32_t width, int32_t height);
-
 	Engine& m_Engine;
 
-	GLFWwindow* m_Window = nullptr;
+	SDL_Window* m_Window = nullptr;
+	SDL_Event m_Event;
+
+	bool m_ShouldQuit;
 };
 }
 
