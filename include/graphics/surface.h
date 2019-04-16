@@ -32,11 +32,12 @@ namespace dm
 {
 class Instance;
 class PhysicalDevice;
+class Window;
 
 class Surface
 {
 public:
-	Surface(const Instance *instance, const PhysicalDevice *physicalDevice, GLFWwindow* window);
+	Surface(const Instance *instance, const PhysicalDevice *physicalDevice, Window* window);
 	~Surface();
 
 	operator const VkSurfaceKHR &() const { return m_Surface; }

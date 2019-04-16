@@ -21,23 +21,21 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-#define GLFW_INCLUDE_VULKAN
-#include <GLFW/glfw3.h>
-
 #include <graphics/surface.h>
 #include <graphics/instance.h>
 #include <graphics/physical_device.h>
+#include <graphics/window.h>
 
 namespace dm
 {
-Surface::Surface(const Instance* instance, const PhysicalDevice* physicalDevice, GLFWwindow* window) :
+Surface::Surface(const Instance* instance, const PhysicalDevice* physicalDevice, Window* window) :
 	m_Instance(instance),
 	m_PhysicalDevice(physicalDevice),
 	m_Surface(VK_NULL_HANDLE),
 	m_Capabilities({}),
 	m_Format({})
 {
-	if (glfwCreateWindowSurface(*m_Instance, window, nullptr, &m_Surface) != VK_SUCCESS)
+	if (window->CreateSurface(*m_Instance, nullptr, &m_Surface))
 	{
 		throw std::runtime_error("failed to create window surface");
 	}

@@ -26,11 +26,11 @@ SOFTWARE.
 #define INPUT_H
 
 #include <vector>
+#include <GLFW/glfw3.h>
 
 #include <engine/engine.h>
 
 #include <engine/vector.h>
-#include <iostream>
 
 namespace dm
 {
@@ -52,7 +52,8 @@ enum class KeyCode
 	DOWN = GLFW_KEY_DOWN,
 	LEFT = GLFW_KEY_LEFT,
 	RIGHT = GLFW_KEY_RIGHT,
-	SHIFT_LEFT = GLFW_KEY_LEFT_SHIFT
+	SHIFT_LEFT = GLFW_KEY_LEFT_SHIFT,
+	ESCAPE = GLFW_KEY_ESCAPE
 };
 
 enum class ButtonCode

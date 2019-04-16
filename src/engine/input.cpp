@@ -23,7 +23,6 @@ SOFTWARE.
 */
 
 #include <engine/Input.h>
-#include <iostream>
 
 namespace dm
 {

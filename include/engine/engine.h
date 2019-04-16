@@ -25,8 +25,6 @@ SOFTWARE.
 #ifndef ENGINE_H
 #define ENGINE_H
 
-#define GLFW_INCLUDE_VULKAN
-#include <GLFW/glfw3.h>
 #include <engine/vector.h>
 
 namespace dm
@@ -36,6 +34,7 @@ class InputManager;
 class EntityManager;
 class ComponentManager;
 class SystemManager;
+class Window;
 
 struct EngineSettings
 {
@@ -75,7 +74,7 @@ private:
 
 	EngineSettings m_Settings;
 
-	GLFWwindow* m_Window = nullptr;
+	Window* m_Window = nullptr;
 
 	GraphicManager* m_GraphicManager = nullptr;
 	InputManager* m_InputManager = nullptr;

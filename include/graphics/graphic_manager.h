@@ -104,7 +104,7 @@ public:
 	 * \brief Get the game's window
 	 * \return 
 	 */
-	GLFWwindow* GetWindow() const;
+	Window* GetWindow() const;
 
 private:
 	/**
@@ -282,7 +282,7 @@ private:
 	void UpdateMainCamera() const;
 
 	//WINDOW
-	GLFWwindow* m_Window = nullptr;
+	std::unique_ptr<Window> m_Window = nullptr;
 
 	const std::string MODEL_PATH = "ressources/models/Tentacle_lp.obj";
 	const std::string TEXTURE_PATH = "ressources/textures/Tentacle_lp_defaultMat_BaseColor.png";

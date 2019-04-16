@@ -35,27 +35,23 @@ SOFTWARE.
 #include <graphics/graphic_manager.h>
 #include <engine/Input.h>
 #include <iostream>
+#include <graphics/window.h>
 
 namespace dm
 {
-GraphicManager::GraphicManager(Engine& engine) : m_Engine(engine) {}
+GraphicManager::GraphicManager(Engine& engine) : m_Engine(engine)
+{
+	m_Window = std::make_unique<Window>(m_Engine);
+}
 
 void GraphicManager::InitWindow()
 {
-	//Init glfw
-	glfwInit();
-
-	//Set context to null (otherwise it would be openGL)
-	glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-
-	const auto windowSize = m_Engine.GetSettings().windowSize;
-	m_Window = glfwCreateWindow(windowSize.x, windowSize.y, "Vulkan", nullptr, nullptr);
-	glfwSetWindowUserPointer(m_Window, this);
-	glfwSetFramebufferSizeCallback(m_Window, FrameBufferResizeCallback);
+	m_Window->Init();
 }
 
 void GraphicManager::FrameBufferResizeCallback(GLFWwindow* window, int width, int height)
 {
+	//TODO elenver ça
 	const auto app = reinterpret_cast<GraphicManager*>(glfwGetWindowUserPointer(window));
 	app->m_FrameBufferResized = true;
 }
@@ -64,7 +60,7 @@ void GraphicManager::InitVulkan()
 {
 	m_Instance = std::make_unique<Instance>();
 	m_PhysicalDevice = std::make_unique<PhysicalDevice>(m_Instance.get());
-	m_Surface = std::make_unique<Surface>(m_Instance.get(), m_PhysicalDevice.get(), m_Window);
+	m_Surface = std::make_unique<Surface>(m_Instance.get(), m_PhysicalDevice.get(), m_Window.get());
 	m_LogicalDevice = std::make_unique<LogicalDevice>(m_Instance.get(), m_PhysicalDevice.get(), m_Surface.get());
 
 	CreateSwapChain();
@@ -135,18 +131,11 @@ void GraphicManager::Destroy()
 		vkDestroySemaphore(*m_LogicalDevice, m_ImageAvailableSemaphores[i], nullptr);
 		vkDestroyFence(*m_LogicalDevice, m_InFlightFences[i], nullptr);
 	}
-
-	glfwDestroyWindow(m_Window);
-
-	glfwTerminate();
 }
 
 void GraphicManager::Update()
 {
 	DrawFrame();
-
-	if(glfwGetKey(m_Window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-		glfwSetWindowShouldClose(m_Window, true);
 }
 
 void GraphicManager::SetMainCamera(Camera* camera)
@@ -154,15 +143,13 @@ void GraphicManager::SetMainCamera(Camera* camera)
 	m_MainCamera = camera;
 }
 
-GLFWwindow* GraphicManager::GetWindow() const
+Window* GraphicManager::GetWindow() const
 {
-	return m_Window;
+	return m_Window.get();
 }
 
 QueueFamilyIndices GraphicManager::FindQueueFamilies(const VkPhysicalDevice device) const
 {
-	std::cout << "hola\n";
-
 	QueueFamilyIndices indices;
 
 	uint32_t queueFamilyCount = 0;
@@ -310,7 +297,6 @@ SwapChainSupportDetails GraphicManager::QuerySwapChainSupport(const VkPhysicalDe
 
 VkSurfaceFormatKHR GraphicManager::ChooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats)
 {
-	std::cout << "ICI\n";
 	if (availableFormats.size() == 1 && availableFormats[0].format == VK_FORMAT_UNDEFINED)
 	{
 		return {VK_FORMAT_B8G8R8A8_UNORM, VK_COLOR_SPACE_SRGB_NONLINEAR_KHR};
@@ -360,7 +346,7 @@ VkExtent2D GraphicManager::ChooseSwapExtent(const VkSurfaceCapabilitiesKHR& capa
 	else
 	{
 		int width, height;
-		glfwGetFramebufferSize(m_Window, &width, &height);
+		m_Window->GetFramebufferSize(&width, &height);
 
 		VkExtent2D actualExtent = {width, height};
 
@@ -771,8 +757,8 @@ void GraphicManager::DrawFrame()
 		auto width = 0, height = 0;
 		while (width == 0 || height == 0)
 		{
-			glfwGetFramebufferSize(m_Window, &width, &height);
-			glfwWaitEvents();
+			m_Window->GetFramebufferSize(&width, &height);
+			Window::WaitEvents();
 		}
 
 		m_Engine.GetSettings().windowSize = Vec2i(width, height);
@@ -933,8 +919,6 @@ void GraphicManager::CreateIndexBuffer()
 
 uint32_t GraphicManager::FindMemoryType(const uint32_t typeFilter, const VkMemoryPropertyFlags properties) const
 {
-	std::cout << "ICI\n";
-
 	VkPhysicalDeviceMemoryProperties memProperties;
 	vkGetPhysicalDeviceMemoryProperties(m_PhysicalDevice->GetPhysicalDevice(), &memProperties);
 

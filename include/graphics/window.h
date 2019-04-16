@@ -22,4 +22,52 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#include <graphics/vulkan_utilities.h>
+#ifndef WINDOW_H
+#define WINDOW_H
+
+#define GLFW_INCLUDE_VULKAN
+#include <GLFW/glfw3.h>
+#include <vulkan/vulkan.h>
+#include "engine/engine.h"
+
+namespace dm
+{
+class Window final
+{
+public:
+	Window(Engine& engine);
+	~Window();
+
+	void Init();
+
+	operator const GLFWwindow &() const { return *m_Window; }
+
+	GLFWwindow* GetWindow() { return m_Window; }
+
+	static void PollEvents()
+	{
+		glfwPollEvents();
+	}
+
+	static void WaitEvents()
+	{
+		glfwWaitEvents();
+	}
+
+	bool ShouldClose() const;
+
+	void SetShouldClose() const;
+
+	void GetFramebufferSize(int* width, int* height) const;
+
+	VkResult CreateSurface(const VkInstance &instance, const VkAllocationCallbacks *allocator, VkSurfaceKHR *surface) const;
+private:
+	friend void CallbackFrame(GLFWwindow *window, int32_t width, int32_t height);
+
+	Engine& m_Engine;
+
+	GLFWwindow* m_Window = nullptr;
+};
+}
+
+#endif WINDOW_H

@@ -28,6 +28,7 @@ SOFTWARE.
 #include <entity/entity.h>
 #include <component/component_manager.h>
 #include <system/system_manager.h>
+#include <graphics/window.h>
 
 namespace dm
 {
@@ -59,7 +60,7 @@ void Engine::Init()
 	m_GraphicManager->Init();
 	m_Window = m_GraphicManager->GetWindow();
 
-	m_InputManager->Init(m_Window);
+	m_InputManager->Init(m_Window->GetWindow());
 }
 
 void Engine::Start()
@@ -70,7 +71,7 @@ void Engine::Start()
 
 void Engine::Stop() const
 {
-	glfwSetWindowShouldClose(m_Window, true);
+	glfwSetWindowShouldClose(m_Window->GetWindow(), true);
 }
 
 GraphicManager* Engine::GetGraphicManager() const
@@ -105,11 +106,11 @@ EngineSettings& Engine::GetSettings()
 
 void Engine::MainLoop()
 {
-	while (!glfwWindowShouldClose(m_Window))
+	while (!m_Window->ShouldClose())
 	{
-		glfwPollEvents();
-		if (glfwGetKey(m_Window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-			glfwSetWindowShouldClose(m_Window, true);
+		Window::PollEvents();
+		if (m_InputManager->IsKeyDown(KeyCode::ESCAPE))
+			m_Window->SetShouldClose();
 
 		m_InputManager->Update();
 
