@@ -51,9 +51,9 @@ void GraphicManager::InitWindow()
 
 void GraphicManager::FrameBufferResizeCallback(GLFWwindow* window, int width, int height)
 {
-	//TODO elenver ça
+	//TODO Faire en sorte que quand on resize une window cette fonction soit appelée 
 	const auto app = reinterpret_cast<GraphicManager*>(glfwGetWindowUserPointer(window));
-	app->m_FrameBufferResized = true;
+	app->m_FrameBufferResized = true; 
 }
 
 void GraphicManager::InitVulkan()
