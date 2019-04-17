@@ -24,6 +24,7 @@ SOFTWARE.
 
 #include <graphics/instance.h>
 #include <iostream>
+#include <SDL_vulkan.h>
 
 namespace dm
 {
@@ -41,13 +42,13 @@ VkBool32 DebugCallback(VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
 	return VK_FALSE;
 }
 
-Instance::Instance() : m_DebugMessenger(VK_NULL_HANDLE), m_Instance(VK_NULL_HANDLE)
+Instance::Instance(SDL_Window* window) : m_DebugMessenger(VK_NULL_HANDLE), m_Instance(VK_NULL_HANDLE)
 {
 	if (ENABLE_VALIDATION_LAYERS)
 	{
 		SetupLayers();
 	}
-	SetupExtensions();
+	SetupExtensions(window);
 	CreateInstance();
 	CreateDebugCallback();
 }
@@ -149,19 +150,27 @@ void Instance::SetupLayers()
 	}
 }
 
-void Instance::SetupExtensions()
+void Instance::SetupExtensions(SDL_Window* window)
 {
-	uint32_t glfwExtensionsCount = 0;
-	const auto glfwExtensions = glfwGetRequiredInstanceExtensions(&glfwExtensionsCount);
-	//TODO finir ça
+	uint32_t extensionCount = 0;
 
-	m_InstanceExtensions = std::vector<const char*>(glfwExtensions, glfwExtensions + glfwExtensionsCount);
+	SDL_Vulkan_GetInstanceExtensions(window, &extensionCount, nullptr);
+
+	std::vector<const char*> extensions;
+	size_t additional_extension_count = extensions.size();
+	extensions.resize(additional_extension_count + extensionCount);
+	if (!SDL_Vulkan_GetInstanceExtensions(window, &extensionCount, extensions.data() + additional_extension_count))
+	{
+		throw std::runtime_error("Could not SDL Vulkan Extensions correctly");
+	}
 
 	//If debug mod, add an extension to handle error
 	if (ENABLE_VALIDATION_LAYERS)
 	{
-		m_InstanceExtensions.push_back(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
+		extensions.push_back(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
 	}
+
+	m_InstanceExtensions = extensions;
 
 	for (const auto &instanceExtension : InstanceExtensions)
 	{

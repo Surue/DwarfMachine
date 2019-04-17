@@ -108,7 +108,7 @@ void Engine::MainLoop()
 {
 	while (!m_Window->ShouldClose())
 	{
-		Window::PollEvents();
+		m_Window->PollEvents();
 		if (m_InputManager->IsKeyDown(KeyCode::ESCAPE))
 			m_Window->SetShouldClose();
 

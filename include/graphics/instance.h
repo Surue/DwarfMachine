@@ -27,6 +27,7 @@ SOFTWARE.
 
 #include <vector>
 #include <vulkan/vulkan.h>
+#include <SDL.h>
 
 #ifdef NDEBUG
 const bool ENABLE_VALIDATION_LAYERS = false;
@@ -49,7 +50,7 @@ public:
 	static const std::vector<const char*> InstanceExtensions;
 	static const std::vector<const char*> DeviceExtensions;
 
-	Instance();
+	Instance(SDL_Window* window);
 	~Instance();
 
 	static VkResult CreateDebugUtilsMessengerEXT(
@@ -75,7 +76,7 @@ public:
 	const VkInstance &GetInstance() const { return m_Instance; }
 private:
 	void SetupLayers();
-	void SetupExtensions();
+	void SetupExtensions(SDL_Window* window);
 	void CreateInstance();
 	void CreateDebugCallback();
 

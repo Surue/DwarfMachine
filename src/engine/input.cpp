@@ -31,11 +31,9 @@ InputManager::InputManager(Engine& engine) : m_Engine(engine)
 {
 }
 
-void InputManager::Init(GLFWwindow* window)
+void InputManager::Init(SDL_Window* window)
 {
 	m_Window = window;
-
-	glfwSetScrollCallback(window, ScrollCallback);
 }
 
 void InputManager::Update()
@@ -43,13 +41,94 @@ void InputManager::Update()
 	for (size_t i = 0; i < m_KeyPressedStatus.size(); i++)
 	{
 		m_KeyPressedStatus[i].previousKeyPressed = m_KeyPressedStatus[i].keyPressed;
-		m_KeyPressedStatus[i].keyPressed = glfwGetKey(m_Window, i);
+		//m_KeyPressedStatus[i].keyPressed = false;
 	}
 
 	for (size_t i = 0; i < m_ButtonPressedStatus.size(); i++)
 	{
 		m_ButtonPressedStatus[i].previousKeyPressed = m_ButtonPressedStatus[i].keyPressed;
-		m_ButtonPressedStatus[i].keyPressed = glfwGetMouseButton(m_Window, i);
+		//m_ButtonPressedStatus[i].keyPressed = false;
+	}
+
+	SDL_Event event;
+	while (SDL_PollEvent(&event))
+	{
+		switch (event.type)
+		{
+		case SDL_QUIT:
+			m_WillQuit = true;
+			break;
+
+			// SDL2's new way of handling input
+		case SDL_TEXTINPUT:
+			//TODO ajouter le text input
+			break;
+
+		case SDL_KEYDOWN:
+		{
+			keyboard = SDL_GetKeyboardState(nullptr);
+
+			const int index = event.key.keysym.scancode;
+			m_KeyPressedStatus[index].keyPressed = true;
+		}
+		break;
+
+		case SDL_KEYUP:
+		{
+			keyboard = SDL_GetKeyboardState(nullptr);
+
+			const int index = event.key.keysym.scancode;
+			m_KeyPressedStatus[index].keyPressed = false;
+		}
+		break;
+
+		case SDL_MOUSEMOTION:
+			m_MousePos.x += event.motion.x /*+ cameraX*/;
+			m_MousePos.y += event.motion.y /*+ cameraY*/;
+			break;
+
+		case SDL_MOUSEBUTTONDOWN:
+			this->mouse = SDL_GetMouseState(&(m_MousePos.x),
+				&(m_MousePos.y));
+
+			if (event.button.button == SDL_BUTTON_LEFT)
+				m_ButtonPressedStatus[static_cast<int>(ButtonCode::LEFT)].keyPressed = true;
+
+			else if (event.button.button == SDL_BUTTON_RIGHT)
+				m_ButtonPressedStatus[static_cast<int>(ButtonCode::RIGHT)].keyPressed = true;
+
+			else if (event.button.button == SDL_BUTTON_MIDDLE)
+				m_ButtonPressedStatus[static_cast<int>(ButtonCode::MIDDLE)].keyPressed = true;
+			break;
+
+		case SDL_MOUSEBUTTONUP:
+			this->mouse = SDL_GetMouseState(&(m_MousePos.x),
+				&(m_MousePos.y));
+
+			if (event.button.button == SDL_BUTTON_LEFT)
+				m_ButtonPressedStatus[static_cast<int>(ButtonCode::LEFT)].keyPressed = false;
+
+			else if (event.button.button == SDL_BUTTON_RIGHT)
+				m_ButtonPressedStatus[static_cast<int>(ButtonCode::RIGHT)].keyPressed = false;
+
+			else if (event.button.button == SDL_BUTTON_MIDDLE)
+				m_ButtonPressedStatus[static_cast<int>(ButtonCode::MIDDLE)].keyPressed = false;
+			break;
+
+			// Brand new SDL2 event.
+		case SDL_MOUSEWHEEL:
+			// event.x; // Ammount scrolled horizontally
+			// // If negative, scrolled to the right
+			// // If positive, scrolled to the left
+
+			// event.y; // Ammount scrolled vertically
+			// // If negative, scrolled down
+			// // If positive, scrolled up
+			break;
+
+		default:
+			break;
+		}
 	}
 
 	if (!scrollUpdate) {
@@ -63,38 +142,36 @@ void InputManager::Update()
 
 bool InputManager::IsKeyDown(KeyCode key)
 {
-	return m_KeyPressedStatus[static_cast<int>(key)].previousKeyPressed != GLFW_PRESS && m_KeyPressedStatus[static_cast<int>(key)].keyPressed == GLFW_PRESS;
+	return !m_KeyPressedStatus[static_cast<int>(key)].previousKeyPressed && m_KeyPressedStatus[static_cast<int>(key)].keyPressed;
 }
 
 bool InputManager::IsKeyUp(KeyCode key)
 {
-	return m_KeyPressedStatus[static_cast<int>(key)].previousKeyPressed == GLFW_PRESS && m_KeyPressedStatus[static_cast<int>(key)].keyPressed != GLFW_PRESS;
+	return m_KeyPressedStatus[static_cast<int>(key)].previousKeyPressed && !m_KeyPressedStatus[static_cast<int>(key)].keyPressed;
 }
 
 bool InputManager::IsKeyHeld(KeyCode key)
 {
-	return m_KeyPressedStatus[static_cast<int>(key)].keyPressed == GLFW_PRESS;
+	return m_KeyPressedStatus[static_cast<int>(key)].keyPressed;
 }
 
 Vec2i InputManager::GetMousePosition() const
 {
-	double x, y;
-	glfwGetCursorPos(m_Window, &x, &y);
-	return Vec2i(x, y);
+	return m_MousePos;
 }
 
 bool InputManager::IsButtonDown(ButtonCode button) const
 {
-	return m_ButtonPressedStatus[static_cast<int>(button)].previousKeyPressed != GLFW_PRESS && m_ButtonPressedStatus[static_cast<int>(button)].keyPressed == GLFW_PRESS;
+	return !m_ButtonPressedStatus[static_cast<int>(button)].previousKeyPressed && m_ButtonPressedStatus[static_cast<int>(button)].keyPressed;
 }
 
 bool InputManager::IsButtonReleased(ButtonCode button) const
 {
-	return m_ButtonPressedStatus[static_cast<int>(button)].previousKeyPressed == GLFW_PRESS && m_ButtonPressedStatus[static_cast<int>(button)].keyPressed != GLFW_PRESS;
+	return m_ButtonPressedStatus[static_cast<int>(button)].previousKeyPressed && !m_ButtonPressedStatus[static_cast<int>(button)].keyPressed;
 }
 
 bool InputManager::IsButtonHeld(ButtonCode button) const
 {
-	return m_ButtonPressedStatus[static_cast<int>(button)].keyPressed == GLFW_PRESS;
+	return m_ButtonPressedStatus[static_cast<int>(button)].keyPressed;
 }
 }

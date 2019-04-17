@@ -58,7 +58,7 @@ void GraphicManager::FrameBufferResizeCallback(SDL_Window* window, int width, in
 
 void GraphicManager::InitVulkan()
 {
-	m_Instance = std::make_unique<Instance>();
+	m_Instance = std::make_unique<Instance>(m_Window.get()->GetWindow());
 	m_PhysicalDevice = std::make_unique<PhysicalDevice>(m_Instance.get());
 	m_Surface = std::make_unique<Surface>(m_Instance.get(), m_PhysicalDevice.get(), m_Window.get());
 	m_LogicalDevice = std::make_unique<LogicalDevice>(m_Instance.get(), m_PhysicalDevice.get(), m_Surface.get());
@@ -758,7 +758,7 @@ void GraphicManager::DrawFrame()
 		while (width == 0 || height == 0)
 		{
 			m_Window->GetFramebufferSize(&width, &height);
-			Window::WaitEvents();
+			m_Window->WaitEvents();
 		}
 
 		m_Engine.GetSettings().windowSize = Vec2i(width, height);

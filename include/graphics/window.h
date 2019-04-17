@@ -62,7 +62,7 @@ private:
 	SDL_Window* m_Window = nullptr;
 	SDL_Event m_Event;
 
-	bool m_ShouldQuit;
+	bool m_ShouldQuit = false;
 };
 }
 
