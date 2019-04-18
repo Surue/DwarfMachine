@@ -313,7 +313,6 @@ private:
 	std::vector<VkFramebuffer> m_SwapChainFrameBuffers;
 
 	std::shared_ptr<CommandPool> m_CommandPool = nullptr;
-	//std::vector<VkCommandBuffer> m_OldCommandBuffers;
 	std::vector< std::unique_ptr<CommandBuffer>> m_CommandBuffers;
 
 	std::vector<VkSemaphore> m_ImageAvailableSemaphores;

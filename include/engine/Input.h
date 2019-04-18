@@ -310,7 +310,7 @@ public:
 
 	bool IsKeyUp(KeyCode key);
 
-	bool IsKeyHeld(KeyCode key);
+	bool IsKeyHeld(KeyCode key) const;
 
 	Vec2i GetMousePosition() const;
 

@@ -122,14 +122,7 @@ void InputManager::Update()
 
 			// Brand new SDL2 event.
 		case SDL_MOUSEWHEEL:
-			// event.x; // Ammount scrolled horizontally
-			// // If negative, scrolled to the right
-			// // If positive, scrolled to the left
 			scrollX = event.wheel.y;
-
-			// event.y; // Ammount scrolled vertically
-			// // If negative, scrolled down
-			// // If positive, scrolled up
 			scrollY = event.wheel.y;
 
 			scrollUpdate = true;
@@ -159,7 +152,7 @@ bool InputManager::IsKeyUp(KeyCode key)
 	return m_KeyPressedUp[static_cast<int>(key)];
 }
 
-bool InputManager::IsKeyHeld(KeyCode key)
+bool InputManager::IsKeyHeld(KeyCode key) const
 {
 	if (!keyboard || keyboard == nullptr)
 		return false;
