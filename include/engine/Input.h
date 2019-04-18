@@ -296,12 +296,6 @@ enum class ButtonCode
 	MOUSE_MAX
 };
 
-struct KeyPressedStatus final
-{
-	bool previousKeyPressed; 
-	bool keyPressed;
-};
-
 class InputManager
 {
 public:
@@ -326,14 +320,16 @@ public:
 
 	bool IsButtonHeld(ButtonCode button) const;
 
-	inline static int scrollX = 0;
-	inline static int scrollY = 0;
+	int scrollX = 0;
+	int scrollY = 0;
 	inline static int scrollUpdate = false;
 private:
 	Engine& m_Engine;
 
-	std::vector<KeyPressedStatus> m_KeyPressedStatus{ KEYBOARD_SIZE };
-	std::vector<KeyPressedStatus> m_ButtonPressedStatus{ static_cast<int>(ButtonCode::MOUSE_MAX) };
+	bool m_KeyPressedUp[KEYBOARD_SIZE];
+	bool m_KeyPressedDown[KEYBOARD_SIZE];
+	bool m_ButtonUp[static_cast<int>(ButtonCode::MOUSE_MAX)];
+	bool m_ButtonDown[static_cast<int>(ButtonCode::MOUSE_MAX)];
 
 	SDL_Window* m_Window = nullptr;
 	bool m_WillQuit = false;

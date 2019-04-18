@@ -23,11 +23,16 @@ SOFTWARE.
 */
 
 #include <engine/Input.h>
+#include <iostream>
 
 namespace dm
 {
 
-InputManager::InputManager(Engine& engine) : m_Engine(engine)
+InputManager::InputManager(Engine& engine) : 
+	m_Engine(engine), 
+	keyboard(nullptr), 
+	mouse(0), 
+	m_MousePos(0, 0)
 {
 }
 
@@ -38,16 +43,16 @@ void InputManager::Init(SDL_Window* window)
 
 void InputManager::Update()
 {
-	for (size_t i = 0; i < m_KeyPressedStatus.size(); i++)
+	for (size_t i = 0; i < KEYBOARD_SIZE; i++)
 	{
-		m_KeyPressedStatus[i].previousKeyPressed = m_KeyPressedStatus[i].keyPressed;
-		//m_KeyPressedStatus[i].keyPressed = false;
+		m_KeyPressedDown[i] = false;
+		m_KeyPressedUp[i] = false;
 	}
 
-	for (size_t i = 0; i < m_ButtonPressedStatus.size(); i++)
+	for (size_t i = 0; i < static_cast<int>(ButtonCode::MOUSE_MAX); i++)
 	{
-		m_ButtonPressedStatus[i].previousKeyPressed = m_ButtonPressedStatus[i].keyPressed;
-		//m_ButtonPressedStatus[i].keyPressed = false;
+		m_ButtonUp[i] = false;
+		m_ButtonDown[i] = false;
 	}
 
 	SDL_Event event;
@@ -66,25 +71,25 @@ void InputManager::Update()
 
 		case SDL_KEYDOWN:
 		{
-			keyboard = SDL_GetKeyboardState(nullptr);
+			this->keyboard = SDL_GetKeyboardState(nullptr);
 
 			const int index = event.key.keysym.scancode;
-			m_KeyPressedStatus[index].keyPressed = true;
+			m_KeyPressedDown[index] = true;
 		}
 		break;
 
 		case SDL_KEYUP:
 		{
-			keyboard = SDL_GetKeyboardState(nullptr);
+			this->keyboard = SDL_GetKeyboardState(nullptr);
 
 			const int index = event.key.keysym.scancode;
-			m_KeyPressedStatus[index].keyPressed = false;
+			m_KeyPressedUp[index] = true;
 		}
 		break;
 
 		case SDL_MOUSEMOTION:
-			m_MousePos.x += event.motion.x /*+ cameraX*/;
-			m_MousePos.y += event.motion.y /*+ cameraY*/;
+			m_MousePos.x = -event.motion.x /*+ cameraX*/;
+			m_MousePos.y = -event.motion.y /*+ cameraY*/;
 			break;
 
 		case SDL_MOUSEBUTTONDOWN:
@@ -92,13 +97,13 @@ void InputManager::Update()
 				&(m_MousePos.y));
 
 			if (event.button.button == SDL_BUTTON_LEFT)
-				m_ButtonPressedStatus[static_cast<int>(ButtonCode::LEFT)].keyPressed = true;
+				m_ButtonDown[static_cast<int>(ButtonCode::LEFT)] = true;
 
 			else if (event.button.button == SDL_BUTTON_RIGHT)
-				m_ButtonPressedStatus[static_cast<int>(ButtonCode::RIGHT)].keyPressed = true;
+				m_ButtonDown[static_cast<int>(ButtonCode::RIGHT)] = true;
 
 			else if (event.button.button == SDL_BUTTON_MIDDLE)
-				m_ButtonPressedStatus[static_cast<int>(ButtonCode::MIDDLE)].keyPressed = true;
+				m_ButtonDown[static_cast<int>(ButtonCode::MIDDLE)] = true;
 			break;
 
 		case SDL_MOUSEBUTTONUP:
@@ -106,13 +111,13 @@ void InputManager::Update()
 				&(m_MousePos.y));
 
 			if (event.button.button == SDL_BUTTON_LEFT)
-				m_ButtonPressedStatus[static_cast<int>(ButtonCode::LEFT)].keyPressed = false;
+				m_ButtonUp[static_cast<int>(ButtonCode::LEFT)] = true;
 
 			else if (event.button.button == SDL_BUTTON_RIGHT)
-				m_ButtonPressedStatus[static_cast<int>(ButtonCode::RIGHT)].keyPressed = false;
+				m_ButtonUp[static_cast<int>(ButtonCode::RIGHT)] = true;
 
 			else if (event.button.button == SDL_BUTTON_MIDDLE)
-				m_ButtonPressedStatus[static_cast<int>(ButtonCode::MIDDLE)].keyPressed = false;
+				m_ButtonUp[static_cast<int>(ButtonCode::MIDDLE)] = true;
 			break;
 
 			// Brand new SDL2 event.
@@ -120,10 +125,14 @@ void InputManager::Update()
 			// event.x; // Ammount scrolled horizontally
 			// // If negative, scrolled to the right
 			// // If positive, scrolled to the left
+			scrollX = event.wheel.y;
 
 			// event.y; // Ammount scrolled vertically
 			// // If negative, scrolled down
 			// // If positive, scrolled up
+			scrollY = event.wheel.y;
+
+			scrollUpdate = true;
 			break;
 
 		default:
@@ -142,17 +151,22 @@ void InputManager::Update()
 
 bool InputManager::IsKeyDown(KeyCode key)
 {
-	return !m_KeyPressedStatus[static_cast<int>(key)].previousKeyPressed && m_KeyPressedStatus[static_cast<int>(key)].keyPressed;
+	return m_KeyPressedDown[static_cast<int>(key)];
 }
 
 bool InputManager::IsKeyUp(KeyCode key)
 {
-	return m_KeyPressedStatus[static_cast<int>(key)].previousKeyPressed && !m_KeyPressedStatus[static_cast<int>(key)].keyPressed;
+	return m_KeyPressedUp[static_cast<int>(key)];
 }
 
 bool InputManager::IsKeyHeld(KeyCode key)
 {
-	return m_KeyPressedStatus[static_cast<int>(key)].keyPressed;
+	if (!keyboard || keyboard == nullptr)
+		return false;
+
+	const auto sdlKey = static_cast<int>(key);
+
+	return keyboard[sdlKey] != 0;
 }
 
 Vec2i InputManager::GetMousePosition() const
@@ -162,16 +176,37 @@ Vec2i InputManager::GetMousePosition() const
 
 bool InputManager::IsButtonDown(ButtonCode button) const
 {
-	return !m_ButtonPressedStatus[static_cast<int>(button)].previousKeyPressed && m_ButtonPressedStatus[static_cast<int>(button)].keyPressed;
+	return m_ButtonDown[static_cast<int>(button)];
 }
 
 bool InputManager::IsButtonReleased(ButtonCode button) const
 {
-	return m_ButtonPressedStatus[static_cast<int>(button)].previousKeyPressed && !m_ButtonPressedStatus[static_cast<int>(button)].keyPressed;
+	return m_ButtonUp[static_cast<int>(button)];
 }
 
-bool InputManager::IsButtonHeld(ButtonCode button) const
+bool InputManager::IsButtonHeld(const ButtonCode button) const
 {
-	return m_ButtonPressedStatus[static_cast<int>(button)].keyPressed;
+	switch (button)
+	{
+	case ButtonCode::LEFT:
+		if (mouse & SDL_BUTTON(1))
+			return true;
+		break;
+
+	case ButtonCode::RIGHT:
+		if (mouse & SDL_BUTTON(3))
+			return true;
+		break;
+
+	case ButtonCode::MIDDLE:
+		if (mouse & SDL_BUTTON(2))
+			return true;
+		break;
+
+	default:
+		break;
+	}
+
+	return false;
 }
 }

@@ -120,11 +120,11 @@ void InputController::Update()
 				transform->position += camFront * moveSpeed;
 			}
 
-			if (InputManager::scrollY > 0.1f)
+			if (inputManager->scrollY > 0.1f)
 			{
 				transform->position += camFront;
 			}
-			else if (InputManager::scrollY < -0.1f)
+			else if (inputManager->scrollY < -0.1f)
 			{
 				transform->position -= camFront;
 			}
@@ -159,22 +159,22 @@ void InputController::Update()
 
 			if (inputManager->IsKeyHeld(KeyCode::A))
 			{
-				transform->rotation.y -= 0.01f;
+				transform->rotation.y -= 0.02f;
 			}
 
 			if (inputManager->IsKeyHeld(KeyCode::D))
 			{
-				transform->rotation.y += 0.01f;
+				transform->rotation.y += 0.02f;
 			}
 
 			if (inputManager->IsKeyHeld(KeyCode::W))
 			{
-				transform->rotation.x += 0.01f;
+				transform->rotation.x += 0.02f;
 			}
 
 			if (inputManager->IsKeyHeld(KeyCode::S))
 			{
-				transform->rotation.x -= 0.01f;
+				transform->rotation.x -= 0.02f;
 			}
 		}
 			break;
