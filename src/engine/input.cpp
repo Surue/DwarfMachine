@@ -88,8 +88,8 @@ void InputManager::Update()
 		break;
 
 		case SDL_MOUSEMOTION:
-			m_MousePos.x = -event.motion.x /*+ cameraX*/;
-			m_MousePos.y = -event.motion.y /*+ cameraY*/;
+			m_MousePos.x = -event.motion.x ;
+			m_MousePos.y = -event.motion.y;
 			break;
 
 		case SDL_MOUSEBUTTONDOWN:

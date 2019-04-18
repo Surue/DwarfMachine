@@ -88,22 +88,6 @@ set(SDL_SHARED OFF)
 add_subdirectory(${SDL_DIR})
 include_directories(${SDL2_DIR}/include ${SDL2_DIR}/src)
 
-#GLFW
-find_package(glfw3 3.2 REQUIRED)
-if(NOT TARGET glfw)
-	set(_DWARF_MACHINE_ALL_SYSTEM_LIB false)
-	# Used later to define as a pre-build dependency
-	# The glfw3Config.cmake file doesn't define it automatically
-	set(glfw_FOUND false)
-	foreach(_glfw3_option "GLFW_BUILD_TESTS" "GLFW_BUILD_EXAMPLES" "GLFW_BUILD_DOCS" "GLFW_INSTALL" "GLFW_VULKAN_STATIC")
-		set(${_glfw3_option} OFF CACHE INTERNAL "")
-	endforeach()
-
-	add_subdirectory(${PROJECT_SOURCE_DIR}/externals/glfw)
-else()
-	set(glfw_FOUND true)
-endif()
-
 # SPIRV is needed (from Glslang)
 # NOTE: End-users can pass -DSPIRV_ROOT=/some/path to find the lib
 set(SPIRV_ROOT CACHE PATH "An optional path to the system's SPIRV root dir to help find it. Ignore if building Glslang locally.")
@@ -178,8 +162,6 @@ target_link_libraries(DWARF_MACHINE_COMMON PUBLIC ${DWARF_MACHINE_LIBRARIES})
 set_property(TARGET DWARF_MACHINE_COMMON PROPERTY CXX_STANDARD 17)
 
 target_link_libraries(DWARF_MACHINE_COMMON PUBLIC Vulkan::Vulkan)
-
-target_link_libraries(DWARF_MACHINE_COMMON PUBLIC glfw)
 
 target_link_libraries(DWARF_MACHINE_COMMON PUBLIC SDL2-static)
 
