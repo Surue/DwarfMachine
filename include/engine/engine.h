@@ -44,6 +44,8 @@ struct EngineSettings
 class Engine
 {
 public:
+	static Engine *Get() { return m_Instance; }
+
 	Engine();
 	Engine(EngineSettings engineSettings);
 
@@ -71,6 +73,8 @@ private:
 	void MainLoop();
 
 	void Destroy();
+
+	static Engine *m_Instance;
 
 	EngineSettings m_Settings;
 

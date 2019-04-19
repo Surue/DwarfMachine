@@ -109,6 +109,9 @@ public:
 	 */
 	Window* GetWindow() const;
 
+	const PhysicalDevice* GetPhysicalDevice() const { return m_PhysicalDevice.get(); }
+	const LogicalDevice* GetLogicalDevice() const { return m_LogicalDevice.get(); }
+
 private:
 	/**
 	 * \brief Init a GLFW window

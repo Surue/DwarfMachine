@@ -32,8 +32,12 @@ SOFTWARE.
 
 namespace dm
 {
+Engine *Engine::m_Instance = nullptr;
+
 Engine::Engine()
 {
+	m_Instance = this;
+
 	m_Settings = EngineSettings();
 	m_Settings.windowSize = Vec2i(800, 600);
 

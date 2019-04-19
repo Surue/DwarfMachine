@@ -29,6 +29,8 @@ SOFTWARE.
 
 namespace dm
 {
+class LogicalDevice;
+
 class Buffer
 {
 public:
@@ -42,9 +44,9 @@ public:
 	Buffer(VkDeviceSize &size, const VkBufferUsageFlags &usage, const VkMemoryPropertyFlags &properties, const void *data = nullptr);
 	virtual ~Buffer();
 
-	void MapMemory(void **data);
+	void MapMemory(void **data) const;
 
-	void UnmapMemory();
+	void UnmapMemory() const;
 
 	const VkDeviceSize &GetSize() const { return m_Size; }
 
