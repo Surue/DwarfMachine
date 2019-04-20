@@ -111,6 +111,8 @@ public:
 
 	const PhysicalDevice* GetPhysicalDevice() const { return m_PhysicalDevice.get(); }
 	const LogicalDevice* GetLogicalDevice() const { return m_LogicalDevice.get(); }
+	std::shared_ptr<CommandPool> GetCommandPool() const { return m_CommandPool; }
+	const Surface* GetSurface() const { return m_Surface.get(); }
 
 private:
 	/**

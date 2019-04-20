@@ -24,32 +24,41 @@ SOFTWARE.
 
 #include <graphics/command_buffer.h>
 #include <graphics/logical_device.h>
+#include <engine/engine.h>
+#include <graphics/graphic_manager.h>
 
 namespace dm
 {
-CommandBuffer::CommandBuffer(const std::shared_ptr<CommandPool> commandPool, LogicalDevice* logicalDevice, const VkQueueFlagBits& queueType,
-		const VkCommandBufferLevel& bufferLevel):
-	m_CommandPool(commandPool),
+CommandBuffer::CommandBuffer(const bool &begin, const VkQueueFlagBits& queueType, const VkCommandBufferLevel& bufferLevel):
+	m_CommandPool(nullptr),
 	m_QueueType(queueType), 
 	m_CommandBuffer(nullptr), 
-	m_Running(false),
-	m_LogicalDevice(logicalDevice)
+	m_Running(false)
 {
+	auto logicalDevice = Engine::Get()->GetGraphicManager()->GetLogicalDevice();
+	m_CommandPool = Engine::Get()->GetGraphicManager()->GetCommandPool();
+
 	VkCommandBufferAllocateInfo allocInfo = {};
 	allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
 	allocInfo.commandPool = *m_CommandPool;
 	allocInfo.level = bufferLevel;
 	allocInfo.commandBufferCount = 1;
 
-	if (vkAllocateCommandBuffers(*m_LogicalDevice, &allocInfo, &m_CommandBuffer) != VK_SUCCESS)
+	if (vkAllocateCommandBuffers(*logicalDevice, &allocInfo, &m_CommandBuffer) != VK_SUCCESS)
 	{
 		throw std::runtime_error("failed to allocate command buffers!");
+	}
+
+	if(begin)
+	{
+		Begin();
 	}
 }
 
 CommandBuffer::~CommandBuffer()
 {
-	vkFreeCommandBuffers(*m_LogicalDevice, m_CommandPool->GetCommandPool(), 1, &m_CommandBuffer);
+	const auto logicalDevice = Engine::Get()->GetGraphicManager()->GetLogicalDevice();
+	vkFreeCommandBuffers(*logicalDevice, m_CommandPool->GetCommandPool(), 1, &m_CommandBuffer);
 }
 
 void CommandBuffer::Begin(const VkCommandBufferUsageFlags& usage)
@@ -88,6 +97,7 @@ void CommandBuffer::End()
 
 void CommandBuffer::SubmitIdle()
 {
+	const auto logicalDevice = Engine::Get()->GetGraphicManager()->GetLogicalDevice();
 	auto queueSelected = GetQueue();
 
 	if(m_Running)
@@ -104,21 +114,22 @@ void CommandBuffer::SubmitIdle()
 	fenceCreateInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
 
 	VkFence fence;
-	vkCreateFence(*m_LogicalDevice, &fenceCreateInfo, nullptr, &fence);
-	vkResetFences(*m_LogicalDevice, 1, &fence);
+	vkCreateFence(*logicalDevice, &fenceCreateInfo, nullptr, &fence);
+	vkResetFences(*logicalDevice, 1, &fence);
 
-	if (vkQueueSubmit(m_LogicalDevice->GetGraphicsQueue(), 1, &submitInfo, fence) != VK_SUCCESS)
+	if (vkQueueSubmit(logicalDevice->GetGraphicsQueue(), 1, &submitInfo, fence) != VK_SUCCESS)
 	{
 		throw std::runtime_error("failed to submit draw command buffer");
 	}
 
-	vkWaitForFences(*m_LogicalDevice, 1, &fence, VK_TRUE, std::numeric_limits<uint64_t>::max());
+	vkWaitForFences(*logicalDevice, 1, &fence, VK_TRUE, std::numeric_limits<uint64_t>::max());
 
-	vkDestroyFence(*m_LogicalDevice, fence, nullptr);
+	vkDestroyFence(*logicalDevice, fence, nullptr);
 }
 
 void CommandBuffer::Submit(const VkSemaphore& waitSemaphore, const VkSemaphore& signalSemaphore, VkFence fence)
 {
+	const auto logicalDevice = Engine::Get()->GetGraphicManager()->GetLogicalDevice();
 	const auto queueSelected = GetQueue();
 
 	if(m_Running)
@@ -149,7 +160,7 @@ void CommandBuffer::Submit(const VkSemaphore& waitSemaphore, const VkSemaphore& 
 
 	if (fence != VK_NULL_HANDLE)
 	{
-		vkResetFences(*m_LogicalDevice, 1, &fence);
+		vkResetFences(*logicalDevice, 1, &fence);
 	}
 
 	vkQueueSubmit(queueSelected, 1, &submitInfo, fence);
@@ -157,12 +168,13 @@ void CommandBuffer::Submit(const VkSemaphore& waitSemaphore, const VkSemaphore& 
 
 VkQueue CommandBuffer::GetQueue() const
 {
+	const auto logicalDevice = Engine::Get()->GetGraphicManager()->GetLogicalDevice();
 	switch(m_QueueType)
 	{
 	case VK_QUEUE_GRAPHICS_BIT:
-		return m_LogicalDevice->GetGraphicsQueue();
+		return logicalDevice->GetGraphicsQueue();
 	case VK_QUEUE_COMPUTE_BIT:
-		return m_LogicalDevice->GetComputeQueue();
+		return logicalDevice->GetComputeQueue();
 	default: 
 		return nullptr;
 	}

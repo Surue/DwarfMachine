@@ -650,7 +650,7 @@ void GraphicManager::CreateCommandBuffers()
 
 	for (size_t i = 0; i < m_CommandBuffers.size(); i++)
 	{
-		m_CommandBuffers[i] = std::make_unique<CommandBuffer>(m_CommandPool, m_LogicalDevice.get());
+		m_CommandBuffers[i] = std::make_unique<CommandBuffer>(false);
 		m_CommandBuffers[i]->Begin(VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT);
 
 		VkRenderPassBeginInfo renderPassInfo = {};
@@ -1394,8 +1394,6 @@ void GraphicManager::LoadModel()
 
 void GraphicManager::GenerateMipmaps(const VkImage image, const VkFormat imageFormat, const int32_t texWidth, const int32_t texHeight, const uint32_t mipLevels) const
 {
-	//TODO ce genre de fonction ne devrait pas être fait en runtime, il faudrait trouver un autre moyen pour stocker les mipmaps
-
 	VkFormatProperties formatProperties;
 	vkGetPhysicalDeviceFormatProperties(m_PhysicalDevice->GetPhysicalDevice(), imageFormat, &formatProperties);
 

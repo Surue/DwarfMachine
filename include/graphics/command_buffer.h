@@ -36,7 +36,7 @@ class LogicalDevice;
 
 class CommandBuffer {
 public:
-	CommandBuffer(std::shared_ptr<CommandPool> commandPool ,LogicalDevice* logicalDevice, const VkQueueFlagBits &queueType = VK_QUEUE_GRAPHICS_BIT, const VkCommandBufferLevel &bufferLevel = VK_COMMAND_BUFFER_LEVEL_PRIMARY);
+	explicit CommandBuffer(const bool &begin = true, const VkQueueFlagBits &queueType = VK_QUEUE_GRAPHICS_BIT, const VkCommandBufferLevel &bufferLevel = VK_COMMAND_BUFFER_LEVEL_PRIMARY);
 	~CommandBuffer();
 
 	void Begin(const VkCommandBufferUsageFlags &usage = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT);
@@ -59,8 +59,6 @@ private:
 	VkQueueFlagBits m_QueueType;
 	VkCommandBuffer m_CommandBuffer;
 	bool m_Running;
-
-	LogicalDevice* m_LogicalDevice;
 };
 }
 
