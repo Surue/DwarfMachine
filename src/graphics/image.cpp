@@ -23,6 +23,7 @@ SOFTWARE.
 */
 
 #include <graphics/image.h>
+#include <graphics/buffer.h>
 #include <graphics/graphic_manager.h>
 
 namespace dm
@@ -119,5 +120,25 @@ std::unique_ptr<uint8_t[]> Image::GetPixels(VkExtent3D& extent, const uint32_t& 
 	vkDestroyImage(*logicalDevice, dstImage, nullptr);
 
 	return pixels;
+}
+
+void Image::SetPixels(const uint8_t* pixels, const uint32_t& layerCount, const uint32_t& baseArrayLayer) const
+{
+	VkDeviceSize imageSize = m_Extent.width * m_Extent.height * 4;
+	auto stagingBuffer = Buffer(imageSize, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+
+	void *data;
+	stagingBuffer.MapMemory(&data);
+	std::memcpy(data, pixels, stagingBuffer.GetSize());
+	stagingBuffer.UnmapMemory();
+
+
+	CopyBufferToImage(stagingBuffer.GetBuffer(), m_Image, m_Extent, layerCount, baseArrayLayer);
+}
+
+std::unique_ptr<uint8_t[]> Image::LoadPixels(const std::string& filename, uint32_t& width, uint32_t& height,
+	uint32_t& components, VkFormat& format)
+{
+
 }
 }

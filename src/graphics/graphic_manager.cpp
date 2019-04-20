@@ -880,9 +880,9 @@ void GraphicManager::CreateVertexBuffer()
 	             stagingBufferMemory);
 
 	void* data;
-	vkMapMemory(m_LogicalDevice->GetLogicalDevice(), stagingBufferMemory, 0, bufferSize, 0, &data);
+	vkMapMemory(*m_LogicalDevice, stagingBufferMemory, 0, bufferSize, 0, &data);
 	memcpy(data, m_Vertices.data(), static_cast<size_t>(bufferSize));
-	vkUnmapMemory(m_LogicalDevice->GetLogicalDevice(), stagingBufferMemory);
+	vkUnmapMemory(*m_LogicalDevice, stagingBufferMemory);
 
 	CreateBuffer(bufferSize, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT,
 	             VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, m_VertexBuffer, m_VertexBufferMemory);

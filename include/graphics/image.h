@@ -46,7 +46,7 @@ public:
 
 	std::unique_ptr<uint8_t[]> GetPixels(VkExtent3D &extent, const uint32_t &mipLevel = 0, const uint32_t &arrayLayer = 0) const;
 
-	void SetPixels(const uint8_t *pixels, const uint32_t &layerCount, const uint32_t &baseArrayLayer);
+	void SetPixels(const uint8_t *pixels, const uint32_t &layerCount, const uint32_t &baseArrayLayer) const;
 
 	const VkExtent3D &GetExtent() const { return m_Extent; }
 
