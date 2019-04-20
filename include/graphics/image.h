@@ -70,6 +70,12 @@ public:
 
 	const VkImage &GetImage() const { return m_Image; }
 
+	const VkDeviceMemory &GetMemory() { return m_Memory; }
+
+	VkSampler &GetSampler() { return m_Sampler; }
+
+	VkImageView &GetView() { return m_View; }
+
 	static std::unique_ptr<uint8_t[]> LoadPixels(const std::string &filename, uint32_t &width, uint32_t &height, uint32_t &components, VkFormat &format);
 
 	static void WritePixels(const std::string &filename, const uint8_t *pixels, const int32_t &width, const uint32_t &height, const int32_t &components = 4);

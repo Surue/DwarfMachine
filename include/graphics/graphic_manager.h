@@ -36,6 +36,7 @@ SOFTWARE.
 #include <graphics/physical_device.h>
 #include <graphics/logical_device.h>
 #include <graphics/command_buffer.h>
+#include <graphics/image.h>
 
 #include <SDL.h>
 
@@ -346,11 +347,12 @@ private:
 
 	//Textures
 	uint32_t m_MipLevels{};
-	VkImage m_TextureImage{};
-	VkDeviceMemory m_TextureImageMemory{};
-	VkImageView m_TextureImageView{};
+	std::unique_ptr<Image> textureImage = nullptr;
+	//VkImage m_TextureImage{};
+	//VkDeviceMemory m_TextureImageMemory{};
+	//VkImageView m_TextureImageView{};
 
-	VkSampler m_TextureSampler{};
+	//VkSampler m_TextureSampler{};
 
 	//Depth
 	VkImage m_DepthImage{};

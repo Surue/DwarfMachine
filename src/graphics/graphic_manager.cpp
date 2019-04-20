@@ -35,6 +35,7 @@ SOFTWARE.
 #include <graphics/graphic_manager.h>
 #include <engine/Input.h>
 #include <iostream>
+#include <graphics/buffer.h>
 #include <graphics/window.h>
 
 namespace dm
@@ -100,11 +101,11 @@ void GraphicManager::Destroy()
 	//Destroy swap chain
 	DestroySwapChain();
 
-	vkDestroySampler(*m_LogicalDevice, m_TextureSampler, nullptr);
-	vkDestroyImageView(*m_LogicalDevice, m_TextureImageView, nullptr);
+	//vkDestroySampler(*m_LogicalDevice, m_TextureSampler, nullptr);
+	//vkDestroyImageView(*m_LogicalDevice, m_TextureImageView, nullptr);
 
-	vkDestroyImage(*m_LogicalDevice, m_TextureImage, nullptr);
-	vkFreeMemory(*m_LogicalDevice, m_TextureImageMemory, nullptr);
+	//vkDestroyImage(*m_LogicalDevice, m_TextureImage, nullptr);
+	//vkFreeMemory(*m_LogicalDevice, m_TextureImageMemory, nullptr);
 
 	vkDestroyDescriptorPool(*m_LogicalDevice, m_DescriptorPool, nullptr);
 
@@ -1028,8 +1029,8 @@ void GraphicManager::CreateDescriptorSets()
 
 		VkDescriptorImageInfo imageInfo = {};
 		imageInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-		imageInfo.imageView = m_TextureImageView;
-		imageInfo.sampler = m_TextureSampler;
+		imageInfo.imageView = textureImage->GetView();
+		imageInfo.sampler = textureImage->GetSampler();
 
 		std::array<VkWriteDescriptorSet, 2> descriptorWrites = {};
 
@@ -1060,8 +1061,8 @@ void GraphicManager::CreateTextureImage()
 
 	m_MipLevels = static_cast<uint32_t>(std::floor(std::log2(std::max(texWidth, texHeight)))) + 1;
 
-	const VkDeviceSize imageSize = texWidth * texHeight * 4;
-
+	 VkDeviceSize imageSize = texWidth * texHeight * 4;
+	/*
 	if(!pixels)
 	{
 		throw std::runtime_error("failed to load texture image");
@@ -1079,15 +1080,26 @@ void GraphicManager::CreateTextureImage()
 
 	stbi_image_free(pixels);
 
-	CreateImage(texWidth, texHeight, m_MipLevels, VK_SAMPLE_COUNT_1_BIT, VK_FORMAT_R8G8B8A8_UNORM, VK_IMAGE_TILING_OPTIMAL, VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, m_TextureImage, m_TextureImageMemory);
+	CreateImage(texWidth, texHeight, m_MipLevels, VK_SAMPLE_COUNT_1_BIT, VK_FORMAT_R8G8B8A8_UNORM, VK_IMAGE_TILING_OPTIMAL, VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, m_TextureImage, m_TextureImageMemory);*/
 
-	TransitionImageLayout(m_TextureImage, VK_FORMAT_R8G8B8A8_UNORM, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, m_MipLevels);
+	auto buffer = Buffer(imageSize, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, nullptr);
+	const VkExtent3D extent{ texWidth, texHeight, 1 };
+	textureImage = std::make_unique<Image>(extent, VK_IMAGE_TYPE_2D, VK_FORMAT_R8G8B8A8_UNORM, VK_SAMPLE_COUNT_1_BIT, VK_IMAGE_TILING_OPTIMAL, VK_NULL_HANDLE, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, m_MipLevels, 1);
+	Image::TransitionImageLayout(textureImage->GetImage(), VK_FORMAT_R8G8B8A8_UNORM, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, VK_IMAGE_ASPECT_COLOR_BIT, textureImage->GetMipLevels(), 0, 1, 0);
+	
+	textureImage->SetPixels(pixels, textureImage->GetArrayLevels(), 0);
+	
+	Image::CopyBufferToImage(buffer.GetBuffer(), textureImage->GetImage(), textureImage->GetExtent(), textureImage->GetArrayLevels(), 0);
+	Image::CreateMipmaps(textureImage->GetImage(), textureImage->GetExtent(), textureImage->GetFormat(), textureImage->GetLayout(), textureImage->GetMipLevels(), 0, textureImage->GetArrayLevels());
+	
+	std::cout << "ici\n";
+	/*TransitionImageLayout(m_TextureImage, VK_FORMAT_R8G8B8A8_UNORM, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, m_MipLevels);
 	CopyBufferToImage(stagingBuffer, m_TextureImage, static_cast<uint32_t>(texWidth), static_cast<uint32_t>(texHeight));
 	
 	GenerateMipmaps(m_TextureImage, VK_FORMAT_R8G8B8A8_UNORM, texWidth, texHeight, m_MipLevels);
 
 	vkDestroyBuffer(m_LogicalDevice->GetLogicalDevice(), stagingBuffer, nullptr);
-	vkFreeMemory(m_LogicalDevice->GetLogicalDevice(), stagingBufferMemory, nullptr);
+	vkFreeMemory(m_LogicalDevice->GetLogicalDevice(), stagingBufferMemory, nullptr);*/
 }
 
 void GraphicManager::CreateImage(const uint32_t width, const uint32_t height, const uint32_t mipLevels, const VkSampleCountFlagBits numSamples,
@@ -1262,7 +1274,8 @@ void GraphicManager::CopyBufferToImage(const VkBuffer buffer, const VkImage imag
 
 void GraphicManager::CreateTextureImageView()
 {
-	m_TextureImageView = CreateImageView(m_TextureImage, VK_FORMAT_R8G8B8A8_UNORM, VK_IMAGE_ASPECT_COLOR_BIT, m_MipLevels);
+	//m_TextureImageView = CreateImageView(m_TextureImage, VK_FORMAT_R8G8B8A8_UNORM, VK_IMAGE_ASPECT_COLOR_BIT, m_MipLevels);
+	Image::CreateImageView(textureImage->GetImage(), textureImage->GetView(), VK_IMAGE_VIEW_TYPE_2D, VK_FORMAT_R8G8B8A8_UNORM, VK_IMAGE_ASPECT_COLOR_BIT, textureImage->GetMipLevels(), 0, 1, 0);
 }
 
 VkImageView GraphicManager::CreateImageView(const VkImage image, const VkFormat format, const VkImageAspectFlags aspectFlags, const uint32_t mipLevels) const
@@ -1287,27 +1300,29 @@ VkImageView GraphicManager::CreateImageView(const VkImage image, const VkFormat 
 }
 
 void GraphicManager::CreateTextureSampler() {
-	VkSamplerCreateInfo samplerInfo = {};
-	samplerInfo.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
-	samplerInfo.magFilter = VK_FILTER_LINEAR;
-	samplerInfo.minFilter = VK_FILTER_LINEAR;
-	samplerInfo.addressModeU = VK_SAMPLER_ADDRESS_MODE_REPEAT;
-	samplerInfo.addressModeV = VK_SAMPLER_ADDRESS_MODE_REPEAT;
-	samplerInfo.addressModeW = VK_SAMPLER_ADDRESS_MODE_REPEAT;
-	samplerInfo.anisotropyEnable = VK_TRUE;
-	samplerInfo.maxAnisotropy = 16;
-	samplerInfo.borderColor = VK_BORDER_COLOR_INT_OPAQUE_BLACK;
-	samplerInfo.unnormalizedCoordinates = VK_FALSE;
-	samplerInfo.compareEnable = VK_FALSE;
-	samplerInfo.compareOp = VK_COMPARE_OP_ALWAYS;
-	samplerInfo.mipmapMode = VK_SAMPLER_MIPMAP_MODE_LINEAR;
-	samplerInfo.minLod = 0;
-	samplerInfo.maxLod = static_cast<float>(m_MipLevels);
-	samplerInfo.mipLodBias = 0;
+	//VkSamplerCreateInfo samplerInfo = {};
+	//samplerInfo.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
+	//samplerInfo.magFilter = VK_FILTER_LINEAR;
+	//samplerInfo.minFilter = VK_FILTER_LINEAR;
+	//samplerInfo.addressModeU = VK_SAMPLER_ADDRESS_MODE_REPEAT;
+	//samplerInfo.addressModeV = VK_SAMPLER_ADDRESS_MODE_REPEAT;
+	//samplerInfo.addressModeW = VK_SAMPLER_ADDRESS_MODE_REPEAT;
+	//samplerInfo.anisotropyEnable = VK_TRUE;
+	//samplerInfo.maxAnisotropy = 16;
+	//samplerInfo.borderColor = VK_BORDER_COLOR_INT_OPAQUE_BLACK;
+	//samplerInfo.unnormalizedCoordinates = VK_FALSE;
+	//samplerInfo.compareEnable = VK_FALSE;
+	//samplerInfo.compareOp = VK_COMPARE_OP_ALWAYS;
+	//samplerInfo.mipmapMode = VK_SAMPLER_MIPMAP_MODE_LINEAR;
+	//samplerInfo.minLod = 0;
+	//samplerInfo.maxLod = static_cast<float>(m_MipLevels);
+	//samplerInfo.mipLodBias = 0;
 
-	if (vkCreateSampler(m_LogicalDevice->GetLogicalDevice(), &samplerInfo, nullptr, &m_TextureSampler) != VK_SUCCESS) {
-		throw std::runtime_error("failed to create texture sampler!");
-	}
+	//if (vkCreateSampler(m_LogicalDevice->GetLogicalDevice(), &samplerInfo, nullptr, &m_TextureSampler) != VK_SUCCESS) {
+	//	throw std::runtime_error("failed to create texture sampler!");
+	//}
+
+	Image::CreateImageSampler(textureImage->GetSampler(), VK_FILTER_LINEAR, VK_SAMPLER_ADDRESS_MODE_REPEAT, true, textureImage->GetMipLevels());
 }
 
 void GraphicManager::CreateDepthResources()
