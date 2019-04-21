@@ -39,6 +39,7 @@ SOFTWARE.
 #include <graphics/image.h>
 
 #include <SDL.h>
+#include "image2d.h"
 
 namespace dm
 {
@@ -268,11 +269,7 @@ private:
 
 	void CopyBufferToImage(VkBuffer buffer, VkImage image, uint32_t width, uint32_t height) const;
 
-	void CreateTextureImageView();
-
 	VkImageView CreateImageView(VkImage image, VkFormat format, VkImageAspectFlags aspectFlags, uint32_t mipLevels) const;
-
-	void CreateTextureSampler();
 
 	void CreateDepthResources();
 
@@ -346,13 +343,7 @@ private:
 	std::vector<VkDescriptorSet> m_DescriptorSets;
 
 	//Textures
-	uint32_t m_MipLevels{};
-	std::unique_ptr<Image> textureImage = nullptr;
-	//VkImage m_TextureImage{};
-	//VkDeviceMemory m_TextureImageMemory{};
-	//VkImageView m_TextureImageView{};
-
-	//VkSampler m_TextureSampler{};
+	std::shared_ptr<Image2d> m_TextureImage = nullptr;
 
 	//Depth
 	VkImage m_DepthImage{};
@@ -360,9 +351,7 @@ private:
 	VkImageView m_DepthImageView{};
 
 	//Multisample Anti Aliasing 
-	VkImage m_ColorImage{};
-	VkDeviceMemory m_ColorImageMemory{};
-	VkImageView m_ColorImageView{};
+	std::shared_ptr<Image2d> m_ColorImage = nullptr;
 
 	Engine& m_Engine;
 

@@ -26,14 +26,15 @@ SOFTWARE.
 #include "engine/engine.h"
 #include <graphics/graphic_manager.h>
 #include "graphics/buffer.h"
+#include <iostream>
 
 namespace dm
 {
 std::shared_ptr<Image2d> Image2d::Create(const std::string& filename, const VkFilter& filter,
 	const VkSamplerAddressMode& addressMode, const bool& anisotropic, const bool& mipmap)
 {
-	auto result = std::make_shared<Image2d>(filename, filter, addressMode, anisotropic, mipmap, false);
-	return result;
+	//auto result = std::make_shared<Image2d>(filename, filter, addressMode, anisotropic, mipmap, true);
+	return std::make_shared<Image2d>(filename, filter, addressMode, anisotropic, mipmap, true);
 }
 
 Image2d::Image2d(std::string filename, const VkFilter& filter, const VkSamplerAddressMode& addressMode,
@@ -86,6 +87,7 @@ Image2d::Image2d(const uint32_t& width, const uint32_t& height, std::unique_ptr<
 	m_View(VK_NULL_HANDLE),
 	m_Format(format)
 {
+	if (usage & VK_IMAGE_USAGE_TRANSIENT_ATTACHMENT_BIT) { m_Usage = usage; }
 	Image2d::Load();
 }
 
@@ -180,6 +182,49 @@ void Image2d::Load()
 	m_LoadPixels = nullptr;
 }
 
-std::unique_ptr<uint8_t[]> Image2d::GetPixels(VkExtent3D& extent, const uint32_t& mipLevel) const {}
-void Image2d::SetPixels(const uint8_t* pixels, const uint32_t& layerCount, const uint32_t& baseArrayLayer) {}
+std::unique_ptr<uint8_t[]> Image2d::GetPixels(VkExtent3D& extent, const uint32_t& mipLevel) const
+{
+	auto logicalDevice = Engine::Get()->GetGraphicManager()->GetLogicalDevice();
+
+	extent.width = int32_t(m_Width >> mipLevel);
+	extent.height = int32_t(m_Height >> mipLevel);
+	extent.depth = 1;
+
+	VkImage dstImage;
+	VkDeviceMemory dstImageMemory;
+	Image::CopyImage(m_Image, dstImage, dstImageMemory, m_Format, extent, m_Layout, mipLevel, 0);
+
+	VkImageSubresource dstImageSubresource = {};
+	dstImageSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+	dstImageSubresource.mipLevel = 0;
+	dstImageSubresource.arrayLayer = 0;
+
+	VkSubresourceLayout dstSubresourceLayout;
+	vkGetImageSubresourceLayout(*logicalDevice, dstImage, &dstImageSubresource, &dstSubresourceLayout);
+
+	auto pixels = std::make_unique<uint8_t[]>(dstSubresourceLayout.size);
+
+	void *data;
+	vkMapMemory(*logicalDevice, dstImageMemory, dstSubresourceLayout.offset, dstSubresourceLayout.size, 0, &data);
+	std::memcpy(pixels.get(), data, static_cast<size_t>(dstSubresourceLayout.size));
+	vkUnmapMemory(*logicalDevice, dstImageMemory);
+
+	vkFreeMemory(*logicalDevice, dstImageMemory, nullptr);
+	vkDestroyImage(*logicalDevice, dstImage, nullptr);
+
+	return pixels;
+}
+void Image2d::SetPixels(const uint8_t* pixels, const uint32_t& layerCount, const uint32_t& baseArrayLayer)
+{
+	VkDeviceSize imageSize = m_Width * m_Height * m_Components;
+	auto stagingBuffer = Buffer(imageSize, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+
+	void *data;
+	stagingBuffer.MapMemory(&data);
+	std::memcpy(data, pixels, stagingBuffer.GetSize());
+	stagingBuffer.UnmapMemory();
+
+
+	Image::CopyBufferToImage(stagingBuffer.GetBuffer(), m_Image, { m_Width, m_Height, 1 }, layerCount, baseArrayLayer);
+}
 }

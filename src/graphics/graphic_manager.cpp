@@ -76,8 +76,6 @@ void GraphicManager::InitVulkan()
 	CreateDepthResources();
 	CreateFrameBuffers();
 	CreateTextureImage();
-	CreateTextureImageView();
-	CreateTextureSampler();
 	LoadModel();
 	CreateVertexBuffer();
 	CreateIndexBuffer();
@@ -625,7 +623,7 @@ void GraphicManager::CreateFrameBuffers()
 	for (size_t i = 0; i < m_SwapChainImageViews.size(); i++) {
 		std::array<VkImageView, 3> attachments = 
 		{
-			m_ColorImageView,
+			colorImage->GetView(),
 			m_DepthImageView,
 			m_SwapChainImageViews[i]
 		};
@@ -794,10 +792,6 @@ void GraphicManager::RecreateSwapChain()
 
 void GraphicManager::DestroySwapChain()
 {
-	vkDestroyImageView(*m_LogicalDevice, m_ColorImageView, nullptr);
-	vkDestroyImage(*m_LogicalDevice, m_ColorImage, nullptr);
-	vkFreeMemory(*m_LogicalDevice, m_ColorImageMemory, nullptr);
-
 	vkDestroyImageView(*m_LogicalDevice, m_DepthImageView, nullptr);
 	vkDestroyImage(*m_LogicalDevice, m_DepthImage, nullptr);
 	vkFreeMemory(*m_LogicalDevice, m_DepthImageMemory, nullptr);
@@ -1056,59 +1050,7 @@ void GraphicManager::CreateDescriptorSets()
 
 void GraphicManager::CreateTextureImage()
 {
-	int texWidth, texHeight, texChannels;
-	auto pixels = stbi_load(TEXTURE_PATH.c_str(), &texWidth, &texHeight, &texChannels, STBI_rgb_alpha);
-
-	m_MipLevels = static_cast<uint32_t>(std::floor(std::log2(std::max(texWidth, texHeight)))) + 1;
-
-	 VkDeviceSize imageSize = texWidth * texHeight * 4;
-	/*
-	if(!pixels)
-	{
-		throw std::runtime_error("failed to load texture image");
-	}
-
-	VkBuffer stagingBuffer;
-	VkDeviceMemory stagingBufferMemory;
-
-	CreateBuffer(imageSize, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, stagingBuffer, stagingBufferMemory);
-
-	void* data;
-	vkMapMemory(m_LogicalDevice->GetLogicalDevice(), stagingBufferMemory, 0, imageSize, 0, &data);
-	memcpy(data, pixels, static_cast<size_t>(imageSize));
-	vkUnmapMemory(m_LogicalDevice->GetLogicalDevice(), stagingBufferMemory);
-
-	CreateImage(texWidth, texHeight, m_MipLevels, VK_SAMPLE_COUNT_1_BIT, VK_FORMAT_R8G8B8A8_UNORM, VK_IMAGE_TILING_OPTIMAL, VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, m_TextureImage, m_TextureImageMemory);*/
-	
-	stbi_image_free(pixels);
-
-	uint32_t width, height, components;
-	VkFormat format;
-	std::unique_ptr<uint8_t[]> pixel = Image::LoadPixels(TEXTURE_PATH.c_str(), width, height, components, format);
-
-	auto buffer = Buffer(imageSize, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, nullptr);
-	const VkExtent3D extent{ texWidth, texHeight, 1 };
-	textureImage = std::make_unique<Image>(extent, VK_IMAGE_TYPE_2D, VK_FORMAT_R8G8B8A8_UNORM, VK_SAMPLE_COUNT_1_BIT, VK_IMAGE_TILING_OPTIMAL, VK_NULL_HANDLE, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, m_MipLevels, 1);
-	Image::CreateImageView(textureImage->GetImage(), textureImage->GetView(), VK_IMAGE_VIEW_TYPE_2D, VK_FORMAT_R8G8B8A8_UNORM, VK_IMAGE_ASPECT_COLOR_BIT, textureImage->GetMipLevels(), 0, 1, 0);
-	Image::CreateImageSampler(textureImage->GetSampler(), VK_FILTER_LINEAR, VK_SAMPLER_ADDRESS_MODE_REPEAT, true, textureImage->GetMipLevels());
-	
-	Image::TransitionImageLayout(textureImage->GetImage(), VK_FORMAT_R8G8B8A8_UNORM, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, VK_IMAGE_ASPECT_COLOR_BIT, textureImage->GetMipLevels(), 0, 1, 0);
-	
-	textureImage->SetPixels(pixel.get(), textureImage->GetArrayLevels(), 0);
-	
-	Image::CopyBufferToImage(buffer.GetBuffer(), textureImage->GetImage(), textureImage->GetExtent(), textureImage->GetArrayLevels(), 0);
-	Image::CreateMipmaps(textureImage->GetImage(), textureImage->GetExtent(), textureImage->GetFormat(), VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL, textureImage->GetMipLevels(), 0, textureImage->GetArrayLevels());
-
-	//Image::TransitionImageLayout(textureImage->GetImage(), textureImage->GetFormat(), VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, textureImage->GetLayout(), VK_IMAGE_ASPECT_COLOR_BIT, textureImage->GetMipLevels(), 0, 1, 0);
-
-	std::cout << "ici\n";
-	/*TransitionImageLayout(m_TextureImage, VK_FORMAT_R8G8B8A8_UNORM, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, m_MipLevels);
-	CopyBufferToImage(stagingBuffer, m_TextureImage, static_cast<uint32_t>(texWidth), static_cast<uint32_t>(texHeight));
-	
-	GenerateMipmaps(m_TextureImage, VK_FORMAT_R8G8B8A8_UNORM, texWidth, texHeight, m_MipLevels);
-
-	vkDestroyBuffer(m_LogicalDevice->GetLogicalDevice(), stagingBuffer, nullptr);
-	vkFreeMemory(m_LogicalDevice->GetLogicalDevice(), stagingBufferMemory, nullptr);*/
+	textureImage = Image2d::Create(TEXTURE_PATH);
 }
 
 void GraphicManager::CreateImage(const uint32_t width, const uint32_t height, const uint32_t mipLevels, const VkSampleCountFlagBits numSamples,
@@ -1281,11 +1223,6 @@ void GraphicManager::CopyBufferToImage(const VkBuffer buffer, const VkImage imag
 	EndSingleTimeCommands(commandBuffer);
 }
 
-void GraphicManager::CreateTextureImageView()
-{
-	//m_TextureImageView = CreateImageView(m_TextureImage, VK_FORMAT_R8G8B8A8_UNORM, VK_IMAGE_ASPECT_COLOR_BIT, m_MipLevels);
-	//Image::CreateImageView(textureImage->GetImage(), textureImage->GetView(), VK_IMAGE_VIEW_TYPE_2D, VK_FORMAT_R8G8B8A8_UNORM, VK_IMAGE_ASPECT_COLOR_BIT, textureImage->GetMipLevels(), 0, 1, 0);
-}
 
 VkImageView GraphicManager::CreateImageView(const VkImage image, const VkFormat format, const VkImageAspectFlags aspectFlags, const uint32_t mipLevels) const
 {
@@ -1306,32 +1243,6 @@ VkImageView GraphicManager::CreateImageView(const VkImage image, const VkFormat 
 	}
 
 	return imageView;
-}
-
-void GraphicManager::CreateTextureSampler() {
-	//VkSamplerCreateInfo samplerInfo = {};
-	//samplerInfo.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
-	//samplerInfo.magFilter = VK_FILTER_LINEAR;
-	//samplerInfo.minFilter = VK_FILTER_LINEAR;
-	//samplerInfo.addressModeU = VK_SAMPLER_ADDRESS_MODE_REPEAT;
-	//samplerInfo.addressModeV = VK_SAMPLER_ADDRESS_MODE_REPEAT;
-	//samplerInfo.addressModeW = VK_SAMPLER_ADDRESS_MODE_REPEAT;
-	//samplerInfo.anisotropyEnable = VK_TRUE;
-	//samplerInfo.maxAnisotropy = 16;
-	//samplerInfo.borderColor = VK_BORDER_COLOR_INT_OPAQUE_BLACK;
-	//samplerInfo.unnormalizedCoordinates = VK_FALSE;
-	//samplerInfo.compareEnable = VK_FALSE;
-	//samplerInfo.compareOp = VK_COMPARE_OP_ALWAYS;
-	//samplerInfo.mipmapMode = VK_SAMPLER_MIPMAP_MODE_LINEAR;
-	//samplerInfo.minLod = 0;
-	//samplerInfo.maxLod = static_cast<float>(m_MipLevels);
-	//samplerInfo.mipLodBias = 0;
-
-	//if (vkCreateSampler(m_LogicalDevice->GetLogicalDevice(), &samplerInfo, nullptr, &m_TextureSampler) != VK_SUCCESS) {
-	//	throw std::runtime_error("failed to create texture sampler!");
-	//}
-
-	//Image::CreateImageSampler(textureImage->GetSampler(), VK_FILTER_LINEAR, VK_SAMPLER_ADDRESS_MODE_REPEAT, true, textureImage->GetMipLevels());
 }
 
 void GraphicManager::CreateDepthResources()
@@ -1507,12 +1418,8 @@ void GraphicManager::GenerateMipmaps(const VkImage image, const VkFormat imageFo
 
 void GraphicManager::CreateColorResources()
 {
-	const auto colorFormat = m_SwapChainImageFormat;
-
-	CreateImage(m_SwapChainExtent.width, m_SwapChainExtent.height, 1, m_PhysicalDevice->GetMsaaSamples(), colorFormat, VK_IMAGE_TILING_OPTIMAL, VK_IMAGE_USAGE_TRANSIENT_ATTACHMENT_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, m_ColorImage, m_ColorImageMemory);
-	m_ColorImageView = CreateImageView(m_ColorImage, colorFormat, VK_IMAGE_ASPECT_COLOR_BIT, 1);
-
-	TransitionImageLayout(m_ColorImage, colorFormat, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL, 1);
+	colorImage = std::make_shared<Image2d>(m_SwapChainExtent.width, m_SwapChainExtent.height, nullptr, m_SwapChainImageFormat, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL, VK_IMAGE_USAGE_TRANSIENT_ATTACHMENT_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT, VK_FILTER_LINEAR, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE, m_PhysicalDevice->GetMsaaSamples(), false, false);
+	Image::TransitionImageLayout(colorImage->GetImage(), m_SwapChainImageFormat, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL, VK_IMAGE_ASPECT_COLOR_BIT, colorImage->GetMipLevels(), 0, 1, 0);
 }
 
 void GraphicManager::UpdateMainCamera() const
