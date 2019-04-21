@@ -61,7 +61,6 @@ void GraphicManager::InitVulkan()
 	m_LogicalDevice = std::make_unique<LogicalDevice>(m_Instance.get(), m_PhysicalDevice.get(), m_Surface.get());
 
 	CreateSwapChain();
-	CreateImageViews();
 	CreateRenderPass();
 	CreateDescriptorSetLayout();
 	CreateGraphicPipeline();
@@ -99,7 +98,7 @@ void GraphicManager::Destroy()
 
 	//Destroy all bindings
 	vkDestroyDescriptorSetLayout(*m_LogicalDevice, m_DescriptorSetLayout, nullptr);
-	for(size_t i = 0; i < m_SwapChainImages.size(); i++)
+	for(size_t i = 0; i < swapchain->GetImages().size(); i++)
 	{
 		vkDestroyBuffer(*m_LogicalDevice, m_UniformBuffers[i], nullptr);
 		vkFreeMemory(*m_LogicalDevice, m_UniformBuffersMemory[i], nullptr);
@@ -137,106 +136,12 @@ Window* GraphicManager::GetWindow() const
 	return m_Window.get();
 }
 
-QueueFamilyIndices GraphicManager::FindQueueFamilies(const VkPhysicalDevice device) const
-{
-	QueueFamilyIndices indices;
-
-	uint32_t queueFamilyCount = 0;
-	vkGetPhysicalDeviceQueueFamilyProperties(device, &queueFamilyCount, nullptr);
-
-	std::vector<VkQueueFamilyProperties> queueFamilies(queueFamilyCount);
-	vkGetPhysicalDeviceQueueFamilyProperties(device, &queueFamilyCount, queueFamilies.data());
-
-	auto i = 0;
-	for (const auto& queueFamily : queueFamilies)
-	{
-		if (queueFamily.queueCount > 0 && queueFamily.queueFlags & VK_QUEUE_GRAPHICS_BIT)
-		{
-			indices.graphicFamily = i;
-		}
-
-		VkBool32 presentSupport = false;
-		vkGetPhysicalDeviceSurfaceSupportKHR(device, i, m_Surface->GetSurface(), &presentSupport);
-
-		if (queueFamily.queueCount > 0 && presentSupport)
-		{
-			indices.presentFamily = i;
-		}
-
-		if (indices.IsComplete())
-		{
-			break;
-		}
-
-		i++;
-	}
-
-	return indices;
-}
-
 void GraphicManager::CreateSwapChain()
 {
 	const auto swapChainSupport = QuerySwapChainSupport(m_PhysicalDevice->GetPhysicalDevice());
 
-	const auto surfaceFormat = ChooseSwapSurfaceFormat(swapChainSupport.formats);
-	const auto presentMode = ChooseSwapPresentMode(swapChainSupport.presentModes);
-	const auto extent = ChooseSwapExtent(swapChainSupport.capabilities);
-
-	auto imageCount = swapChainSupport.capabilities.minImageCount + 1;
-	//Recommended to ask for +1 to don't wait on the driver
-
-	if (swapChainSupport.capabilities.maxImageCount > 0 && imageCount > swapChainSupport.capabilities.maxImageCount)
-	{
-		imageCount = swapChainSupport.capabilities.maxImageCount;
-	}
-
-	VkSwapchainCreateInfoKHR createInfo = {};
-	createInfo.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
-	createInfo.surface = m_Surface->GetSurface();
-
-	createInfo.minImageCount = imageCount;
-	createInfo.imageFormat = surfaceFormat.format;
-	createInfo.imageColorSpace = surfaceFormat.colorSpace;
-	createInfo.imageExtent = extent;
-	createInfo.imageArrayLayers = 1; //Always 1 unless if developing a stereoscopic application 
-	createInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
-	//If want tu use post process use VK_IMAGE_USAGE_TRANSFER_DST_BIT
-
-	auto indices = FindQueueFamilies(m_PhysicalDevice->GetPhysicalDevice());
-	uint32_t queueFamilyIndices[] = {indices.graphicFamily.value(), indices.presentFamily.value()};
-
-	if (indices.graphicFamily != indices.presentFamily)
-	{
-		createInfo.imageSharingMode = VK_SHARING_MODE_CONCURRENT;
-		createInfo.queueFamilyIndexCount = 2;
-		createInfo.pQueueFamilyIndices = queueFamilyIndices;
-	}
-	else
-	{
-		createInfo.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE; //Best performance
-		createInfo.queueFamilyIndexCount = 0;
-		createInfo.pQueueFamilyIndices = nullptr;
-	}
-
-	createInfo.preTransform = swapChainSupport.capabilities.currentTransform;
-	createInfo.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
-
-	createInfo.presentMode = presentMode;
-	createInfo.clipped = VK_TRUE; //Don't read a pixel if it's hidden by an another window
-
-	createInfo.oldSwapchain = VK_NULL_HANDLE;
-
-	if (vkCreateSwapchainKHR(m_LogicalDevice->GetLogicalDevice(), &createInfo, nullptr, &m_SwapChain) != VK_SUCCESS)
-	{
-		throw std::runtime_error("failed to create swap chain!");
-	}
-
-	vkGetSwapchainImagesKHR(m_LogicalDevice->GetLogicalDevice(), m_SwapChain, &imageCount, nullptr);
-	m_SwapChainImages.resize(imageCount);
-	vkGetSwapchainImagesKHR(m_LogicalDevice->GetLogicalDevice(), m_SwapChain, &imageCount, m_SwapChainImages.data());
-
-	m_SwapChainImageFormat = surfaceFormat.format;
-	m_SwapChainExtent = extent;
+	auto extent = ChooseSwapExtent(swapChainSupport.capabilities);
+	swapchain = std::make_unique<Swapchain>(extent);
 }
 
 SwapChainSupportDetails GraphicManager::QuerySwapChainSupport(const VkPhysicalDevice device) const
@@ -264,30 +169,6 @@ SwapChainSupportDetails GraphicManager::QuerySwapChainSupport(const VkPhysicalDe
 	}
 
 	return details;
-}
-
-VkSurfaceFormatKHR GraphicManager::ChooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats)
-{
-	if (availableFormats.size() == 1 && availableFormats[0].format == VK_FORMAT_UNDEFINED)
-	{
-		return {VK_FORMAT_B8G8R8A8_UNORM, VK_COLOR_SPACE_SRGB_NONLINEAR_KHR};
-	}
-
-	for (const auto& availableFormat : availableFormats)
-	{
-		if (availableFormat.format == VK_FORMAT_B8G8R8A8_UNORM && availableFormat.colorSpace ==
-			VK_COLOR_SPACE_SRGB_NONLINEAR_KHR)
-		{
-			return availableFormat;
-		}
-	}
-
-	/**
-	 * Instead of choose only one device, it would be possible to rank all of them
-	 * and to choose the best one
-	 */
-
-	return availableFormats[0];
 }
 
 VkPresentModeKHR GraphicManager::ChooseSwapPresentMode(const std::vector<VkPresentModeKHR>& availablePresentModes)
@@ -327,16 +208,6 @@ VkExtent2D GraphicManager::ChooseSwapExtent(const VkSurfaceCapabilitiesKHR& capa
 		                               std::min(capabilities.maxImageExtent.height, actualExtent.height));
 
 		return actualExtent;
-	}
-}
-
-void GraphicManager::CreateImageViews()
-{
-	m_SwapChainImageViews.resize(m_SwapChainImages.size());
-
-	for (size_t i = 0; i < m_SwapChainImages.size(); i++)
-	{
-		m_SwapChainImageViews[i] = CreateImageView(m_SwapChainImages[i], m_SwapChainImageFormat, VK_IMAGE_ASPECT_COLOR_BIT, 1);
 	}
 }
 
@@ -380,14 +251,14 @@ void GraphicManager::CreateGraphicPipeline()
 	VkViewport viewport = {};
 	viewport.x = 0.0f;
 	viewport.y = 0.0f;
-	viewport.width = static_cast<float>(m_SwapChainExtent.width);
-	viewport.height = static_cast<float>(m_SwapChainExtent.height);
+	viewport.width = static_cast<float>(swapchain->GetExtend().width);
+	viewport.height = static_cast<float>(swapchain->GetExtend().height);
 	viewport.minDepth = 0.0f;
 	viewport.maxDepth = 1.0f;
 
 	VkRect2D scissor = {};
 	scissor.offset = {0, 0};
-	scissor.extent = m_SwapChainExtent;
+	scissor.extent = swapchain->GetExtend();
 
 	VkPipelineViewportStateCreateInfo viewportState = {};
 	viewportState.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
@@ -515,7 +386,7 @@ VkShaderModule GraphicManager::CreateShaderModule(const std::vector<char>& code)
 void GraphicManager::CreateRenderPass()
 {
 	VkAttachmentDescription colorAttachment = {};
-	colorAttachment.format = m_SwapChainImageFormat;
+	colorAttachment.format = m_Surface->GetFormat().format;
 	colorAttachment.samples = m_PhysicalDevice->GetMsaaSamples();
 	colorAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
 	colorAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
@@ -525,7 +396,7 @@ void GraphicManager::CreateRenderPass()
 	colorAttachment.finalLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
 
 	VkAttachmentDescription colorAttachmentResolve = {};
-	colorAttachmentResolve.format = m_SwapChainImageFormat;
+	colorAttachmentResolve.format = m_Surface->GetFormat().format;
 	colorAttachmentResolve.samples = VK_SAMPLE_COUNT_1_BIT;
 	colorAttachmentResolve.loadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
 	colorAttachmentResolve.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
@@ -590,14 +461,14 @@ void GraphicManager::CreateRenderPass()
 
 void GraphicManager::CreateFrameBuffers()
 {
-	m_SwapChainFrameBuffers.resize(m_SwapChainImageViews.size());
+	m_SwapChainFrameBuffers.resize(swapchain->GetImageViews().size());
 
-	for (size_t i = 0; i < m_SwapChainImageViews.size(); i++) {
+	for (size_t i = 0; i < swapchain->GetImageViews().size(); i++) {
 		std::array<VkImageView, 3> attachments = 
 		{
 			m_ColorImage->GetView(),
 			m_DepthImage->GetView(),
-			m_SwapChainImageViews[i]
+			swapchain->GetImageViews()[i]
 		};
 
 		VkFramebufferCreateInfo framebufferInfo = {};
@@ -605,8 +476,8 @@ void GraphicManager::CreateFrameBuffers()
 		framebufferInfo.renderPass = m_RenderPass;
 		framebufferInfo.attachmentCount = static_cast<uint32_t>(attachments.size());
 		framebufferInfo.pAttachments = attachments.data();
-		framebufferInfo.width = m_SwapChainExtent.width;
-		framebufferInfo.height = m_SwapChainExtent.height;
+		framebufferInfo.width = swapchain->GetExtend().width;
+		framebufferInfo.height = swapchain->GetExtend().height;
 		framebufferInfo.layers = 1;
 
 		if (vkCreateFramebuffer(m_LogicalDevice->GetLogicalDevice(), &framebufferInfo, nullptr, &m_SwapChainFrameBuffers[i]) != VK_SUCCESS) {
@@ -629,7 +500,7 @@ void GraphicManager::CreateCommandBuffers()
 		renderPassInfo.renderPass = m_RenderPass;
 		renderPassInfo.framebuffer = m_SwapChainFrameBuffers[i];
 		renderPassInfo.renderArea.offset = {0, 0};
-		renderPassInfo.renderArea.extent = m_SwapChainExtent;
+		renderPassInfo.renderArea.extent = swapchain->GetExtend();
 
 		std::array<VkClearValue, 2> clearValues = {};
 		clearValues[0].color = { 0.0f, 0.0f, 0.0f, 1.0f };
@@ -685,27 +556,20 @@ void GraphicManager::DrawFrame()
 	vkWaitForFences(*m_LogicalDevice, 1, &m_InFlightFences[m_CurrentFrame], VK_TRUE, std::numeric_limits<uint64_t>::max());
 
 	//Acquire an image from the swap chain
-	uint32_t imageIndex;
-	auto result = vkAcquireNextImageKHR(*m_LogicalDevice, m_SwapChain, std::numeric_limits<uint64_t>::max(),
-	                                        m_ImageAvailableSemaphores[m_CurrentFrame], VK_NULL_HANDLE, &imageIndex);
 
-	if (result == VK_ERROR_OUT_OF_DATE_KHR)
+	if (swapchain->AcquireNextImage(m_ImageAvailableSemaphores[m_CurrentFrame]) == VK_ERROR_OUT_OF_DATE_KHR)
 	{
 		RecreateSwapChain();
 		return;
 	}
-	else if (result != VK_SUCCESS && result != VK_SUBOPTIMAL_KHR)
-	{
-		throw std::runtime_error("failed to acquire swap chain image");
-	}
 
-	UpdateUniformBuffer(imageIndex);
+	UpdateUniformBuffer(swapchain->GetActiveImageIndex());
 
 	VkSemaphore waitSemaphores[] = {m_ImageAvailableSemaphores[m_CurrentFrame]};
 
 	VkSemaphore signalSemaphores[] = {m_RenderFinishedSemaphores[m_CurrentFrame]};
 	
-	m_CommandBuffers[imageIndex]->Submit(waitSemaphores[0], signalSemaphores[0], m_InFlightFences[m_CurrentFrame]);
+	m_CommandBuffers[swapchain->GetActiveImageIndex()]->Submit(waitSemaphores[0], signalSemaphores[0], m_InFlightFences[m_CurrentFrame]);
 
 	//Presentation
 	VkPresentInfoKHR presentInfo = {};
@@ -713,13 +577,13 @@ void GraphicManager::DrawFrame()
 	presentInfo.waitSemaphoreCount = 1;
 	presentInfo.pWaitSemaphores = signalSemaphores;
 
-	VkSwapchainKHR swapChain[] = {m_SwapChain};
+	VkSwapchainKHR swapChain[] = {swapchain->GetSwapchain()};
 	presentInfo.swapchainCount = 1;
 	presentInfo.pSwapchains = swapChain;
-	presentInfo.pImageIndices = &imageIndex;
+	presentInfo.pImageIndices = &swapchain->GetActiveImageIndex();
 	presentInfo.pResults = nullptr;
 
-	result = vkQueuePresentKHR(m_LogicalDevice->GetPresentQueue(), &presentInfo);
+	VkResult result = vkQueuePresentKHR(m_LogicalDevice->GetPresentQueue(), &presentInfo);
 
 	if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR || m_FrameBufferResized)
 	{
@@ -753,7 +617,6 @@ void GraphicManager::RecreateSwapChain()
 	DestroySwapChain();
 
 	CreateSwapChain();
-	CreateImageViews();
 	CreateRenderPass();
 	CreateGraphicPipeline();
 	CreateColorResources();
@@ -772,13 +635,6 @@ void GraphicManager::DestroySwapChain()
 	vkDestroyPipeline(*m_LogicalDevice, m_GraphicsPipeline, nullptr);
 	vkDestroyPipelineLayout(*m_LogicalDevice, m_PipelineLayout, nullptr);
 	vkDestroyRenderPass(*m_LogicalDevice, m_RenderPass, nullptr);
-
-	for (auto imageView : m_SwapChainImageViews)
-	{
-		vkDestroyImageView(*m_LogicalDevice, imageView, nullptr);
-	}
-
-	vkDestroySwapchainKHR(*m_LogicalDevice, m_SwapChain, nullptr);
 }
 
 void GraphicManager::CreateBuffer(const VkDeviceSize size, const VkBufferUsageFlags usage,
@@ -927,10 +783,10 @@ void GraphicManager::CreateUniformBuffers()
 {
 	const auto bufferSize = sizeof(UniformBufferObject);
 
-	m_UniformBuffers.resize(m_SwapChainImages.size());
-	m_UniformBuffersMemory.resize(m_SwapChainImages.size());
+	m_UniformBuffers.resize(swapchain->GetImageCount());
+	m_UniformBuffersMemory.resize(swapchain->GetImageCount());
 
-	for(size_t i = 0; i < m_SwapChainImages.size(); i++)
+	for(size_t i = 0; i <swapchain->GetImageCount(); i++)
 	{
 		CreateBuffer(bufferSize, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, m_UniformBuffers[i], m_UniformBuffersMemory[i]);
 	}
@@ -954,15 +810,15 @@ void GraphicManager::CreateDescriptorPool()
 {
 	std::array<VkDescriptorPoolSize, 2> poolSizes = {};
 	poolSizes[0].type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-	poolSizes[0].descriptorCount = static_cast<uint32_t>(m_SwapChainImages.size());
+	poolSizes[0].descriptorCount = static_cast<uint32_t>(swapchain->GetImageCount());
 	poolSizes[1].type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-	poolSizes[1].descriptorCount = static_cast<uint32_t>(m_SwapChainImages.size());
+	poolSizes[1].descriptorCount = static_cast<uint32_t>(swapchain->GetImageCount());
 
 	VkDescriptorPoolCreateInfo poolInfo = {};
 	poolInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
 	poolInfo.poolSizeCount = static_cast<uint32_t>(poolSizes.size());
 	poolInfo.pPoolSizes = poolSizes.data();
-	poolInfo.maxSets = static_cast<uint32_t>(m_SwapChainImages.size());
+	poolInfo.maxSets = static_cast<uint32_t>(swapchain->GetImageCount());
 
 	if (vkCreateDescriptorPool(m_LogicalDevice->GetLogicalDevice(), &poolInfo, nullptr, &m_DescriptorPool) != VK_SUCCESS) {
 		throw std::runtime_error("failed to create descriptor pool!");
@@ -971,19 +827,19 @@ void GraphicManager::CreateDescriptorPool()
 
 void GraphicManager::CreateDescriptorSets()
 {
-	std::vector<VkDescriptorSetLayout> layouts(m_SwapChainImages.size(), m_DescriptorSetLayout);
+	std::vector<VkDescriptorSetLayout> layouts(swapchain->GetImageCount(), m_DescriptorSetLayout);
 	VkDescriptorSetAllocateInfo allocInfo = {};
 	allocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
 	allocInfo.descriptorPool = m_DescriptorPool;
-	allocInfo.descriptorSetCount = static_cast<uint32_t>(m_SwapChainImages.size());
+	allocInfo.descriptorSetCount = static_cast<uint32_t>(swapchain->GetImageCount());
 	allocInfo.pSetLayouts = layouts.data();
 
-	m_DescriptorSets.resize(m_SwapChainImages.size());
+	m_DescriptorSets.resize(swapchain->GetImageCount());
 	if (vkAllocateDescriptorSets(m_LogicalDevice->GetLogicalDevice(), &allocInfo, m_DescriptorSets.data()) != VK_SUCCESS) {
 		throw std::runtime_error("failed to allocate descriptor sets!");
 	}
 
-	for (size_t i = 0; i < m_SwapChainImages.size(); i++) {
+	for (size_t i = 0; i < swapchain->GetImageCount(); i++) {
 		VkDescriptorBufferInfo bufferInfo = {};
 		bufferInfo.buffer = m_UniformBuffers[i];
 		bufferInfo.offset = 0;
@@ -1079,7 +935,7 @@ VkImageView GraphicManager::CreateImageView(const VkImage image, const VkFormat 
 
 void GraphicManager::CreateDepthResources()
 {
-	m_DepthImage = std::make_shared<ImageDepth>(m_SwapChainExtent.width, m_SwapChainExtent.height, m_PhysicalDevice->GetMsaaSamples());
+	m_DepthImage = std::make_shared<ImageDepth>(swapchain->GetExtend().width, swapchain->GetExtend().height, m_PhysicalDevice->GetMsaaSamples());
 }
 
 VkFormat GraphicManager::FindSupportedFormat(const std::vector<VkFormat>& candidates, const VkImageTiling tiling,
@@ -1152,8 +1008,8 @@ void GraphicManager::LoadModel()
 
 void GraphicManager::CreateColorResources()
 {
-	m_ColorImage = std::make_shared<Image2d>(m_SwapChainExtent.width, m_SwapChainExtent.height, nullptr, m_SwapChainImageFormat, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL, VK_IMAGE_USAGE_TRANSIENT_ATTACHMENT_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT, VK_FILTER_LINEAR, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE, m_PhysicalDevice->GetMsaaSamples(), false, false);
-	Image::TransitionImageLayout(m_ColorImage->GetImage(), m_SwapChainImageFormat, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL, VK_IMAGE_ASPECT_COLOR_BIT, m_ColorImage->GetMipLevels(), 0, 1, 0);
+	m_ColorImage = std::make_shared<Image2d>(swapchain->GetExtend().width, swapchain->GetExtend().height, nullptr, m_Surface->GetFormat().format, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL, VK_IMAGE_USAGE_TRANSIENT_ATTACHMENT_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT, VK_FILTER_LINEAR, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE, m_PhysicalDevice->GetMsaaSamples(), false, false);
+	Image::TransitionImageLayout(m_ColorImage->GetImage(), m_Surface->GetFormat().format, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL, VK_IMAGE_ASPECT_COLOR_BIT, m_ColorImage->GetMipLevels(), 0, 1, 0);
 }
 
 void GraphicManager::UpdateMainCamera() const

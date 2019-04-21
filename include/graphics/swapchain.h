@@ -27,20 +27,19 @@ SOFTWARE.
 
 #include <vulkan/vulkan.h>
 #include <vector>
-#include <graphics/graphic_manager.h>
 
 namespace dm
 {
 class Swapchain
 {
 public:
-	Swapchain(const VkExtent2D &extent, PhysicalDevice* physicalDevice, Surface* surface, LogicalDevice* logicalDevice);
+	explicit Swapchain(const VkExtent2D &extent);
 
 	~Swapchain();
 
 	VkResult AcquireNextImage(const VkSemaphore &presentCompleteSemaphore = VK_NULL_HANDLE);
 
-	VkResult QueuePresent(const VkQueue &presentQueue, const VkSemaphore &waitSemaphore = VK_NULL_HANDLE);
+	VkResult QueuePresent(const VkQueue &presentQueue, const VkSemaphore &waitSemaphore = VK_NULL_HANDLE) const;
 
 	const VkExtent2D &GetExtend() const { return m_Extent; }
 
@@ -60,7 +59,7 @@ public:
 
 	const uint32_t &GetActiveImageIndex() const { return m_ActiveImageIndex; }
 
-	bool IsSameExtent(const VkExtent2D &extent2D) { return m_Extent.width == extent2D.width && m_Extent.height == extent2D.height; }
+	bool IsSameExtent(const VkExtent2D &extent2D) const { return m_Extent.width == extent2D.width && m_Extent.height == extent2D.height; }
 private:
 	VkExtent2D m_Extent;
 	VkPresentModeKHR m_PresentMode;

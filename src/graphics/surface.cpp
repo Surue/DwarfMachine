@@ -37,6 +37,8 @@ Surface::Surface(const Instance* instance, const PhysicalDevice* physicalDevice,
 {
 	window->CreateSurface(*m_Instance, nullptr, &m_Surface);
 
+	vkGetPhysicalDeviceSurfaceCapabilitiesKHR(*m_PhysicalDevice, m_Surface, &m_Capabilities);
+
 	uint32_t formatCount = 0;
 	vkGetPhysicalDeviceSurfaceFormatsKHR(*m_PhysicalDevice, m_Surface, &formatCount, nullptr);
 	std::vector<VkSurfaceFormatKHR> surfaceFormat(formatCount);

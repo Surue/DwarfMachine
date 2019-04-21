@@ -40,6 +40,7 @@ SOFTWARE.
 #include <SDL.h>
 #include <graphics/image_2d.h>
 #include <graphics/image_depth.h>
+#include <graphics/swapchain.h>
 
 namespace dm
 {
@@ -115,6 +116,7 @@ public:
 	const LogicalDevice* GetLogicalDevice() const { return m_LogicalDevice.get(); }
 	std::shared_ptr<CommandPool> GetCommandPool() const { return m_CommandPool; }
 	const Surface* GetSurface() const { return m_Surface.get(); }
+	const Swapchain* GetSwapchain() const { return swapchain.get(); }
 
 private:
 	/**
@@ -130,12 +132,6 @@ private:
 	void InitVulkan();
 
 	/**
-	 * \brief Return queue families that satisfy certain desired properties
-	 * \param device
-	 */
-	QueueFamilyIndices FindQueueFamilies(VkPhysicalDevice device) const;
-
-	/**
 	 * \brief Create a swapchain (Act as an image buffer)
 	 */
 	void CreateSwapChain();
@@ -146,13 +142,6 @@ private:
 	 * \return 
 	 */
 	SwapChainSupportDetails QuerySwapChainSupport(VkPhysicalDevice device) const;
-
-	/**
-	 * \brief 
-	 * \param availableFormats 
-	 * \return 
-	 */
-	static VkSurfaceFormatKHR ChooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats);
 
 	/**
 	 * \brief 
@@ -167,11 +156,6 @@ private:
 	 * \return 
 	 */
 	VkExtent2D ChooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities) const;
-
-	/**
-	 * \brief 
-	 */
-	void CreateImageViews();
 
 	/**
 	 * \brief Create graphic pipeline
@@ -282,13 +266,16 @@ private:
 	std::unique_ptr<PhysicalDevice> m_PhysicalDevice = nullptr;
 	std::unique_ptr<LogicalDevice> m_LogicalDevice = nullptr;
 
+	std::unique_ptr<Swapchain> swapchain = nullptr;
+	/*VkExtent2D m_SwapChainExtent{};
 	VkSwapchainKHR m_SwapChain{};
-
 	std::vector<VkImage> m_SwapChainImages;
-	VkFormat m_SwapChainImageFormat;
-	VkExtent2D m_SwapChainExtent{};
+	std::vector<VkImageView> m_SwapChainImageViews;*/
+	std::vector<VkFence> m_InFlightFences;
+	size_t m_CurrentFrame = 0;
 
-	std::vector<VkImageView> m_SwapChainImageViews;
+	//VkFormat m_SwapChainImageFormat;
+
 
 	VkRenderPass m_RenderPass{};
 	VkDescriptorSetLayout m_DescriptorSetLayout{};
@@ -303,8 +290,6 @@ private:
 
 	std::vector<VkSemaphore> m_ImageAvailableSemaphores;
 	std::vector<VkSemaphore> m_RenderFinishedSemaphores;
-	std::vector<VkFence> m_InFlightFences;
-	size_t m_CurrentFrame = 0;
 
 	bool m_FrameBufferResized = false;
 
