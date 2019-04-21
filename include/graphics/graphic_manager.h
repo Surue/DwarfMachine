@@ -36,10 +36,10 @@ SOFTWARE.
 #include <graphics/physical_device.h>
 #include <graphics/logical_device.h>
 #include <graphics/command_buffer.h>
-#include <graphics/image.h>
 
 #include <SDL.h>
-#include "image2d.h"
+#include <graphics/image_2d.h>
+#include <graphics/image_depth.h>
 
 namespace dm
 {
@@ -134,13 +134,6 @@ private:
 	 * \param device
 	 */
 	QueueFamilyIndices FindQueueFamilies(VkPhysicalDevice device) const;
-
-	/**
-	 * \brief Check if the given device support extensions
-	 * \param device to check
-	 * \return true if support extensions
-	 */
-	static bool CheckDeviceExtensionSupport(VkPhysicalDevice device);
 
 	/**
 	 * \brief Create a swapchain (Act as an image buffer)
@@ -259,15 +252,9 @@ private:
 
 	void CreateTextureImage();
 
-	void CreateImage(uint32_t width, uint32_t height, uint32_t mipLevels, VkSampleCountFlagBits numSamples, VkFormat format, VkImageTiling tiling, VkImageUsageFlags usage, VkMemoryPropertyFlags properties, VkImage& image, VkDeviceMemory& imageMemory) const;
-
 	VkCommandBuffer BeginSingleTimeCommands() const;
 
 	void EndSingleTimeCommands(VkCommandBuffer commandBuffer) const;
-
-	void TransitionImageLayout(VkImage image, VkFormat format, VkImageLayout oldLayout, VkImageLayout newLayout, uint32_t mipLevels) const;
-
-	void CopyBufferToImage(VkBuffer buffer, VkImage image, uint32_t width, uint32_t height) const;
 
 	VkImageView CreateImageView(VkImage image, VkFormat format, VkImageAspectFlags aspectFlags, uint32_t mipLevels) const;
 
@@ -277,11 +264,7 @@ private:
 
 	VkFormat FindDepthFormat() const;
 
-	static bool HasStencilComponent(VkFormat format);
-
 	void LoadModel();
-
-	void GenerateMipmaps(VkImage image, VkFormat imageFormat, int32_t texWidth, int32_t texHeight, uint32_t mipLevels) const;
 
 	void CreateColorResources();
 
@@ -346,9 +329,7 @@ private:
 	std::shared_ptr<Image2d> m_TextureImage = nullptr;
 
 	//Depth
-	VkImage m_DepthImage{};
-	VkDeviceMemory m_DepthImageMemory{};
-	VkImageView m_DepthImageView{};
+	std::shared_ptr<ImageDepth> m_DepthImage = nullptr;
 
 	//Multisample Anti Aliasing 
 	std::shared_ptr<Image2d> m_ColorImage = nullptr;

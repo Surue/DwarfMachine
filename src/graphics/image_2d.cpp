@@ -22,11 +22,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#include <graphics/image2d.h>
-#include "engine/engine.h"
+#include <graphics/image_2d.h>
+#include <engine/engine.h>
 #include <graphics/graphic_manager.h>
-#include "graphics/buffer.h"
-#include <iostream>
+#include <graphics/buffer.h>
 
 namespace dm
 {

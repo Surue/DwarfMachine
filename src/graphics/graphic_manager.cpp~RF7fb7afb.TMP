@@ -24,9 +24,13 @@ SOFTWARE.
 #include <stdexcept>
 #include <glm/gtc/matrix_transform.hpp>
 #include <chrono>
+#include <set>
 #include <algorithm>
 #include <fstream>
 #include <unordered_map>
+
+#define STB_IMAGE_IMPLEMENTATION
+#include <utility/stb_image.h>
 
 #include <graphics/graphic_manager.h>
 #include <engine/Input.h>
