@@ -317,7 +317,7 @@ void Image::CreateMipmaps(const VkImage& image, const VkExtent3D& extent, const 
 			0, nullptr,
 			0, nullptr,
 			1, &barrier);
-
+		
 		VkImageBlit blit = {};
 		blit.srcOffsets[1] = { int32_t(extent.width >> (i - 1)), int32_t(extent.height >> (i - 1)), 1 };
 		blit.srcSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
