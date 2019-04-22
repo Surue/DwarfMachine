@@ -144,7 +144,7 @@ public:
 
 	const bool &ISOUtOfDate() const { return m_OutOfDate; }
 
-	const Renderpass *GetRenderpass() const { return m_Renderpass.get(); }
+	const RenderPass *GetRenderPass() const { return m_Renderpass.get(); }
 
 	const ImageDepth *GetDepthStencil() const { return m_DepthStencil.get(); }
 
@@ -170,7 +170,7 @@ private:
 
 	Viewport m_Viewport;
 
-	std::unique_ptr<Renderpass> m_Renderpass;
+	std::unique_ptr<RenderPass> m_Renderpass;
 	std::unique_ptr<ImageDepth> m_DepthStencil;
 	std::unique_ptr<Framebuffers> m_Framebuffers;
 

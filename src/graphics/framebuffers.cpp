@@ -23,12 +23,82 @@ SOFTWARE.
 */
 
 #include <graphics/framebuffers.h>
+#include <graphics/graphic_manager.h>
+#include <graphics/render_stage.h>
+#include <graphics/renderpass.h>
 
 namespace dm
 {
 Framebuffers::Framebuffers(const uint32_t& width, const uint32_t& height, const RenderStage& renderStage,
-	const Renderpass& renderpass, const Swapchain& sawpchain, const ImageDepth& depthSstencil,
-	const VkSampleCountFlagBits& samples) {}
+	const RenderPass& renderpass, const Swapchain& swapchain, const ImageDepth& depthStencil,
+	const VkSampleCountFlagBits& samples)
+{
+	auto logicalDevice = Engine::Get()->GetGraphicManager()->GetLogicalDevice();
 
-Framebuffers::~Framebuffers() {}
+	for(const auto &attachment : renderStage.GetAttachments())
+	{
+		auto attachmentSamples = attachment.IsMultisampled() ? samples : VK_SAMPLE_COUNT_1_BIT;
+
+		switch(attachment.GetType())
+		{
+		case Attachment::Type::IMAGE: 
+			m_ImageAttachments.emplace_back(std::make_unique<Image2d>(width, height, nullptr, attachment.GetFormat(), VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL, VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_STORAGE_BIT, VK_FILTER_LINEAR, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE, attachmentSamples));
+			break;
+		case Attachment::Type::DEPTH: 
+			m_ImageAttachments.emplace_back(nullptr);
+			break;
+		case Attachment::Type::SWAPCHAIN: 
+			m_ImageAttachments.emplace_back(nullptr);
+			break;
+		default: ;
+		}
+	}
+
+	m_Framebuffers.resize(swapchain.GetImageCount());
+
+	for(uint32_t i = 0; i < swapchain.GetImageCount(); i++)
+	{
+		std::vector<VkImageView> attachments;
+
+		for(const auto &attachment : renderStage.GetAttachments())
+		{
+			switch(attachment.GetType())
+			{
+			case Attachment::Type::IMAGE: 
+				attachments.emplace_back(GetAttachment(attachment.GetBinding())->GetView());
+				break;
+			case Attachment::Type::DEPTH: 
+				attachments.emplace_back(depthStencil.GetView());
+				break;
+			case Attachment::Type::SWAPCHAIN: 
+				attachments.emplace_back(swapchain.GetImageViews().at(i));
+				break;
+			default: ;
+			}
+		}
+
+		VkFramebufferCreateInfo createInfo = {};
+		createInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
+		createInfo.renderPass = renderpass.GetRenderPass();
+		createInfo.attachmentCount = static_cast<uint32_t>(attachments.size());
+		createInfo.pAttachments = attachments.data();
+		createInfo.width = width;
+		createInfo.height = height;
+		createInfo.layers = 1;
+
+		if (vkCreateFramebuffer(*logicalDevice, &createInfo, nullptr, &m_Framebuffers[i]) != VK_SUCCESS) {
+			throw std::runtime_error("failed to create framebuffer!");
+		}
+	}
+}
+
+Framebuffers::~Framebuffers()
+{
+	const auto logicalDevice = Engine::Get()->GetGraphicManager()->GetLogicalDevice();
+
+	for(const auto &framebuffer : m_Framebuffers)
+	{
+		vkDestroyFramebuffer(*logicalDevice, framebuffer, nullptr);
+	}
+}
 }

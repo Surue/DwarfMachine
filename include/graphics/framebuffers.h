@@ -31,12 +31,12 @@ SOFTWARE.
 namespace dm
 {
 class ImageDepth;
-class Renderpass;
+class RenderPass;
 class RenderStage;
 
 class Framebuffers {
 public:
-	Framebuffers(const uint32_t &width, const uint32_t &height, const RenderStage &renderStage, const Renderpass &renderpass, const Swapchain &sawpchain, const ImageDepth &depthSstencil, const VkSampleCountFlagBits &samples = VK_SAMPLE_COUNT_1_BIT);
+	Framebuffers(const uint32_t &width, const uint32_t &height, const RenderStage &renderStage, const RenderPass &renderpass, const Swapchain &swapchain, const ImageDepth &depthStencil, const VkSampleCountFlagBits &samples = VK_SAMPLE_COUNT_1_BIT);
 
 	~Framebuffers();
 
