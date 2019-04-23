@@ -22,54 +22,35 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
+#ifndef RENDER_MANAGER_H
+#define RENDER_MANAGER_H
+
 #include <graphics/renderer_container.h>
 
 namespace dm
 {
-RendererContainer::RendererContainer() {}
+class RenderPipeline;
 
-RenderPipeline* RendererContainer::Add(RenderPipeline* renderer)
+class RenderManager
 {
-	if(renderer == nullptr)
-	{
-		return nullptr;
-	}
+public:
+	explicit RenderManager() :
+		m_Started(false)
+	{}
 
-	bool emplaced = false;
+	virtual ~RenderManager() = default;
 
-	do
-	{
-		auto stage = m_Stages.find(renderer->GetStage());
+	virtual void Start() = 0;
 
-		if(stage == m_Stages.end())
-		{
-			m_Stages.emplace(renderer->GetStage(), std::vector<std::unique_ptr<RenderPipeline>>());
-		}else
-		{
-			(*stage).second.emplace_back(renderer);
-			emplaced = true;
-		}
-	} while (!emplaced);
+	virtual void Update() = 0;
 
-	return renderer;
+	RendererContainer &GetRendererContainer() { return m_RendererContainer; }
+private:
+	friend class Renderer;
+
+	bool m_Started;
+	RendererContainer m_RendererContainer;
+};
 }
 
-void RendererContainer::Remove(RenderPipeline* renderer)
-{
-	for(auto it = m_Stages.begin(); it != m_Stages.end(); ++it)
-	{
-		for(auto it2 = (*it).second.begin(); it2 != (*it).second.end(); ++it)
-		{
-			if((*it2).get() == renderer)
-			{
-				(*it).second.erase(it2);
-
-				if((*it).second.empty())
-				{
-					m_Stages.erase(it);
-				}
-			}
-		}
-	}
-}
-}
+#endif RENDER_MANAGER

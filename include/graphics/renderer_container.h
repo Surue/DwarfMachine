@@ -29,10 +29,10 @@ SOFTWARE.
 
 namespace dm
 {
-class RenderContainer
+class RendererContainer
 {
 public:
-	RenderContainer();
+	RendererContainer();
 
 	const std::map<Pipeline::Stage, std::vector<std::unique_ptr<RenderPipeline>>> &GetStages() const { return m_Stages; }
 
