@@ -139,12 +139,12 @@ void RenderStage::Rebuild(const Swapchain& swapchain)
 
 std::optional<Attachment> RenderStage::GetAttachment(const std::string& name) const
 {
-	auto it = std::find(m_Attachments.begin(), m_Attachments.end(), [name](const Attachment &a)
+	auto it = std::find_if(m_Attachments.begin(), m_Attachments.end(), [name](const Attachment &a)
 	{
 		return a.GetName() == name;
 	});
 
-	if(it == m_Attachments.end())
+	if (it == m_Attachments.end())
 	{
 		return {};
 	}
@@ -154,7 +154,7 @@ std::optional<Attachment> RenderStage::GetAttachment(const std::string& name) co
 
 std::optional<Attachment> RenderStage::GetAttachment(const uint32_t& binding) const
 {
-	auto it = std::find(m_Attachments.begin(), m_Attachments.end(), [binding](const Attachment &a)
+	auto it = std::find_if(m_Attachments.begin(), m_Attachments.end(), [binding](const Attachment &a)
 	{
 		return a.GetBinding() == binding;
 	});
