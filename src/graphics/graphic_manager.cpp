@@ -34,10 +34,14 @@ SOFTWARE.
 #include <graphics/buffer.h>
 #include <graphics/window.h>
 
+#include <SPIRV/GlslangToSpv.h>
+
 namespace dm
 {
 GraphicManager::GraphicManager(Engine& engine) : m_Engine(engine)
 {
+	glslang::InitializeProcess();
+
 	m_Window = std::make_unique<Window>(m_Engine);
 	InitWindow();
 
@@ -47,6 +51,7 @@ GraphicManager::GraphicManager(Engine& engine) : m_Engine(engine)
 	m_LogicalDevice = std::make_unique<LogicalDevice>(m_Instance.get(), m_PhysicalDevice.get(), m_Surface.get());
 
 	CreatePipelineCache();
+
 }
 
 RenderStage* GraphicManager::GetRenderStage(const uint32_t& index) const

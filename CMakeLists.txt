@@ -165,6 +165,8 @@ target_link_libraries(DWARF_MACHINE_COMMON PUBLIC Vulkan::Vulkan)
 
 target_link_libraries(DWARF_MACHINE_COMMON PUBLIC SDL2-static)
 
+target_link_libraries(DWARF_MACHINE_COMMON PRIVATE ${SPIRV_LIBRARY})
+
 if(MSVC)
 target_link_libraries(DWARF_MACHINE_COMMON PUBLIC SDL2main)
 endif(MSVC)
