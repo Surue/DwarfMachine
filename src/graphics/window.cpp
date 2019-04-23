@@ -83,6 +83,13 @@ void Window::SetShouldClose()
 	m_ShouldQuit = true;
 }
 
+Vec2i Window::GetSize()
+{
+	Vec2i size;
+	SDL_GetWindowSize(m_Window, &size.x, &size.y);
+	return size;
+}
+
 void Window::GetFramebufferSize(int* width, int* height) const
 {
 	SDL_Vulkan_GetDrawableSize(m_Window, width, height);

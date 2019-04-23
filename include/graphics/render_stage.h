@@ -120,7 +120,7 @@ private:
 class RenderStage
 {
 public:
-	explicit RenderStage(std::vector<Attachment> image = {}, std::vector<SubpassType> subpasses = {}, const Viewport &viewport = Viewport());
+	explicit RenderStage(std::vector<Attachment> images = {}, std::vector<SubpassType> subpasses = {}, const Viewport &viewport = Viewport());
 
 	void Update();
 

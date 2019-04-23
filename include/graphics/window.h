@@ -53,6 +53,8 @@ public:
 
 	void SetShouldClose();
 
+	Vec2i GetSize();
+
 	void GetFramebufferSize(int* width, int* height) const;
 
 	void CreateSurface(const VkInstance &instance, const VkAllocationCallbacks *allocator, VkSurfaceKHR *surface) const;
