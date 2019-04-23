@@ -22,22 +22,23 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#include <graphics/image_2d.h>
-#include <engine/engine.h>
+#include <graphics/image_cube.h>
 #include <graphics/graphic_manager.h>
 #include <graphics/buffer.h>
 
 namespace dm
 {
-std::shared_ptr<Image2d> Image2d::Create(const std::string& filename, const VkFilter& filter,
-	const VkSamplerAddressMode& addressMode, const bool& anisotropic, const bool& mipmap)
+std::shared_ptr<ImageCube> ImageCube::Create(const std::string& filename, const std::string fileSuffix,
+	const VkFilter& filter, const VkSamplerAddressMode& addressMode, const bool& anisotropic, const bool& mipmap)
 {
-	return std::make_shared<Image2d>(filename, filter, addressMode, anisotropic, mipmap, true);
+	return std::make_shared<ImageCube>(filename, fileSuffix, filter, addressMode, anisotropic, mipmap, true);
 }
 
-Image2d::Image2d(std::string filename, const VkFilter& filter, const VkSamplerAddressMode& addressMode,
-	const bool& anisotropic, const bool& mipmap, const bool& load) :
+ImageCube::ImageCube(std::string filename, std::string fileSuffix, const VkFilter& filter,
+	const VkSamplerAddressMode& addressMode, const bool& anisotropic, const bool& mipmap, const bool& load) :
 	m_Filename(std::move(filename)),
+	m_FileSuffix(std::move(fileSuffix)),
+	m_FileSides(std::vector<std::string>{"Right", "Left", "Top", "Bottom", "Back", "Front"}),
 	m_Filter(filter),
 	m_AddressMode(addressMode),
 	m_Anisotropic(anisotropic),
@@ -58,15 +59,16 @@ Image2d::Image2d(std::string filename, const VkFilter& filter, const VkSamplerAd
 {
 	if(load)
 	{
-		Image2d::Load();
+		Load();
 	}
 }
 
-Image2d::Image2d(const uint32_t& width, const uint32_t& height, std::unique_ptr<uint8_t[]> pixels,
+ImageCube::ImageCube(const uint32_t& width, const uint32_t& height, std::unique_ptr<uint8_t[]> pixels,
 	const VkFormat& format, const VkImageLayout& layout, const VkImageUsageFlags& usage, const VkFilter& filter,
 	const VkSamplerAddressMode& addressMode, const VkSampleCountFlagBits& samples, const bool& anisotropic,
 	const bool& mipmap) :
 	m_Filename(""),
+	m_FileSuffix(""),
 	m_Filter(filter),
 	m_AddressMode(addressMode),
 	m_Anisotropic(anisotropic),
@@ -74,7 +76,7 @@ Image2d::Image2d(const uint32_t& width, const uint32_t& height, std::unique_ptr<
 	m_Samples(samples),
 	m_Layout(layout),
 	m_Usage(usage | VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT),
-	m_Components(4),
+	m_Components(0),
 	m_Width(width),
 	m_Height(height),
 	m_LoadPixels(std::move(pixels)),
@@ -85,21 +87,20 @@ Image2d::Image2d(const uint32_t& width, const uint32_t& height, std::unique_ptr<
 	m_View(VK_NULL_HANDLE),
 	m_Format(format)
 {
-	if (usage & VK_IMAGE_USAGE_TRANSIENT_ATTACHMENT_BIT) { m_Usage = usage; }
-	Image2d::Load();
+	Load();
 }
 
-Image2d::~Image2d()
+ImageCube::~ImageCube()
 {
 	auto logicalDevice = Engine::Get()->GetGraphicManager()->GetLogicalDevice();
 
-	vkDestroySampler(*logicalDevice, m_Sampler, nullptr);
 	vkDestroyImageView(*logicalDevice, m_View, nullptr);
+	vkDestroySampler(*logicalDevice, m_Sampler, nullptr);
 	vkFreeMemory(*logicalDevice, m_Memory, nullptr);
 	vkDestroyImage(*logicalDevice, m_Image, nullptr);
 }
 
-VkDescriptorSetLayoutBinding Image2d::GetDescriptorSetLayout(const uint32_t& binding,
+VkDescriptorSetLayoutBinding ImageCube::GetDescriptorSetLayout(const uint32_t& binding,
 	const VkDescriptorType& descriptorType, const VkShaderStageFlags& stage, const uint32_t& count)
 {
 	VkDescriptorSetLayoutBinding descriptorSet = {};
@@ -111,7 +112,7 @@ VkDescriptorSetLayoutBinding Image2d::GetDescriptorSetLayout(const uint32_t& bin
 	return descriptorSet;
 }
 
-WriteDescriptorSet Image2d::GetWriteDescriptor(const uint32_t& binding, const VkDescriptorType& descriptorType,
+WriteDescriptorSet ImageCube::GetWriteDescriptor(const uint32_t& binding, const VkDescriptorType& descriptorType,
 	const std::optional<OffsetSize>& offsetSize) const
 {
 	VkDescriptorImageInfo imageInfo = {};
@@ -129,30 +130,30 @@ WriteDescriptorSet Image2d::GetWriteDescriptor(const uint32_t& binding, const Vk
 	return WriteDescriptorSet(descriptorWrite, imageInfo);
 }
 
-void Image2d::Load()
+void ImageCube::Load()
 {
-	if(!m_Filename.empty() && m_LoadPixels == nullptr)
+	if (!m_Filename.empty() && m_LoadPixels == nullptr)
 	{
-		m_LoadPixels = Image::LoadPixels(m_Filename, m_Width, m_Height, m_Components, m_Format);
+		m_LoadPixels = LoadPixels(m_Filename, m_FileSuffix, m_FileSides, m_Width, m_Height, m_Components, m_Format);
 	}
 
-	if(m_Width == 0 && m_Height == 0)
+	if (m_Width == 0 && m_Height == 0)
 	{
 		return;
 	}
 
 	m_MipLevels = m_Mipmap ? Image::GetMipLevels({ m_Width, m_Height, 1 }) : 1;
 
-	Image::CreateImage(m_Image, m_Memory, { m_Width, m_Height, 1 }, m_Format, m_Samples, VK_IMAGE_TILING_OPTIMAL, m_Usage, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, m_MipLevels, 1, VK_IMAGE_TYPE_2D);
+	Image::CreateImage(m_Image, m_Memory, { m_Width, m_Height, 1 }, m_Format, m_Samples, VK_IMAGE_TILING_OPTIMAL, m_Usage, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, m_MipLevels, 6, VK_IMAGE_TYPE_2D);
 	Image::CreateImageSampler(m_Sampler, m_Filter, m_AddressMode, m_Anisotropic, m_MipLevels);
-	Image::CreateImageView(m_Image, m_View, VK_IMAGE_VIEW_TYPE_2D, m_Format, VK_IMAGE_ASPECT_COLOR_BIT, m_MipLevels, 0, 1, 0);
+	Image::CreateImageView(m_Image, m_View, VK_IMAGE_VIEW_TYPE_CUBE, m_Format, VK_IMAGE_ASPECT_COLOR_BIT, m_MipLevels, 0, 6, 0);
 
-	if(m_LoadPixels != nullptr || m_Mipmap)
+	if (m_LoadPixels != nullptr || m_Mipmap)
 	{
-		Image::TransitionImageLayout(m_Image, m_Format, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, VK_IMAGE_ASPECT_COLOR_BIT, m_MipLevels, 0, 1, 0);
+		Image::TransitionImageLayout(m_Image, m_Format, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, VK_IMAGE_ASPECT_COLOR_BIT, m_MipLevels, 0, 6, 0);
 	}
 
-	if(m_LoadPixels != nullptr)
+	if (m_LoadPixels != nullptr)
 	{
 		VkDeviceSize imageSize = m_Width * m_Height * m_Components;
 
@@ -163,24 +164,27 @@ void Image2d::Load()
 		std::memcpy(data, m_LoadPixels.get(), stagingBuffer.GetSize());
 		stagingBuffer.UnmapMemory();
 
-		Image::CopyBufferToImage(stagingBuffer.GetBuffer(), m_Image, { m_Width, m_Height, 1 }, 1, 0);
+		Image::CopyBufferToImage(stagingBuffer.GetBuffer(), m_Image, { m_Width, m_Height, 1 }, 6, 0);
 	}
 
-	if(m_Mipmap)
+	if (m_Mipmap)
 	{
-		Image::CreateMipmaps(m_Image, { m_Width, m_Height, 1 }, m_Format, m_Layout, m_MipLevels, 0, 1);
-	}else if(m_LoadPixels != nullptr)
+		Image::CreateMipmaps(m_Image, { m_Width, m_Height, 1 }, m_Format, m_Layout, m_MipLevels, 0, 6);
+	}
+	else if (m_LoadPixels != nullptr)
 	{
-		Image::TransitionImageLayout(m_Image, m_Format, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, m_Layout, VK_IMAGE_ASPECT_COLOR_BIT, m_MipLevels, 0, 1, 0);
-	}else
+		Image::TransitionImageLayout(m_Image, m_Format, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, m_Layout, VK_IMAGE_ASPECT_COLOR_BIT, m_MipLevels, 0, 6, 0);
+	}
+	else
 	{
-		Image::TransitionImageLayout(m_Image, m_Format, VK_IMAGE_LAYOUT_UNDEFINED, m_Layout, VK_IMAGE_ASPECT_COLOR_BIT, m_MipLevels, 0, 1, 0);
+		Image::TransitionImageLayout(m_Image, m_Format, VK_IMAGE_LAYOUT_UNDEFINED, m_Layout, VK_IMAGE_ASPECT_COLOR_BIT, m_MipLevels, 0, 6, 0);
 	}
 
 	m_LoadPixels = nullptr;
 }
 
-std::unique_ptr<uint8_t[]> Image2d::GetPixels(VkExtent3D& extent, const uint32_t& mipLevel) const
+std::unique_ptr<uint8_t[]> ImageCube::GetPixels(VkExtent3D& extent, const uint32_t& mipLevel,
+	const uint32_t& arrayLayer) const
 {
 	auto logicalDevice = Engine::Get()->GetGraphicManager()->GetLogicalDevice();
 
@@ -190,7 +194,7 @@ std::unique_ptr<uint8_t[]> Image2d::GetPixels(VkExtent3D& extent, const uint32_t
 
 	VkImage dstImage;
 	VkDeviceMemory dstImageMemory;
-	Image::CopyImage(m_Image, dstImage, dstImageMemory, m_Format, extent, m_Layout, mipLevel, 0);
+	Image::CopyImage(m_Image, dstImage, dstImageMemory, m_Format, extent, m_Layout, mipLevel, arrayLayer);
 
 	VkImageSubresource dstImageSubresource = {};
 	dstImageSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
@@ -200,21 +204,46 @@ std::unique_ptr<uint8_t[]> Image2d::GetPixels(VkExtent3D& extent, const uint32_t
 	VkSubresourceLayout dstSubresourceLayout;
 	vkGetImageSubresourceLayout(*logicalDevice, dstImage, &dstImageSubresource, &dstSubresourceLayout);
 
-	auto pixels = std::make_unique<uint8_t[]>(dstSubresourceLayout.size);
+	auto result = std::make_unique<uint8_t[]>(dstSubresourceLayout.size);
 
 	void *data;
 	vkMapMemory(*logicalDevice, dstImageMemory, dstSubresourceLayout.offset, dstSubresourceLayout.size, 0, &data);
-	std::memcpy(pixels.get(), data, static_cast<size_t>(dstSubresourceLayout.size));
+	std::memcpy(result.get(), data, static_cast<size_t>(dstSubresourceLayout.size));
 	vkUnmapMemory(*logicalDevice, dstImageMemory);
 
 	vkFreeMemory(*logicalDevice, dstImageMemory, nullptr);
 	vkDestroyImage(*logicalDevice, dstImage, nullptr);
 
+	return result;
+}
+
+std::unique_ptr<uint8_t[]> ImageCube::GetPixels(VkExtent3D& extent, const uint32_t& mipLevel) const
+{
+	std::unique_ptr<uint8_t[]> pixels = nullptr;
+	uint8_t *offset = nullptr;
+
+	for (uint32_t i = 0; i < 6; i++)
+	{
+		auto resultSide = GetPixels(extent, mipLevel, i);
+		int32_t sizeSide = extent.width * extent.height * m_Components;
+
+		if (pixels == nullptr)
+		{
+			pixels = std::make_unique<uint8_t[]>(sizeSide * 6);
+			offset = pixels.get();
+		}
+
+		memcpy(offset, resultSide.get(), sizeSide);
+		offset += sizeSide;
+	}
+
+	extent.height *= 6;
 	return pixels;
 }
-void Image2d::SetPixels(const uint8_t* pixels, const uint32_t& layerCount, const uint32_t& baseArrayLayer)
+
+void ImageCube::SetPixels(const uint8_t* pixels, const uint32_t& layerCount, const uint32_t& baseArrayLayer)
 {
-	VkDeviceSize imageSize = m_Width * m_Height * m_Components;
+	VkDeviceSize imageSize = m_Width * m_Height * m_Components * 6;
 	auto stagingBuffer = Buffer(imageSize, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 
 	void *data;
@@ -224,5 +253,31 @@ void Image2d::SetPixels(const uint8_t* pixels, const uint32_t& layerCount, const
 
 
 	Image::CopyBufferToImage(stagingBuffer.GetBuffer(), m_Image, { m_Width, m_Height, 1 }, layerCount, baseArrayLayer);
+}
+
+std::unique_ptr<uint8_t[]> ImageCube::LoadPixels(const std::string& filename, const std::string& fileSuffix,
+	const std::vector<std::string>& fileSides, uint32_t& width, uint32_t& height, uint32_t& components,
+	VkFormat& format)
+{
+	std::unique_ptr<uint8_t[]> result = nullptr;
+	uint8_t *offset = nullptr;
+
+	for (const auto &side : fileSides)
+	{
+		auto filenameSide = std::string(filename).append("/").append(side).append(fileSuffix);
+		auto resultSide = Image::LoadPixels(filenameSide, width, height, components, format);
+		const int32_t sizeSide = width * height * components;
+
+		if (result == nullptr)
+		{
+			result = std::make_unique<uint8_t[]>(sizeSide * fileSides.size());
+			offset = result.get();
+		}
+
+		memcpy(offset, resultSide.get(), sizeSide);
+		offset += sizeSide;
+	}
+
+	return result;
 }
 }
