@@ -22,45 +22,25 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#ifndef BUFFER_H
-#define BUFFER_H
+#ifndef STORAGE_BUFFER_H
+#define STORAGE_BUFFER_H
 
-#include <vulkan/vulkan.h>
+#include <graphics/descriptor.h>
+#include <graphics/buffer.h>
 
 namespace dm
 {
-class LogicalDevice;
-
-class Buffer
+class StorageBuffer : public Descriptor, public Buffer
 {
 public:
-	enum class Status
-	{
-		RESET,
-		CHANGED,
-		NORMAL
-	};
+	explicit StorageBuffer(const VkDeviceSize &size, const void *data = nullptr);
 
-	Buffer(const VkDeviceSize &size, const VkBufferUsageFlags &usage, const VkMemoryPropertyFlags &properties, const void *data = nullptr);
-	virtual ~Buffer();
+	void Update(const void *newData) const;
 
-	void MapMemory(void **data) const;
+	static VkDescriptorSetLayoutBinding GetDescriptorSetLayout(const uint32_t &binding, const VkDescriptorType &descriptorType, const VkShaderStageFlags &stage, const uint32_t &count);
 
-	void UnmapMemory() const;
-
-	const VkDeviceSize &GetSize() const { return m_Size; }
-
-	const VkBuffer &GetBuffer() const { return m_Buffer; }
-
-	const VkDeviceMemory &GetBufferMemory() const { return m_BufferMemory; }
-
-	static uint32_t FindMemoryType(const uint32_t &typeFilter, const VkMemoryPropertyFlags &requiredProperties);
-
-protected:
-	VkDeviceSize m_Size;
-	VkBuffer m_Buffer;
-	VkDeviceMemory m_BufferMemory;
+	WriteDescriptorSet GetWriteDescriptor(const uint32_t& binding, const VkDescriptorType& descriptorType, const std::optional<OffsetSize>& offsetSize) const override;
 };
 }
 
-#endif BUFFER_H
+#endif STORAGE_BUFFER_H

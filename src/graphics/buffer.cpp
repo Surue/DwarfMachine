@@ -28,7 +28,7 @@ SOFTWARE.
 
 namespace dm
 {
-Buffer::Buffer(VkDeviceSize& size, const VkBufferUsageFlags& usage, const VkMemoryPropertyFlags& properties,
+Buffer::Buffer(const VkDeviceSize& size, const VkBufferUsageFlags& usage, const VkMemoryPropertyFlags& properties,
                const void* data) : 
 	m_Size(size), 
 	m_Buffer(VK_NULL_HANDLE),
