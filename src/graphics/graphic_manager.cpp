@@ -39,6 +39,31 @@ namespace dm
 GraphicManager::GraphicManager(Engine& engine) : m_Engine(engine)
 {
 	m_Window = std::make_unique<Window>(m_Engine);
+	InitWindow();
+
+	m_Instance = std::make_unique<Instance>(m_Window->GetWindow());
+	m_PhysicalDevice = std::make_unique<PhysicalDevice>(m_Instance.get());
+	m_Surface = std::make_unique<Surface>(m_Instance.get(), m_PhysicalDevice.get(), m_Window.get());
+	m_LogicalDevice = std::make_unique<LogicalDevice>(m_Instance.get(), m_PhysicalDevice.get(), m_Surface.get());
+
+	CreatePipelineCache();
+}
+
+RenderStage* GraphicManager::GetRenderStage(const uint32_t& index) const
+{
+	if(m_RenderStages.empty() || m_RenderStages.size() < index)
+	{
+		return nullptr;
+	}
+
+	return m_RenderStages.at(index).get();
+}
+
+void GraphicManager::CreatePipelineCache()
+{
+	VkPipelineCacheCreateInfo pipelineCacheCreateInfo = {};
+	pipelineCacheCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_CACHE_CREATE_INFO;
+	vkCreatePipelineCache(*m_LogicalDevice, &pipelineCacheCreateInfo, nullptr, &m_PipelineCache);
 }
 
 void GraphicManager::InitWindow()
@@ -55,10 +80,6 @@ void GraphicManager::FrameBufferResizeCallback(SDL_Window* window, int width, in
 
 void GraphicManager::InitVulkan()
 {
-	m_Instance = std::make_unique<Instance>(m_Window.get()->GetWindow());
-	m_PhysicalDevice = std::make_unique<PhysicalDevice>(m_Instance.get());
-	m_Surface = std::make_unique<Surface>(m_Instance.get(), m_PhysicalDevice.get(), m_Window.get());
-	m_LogicalDevice = std::make_unique<LogicalDevice>(m_Instance.get(), m_PhysicalDevice.get(), m_Surface.get());
 
 	CreateSwapChain();
 	CreateRenderPass();
@@ -83,7 +104,6 @@ void GraphicManager::InitVulkan()
 
 void GraphicManager::Init()
 {
-	InitWindow();
 	InitVulkan();
 }
 

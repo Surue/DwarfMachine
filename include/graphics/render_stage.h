@@ -140,9 +140,9 @@ public:
 
 	const Vec2i &GetSize() const { return m_Size; }
 
-	const float &getAspectRatio() const { return m_AspectRatio; }
+	const float &GetAspectRatio() const { return m_AspectRatio; }
 
-	const bool &ISOUtOfDate() const { return m_OutOfDate; }
+	const bool &IsOutOfDate() const { return m_OutOfDate; }
 
 	const RenderPass *GetRenderPass() const { return m_Renderpass.get(); }
 

@@ -41,6 +41,7 @@ SOFTWARE.
 #include <graphics/image_2d.h>
 #include <graphics/image_depth.h>
 #include <graphics/swapchain.h>
+#include "render_stage.h"
 
 namespace dm
 {
@@ -113,12 +114,21 @@ public:
 	Window* GetWindow() const;
 
 	const PhysicalDevice* GetPhysicalDevice() const { return m_PhysicalDevice.get(); }
+
 	const LogicalDevice* GetLogicalDevice() const { return m_LogicalDevice.get(); }
+
 	std::shared_ptr<CommandPool> GetCommandPool() const { return m_CommandPool; }
+
 	const Surface* GetSurface() const { return m_Surface.get(); }
+
 	const Swapchain* GetSwapchain() const { return swapchain.get(); }
 
+	RenderStage *GetRenderStage(const uint32_t &index) const;
+
+	const VkPipelineCache &GetPipelineCache() const { return m_PipelineCache; }
+
 private:
+	void CreatePipelineCache();
 	/**
 	 * \brief Init a GLFW window
 	 */
@@ -323,6 +333,9 @@ private:
 
 	//Camera
 	Camera* m_MainCamera = nullptr;
+
+	VkPipelineCache m_PipelineCache;
+	std::vector<std::unique_ptr<RenderStage>> m_RenderStages;
 };
 }
 
