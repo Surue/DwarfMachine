@@ -24,6 +24,8 @@ SOFTWARE.
 
 #include <engine/Input.h>
 #include <iostream>
+#include <graphics/graphic_manager.h>
+#include <graphics/window.h>
 
 namespace dm
 {
@@ -61,7 +63,7 @@ void InputManager::Update()
 		switch (event.type)
 		{
 		case SDL_QUIT:
-			m_WillQuit = true;
+			m_Engine.GetGraphicManager()->GetWindow()->SetShouldClose();
 			break;
 
 			// SDL2's new way of handling input

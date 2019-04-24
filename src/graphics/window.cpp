@@ -44,15 +44,14 @@ void Window::Init()
 {
 	SDL_Init(SDL_INIT_VIDEO);
 
-
 	const auto windowSize = m_Engine.GetSettings().windowSize;
 	m_Window = SDL_CreateWindow(
-		"An SDL2 Vulkan window",                  // window title
-		SDL_WINDOWPOS_UNDEFINED,           // initial x position
-		SDL_WINDOWPOS_UNDEFINED,           // initial y position
+		"An SDL2 Vulkan window",					// window title
+		SDL_WINDOWPOS_UNDEFINED,					// initial x position
+		SDL_WINDOWPOS_UNDEFINED,					// initial y position
 		windowSize.x,                               // width, in pixels
 		windowSize.y,                               // height, in pixels
-		SDL_WINDOW_VULKAN | SDL_WINDOW_RESIZABLE               // flags - see below
+		SDL_WINDOW_VULKAN | SDL_WINDOW_RESIZABLE    // flags - see below
 	);
 
 	if (m_Window == nullptr) {

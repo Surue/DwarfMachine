@@ -332,7 +332,6 @@ private:
 	bool m_ButtonDown[static_cast<int>(ButtonCode::MOUSE_MAX)];
 
 	SDL_Window* m_Window = nullptr;
-	bool m_WillQuit = false;
 	const uint8_t* keyboard;
 	uint32_t mouse;
 	Vec2i m_MousePos;
