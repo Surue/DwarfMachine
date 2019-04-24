@@ -144,6 +144,8 @@ void GraphicManager::Destroy()
 		vkDestroySemaphore(*m_LogicalDevice, m_ImageAvailableSemaphores[i], nullptr);
 		vkDestroyFence(*m_LogicalDevice, m_InFlightFences[i], nullptr);
 	}
+
+	vkDestroyPipelineCache(*m_LogicalDevice, m_PipelineCache, nullptr);
 }
 
 void GraphicManager::Update()
