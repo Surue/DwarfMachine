@@ -86,11 +86,11 @@ void Instance::DestroyDebugUtilsMessengerEXT(const VkInstance instance, const Vk
 	}
 }
 
-void Instance::CmdPushDescriptorSetKHR(VkDevice device, VkCommandBuffer commandBuffer,
-	VkPipelineBindPoint pipelineBindPoint, VkPipelineLayout layout, uint32_t set, uint32_t descriptorWriteCount,
+void Instance::CmdPushDescriptorSetKHR(const VkDevice device, const VkCommandBuffer commandBuffer,
+                                       const VkPipelineBindPoint pipelineBindPoint, const VkPipelineLayout layout, const uint32_t set, const uint32_t descriptorWriteCount,
 	const VkWriteDescriptorSet* pDescriptorSet)
 {
-	auto func = reinterpret_cast<PFN_vkCmdPushDescriptorSetKHR>(vkGetDeviceProcAddr(device, "vkCmdPushDescriptorSetKHR"));
+	const auto func = reinterpret_cast<PFN_vkCmdPushDescriptorSetKHR>(vkGetDeviceProcAddr(device, "vkCmdPushDescriptorSetKHR"));
 
 	if(func != nullptr)
 	{

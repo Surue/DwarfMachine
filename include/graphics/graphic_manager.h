@@ -42,6 +42,7 @@ SOFTWARE.
 #include <graphics/image_depth.h>
 #include <graphics/swapchain.h>
 #include "render_stage.h"
+#include "uniform_handle.h"
 
 namespace dm
 {
@@ -121,7 +122,7 @@ public:
 
 	const Surface* GetSurface() const { return m_Surface.get(); }
 
-	const Swapchain* GetSwapchain() const { return swapchain.get(); }
+	const Swapchain* GetSwapchain() const { return m_Swapchain.get(); }
 
 	RenderStage *GetRenderStage(const uint32_t &index) const;
 
@@ -232,8 +233,6 @@ private:
 	 */
 	void CreateIndexBuffer();
 
-	uint32_t FindMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties) const;
-
 	void CreateDescriptorSetLayout();
 
 	void CreateUniformBuffers();
@@ -249,8 +248,6 @@ private:
 	VkCommandBuffer BeginSingleTimeCommands() const;
 
 	void EndSingleTimeCommands(VkCommandBuffer commandBuffer) const;
-
-	VkImageView CreateImageView(VkImage image, VkFormat format, VkImageAspectFlags aspectFlags, uint32_t mipLevels) const;
 
 	void CreateDepthResources();
 
@@ -276,16 +273,10 @@ private:
 	std::unique_ptr<PhysicalDevice> m_PhysicalDevice = nullptr;
 	std::unique_ptr<LogicalDevice> m_LogicalDevice = nullptr;
 
-	std::unique_ptr<Swapchain> swapchain = nullptr;
-	/*VkExtent2D m_SwapChainExtent{};
-	VkSwapchainKHR m_SwapChain{};
-	std::vector<VkImage> m_SwapChainImages;
-	std::vector<VkImageView> m_SwapChainImageViews;*/
+	std::unique_ptr<Swapchain> m_Swapchain = nullptr;
+
 	std::vector<VkFence> m_InFlightFences;
 	size_t m_CurrentFrame = 0;
-
-	//VkFormat m_SwapChainImageFormat;
-
 
 	VkRenderPass m_RenderPass{};
 	VkDescriptorSetLayout m_DescriptorSetLayout{};
@@ -320,14 +311,10 @@ private:
 	VkDescriptorPool m_DescriptorPool{};
 	std::vector<VkDescriptorSet> m_DescriptorSets;
 
-	//Textures
-	std::shared_ptr<Image2d> m_TextureImage = nullptr;
-
-	//Depth
-	std::shared_ptr<ImageDepth> m_DepthImage = nullptr;
-
-	//Multisample Anti Aliasing 
-	std::shared_ptr<Image2d> m_ColorImage = nullptr;
+	//Images
+	std::shared_ptr<Image2d> m_TextureImage = nullptr; //Textures tentacules
+	std::shared_ptr<ImageDepth> m_DepthImage = nullptr; //Depth
+	std::shared_ptr<Image2d> m_ColorImage = nullptr; //Multisample Anti Aliasing 
 
 	Engine& m_Engine;
 

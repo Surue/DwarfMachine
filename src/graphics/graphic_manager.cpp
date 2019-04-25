@@ -123,7 +123,7 @@ void GraphicManager::Destroy()
 
 	//Destroy all bindings
 	vkDestroyDescriptorSetLayout(*m_LogicalDevice, m_DescriptorSetLayout, nullptr);
-	for(size_t i = 0; i < swapchain->GetImages().size(); i++)
+	for(size_t i = 0; i < m_Swapchain->GetImages().size(); i++)
 	{
 		vkDestroyBuffer(*m_LogicalDevice, m_UniformBuffers[i], nullptr);
 		vkFreeMemory(*m_LogicalDevice, m_UniformBuffersMemory[i], nullptr);
@@ -166,24 +166,24 @@ Window* GraphicManager::GetWindow() const
 void GraphicManager::CreateSwapChain()
 {
 	const auto swapChainSupport = QuerySwapChainSupport(m_PhysicalDevice->GetPhysicalDevice());
-
-	auto extent = ChooseSwapExtent(swapChainSupport.capabilities);
-	swapchain = std::make_unique<Swapchain>(extent);
+	
+	auto extent = ChooseSwapExtent(m_Surface->GetCapabilities());
+	m_Swapchain = std::make_unique<Swapchain>(extent);
 }
 
 SwapChainSupportDetails GraphicManager::QuerySwapChainSupport(const VkPhysicalDevice device) const
 {
 	SwapChainSupportDetails details;
 
-	vkGetPhysicalDeviceSurfaceCapabilitiesKHR(device, m_Surface->GetSurface(), &details.capabilities);
+	vkGetPhysicalDeviceSurfaceCapabilitiesKHR(device, *m_Surface, &details.capabilities);
 
 	uint32_t formatCount;
-	vkGetPhysicalDeviceSurfaceFormatsKHR(device, m_Surface->GetSurface(), &formatCount, nullptr);
+	vkGetPhysicalDeviceSurfaceFormatsKHR(device, *m_Surface, &formatCount, nullptr);
 
 	if (formatCount != 0)
 	{
 		details.formats.resize(formatCount);
-		vkGetPhysicalDeviceSurfaceFormatsKHR(device, m_Surface->GetSurface(), &formatCount, details.formats.data());
+		vkGetPhysicalDeviceSurfaceFormatsKHR(device, *m_Surface, &formatCount, details.formats.data());
 	}
 
 	uint32_t presentModeCount;
@@ -192,7 +192,7 @@ SwapChainSupportDetails GraphicManager::QuerySwapChainSupport(const VkPhysicalDe
 	if (presentModeCount != 0)
 	{
 		details.presentModes.resize(presentModeCount);
-		vkGetPhysicalDeviceSurfacePresentModesKHR(device, m_Surface->GetSurface(), &presentModeCount, details.presentModes.data());
+		vkGetPhysicalDeviceSurfacePresentModesKHR(device, *m_Surface, &presentModeCount, details.presentModes.data());
 	}
 
 	return details;
@@ -278,14 +278,14 @@ void GraphicManager::CreateGraphicPipeline()
 	VkViewport viewport = {};
 	viewport.x = 0.0f;
 	viewport.y = 0.0f;
-	viewport.width = static_cast<float>(swapchain->GetExtend().width);
-	viewport.height = static_cast<float>(swapchain->GetExtend().height);
+	viewport.width = static_cast<float>(m_Swapchain->GetExtend().width);
+	viewport.height = static_cast<float>(m_Swapchain->GetExtend().height);
 	viewport.minDepth = 0.0f;
 	viewport.maxDepth = 1.0f;
 
 	VkRect2D scissor = {};
 	scissor.offset = {0, 0};
-	scissor.extent = swapchain->GetExtend();
+	scissor.extent = m_Swapchain->GetExtend();
 
 	VkPipelineViewportStateCreateInfo viewportState = {};
 	viewportState.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
@@ -488,14 +488,14 @@ void GraphicManager::CreateRenderPass()
 
 void GraphicManager::CreateFrameBuffers()
 {
-	m_SwapChainFrameBuffers.resize(swapchain->GetImageViews().size());
+	m_SwapChainFrameBuffers.resize(m_Swapchain->GetImageViews().size());
 
-	for (size_t i = 0; i < swapchain->GetImageViews().size(); i++) {
+	for (size_t i = 0; i < m_Swapchain->GetImageViews().size(); i++) {
 		std::array<VkImageView, 3> attachments = 
 		{
 			m_ColorImage->GetView(),
 			m_DepthImage->GetView(),
-			swapchain->GetImageViews()[i]
+			m_Swapchain->GetImageViews()[i]
 		};
 
 		VkFramebufferCreateInfo framebufferInfo = {};
@@ -503,8 +503,8 @@ void GraphicManager::CreateFrameBuffers()
 		framebufferInfo.renderPass = m_RenderPass;
 		framebufferInfo.attachmentCount = static_cast<uint32_t>(attachments.size());
 		framebufferInfo.pAttachments = attachments.data();
-		framebufferInfo.width = swapchain->GetExtend().width;
-		framebufferInfo.height = swapchain->GetExtend().height;
+		framebufferInfo.width = m_Swapchain->GetExtend().width;
+		framebufferInfo.height = m_Swapchain->GetExtend().height;
 		framebufferInfo.layers = 1;
 
 		if (vkCreateFramebuffer(m_LogicalDevice->GetLogicalDevice(), &framebufferInfo, nullptr, &m_SwapChainFrameBuffers[i]) != VK_SUCCESS) {
@@ -527,7 +527,7 @@ void GraphicManager::CreateCommandBuffers()
 		renderPassInfo.renderPass = m_RenderPass;
 		renderPassInfo.framebuffer = m_SwapChainFrameBuffers[i];
 		renderPassInfo.renderArea.offset = {0, 0};
-		renderPassInfo.renderArea.extent = swapchain->GetExtend();
+		renderPassInfo.renderArea.extent = m_Swapchain->GetExtend();
 
 		std::array<VkClearValue, 2> clearValues = {};
 		clearValues[0].color = { 0.0f, 0.0f, 0.0f, 1.0f };
@@ -584,19 +584,19 @@ void GraphicManager::DrawFrame()
 
 	//Acquire an image from the swap chain
 
-	if (swapchain->AcquireNextImage(m_ImageAvailableSemaphores[m_CurrentFrame]) == VK_ERROR_OUT_OF_DATE_KHR)
+	if (m_Swapchain->AcquireNextImage(m_ImageAvailableSemaphores[m_CurrentFrame]) == VK_ERROR_OUT_OF_DATE_KHR)
 	{
 		RecreateSwapChain();
 		return;
 	}
 
-	UpdateUniformBuffer(swapchain->GetActiveImageIndex());
+	UpdateUniformBuffer(m_Swapchain->GetActiveImageIndex());
 
 	VkSemaphore waitSemaphores[] = {m_ImageAvailableSemaphores[m_CurrentFrame]};
 
 	VkSemaphore signalSemaphores[] = {m_RenderFinishedSemaphores[m_CurrentFrame]};
 	
-	m_CommandBuffers[swapchain->GetActiveImageIndex()]->Submit(waitSemaphores[0], signalSemaphores[0], m_InFlightFences[m_CurrentFrame]);
+	m_CommandBuffers[m_Swapchain->GetActiveImageIndex()]->Submit(waitSemaphores[0], signalSemaphores[0], m_InFlightFences[m_CurrentFrame]);
 
 	//Presentation
 	VkPresentInfoKHR presentInfo = {};
@@ -604,10 +604,10 @@ void GraphicManager::DrawFrame()
 	presentInfo.waitSemaphoreCount = 1;
 	presentInfo.pWaitSemaphores = signalSemaphores;
 
-	VkSwapchainKHR swapChain[] = {swapchain->GetSwapchain()};
+	VkSwapchainKHR swapChain[] = {m_Swapchain->GetSwapchain()};
 	presentInfo.swapchainCount = 1;
 	presentInfo.pSwapchains = swapChain;
-	presentInfo.pImageIndices = &swapchain->GetActiveImageIndex();
+	presentInfo.pImageIndices = &m_Swapchain->GetActiveImageIndex();
 	presentInfo.pResults = nullptr;
 
 	VkResult result = vkQueuePresentKHR(m_LogicalDevice->GetPresentQueue(), &presentInfo);
@@ -685,7 +685,7 @@ void GraphicManager::CreateBuffer(const VkDeviceSize size, const VkBufferUsageFl
 	VkMemoryAllocateInfo allocInfo = {};
 	allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
 	allocInfo.allocationSize = memRequirements.size;
-	allocInfo.memoryTypeIndex = FindMemoryType(memRequirements.memoryTypeBits, properties);
+	allocInfo.memoryTypeIndex = m_Instance->FindMemoryTypeIndex(&m_PhysicalDevice->GetMemoryProperties(), &memRequirements, properties);
 
 	/**
 	 * Normalement la taille maximum de la mémoire alloué est fixée par maxMemoryAllocationCount
@@ -694,7 +694,6 @@ void GraphicManager::CreateBuffer(const VkDeviceSize size, const VkBufferUsageFl
 	 * 
 	 * Il est aussi possible d'utiliser la librairie VulkanMemoryAllocator faite par GPUOpen
 	 */
-	//TODO modifier l'allocation de la mémoire pour les buffers
 	if (vkAllocateMemory(m_LogicalDevice->GetLogicalDevice(), &allocInfo, nullptr, &bufferMemory) != VK_SUCCESS)
 	{
 		throw std::runtime_error("failed to allocate vertex buffer memory");
@@ -763,22 +762,6 @@ void GraphicManager::CreateIndexBuffer()
 	vkFreeMemory(m_LogicalDevice->GetLogicalDevice(), stagingBufferMemory, nullptr);
 }
 
-uint32_t GraphicManager::FindMemoryType(const uint32_t typeFilter, const VkMemoryPropertyFlags properties) const
-{
-	VkPhysicalDeviceMemoryProperties memProperties;
-	vkGetPhysicalDeviceMemoryProperties(m_PhysicalDevice->GetPhysicalDevice(), &memProperties);
-
-	for (uint32_t i = 0; i < memProperties.memoryTypeCount; i++)
-	{
-		if ((typeFilter & (1 << i)) && (memProperties.memoryTypes[i].propertyFlags & properties) == properties)
-		{
-			return i;
-		}
-	}
-
-	throw std::runtime_error("failed to find suitable memory type!");
-}
-
 void GraphicManager::CreateDescriptorSetLayout()
 {
 	VkDescriptorSetLayoutBinding uboLayoutBinding = {};
@@ -810,10 +793,10 @@ void GraphicManager::CreateUniformBuffers()
 {
 	const auto bufferSize = sizeof(UniformBufferObject);
 
-	m_UniformBuffers.resize(swapchain->GetImageCount());
-	m_UniformBuffersMemory.resize(swapchain->GetImageCount());
+	m_UniformBuffers.resize(m_Swapchain->GetImageCount());
+	m_UniformBuffersMemory.resize(m_Swapchain->GetImageCount());
 
-	for(size_t i = 0; i <swapchain->GetImageCount(); i++)
+	for(size_t i = 0; i <m_Swapchain->GetImageCount(); i++)
 	{
 		CreateBuffer(bufferSize, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, m_UniformBuffers[i], m_UniformBuffersMemory[i]);
 	}
@@ -837,15 +820,15 @@ void GraphicManager::CreateDescriptorPool()
 {
 	std::array<VkDescriptorPoolSize, 2> poolSizes = {};
 	poolSizes[0].type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-	poolSizes[0].descriptorCount = static_cast<uint32_t>(swapchain->GetImageCount());
+	poolSizes[0].descriptorCount = static_cast<uint32_t>(m_Swapchain->GetImageCount());
 	poolSizes[1].type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-	poolSizes[1].descriptorCount = static_cast<uint32_t>(swapchain->GetImageCount());
+	poolSizes[1].descriptorCount = static_cast<uint32_t>(m_Swapchain->GetImageCount());
 
 	VkDescriptorPoolCreateInfo poolInfo = {};
 	poolInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
 	poolInfo.poolSizeCount = static_cast<uint32_t>(poolSizes.size());
 	poolInfo.pPoolSizes = poolSizes.data();
-	poolInfo.maxSets = static_cast<uint32_t>(swapchain->GetImageCount());
+	poolInfo.maxSets = static_cast<uint32_t>(m_Swapchain->GetImageCount());
 
 	if (vkCreateDescriptorPool(m_LogicalDevice->GetLogicalDevice(), &poolInfo, nullptr, &m_DescriptorPool) != VK_SUCCESS) {
 		throw std::runtime_error("failed to create descriptor pool!");
@@ -854,19 +837,19 @@ void GraphicManager::CreateDescriptorPool()
 
 void GraphicManager::CreateDescriptorSets()
 {
-	std::vector<VkDescriptorSetLayout> layouts(swapchain->GetImageCount(), m_DescriptorSetLayout);
+	std::vector<VkDescriptorSetLayout> layouts(m_Swapchain->GetImageCount(), m_DescriptorSetLayout);
 	VkDescriptorSetAllocateInfo allocInfo = {};
 	allocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
 	allocInfo.descriptorPool = m_DescriptorPool;
-	allocInfo.descriptorSetCount = static_cast<uint32_t>(swapchain->GetImageCount());
+	allocInfo.descriptorSetCount = static_cast<uint32_t>(m_Swapchain->GetImageCount());
 	allocInfo.pSetLayouts = layouts.data();
 
-	m_DescriptorSets.resize(swapchain->GetImageCount());
+	m_DescriptorSets.resize(m_Swapchain->GetImageCount());
 	if (vkAllocateDescriptorSets(m_LogicalDevice->GetLogicalDevice(), &allocInfo, m_DescriptorSets.data()) != VK_SUCCESS) {
 		throw std::runtime_error("failed to allocate descriptor sets!");
 	}
 
-	for (size_t i = 0; i < swapchain->GetImageCount(); i++) {
+	for (size_t i = 0; i < m_Swapchain->GetImageCount(); i++) {
 		VkDescriptorBufferInfo bufferInfo = {};
 		bufferInfo.buffer = m_UniformBuffers[i];
 		bufferInfo.offset = 0;
@@ -939,30 +922,9 @@ void GraphicManager::EndSingleTimeCommands(VkCommandBuffer commandBuffer) const
 	vkFreeCommandBuffers(m_LogicalDevice->GetLogicalDevice(), *m_CommandPool, 1, &commandBuffer);
 }
 
-VkImageView GraphicManager::CreateImageView(const VkImage image, const VkFormat format, const VkImageAspectFlags aspectFlags, const uint32_t mipLevels) const
-{
-	VkImageViewCreateInfo viewInfo = {};
-	viewInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
-	viewInfo.image = image;
-	viewInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
-	viewInfo.format = format;
-	viewInfo.subresourceRange.aspectMask = aspectFlags;
-	viewInfo.subresourceRange.baseMipLevel = 0;
-	viewInfo.subresourceRange.levelCount = mipLevels;
-	viewInfo.subresourceRange.baseArrayLayer = 0;
-	viewInfo.subresourceRange.layerCount = 1;
-
-	VkImageView imageView;
-	if (vkCreateImageView(m_LogicalDevice->GetLogicalDevice(), &viewInfo, nullptr, &imageView) != VK_SUCCESS) {
-		throw std::runtime_error("failed to create texture image view!");
-	}
-
-	return imageView;
-}
-
 void GraphicManager::CreateDepthResources()
 {
-	m_DepthImage = std::make_shared<ImageDepth>(swapchain->GetExtend().width, swapchain->GetExtend().height, m_PhysicalDevice->GetMsaaSamples());
+	m_DepthImage = std::make_shared<ImageDepth>(m_Swapchain->GetExtend().width, m_Swapchain->GetExtend().height, m_PhysicalDevice->GetMsaaSamples());
 }
 
 VkFormat GraphicManager::FindSupportedFormat(const std::vector<VkFormat>& candidates, const VkImageTiling tiling,
@@ -1035,7 +997,7 @@ void GraphicManager::LoadModel()
 
 void GraphicManager::CreateColorResources()
 {
-	m_ColorImage = std::make_shared<Image2d>(swapchain->GetExtend().width, swapchain->GetExtend().height, nullptr, m_Surface->GetFormat().format, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL, VK_IMAGE_USAGE_TRANSIENT_ATTACHMENT_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT, VK_FILTER_LINEAR, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE, m_PhysicalDevice->GetMsaaSamples(), false, false);
+	m_ColorImage = std::make_shared<Image2d>(m_Swapchain->GetExtend().width, m_Swapchain->GetExtend().height, nullptr, m_Surface->GetFormat().format, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL, VK_IMAGE_USAGE_TRANSIENT_ATTACHMENT_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT, VK_FILTER_LINEAR, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE, m_PhysicalDevice->GetMsaaSamples(), false, false);
 	Image::TransitionImageLayout(m_ColorImage->GetImage(), m_Surface->GetFormat().format, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL, VK_IMAGE_ASPECT_COLOR_BIT, m_ColorImage->GetMipLevels(), 0, 1, 0);
 }
 

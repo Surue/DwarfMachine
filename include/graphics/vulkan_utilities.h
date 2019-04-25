@@ -69,20 +69,6 @@ struct SwapChainSupportDetails final
 };
 
 /**
- * \brief This structure describes the number of queues wanted for a single queue family
- */
-struct QueueFamilyIndices final
-{
-	std::optional<uint32_t> graphicFamily;
-	std::optional<uint32_t> presentFamily;
-
-	bool IsComplete() const
-	{
-		return graphicFamily.has_value() && presentFamily.has_value();
-	}
-};
-
-/**
  * \brief The structure describes the vertex used to draw things on screen
  */
 struct Vertex final

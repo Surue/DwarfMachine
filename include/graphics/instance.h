@@ -37,7 +37,10 @@ const bool ENABLE_VALIDATION_LAYERS = true;
 
 namespace dm
 {
-class Instance
+/**
+ * \brief It represents the connection from the engine to the Vulkan runtime. Only one should exists per application
+ */
+class Instance final
 {
 public:
 	friend VKAPI_ATTR VkBool32 VKAPI_CALL DebugCallback(
