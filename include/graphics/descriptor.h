@@ -76,6 +76,8 @@ public:
 	{
 		m_WriteDescriptorSet.pBufferInfo = m_BufferInfo.get();
 	}
+
+	const VkWriteDescriptorSet &GetWriteDescriptorSet() const { return m_WriteDescriptorSet; }
 private:
 	VkWriteDescriptorSet m_WriteDescriptorSet;
 	std::unique_ptr<VkDescriptorImageInfo> m_ImageInfo;
