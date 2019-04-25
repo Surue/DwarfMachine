@@ -22,20 +22,22 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#ifndef UNIFORM_HANDLE_H
-#define UNIFORM_HANDLE_H
+#ifndef STORAGE_HANDLE_H
+#define STORAGE_HANDLE_H
 
-#include <graphics/uniform_buffer.h>
+#include <graphics/storage_buffer.h>
 #include "shader.h"
 
 namespace dm
 {
-class UniformHandle
+class StorageHandle
 {
 public:
-	explicit UniformHandle(const bool &multiPipeline = false);
+	explicit StorageHandle(const bool &multiPipeline = false);
 
-	explicit UniformHandle(const Shader::UniformBlock &uniformBlock, const bool &multiPipeline = false);
+	explicit StorageHandle(const Shader::UniformBlock &uniformBlock, const bool &multiPipeline = false);
+
+	void Push(void* data, const std::size_t& size);
 
 	template<typename T>
 	void Push(const T &object, const std::size_t &offset, const std::size_t &size)
@@ -45,7 +47,7 @@ public:
 			return;
 		}
 
-		if(std::memcmp(m_Data.Get() + offset, &object, size) != 0)
+		if (std::memcmp(m_Data.Get() + offset, &object, size) != 0)
 		{
 			std::memcpy(m_Data.get() + offset, &object, size);
 			m_HandleStatus = Buffer::Status::CHANGED;
@@ -55,21 +57,21 @@ public:
 	template<typename T>
 	void Push(const std::string &uniformName, const T &object, const std::size_t &size = 0)
 	{
-		if(!m_UniformBlock)
+		if (!m_UniformBlock)
 		{
 			return;
 		}
 
 		auto uniform = m_UniformBlock->GetUniform(uniformName);
 
-		if(!uniform)
+		if (!uniform)
 		{
 			return;
 		}
 
 		auto realSize = size;
 
-		if(realSize == 0)
+		if (realSize == 0)
 		{
 			realSize == std::min(sizeof(object), static_cast<std::size_t>(uniform->GetSize()));
 		}
@@ -79,15 +81,15 @@ public:
 
 	bool Update(const std::optional<Shader::UniformBlock> &uniformBlock);
 
-	const UniformBuffer *GetUniformBuffer() const { return m_UniformBuffer.get(); }
+	const StorageBuffer *GetUniformBuffer() const { return m_StorageBuffer.get(); }
 private:
 	bool m_MultiPipeline;
 	std::optional<Shader::UniformBlock> m_UniformBlock;
 	uint32_t m_Size;
 	std::unique_ptr<char[]> m_Data;
-	std::unique_ptr<UniformBuffer> m_UniformBuffer;
+	std::unique_ptr<StorageBuffer> m_StorageBuffer;
 	Buffer::Status m_HandleStatus;
 };
 }
 
-#endif UNIFORM_HANDLE_H
+#endif STORAGE_HANDLE_H
