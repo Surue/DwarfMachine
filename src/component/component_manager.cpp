@@ -26,23 +26,18 @@ SOFTWARE.
 
 namespace dm
 {
-ComponentManager::ComponentManager(Engine& engine): m_Engine(engine)
-{
-	m_TransformManager = new TransformManager(m_Engine);
-	m_CameraManager = new CameraManager(m_Engine);
-	m_ControllerTypeManager = new ControllerTypeManager(m_Engine);
+ComponentManagerContainer::ComponentManagerContainer(Engine& engine):
+	m_Engine(engine),
+	m_TransformManager(std::make_unique<TransformManager>(m_Engine)),
+	m_CameraManager(std::make_unique<CameraManager>(m_Engine)),
+	m_ControllerTypeManager(std::make_unique<ControllerTypeManager>(m_Engine)),
+	m_MaterialDefaultManager(std::make_unique<MaterialDefaultManager>(m_Engine)) { }
 
-	//TODO utiliser un std::vector qui stock tout les managers
+void ComponentManagerContainer::Destroy()
+{
 }
 
-void ComponentManager::Destroy()
-{
-	delete(m_TransformManager);
-	delete(m_CameraManager);
-	delete(m_ControllerTypeManager);
-}
-
-ComponentBase* ComponentManager::CreateComponent(const Entity entity, const ComponentType componentType) const
+ComponentBase* ComponentManagerContainer::CreateComponent(const Entity entity, const ComponentType componentType) const
 {
 	switch (componentType)
 	{
@@ -59,7 +54,7 @@ ComponentBase* ComponentManager::CreateComponent(const Entity entity, const Comp
 	}
 }
 
-ComponentBase* ComponentManager::AddComponent(const Entity entity, ComponentBase& component) const
+ComponentBase* ComponentManagerContainer::AddComponent(const Entity entity, ComponentBase& component) const
 {
 	switch (component.componentType)
 	{
@@ -71,12 +66,14 @@ ComponentBase* ComponentManager::AddComponent(const Entity entity, ComponentBase
 		return static_cast<ComponentBase*>(m_CameraManager->AddComponent(entity, static_cast<Camera&>(component)));
 	case ComponentType::CONTROL_TYPE:
 		return static_cast<ComponentBase*>(m_ControllerTypeManager->AddComponent(entity, static_cast<ControllerType&>(component)));
+	case ComponentType::MATERIAL_DEFAULT:
+		return static_cast<ComponentBase*>(m_MaterialDefaultManager->AddComponent(entity, static_cast<MaterialDefault&>(component)));
 	default:
 		throw std::runtime_error("Fail to bind component to its own component manager");
 	}
 }
 
-ComponentBase* ComponentManager::GetComponent(const Entity entity, const ComponentType componentType) const
+ComponentBase* ComponentManagerContainer::GetComponent(const Entity entity, const ComponentType componentType) const
 {
 	switch (componentType)
 	{
@@ -91,7 +88,7 @@ ComponentBase* ComponentManager::GetComponent(const Entity entity, const Compone
 	throw std::runtime_error("Try to get non existent component");
 }
 
-void ComponentManager::DestroyComponent(const Entity entity, const ComponentType componentType) const
+void ComponentManagerContainer::DestroyComponent(const Entity entity, const ComponentType componentType) const
 {
 	switch (componentType)
 	{

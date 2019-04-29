@@ -28,6 +28,8 @@ enum class ComponentType : int {
 	NONE = 0,
 	TRANSFORM = 1 << 0,
 	CAMERA = 1 << 1,
-	CONTROL_TYPE = 1 << 2
+	CONTROL_TYPE = 1 << 2,
+	MATERIAL_DEFAULT = 1 << 3,
+	LENGTH = 5
 };
 #endif COMPONENT_TYPE_H

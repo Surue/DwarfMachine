@@ -73,7 +73,7 @@ public:
 
 private:
 	Entity m_Entity;
-	ComponentManager* m_ComponentManager = nullptr;
+	ComponentManagerContainer* m_ComponentManager = nullptr;
 	EntityManager* m_EntityManager = nullptr;
 	SystemManager* m_SystemManager = nullptr;
 	Engine& m_Engine;

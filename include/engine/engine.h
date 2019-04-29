@@ -32,7 +32,7 @@ namespace dm
 class GraphicManager;
 class InputManager;
 class EntityManager;
-class ComponentManager;
+class ComponentManagerContainer;
 class SystemManager;
 class Window;
 
@@ -61,7 +61,7 @@ public:
 
 	EntityManager* GetEntityManager() const;
 
-	ComponentManager* GetComponentManager() const;
+	ComponentManagerContainer* GetComponentManager() const;
 
 	SystemManager* GetSystemManager() const;
 
@@ -83,7 +83,7 @@ private:
 	GraphicManager* m_GraphicManager = nullptr;
 	InputManager* m_InputManager = nullptr;
 	EntityManager* m_EntityManager = nullptr;
-	ComponentManager* m_ComponentManager = nullptr;
+	ComponentManagerContainer* m_ComponentManager = nullptr;
 	SystemManager* m_SystemManager = nullptr;
 };
 }

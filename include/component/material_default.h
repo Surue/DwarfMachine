@@ -42,7 +42,7 @@ struct MaterialDefault : public Material
 class MaterialDefaultManager final : public ComponentBaseManager<MaterialDefault>
 {
 public:
-	MaterialDefaultManager(Engine& engine);
+	explicit MaterialDefaultManager(Engine& engine);
 
 	void Init() override;
 
@@ -52,8 +52,8 @@ public:
 
 	void DestroyComponent(Entity entity) override;
 
+	std::vector<Shader::Define> GetDefines(int indexComponent) const;
 private:
-	std::vector<Shader::Define> GetDefines() const;
 };
 }
 

@@ -41,8 +41,43 @@ MaterialDefault* MaterialDefaultManager::CreateComponent(const Entity entity)
 
 	t.textureDiffuse = nullptr;
 
+	//TODO Deplacer ce code dans le System MeshRendering
+	//t.m_pipelineMaterial = m_pipelineMaterial = PipelineMaterial::Create({ 1, 0 }, PipelineGraphicsCreate({ "Shaders/Defaults/Default.vert", "Shaders/Defaults/Default.frag" }, { mesh->GetVertexInput() }, GetDefines(), PipelineGraphics::Mode::Mrt));
+
 	m_Components[entity - 1] = t;
 
 	return &m_Components[entity - 1];
+}
+
+void MaterialDefaultManager::DestroyComponent(Entity entity) {}
+
+template<typename T>
+static std::string To(const T &val)
+{
+	if constexpr (std::is_enum_v<T>)
+	{
+		typedef typename std::underlying_type<T>::type safe_type;
+		return std::to_string(static_cast<safe_type>(val));
+	}
+	else if constexpr (std::is_same_v<bool, T>)
+	{
+		return val ? "true" : "false";
+	}
+	else if constexpr (std::is_same_v<std::string, T>)
+	{
+		return val;
+	}
+	else
+	{
+		return std::to_string(static_cast<T>(val));
+	}
+}
+
+std::vector<Shader::Define> MaterialDefaultManager::GetDefines(const int indexComponent) const
+{
+	MaterialDefault component = m_Components[indexComponent];
+	std::vector<Shader::Define> defines;
+	defines.emplace_back("DIFFUSE_MAPPING", To(component.textureDiffuse != nullptr));
+	return defines;
 }
 }

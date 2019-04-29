@@ -54,10 +54,10 @@ public:
 	virtual void Update() = 0;
 
 	virtual T* CreateComponent(Entity) = 0;
-
-	virtual T* AddComponent(const Entity entity, T& componentBase)
+	
+	virtual T* AddComponent(const Entity entity, T& component)
 	{
-		m_Components[entity - 1] = componentBase;
+		m_Components[entity - 1] = component;
 		return &m_Components[entity - 1];
 	};
 
@@ -72,6 +72,7 @@ public:
 	{
 		return m_Components;
 	}
+
 
 protected:
 	std::vector<T> m_Components{INIT_COMPONENT_NMB};

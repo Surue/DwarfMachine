@@ -28,18 +28,18 @@ SOFTWARE.
 #include <component/transform.h>
 #include <component/camera.h>
 #include <component/control_type.h>
+#include "material_default.h"
 
 namespace dm {
 
 class Engine;
 
-class ComponentManager final
+class ComponentManagerContainer final
 {
 public:
-	ComponentManager(Engine& engine);
+	ComponentManagerContainer(Engine& engine);
 
 	void Destroy();
-
 
 	ComponentBase* CreateComponent(Entity entity, ComponentType componentType) const;
 
@@ -50,12 +50,15 @@ public:
 	void DestroyComponent(const Entity entity, ComponentType componentType) const;
 
 private:
-	TransformManager* m_TransformManager;
-	CameraManager* m_CameraManager;
-	ControllerTypeManager* m_ControllerTypeManager;
-
 	Engine& m_Engine;
+
+	std::unique_ptr<TransformManager> m_TransformManager;
+	std::unique_ptr<CameraManager> m_CameraManager;
+	std::unique_ptr<ControllerTypeManager> m_ControllerTypeManager;
+	std::unique_ptr<MaterialDefaultManager> m_MaterialDefaultManager;
+
+
+
 };
 }
-
 #endif COMPONENT_MANAGER_H

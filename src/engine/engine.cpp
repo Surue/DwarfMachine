@@ -44,7 +44,7 @@ Engine::Engine()
 	m_GraphicManager = new GraphicManager(*this);
 	m_InputManager = new InputManager(*this);
 	m_EntityManager = new EntityManager(*this);
-	m_ComponentManager = new ComponentManager(*this);
+	m_ComponentManager = new ComponentManagerContainer(*this);
 	m_SystemManager = new SystemManager(*this);
 }
 
@@ -55,7 +55,7 @@ Engine::Engine(const EngineSettings engineSettings)
 	m_GraphicManager = new GraphicManager(*this);
 	m_InputManager = new InputManager(*this);
 	m_EntityManager = new EntityManager(*this);
-	m_ComponentManager = new ComponentManager(*this);
+	m_ComponentManager = new ComponentManagerContainer(*this);
 	m_SystemManager = new SystemManager(*this);
 }
 
@@ -93,7 +93,7 @@ EntityManager* Engine::GetEntityManager() const
 	return m_EntityManager;
 }
 
-ComponentManager* Engine::GetComponentManager() const
+ComponentManagerContainer* Engine::GetComponentManager() const
 {
 	return m_ComponentManager;
 }

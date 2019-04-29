@@ -47,13 +47,15 @@ struct Transform final : ComponentBase
 class TransformManager final : public ComponentBaseManager<Transform>
 {
 public:
+	static Transform Create();
+
 	TransformManager(Engine& engine);
 
 	void Init() override;
 
 	void Update() override;
 
-	Transform* CreateComponent(const Entity entity) override;
+	Transform* CreateComponent(Entity entity) override;
 
 	void DestroyComponent(Entity entity) override;
 };
