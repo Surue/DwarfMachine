@@ -40,6 +40,8 @@ Model::Model() :
 	m_IndexCount(0)
 {}
 
+void Model::Load() {}
+
 bool Model::CmdRender(const CommandBuffer& commandBuffer, const uint32_t& instance) const
 {
 	if(m_VertexBuffer != nullptr && m_IndexBuffer != nullptr)

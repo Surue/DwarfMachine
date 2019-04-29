@@ -46,6 +46,8 @@ public:
 		Initialize(vertices, indices);
 	}
 
+	virtual void Load();
+
 	bool CmdRender(const CommandBuffer &commandBuffer, const uint32_t &instance = 1) const;
 
 	const Buffer *GetVertexBuffer() const { return m_VertexBuffer.get(); }
