@@ -22,41 +22,29 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#ifndef CAMERA_H
-#define CAMERA_H
+#ifndef RENDERER_MESHES_H
+#define RENDERER_MESHES_H
+#include "render_pipeline.h"
+#include "system/system.h"
+#include <graphics/uniform_handle.h>
 
-#include <component/component.h>
-#include <engine/matrix_4.h>
-
-namespace dm {
-struct Camera final : ComponentBase
+namespace dm
 {
-	Matrix4 proj{};
-	Matrix4 view{};
-
-	bool isMainCamera;
-};
-
-class Transform;
-
-class CameraManager final : public ComponentBaseManager<Camera>
+class RendererMeshes : public RenderPipeline, public System
 {
 public:
-	CameraManager(Engine& engine);
+	explicit RendererMeshes(Engine &engine, const Pipeline::Stage &pipelineStage);
 
-	void Init() override;
 	void Update() override;
 
-	Camera* CreateComponent(const Entity entity) override;
+	void Draw(const CommandBuffer &commandBuffer) override;
 
-	Camera* AddComponent(const Entity entity, Camera& componentBase) override;
-
-	Transform* GetTransformOfCamera(Camera& component);
-
-	void DestroyComponent(Entity entity) override;
-
+	void RegisterEntity(const Entity entity) override;
 private:
-	GraphicManager* m_GraphicManager;
+	UniformHandle m_UniformScene;
+
+	std::vector<UniformHandle> m_UniformObjects;
 };
 }
-#endif
+
+#endif RENDERER_MESHES_H

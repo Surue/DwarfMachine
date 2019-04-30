@@ -31,7 +31,7 @@ namespace dm
 {
 struct Material : ComponentBase
 {
-	std::shared_ptr<PipelineMaterial> m_pipelineMaterial;
+	std::shared_ptr<PipelineMaterial> pipelineMaterial;
 };
 }
 

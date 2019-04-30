@@ -124,7 +124,7 @@ public:
 
 	const Swapchain* GetSwapchain() const { return m_Swapchain.get(); }
 
-	const Camera* GetCamera() const { return m_MainCamera; }
+	Camera* GetCamera() const { return m_MainCamera; }
 
 	RenderStage *GetRenderStage(const uint32_t &index) const;
 

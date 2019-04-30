@@ -25,6 +25,8 @@ SOFTWARE.
 
 #include <component/camera.h>
 #include <graphics/graphic_manager.h>
+#include <component/transform.h>
+#include "entity/entity_handle.h"
 
 namespace dm
 {
@@ -66,6 +68,20 @@ Camera* CameraManager::AddComponent(const Entity entity, Camera& componentBase)
 	}
 
 	return &m_Components[entity - 1];
+}
+
+Transform* CameraManager::GetTransformOfCamera(Camera& component)
+{
+	for(auto i = 0; i < m_Components.size(); i++)
+	{
+		if(m_Components.at(i).isMainCamera)
+		{
+			auto entity = EntityHandle(i + 1, *Engine::Get());
+			return entity.GetComponent<Transform>(ComponentType::TRANSFORM);
+		}
+	}
+
+	return nullptr;
 }
 
 void CameraManager::DestroyComponent(Entity entity)

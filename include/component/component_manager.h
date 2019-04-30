@@ -49,6 +49,8 @@ public:
 
 	void DestroyComponent(const Entity entity, ComponentType componentType) const;
 
+	CameraManager* GetCameraManager() const { return m_CameraManager.get(); }
+
 private:
 	Engine& m_Engine;
 

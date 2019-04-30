@@ -25,12 +25,15 @@ SOFTWARE.
 #ifndef MESH_H
 #define MESH_H
 #include <component/component.h>
+#include "graphics/model.h"
+#include "graphics/shader.h"
+#include "graphics/model_vertex.h"
 
 namespace dm
 {
 struct Mesh final : ComponentBase
 {
-	
+	std::shared_ptr<Model> model;
 };
 
 class MeshManager : public ComponentBaseManager<Mesh>
@@ -40,6 +43,8 @@ public:
 	void Update() override;
 	Mesh* CreateComponent(Entity) override;
 	void DestroyComponent(Entity entity) override;
+
+	static Shader::VertexInput GetVertexInput(const uint32_t &binding = 0) { return VertexModel::GetVertexInput(binding); }
 };
 }
 

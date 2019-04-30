@@ -73,9 +73,8 @@ static std::string To(const T &val)
 	}
 }
 
-std::vector<Shader::Define> MaterialDefaultManager::GetDefines(const int indexComponent) const
+std::vector<Shader::Define> MaterialDefaultManager::GetDefines(const MaterialDefault& component)
 {
-	MaterialDefault component = m_Components[indexComponent];
 	std::vector<Shader::Define> defines;
 	defines.emplace_back("DIFFUSE_MAPPING", To(component.textureDiffuse != nullptr));
 	return defines;

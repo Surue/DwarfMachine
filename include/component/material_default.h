@@ -29,6 +29,7 @@ SOFTWARE.
 #include <engine/color.h>
 #include <graphics/uniform_handle.h>
 #include <graphics/descriptor_handle.h>
+#include "engine/matrix_4.h"
 
 namespace dm
 {
@@ -52,7 +53,18 @@ public:
 
 	void DestroyComponent(Entity entity) override;
 
-	std::vector<Shader::Define> GetDefines(int indexComponent) const;
+	static std::vector<Shader::Define> GetDefines(const MaterialDefault &component);
+
+	static void PushDescriptor(const MaterialDefault &component, DescriptorHandle &descriptor)
+	{
+		descriptor.Push("samplerDiffuse", component.textureDiffuse);
+	}
+
+	static void PushUniform(const MaterialDefault &component, UniformHandle &uniform, const Matrix4 worldPos)
+	{
+		uniform.Push("transform", worldPos);
+		uniform.Push("baseDiffuse", component.color);
+	}
 private:
 };
 }
