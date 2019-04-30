@@ -24,22 +24,23 @@ SOFTWARE.
 
 #include <graphics/command_pool.h>
 #include <graphics/logical_device.h>
+#include <graphics/graphic_manager.h>
 
 namespace dm
 {
-CommandPool::CommandPool(LogicalDevice* logicalDevice, const std::thread::id& threadId) :
+CommandPool::CommandPool(const std::thread::id& threadId) :
 	m_CommandPool(VK_NULL_HANDLE),
-	m_ThreadId(threadId),
-	m_LogicalDevice(logicalDevice)
+	m_ThreadId(threadId)
 {
-	const auto graphicsFamily = m_LogicalDevice->GetGraphicsFamily();
+	auto logicalDevice = Engine::Get()->GetGraphicManager()->GetLogicalDevice();
+	const auto graphicsFamily = logicalDevice->GetGraphicsFamily();
 
 	VkCommandPoolCreateInfo poolInfo = {};
 	poolInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
 	poolInfo.queueFamilyIndex = graphicsFamily;
 	poolInfo.flags = VK_COMMAND_POOL_CREATE_TRANSIENT_BIT | VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
 
-	if (vkCreateCommandPool(*m_LogicalDevice, &poolInfo, nullptr, &m_CommandPool) != VK_SUCCESS)
+	if (vkCreateCommandPool(*logicalDevice, &poolInfo, nullptr, &m_CommandPool) != VK_SUCCESS)
 	{
 		throw std::runtime_error("failed to create command pool");
 	}
@@ -47,6 +48,7 @@ CommandPool::CommandPool(LogicalDevice* logicalDevice, const std::thread::id& th
 
 CommandPool::~CommandPool()
 {
-	vkDestroyCommandPool(*m_LogicalDevice, m_CommandPool, nullptr);
+	auto logicalDevice = Engine::Get()->GetGraphicManager()->GetLogicalDevice();
+	vkDestroyCommandPool(*logicalDevice, m_CommandPool, nullptr);
 }
 }

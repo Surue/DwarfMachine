@@ -25,11 +25,7 @@ SOFTWARE.
 #ifndef GRAPHIC_MANAGER_H
 #define GRAPHIC_MANAGER_H
 
-#define TINYOBJLOADER_IMPLEMENTATION
-#include <utility/tiny_obj_loader.h>
-
 #include <engine/engine.h>
-#include <graphics/vulkan_utilities.h>
 #include <component/camera.h>
 #include <graphics/instance.h>
 #include <graphics/surface.h>
@@ -38,12 +34,9 @@ SOFTWARE.
 #include <graphics/command_buffer.h>
 
 #include <SDL.h>
-#include <graphics/image_2d.h>
-#include <graphics/image_depth.h>
 #include <graphics/swapchain.h>
-#include "render_stage.h"
-#include "uniform_handle.h"
-#include "render_manager.h"
+#include <graphics/render_stage.h>
+#include <graphics/render_manager.h>
 
 namespace dm
 {
@@ -115,7 +108,7 @@ public:
 	 */
 	Window* GetWindow() const;
 
-	void SetManager(RenderManager *managerRender) { m_renderManager.reset(managerRender); }
+	void SetManager(RenderManager *managerRender) { m_RenderManager.reset(managerRender); }
 
 	void SetRenderStages(std::vector<std::unique_ptr<RenderStage>> renderStages);
 
@@ -123,7 +116,7 @@ public:
 
 	const LogicalDevice* GetLogicalDevice() const { return m_LogicalDevice.get(); }
 
-	std::shared_ptr<CommandPool> GetCommandPool() const { return m_CommandPool; }
+	const std::shared_ptr<CommandPool> &GetCommandPool(const std::thread::id &threadId = std::this_thread::get_id());
 
 	const Surface* GetSurface() const { return m_Surface.get(); }
 
@@ -144,204 +137,45 @@ private:
 
 	static void FrameBufferResizeCallback(SDL_Window* window, int width, int height);
 
-	/**
-	 * \brief Init Vulkan
-	 */
-	void InitVulkan();
-
-	/**
-	 * \brief Create a swapchain (Act as an image buffer)
-	 */
-	void CreateSwapChain();
-
-	/**
-	 * \brief Create a swap chain struct
-	 * \param device 
-	 * \return 
-	 */
-	SwapChainSupportDetails QuerySwapChainSupport(VkPhysicalDevice device) const;
-
-	/**
-	 * \brief 
-	 * \param availablePresentModes 
-	 * \return 
-	 */
-	static VkPresentModeKHR ChooseSwapPresentMode(const std::vector<VkPresentModeKHR>& availablePresentModes);
-
-	/**
-	 * \brief 
-	 * \param capabilities 
-	 * \return 
-	 */
-	VkExtent2D ChooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities) const;
-
-	/**
-	 * \brief Create graphic pipeline
-	 */
-	void CreateGraphicPipeline();
-
-	/**
-	 * \brief Read a SPIR_V shader file
-	 * \param filename SPIR-V shader
-	 * \return 
-	 */
-	static std::vector<char> ReadFile(const std::string& filename);
-
-	/**
-	 * \brief Create a shader module
-	 * \param code  buffer with bytecode
-	 * \return 
-	 */
-	VkShaderModule CreateShaderModule(const std::vector<char>& code) const;
-
-	/**
-	 * \brief 
-	 */
-	void CreateRenderPass();
-
-	/**
-	 * \brief 
-	 */
-	void CreateFrameBuffers();
-
-	/**
-	 * \brief
-	 */
-	void CreateCommandBuffers();
-
-	/**
-	 * \brief Create semaphore and fences
-	 */
-	void CreateSyncObjects();
-
-	/**
-	 * \brief Draw the current frame
-	 */
-	void DrawFrame();
-
-	/**
-	 * \brief Handle resizing of swap chain if it's not compatible anymore with the window
-	 */
-	void RecreateSwapChain();
-
-	void DestroySwapChain();
-
-	void CreateBuffer(VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties, VkBuffer& buffer, VkDeviceMemory& bufferMemory) const;
-
-	void CopyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size) const;
-
-	/**
-	 * \brief Create a vertex buffer that store all vertices send to the GPU
-	 */
-	void CreateVertexBuffer();
-
-	/**
-	 * \brief Create an index buffer to point to different vertex
-	 */
-	void CreateIndexBuffer();
-
-	void CreateDescriptorSetLayout();
-
-	void CreateUniformBuffers();
-
-	void UpdateUniformBuffer(uint32_t currentImage);
-
-	void CreateDescriptorPool();
-
-	void CreateDescriptorSets();
-
-	void CreateTextureImage();
-
-	VkCommandBuffer BeginSingleTimeCommands() const;
-
-	void EndSingleTimeCommands(VkCommandBuffer commandBuffer) const;
-
-	void CreateDepthResources();
-
-	VkFormat FindSupportedFormat(const std::vector<VkFormat>& candidates, VkImageTiling tiling, VkFormatFeatureFlags features) const;
-
-	VkFormat FindDepthFormat() const;
-
-	void LoadModel();
-
-	void CreateColorResources();
-
 	void UpdateMainCamera() const;
 
-	void RecreatePass(RenderStage &renderStage); //News
+	void RecreatePass(RenderStage &renderStage); 
 
-	void RecreateAttachmentsMap(); //News
+	void RecreateAttachmentsMap(); 
 
-	bool StartRenderpass(RenderStage &renderStage); //News
+	bool StartRenderpass(RenderStage &renderStage); 
 
-	void EndRenderpass(RenderStage &renderStage); //News
+	void EndRenderpass(RenderStage &renderStage); 
 
 
 	//WINDOW
 	std::unique_ptr<Window> m_Window = nullptr;
 
 	//VULKAN
-	std::unique_ptr<Instance> m_Instance = nullptr; //Keep
-	std::unique_ptr<Surface> m_Surface = nullptr; //Keep
-	std::unique_ptr<PhysicalDevice> m_PhysicalDevice = nullptr; //Keep
-	std::unique_ptr<LogicalDevice> m_LogicalDevice = nullptr; //Keep
+	std::unique_ptr<Instance> m_Instance = nullptr; 
+	std::unique_ptr<Surface> m_Surface = nullptr;
+	std::unique_ptr<PhysicalDevice> m_PhysicalDevice = nullptr; 
+	std::unique_ptr<LogicalDevice> m_LogicalDevice = nullptr; 
 
-	std::unique_ptr<Swapchain> m_Swapchain = nullptr; //Keep
+	std::unique_ptr<Swapchain> m_Swapchain = nullptr;
 
-	std::shared_ptr<CommandPool> m_CommandPool = nullptr; //Keep
-	std::vector< std::unique_ptr<CommandBuffer>> m_CommandBuffers; //Keep
+	std::map<std::thread::id, std::shared_ptr<CommandPool>> m_CommandPools; 
+	std::vector< std::unique_ptr<CommandBuffer>> m_CommandBuffers;
 
-	VkPipelineCache m_PipelineCache; //Keep
-	std::vector<VkSemaphore> m_ImageAvailableSemaphores; //Keep
-	std::vector<VkSemaphore> m_RenderFinishedSemaphores; //Keep
-	std::vector<VkFence> m_InFlightFences; //Keep
-	size_t m_CurrentFrame = 0; //Keep
+	VkPipelineCache m_PipelineCache; 
+	std::vector<VkSemaphore> m_ImageAvailableSemaphores; 
+	std::vector<VkSemaphore> m_RenderFinishedSemaphores; 
+	std::vector<VkFence> m_InFlightFences; 
+	size_t m_CurrentFrame = 0; 
 
 	Engine& m_Engine;
 
 	//Camera
 	Camera* m_MainCamera = nullptr;
 
-	std::vector<std::unique_ptr<RenderStage>> m_RenderStages; //Keep
-	std::map<std::string, const Descriptor *> m_Attachments; //New
-	std::unique_ptr<RenderManager> m_renderManager; //New
-
-
-
-	bool m_FrameBufferResized = false;
-
-	//vertex buffer
-	std::vector<Vertex> m_Vertices;
-	std::vector<uint32_t> m_Indices;
-	VkBuffer m_VertexBuffer{};
-	VkDeviceMemory m_VertexBufferMemory{};
-
-	//Index buffer
-	VkBuffer m_IndexBuffer{};
-	VkDeviceMemory m_IndexBufferMemory{};
-
-	//Uniform buffers
-	std::vector<VkBuffer> m_UniformBuffers;
-	std::vector<VkDeviceMemory> m_UniformBuffersMemory;
-
-	VkDescriptorPool m_DescriptorPool{};
-	std::vector<VkDescriptorSet> m_DescriptorSets;
-
-	//Images
-	std::shared_ptr<Image2d> m_TextureImage = nullptr;
-	std::shared_ptr<ImageDepth> m_DepthImage = nullptr;
-	std::shared_ptr<Image2d> m_ColorImage = nullptr;
-
-	VkRenderPass m_RenderPass{};
-	VkDescriptorSetLayout m_DescriptorSetLayout{};
-	VkPipelineLayout m_PipelineLayout{};
-
-	VkPipeline m_GraphicsPipeline{};
-
-	std::vector<VkFramebuffer> m_SwapChainFrameBuffers;
-
-	const std::string MODEL_PATH = "ressources/models/Tentacle_lp.obj";
-	const std::string TEXTURE_PATH = "ressources/textures/Tentacle_lp_defaultMat_BaseColor.png";
+	std::vector<std::unique_ptr<RenderStage>> m_RenderStages; 
+	std::map<std::string, const Descriptor *> m_Attachments; 
+	std::unique_ptr<RenderManager> m_RenderManager; 
 };
 }
 

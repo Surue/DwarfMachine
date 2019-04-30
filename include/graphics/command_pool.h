@@ -35,7 +35,7 @@ class LogicalDevice;
 class CommandPool
 {
 public:
-	CommandPool(LogicalDevice* logicalDevice, const std::thread::id &threadId = std::this_thread::get_id());
+	CommandPool(const std::thread::id &threadId = std::this_thread::get_id());
 
 	~CommandPool();
 
@@ -45,8 +45,6 @@ public:
 private:
 	VkCommandPool m_CommandPool;
 	std::thread::id m_ThreadId;
-
-	LogicalDevice* m_LogicalDevice;
 };
 }
 

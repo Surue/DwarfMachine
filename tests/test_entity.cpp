@@ -28,9 +28,8 @@ SOFTWARE.
 
 #include <component/transform.h>
 #include <entity/entity_handle.h>
-#include <glm/ext/matrix_clip_space.inl>
-#include <glm/detail/func_trigonometric.inl>
-#include <glm/ext/matrix_transform.inl>
+#include <editor/editor_renderer.h>
+#include <graphics/graphic_manager.h>
 
 TEST(Entity, CreateEntity)
 {
@@ -176,18 +175,21 @@ TEST(Entity, SystemAddComponent)
 	auto entity = dm::EntityHandle(e0, engine);
 
 	auto t = entity.CreateComponent<dm::Transform>(ComponentType::TRANSFORM);
-	t->position = dm::Vec3f(0, 0, -10.0f);
+	t->position = dm::Vec3f(0, 0, 10.0f);
+	t->rotation = dm::Vec3f(0, 0, 0);
 
 	dm::Camera cameraInfo;
 	cameraInfo.componentType = ComponentType::CAMERA;
 	cameraInfo.isMainCamera = true;
-	cameraInfo.view = dm::Matrix4::LookAt(dm::Vec3f(10.0f, 0.0f, 0.0f), dm::Vec3f(0.0f, 0.0f, 0.0f), dm::Vec3f(0.0f, 1.0f, 0.0f));
-	cameraInfo.proj = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
+	cameraInfo.view = dm::Matrix4::ViewMatrix(t->position, t->rotation);
+	cameraInfo.proj = dm::Matrix4::PerspectiveMatrix(45.0f  * (3.14f / 180), 800.0f / 600.0f, 0.1f, 100.0f);
 
 	auto camera = entity.AddComponent<dm::Camera>(cameraInfo);
 
 	auto controller = entity.CreateComponent<dm::ControllerType>(ComponentType::CONTROL_TYPE);
 	controller->type = dm::ControllerType::ControllerTypeEnum::CAMERA_EDITOR;
+
+	engine.GetGraphicManager()->SetManager(new dm::EditorRenderManager());
 
 	try
 	{

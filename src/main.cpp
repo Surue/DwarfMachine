@@ -27,6 +27,8 @@ SOFTWARE.
 
 #include <component/transform.h>
 #include <entity/entity_handle.h>
+#include <graphics/graphic_manager.h>
+#include <editor/editor_renderer.h>
 
 int main()
 {
@@ -53,6 +55,8 @@ int main()
 	auto controller = entity.CreateComponent<dm::ControllerType>(ComponentType::CONTROL_TYPE);
 	controller->type = dm::ControllerType::ControllerTypeEnum::CAMERA_EDITOR;
 
+	engine.GetGraphicManager()->SetManager(new dm::EditorRenderManager());
+
 	try
 	{
 		engine.Start();
@@ -61,4 +65,6 @@ int main()
 	{
 		std::cerr << e.what() << "\n";
 	}
+
+	return EXIT_SUCCESS;
 }

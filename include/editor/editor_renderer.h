@@ -22,36 +22,21 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#ifndef RENDER_MANAGER_H
-#define RENDER_MANAGER_H
-
-#include <graphics/renderer_container.h>
+#ifndef EDITOR_RENDER_MANAGER
+#define EDITOR_RENDER_MANAGER
+#include "graphics/render_manager.h"
 
 namespace dm
 {
-class RenderPipeline;
-
-class RenderManager
+class EditorRenderManager : public RenderManager
 {
 public:
-	explicit RenderManager() :
-		m_Started(false)
-	{}
+	EditorRenderManager();
 
-	virtual ~RenderManager() = default;
+	void Start() override;
 
-	virtual void Start() = 0;
-
-	virtual void Update() = 0;
-
-	RendererContainer &GetRendererContainer() { return m_RendererContainer; }
-private:
-	friend class Renderer; //TODO supprimer
-	friend class GraphicManager;
-
-	bool m_Started;
-	RendererContainer m_RendererContainer;
+	void Update() override;
 };
 }
 
-#endif RENDER_MANAGER
+#endif EDITOR_RENDER_MANAGER

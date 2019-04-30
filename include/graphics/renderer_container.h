@@ -34,6 +34,10 @@ class RendererContainer
 public:
 	RendererContainer();
 
+	RendererContainer(const RendererContainer &) = delete;
+
+	RendererContainer &operator=(const RendererContainer &) = delete;
+
 	const std::map<Pipeline::Stage, std::vector<std::unique_ptr<RenderPipeline>>> &GetStages() const { return m_Stages; }
 
 	void Clear() { m_Stages.clear(); }
@@ -68,7 +72,7 @@ public:
 	RenderPipeline *Add(RenderPipeline *renderer);
 
 	template<typename T, typename... Args>
-	T* Add(Args &&... args)
+	T *Add(Args &&... args)
 	{
 		auto created = new T(std::forward<Args>(args)...);
 		Add(created);

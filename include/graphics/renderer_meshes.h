@@ -24,22 +24,22 @@ SOFTWARE.
 
 #ifndef RENDERER_MESHES_H
 #define RENDERER_MESHES_H
-#include "render_pipeline.h"
-#include "system/system.h"
+#include <graphics/render_pipeline.h>
+#include <system/system.h>
 #include <graphics/uniform_handle.h>
 
 namespace dm
 {
-class RendererMeshes : public RenderPipeline, public System
+class RendererMeshes : public RenderPipeline/*, public System*/
 {
 public:
 	explicit RendererMeshes(Engine &engine, const Pipeline::Stage &pipelineStage);
 
-	void Update() override;
+	//void Update() override;
 
 	void Draw(const CommandBuffer &commandBuffer) override;
 
-	void RegisterEntity(const Entity entity) override;
+	//void RegisterEntity(const Entity entity) override;
 private:
 	UniformHandle m_UniformScene;
 
