@@ -44,7 +44,7 @@ public:
 	{
 		std::cout << "parent update\n";
 	}
-	virtual void Draw(){}
+
 	void Destroy();
 
 	virtual void RegisterEntity(const Entity entity);

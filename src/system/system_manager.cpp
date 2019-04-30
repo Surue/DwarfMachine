@@ -25,13 +25,13 @@ SOFTWARE.
 #include <system/system_manager.h>
 #include <system/camera_view.h>
 #include <system/input_controller.h>
-#include <iostream>
+#include <graphics/renderer_meshes.h>
 
 namespace dm {
 	SystemManager::SystemManager(Engine& engine) : m_Engine(engine)
 	{
-		m_Systems.push_back(new CameraView(engine));
-		m_Systems.push_back(new InputController(engine));
+		m_Systems.push_back(std::make_unique<CameraView>(engine));
+		m_Systems.push_back(std::make_unique<InputController>(engine));
 	}
 
 	void SystemManager::Init()
@@ -41,7 +41,7 @@ namespace dm {
 
 	void SystemManager::Update()
 	{
-		for (auto system : m_Systems)
+		for (auto& system : m_Systems)
 		{
 			system->Update();
 		}
@@ -49,9 +49,6 @@ namespace dm {
 
 	void SystemManager::Destroy()
 	{
-		for (auto system : m_Systems)
-		{
-			delete(system);
-		}
+		
 	}
 }

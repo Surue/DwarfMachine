@@ -41,9 +41,6 @@ MaterialDefault* MaterialDefaultManager::CreateComponent(const Entity entity)
 
 	t.textureDiffuse = nullptr;
 
-	//TODO Deplacer ce code dans le System MeshRendering
-	//t.m_pipelineMaterial = m_pipelineMaterial = PipelineMaterial::Create({ 1, 0 }, PipelineGraphicsCreate({ "Shaders/Defaults/Default.vert", "Shaders/Defaults/Default.frag" }, { mesh->GetVertexInput() }, GetDefines(), PipelineGraphics::Mode::Mrt));
-
 	m_Components[entity - 1] = t;
 
 	return &m_Components[entity - 1];

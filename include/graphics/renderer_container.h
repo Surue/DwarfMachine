@@ -26,6 +26,8 @@ SOFTWARE.
 #define RENDERER_CONTAINER_H
 
 #include <graphics/render_pipeline.h>
+#include "entity/entity.h"
+#include <iostream>
 
 namespace dm
 {
@@ -37,6 +39,8 @@ public:
 	RendererContainer(const RendererContainer &) = delete;
 
 	RendererContainer &operator=(const RendererContainer &) = delete;
+
+	void Update();
 
 	const std::map<Pipeline::Stage, std::vector<std::unique_ptr<RenderPipeline>>> &GetStages() const { return m_Stages; }
 
@@ -98,6 +102,40 @@ public:
 					{
 						m_Stages.erase(it);
 					}
+				}
+			}
+		}
+	}
+
+	void AddComponent(const Entity entity, const ComponentMask oldMask, ComponentMask newMask)
+	{
+		std::cout << "Hola\n";
+		for (auto& stages : m_Stages)
+		{
+
+			for (auto& system : stages.second)
+			{
+				const auto systemMask = system->GetSignature();
+				if (newMask.IsNewMatch(oldMask, systemMask))
+				{
+					system->RegisterEntity(entity);
+					std::cout << "Added\n";
+				}
+			}
+		}
+	}
+
+	void DestroyComponent(const Entity entity, const ComponentMask oldMask, ComponentMask newMask)
+	{
+		for (auto& stages : m_Stages)
+		{
+			
+			for (auto& system : stages.second)
+			{
+				const auto systemMask = system->GetSignature();
+				if (newMask.IsNoLongerMatch(oldMask, systemMask))
+				{
+					system->UnRegisterEntity(entity);
 				}
 			}
 		}

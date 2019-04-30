@@ -27,6 +27,7 @@ SOFTWARE.
 
 #include <graphics/command_buffer.h>
 #include <graphics/pipeline.h>
+#include <entity/entity.h>
 
 namespace dm
 {
@@ -40,6 +41,8 @@ public:
 
 	virtual ~RenderPipeline() = default;
 
+	virtual void Update() = 0;
+
 	virtual void Draw(const CommandBuffer &commandBuffer) = 0;
 
 	const Pipeline::Stage &GetStage() const { return m_Stage; }
@@ -48,9 +51,37 @@ public:
 
 	void SetEnabled(const bool &enable) { m_Enabled = enable; }
 
+	virtual void RegisterEntity(const Entity entity)
+	{
+		m_RegisteredEntities.push_back(entity);
+	}
+
+	void UnRegisterEntity(const Entity entity)
+	{
+		for (auto it = m_RegisteredEntities.begin(); it != m_RegisteredEntities.end(); ++it)
+		{
+			const auto e = *it;
+
+			if (e == entity)
+			{
+				m_RegisteredEntities.erase(it);
+				return;
+			}
+		}
+	}
+
+	ComponentMask GetSignature() const
+	{
+		return m_Signature;
+	}
+
 private:
 	Pipeline::Stage m_Stage;
 	bool m_Enabled;
+
+protected:
+	std::vector<Entity> m_RegisteredEntities;
+	ComponentMask m_Signature;
 };
 }
 

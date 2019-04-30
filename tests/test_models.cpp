@@ -1,7 +1,7 @@
 /*
 MIT License
 
-Copyright (c) 2017 SAE Institute Switzerland AG
+Copyright (c) 2019 Nicolas Schneider
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -21,19 +21,24 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-#include <iostream>
 
-#include <SDL.h>
+#include <gtest/gtest.h>
+
+#include <engine/engine.h>
 
 #include <component/transform.h>
 #include <entity/entity_handle.h>
+#include <editor/editor_renderer.h>
 #include <graphics/graphic_manager.h>
-//#include <editor/editor_renderer.h>
+#include "component/mesh.h"
+#include "graphics/model_cube.h"
 
-int main()
+TEST(Models, Cube)
 {
 	dm::Engine engine;
 	engine.Init();
+
+	engine.GetGraphicManager()->SetManager(new dm::EditorRenderManager());
 
 	auto entityManager = engine.GetEntityManager();
 
@@ -55,7 +60,18 @@ int main()
 	auto controller = entity.CreateComponent<dm::ControllerType>(ComponentType::CONTROL_TYPE);
 	controller->type = dm::ControllerType::ControllerTypeEnum::CAMERA_EDITOR;
 
-	//engine.GetGraphicManager()->SetManager(new dm::EditorRenderManager());
+	const auto e1 = entityManager->CreateEntity();
+	auto cube = dm::EntityHandle(e1, engine);
+	cube.CreateComponent<dm::Transform>(ComponentType::TRANSFORM);
+	dm::Mesh mesh;
+	mesh.componentType = ComponentType::MESH;
+	mesh.model = dm::ModelCube::Create(dm::Vec3f(1.0f, 1.0f, 1.0f));
+	cube.AddComponent<dm::Mesh>(mesh);
+
+	dm::MaterialDefault material;
+	material.componentType = ComponentType::MATERIAL_DEFAULT;
+	material.color = dm::Color(25, 25, 25, 1);
+	cube.AddComponent<dm::MaterialDefault>(material);
 
 	try
 	{
@@ -65,5 +81,4 @@ int main()
 	{
 		std::cerr << e.what() << "\n";
 	}
-	return 0;
 }

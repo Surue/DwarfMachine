@@ -87,17 +87,25 @@ void GraphicManager::Init()
 
 void GraphicManager::Destroy()
 {
-	vkDeviceWaitIdle(*m_LogicalDevice);
 
-	//Destroy semaphores
+}
+
+GraphicManager::~GraphicManager()
+{
+	auto graphicsQueue = m_LogicalDevice->GetGraphicsQueue();
+
+	vkQueueWaitIdle(graphicsQueue);
+
+	glslang::FinalizeProcess();
+		
+	vkDestroyPipelineCache(*m_LogicalDevice, m_PipelineCache, nullptr);
+
 	for (size_t i = 0; i < m_InFlightFences.size(); i++)
 	{
 		vkDestroyFence(*m_LogicalDevice, m_InFlightFences[i], nullptr);
 		vkDestroySemaphore(*m_LogicalDevice, m_RenderFinishedSemaphores[i], nullptr);
 		vkDestroySemaphore(*m_LogicalDevice, m_ImageAvailableSemaphores[i], nullptr);
 	}
-
-	vkDestroyPipelineCache(*m_LogicalDevice, m_PipelineCache, nullptr);
 }
 
 void GraphicManager::Update()

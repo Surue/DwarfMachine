@@ -27,6 +27,17 @@ SOFTWARE.
 namespace dm
 {
 RendererContainer::RendererContainer() {}
+void RendererContainer::Update()
+{
+	for(auto& stages : m_Stages)
+	{
+
+		for (auto& system : stages.second)
+		{
+			system->Update();
+		}
+	}
+}
 
 RenderPipeline* RendererContainer::Add(RenderPipeline* renderer)
 {

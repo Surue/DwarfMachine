@@ -24,7 +24,7 @@ SOFTWARE.
 
 #ifndef EDITOR_RENDER_MANAGER
 #define EDITOR_RENDER_MANAGER
-#include "graphics/render_manager.h"
+#include <graphics/render_manager.h>
 
 namespace dm
 {

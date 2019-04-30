@@ -29,6 +29,7 @@ SOFTWARE.
 #include <component/component_manager.h>
 #include <component/component_type.h>
 #include <system/system_manager.h>
+#include "graphics/renderer_container.h"
 
 namespace dm
 {
@@ -45,6 +46,7 @@ public:
 
 		m_EntityManager->AddComponent(m_Entity, component.componentType);
 		m_SystemManager->AddComponent(m_Entity, oldMask, m_EntityManager->GetEntityMask(m_Entity));
+		m_RendererContainer->AddComponent(m_Entity, oldMask, m_EntityManager->GetEntityMask(m_Entity));
 		return static_cast<T*>(m_ComponentManager->AddComponent(m_Entity, component));
 	}
 
@@ -55,6 +57,7 @@ public:
 
 		m_EntityManager->AddComponent(m_Entity, componentType);
 		m_SystemManager->AddComponent(m_Entity, oldMask, m_EntityManager->GetEntityMask(m_Entity));
+		m_RendererContainer->AddComponent(m_Entity, oldMask, m_EntityManager->GetEntityMask(m_Entity));
 		return static_cast<T*>(m_ComponentManager->CreateComponent(m_Entity, componentType));
 	}
 
@@ -76,6 +79,7 @@ private:
 	ComponentManagerContainer* m_ComponentManager = nullptr;
 	EntityManager* m_EntityManager = nullptr;
 	SystemManager* m_SystemManager = nullptr;
+	RendererContainer* m_RendererContainer = nullptr;
 	Engine& m_Engine;
 };
 }

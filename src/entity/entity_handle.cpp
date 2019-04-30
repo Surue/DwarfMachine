@@ -23,6 +23,7 @@ SOFTWARE.
 */
 
 #include <entity/entity_handle.h>
+#include <graphics/graphic_manager.h>
 
 namespace dm
 {
@@ -33,6 +34,7 @@ EntityHandle::EntityHandle(const Entity entity, Engine& engine) : m_Engine(engin
 	m_ComponentManager = m_Engine.GetComponentManager();
 	m_EntityManager = m_Engine.GetEntityManager();
 	m_SystemManager = m_Engine.GetSystemManager();
+	m_RendererContainer = m_Engine.GetGraphicManager()->GetRendererContainer();
 }
 
 bool EntityHandle::HasComponent(const ComponentType componentType) const
@@ -46,6 +48,7 @@ void EntityHandle::DestroyComponent(const ComponentType componentType) const
 
 	m_EntityManager->DestroyComponent(m_Entity, componentType);
 	m_SystemManager->DestroyComponent(m_Entity, oldMask, m_EntityManager->GetEntityMask(m_Entity));
+	m_RendererContainer->DestroyComponent(m_Entity, oldMask, m_EntityManager->GetEntityMask(m_Entity));
 	m_ComponentManager->DestroyComponent(m_Entity, componentType);
 }
 

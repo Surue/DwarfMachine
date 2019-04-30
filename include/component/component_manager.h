@@ -29,6 +29,7 @@ SOFTWARE.
 #include <component/camera.h>
 #include <component/control_type.h>
 #include "material_default.h"
+#include "mesh.h"
 
 namespace dm {
 
@@ -58,9 +59,7 @@ private:
 	std::unique_ptr<CameraManager> m_CameraManager;
 	std::unique_ptr<ControllerTypeManager> m_ControllerTypeManager;
 	std::unique_ptr<MaterialDefaultManager> m_MaterialDefaultManager;
-
-
-
+	std::unique_ptr<MeshManager> m_MeshManager;
 };
 }
 #endif COMPONENT_MANAGER_H

@@ -41,23 +41,25 @@ Engine::Engine()
 	m_Settings = EngineSettings();
 	m_Settings.windowSize = Vec2i(800, 600);
 
-	m_GraphicManager = new GraphicManager(*this);
-	m_InputManager = new InputManager(*this);
-	m_EntityManager = new EntityManager(*this);
-	m_ComponentManager = new ComponentManagerContainer(*this);
-	m_SystemManager = new SystemManager(*this);
+	m_GraphicManager = std::make_unique<GraphicManager>(*this);
+	m_InputManager = std::make_unique<InputManager>(*this);
+	m_EntityManager = std::make_unique<EntityManager>(*this);
+	m_ComponentManager = std::make_unique<ComponentManagerContainer>(*this);
+	m_SystemManager = std::make_unique<SystemManager>(*this);
 }
 
 Engine::Engine(const EngineSettings engineSettings)
 {
 	m_Settings = engineSettings;
 
-	m_GraphicManager = new GraphicManager(*this);
-	m_InputManager = new InputManager(*this);
-	m_EntityManager = new EntityManager(*this);
-	m_ComponentManager = new ComponentManagerContainer(*this);
-	m_SystemManager = new SystemManager(*this);
+	m_GraphicManager = std::make_unique<GraphicManager>(*this);
+	m_InputManager = std::make_unique<InputManager>(*this);
+	m_EntityManager = std::make_unique<EntityManager>(*this);
+	m_ComponentManager = std::make_unique<ComponentManagerContainer>(*this);
+	m_SystemManager = std::make_unique<SystemManager>(*this);
 }
+
+Engine::~Engine() {}
 
 void Engine::Init()
 {
@@ -80,27 +82,27 @@ void Engine::Stop() const
 
 GraphicManager* Engine::GetGraphicManager() const
 {
-	return m_GraphicManager;
+	return m_GraphicManager.get();
 }
 
 InputManager* Engine::GetInputManager() const
 {
-	return m_InputManager;
+	return m_InputManager.get();
 }
 
 EntityManager* Engine::GetEntityManager() const
 {
-	return m_EntityManager;
+	return m_EntityManager.get();
 }
 
 ComponentManagerContainer* Engine::GetComponentManager() const
 {
-	return m_ComponentManager;
+	return m_ComponentManager.get();
 }
 
 SystemManager* Engine::GetSystemManager() const
 {
-	return m_SystemManager;
+	return m_SystemManager.get();
 }
 
 EngineSettings& Engine::GetSettings()
@@ -125,15 +127,7 @@ void Engine::MainLoop()
 
 void Engine::Destroy()
 {
-	m_GraphicManager->Destroy();
-	m_ComponentManager->Destroy();
 	m_SystemManager->Destroy();
-
-	delete(m_GraphicManager);
-	delete(m_InputManager);
-	delete(m_ComponentManager);
-	delete(m_EntityManager);
-	delete(m_SystemManager);
 }
 
 }

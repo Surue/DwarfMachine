@@ -39,9 +39,14 @@ struct Mesh final : ComponentBase
 class MeshManager : public ComponentBaseManager<Mesh>
 {
 public:
+	explicit MeshManager(Engine& engine) : ComponentBaseManager(engine)
+	{
+		
+	}
+
 	void Init() override;
 	void Update() override;
-	Mesh* CreateComponent(Entity) override;
+	Mesh* CreateComponent(Entity entity) override;
 	void DestroyComponent(Entity entity) override;
 
 	static Shader::VertexInput GetVertexInput(const uint32_t &binding = 0) { return VertexModel::GetVertexInput(binding); }

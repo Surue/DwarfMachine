@@ -30,16 +30,16 @@ SOFTWARE.
 
 namespace dm
 {
-class RendererMeshes : public RenderPipeline/*, public System*/
+class RendererMeshes : public RenderPipeline
 {
 public:
 	explicit RendererMeshes(Engine &engine, const Pipeline::Stage &pipelineStage);
 
-	//void Update() override;
+	void Update() override;
 
 	void Draw(const CommandBuffer &commandBuffer) override;
 
-	//void RegisterEntity(const Entity entity) override;
+	void RegisterEntity(const Entity entity) override;
 private:
 	UniformHandle m_UniformScene;
 

@@ -26,6 +26,7 @@ SOFTWARE.
 #define ENGINE_H
 
 #include <engine/vector.h>
+#include <memory>
 
 namespace dm
 {
@@ -48,6 +49,7 @@ public:
 
 	Engine();
 	Engine(EngineSettings engineSettings);
+	~Engine();
 
 	void Init();
 
@@ -80,11 +82,11 @@ private:
 
 	Window* m_Window = nullptr;
 
-	GraphicManager* m_GraphicManager = nullptr;
-	InputManager* m_InputManager = nullptr;
-	EntityManager* m_EntityManager = nullptr;
-	ComponentManagerContainer* m_ComponentManager = nullptr;
-	SystemManager* m_SystemManager = nullptr;
+	std::unique_ptr<GraphicManager> m_GraphicManager = nullptr;
+	std::unique_ptr<InputManager> m_InputManager = nullptr;
+	std::unique_ptr<EntityManager> m_EntityManager = nullptr;
+	std::unique_ptr<ComponentManagerContainer> m_ComponentManager = nullptr;
+	std::unique_ptr<SystemManager> m_SystemManager = nullptr;
 };
 }
 

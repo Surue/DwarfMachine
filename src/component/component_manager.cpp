@@ -31,7 +31,9 @@ ComponentManagerContainer::ComponentManagerContainer(Engine& engine):
 	m_TransformManager(std::make_unique<TransformManager>(m_Engine)),
 	m_CameraManager(std::make_unique<CameraManager>(m_Engine)),
 	m_ControllerTypeManager(std::make_unique<ControllerTypeManager>(m_Engine)),
-	m_MaterialDefaultManager(std::make_unique<MaterialDefaultManager>(m_Engine)) { }
+	m_MaterialDefaultManager(std::make_unique<MaterialDefaultManager>(m_Engine)),
+	m_MeshManager(std::make_unique<MeshManager>(m_Engine))
+{ }
 
 void ComponentManagerContainer::Destroy()
 {
@@ -49,6 +51,10 @@ ComponentBase* ComponentManagerContainer::CreateComponent(const Entity entity, c
 		return m_CameraManager->CreateComponent(entity);
 	case ComponentType::CONTROL_TYPE: 
 		return m_ControllerTypeManager->CreateComponent(entity);
+	case ComponentType::MATERIAL_DEFAULT:
+		return m_MaterialDefaultManager->CreateComponent(entity);
+	case ComponentType::MESH:
+		return m_MeshManager->CreateComponent(entity);
 	default:
 		throw std::runtime_error("Fail to bind component to its own component manager");
 	}
@@ -68,6 +74,8 @@ ComponentBase* ComponentManagerContainer::AddComponent(const Entity entity, Comp
 		return static_cast<ComponentBase*>(m_ControllerTypeManager->AddComponent(entity, static_cast<ControllerType&>(component)));
 	case ComponentType::MATERIAL_DEFAULT:
 		return static_cast<ComponentBase*>(m_MaterialDefaultManager->AddComponent(entity, static_cast<MaterialDefault&>(component)));
+	case ComponentType::MESH:
+		return static_cast<ComponentBase*>(m_MeshManager->AddComponent(entity, static_cast<Mesh&>(component)));
 	default:
 		throw std::runtime_error("Fail to bind component to its own component manager");
 	}
@@ -83,6 +91,10 @@ ComponentBase* ComponentManagerContainer::GetComponent(const Entity entity, cons
 		return m_CameraManager->GetComponent(entity);
 	case ComponentType::CONTROL_TYPE:
 		return m_ControllerTypeManager->GetComponent(entity);
+	case ComponentType::MATERIAL_DEFAULT:
+		return m_MaterialDefaultManager->GetComponent(entity);
+	case ComponentType::MESH:
+		return m_MeshManager->GetComponent(entity);
 	}
 
 	throw std::runtime_error("Try to get non existent component");

@@ -44,7 +44,7 @@ public:
 
 	void AddComponent(const Entity entity, const ComponentMask oldMask, ComponentMask newMask)
 	{
-		for (auto system : m_Systems)
+		for (auto& system : m_Systems)
 		{
 			const auto systemMask = system->GetSignature();
 			if(newMask.IsNewMatch(oldMask, systemMask))
@@ -56,12 +56,12 @@ public:
 
 	void DestroyComponent(const Entity entity, const ComponentMask oldMask, ComponentMask newMask)
 	{
-		for (auto system : m_Systems)
+		for (auto& system : m_Systems)
 		{
 			const auto systemMask = system->GetSignature();
 			if (newMask.IsNoLongerMatch(oldMask, systemMask))
 			{
-				system->RegisterEntity(entity);
+				system->UnRegisterEntity(entity);
 			}
 		}
 	}
@@ -69,7 +69,7 @@ public:
 private:
 	Engine& m_Engine;
 
-	std::vector<System*> m_Systems;
+	std::vector<std::unique_ptr<System>> m_Systems;
 
 };
 }

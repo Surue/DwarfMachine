@@ -29,7 +29,10 @@ SOFTWARE.
 
 namespace dm
 {
-EditorRenderManager::EditorRenderManager() {}
+EditorRenderManager::EditorRenderManager()
+{
+	EditorRenderManager::Start();
+}
 
 void EditorRenderManager::Start()
 {

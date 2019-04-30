@@ -23,8 +23,22 @@ SOFTWARE.
 */
 
 #include <component/mesh.h>
+#include "graphics/model_cube.h"
 
 namespace dm
 {
+void MeshManager::Init() {}
+void MeshManager::Update() {}
+Mesh* MeshManager::CreateComponent(const Entity entity)
+{
+	auto mesh = Mesh();
+	mesh.componentType = ComponentType::TRANSFORM;
 
+	mesh.model = ModelCube::Create();
+
+	m_Components[entity - 1] = mesh;
+
+	return &m_Components[entity - 1];
+}
+void MeshManager::DestroyComponent(Entity entity) {}
 }

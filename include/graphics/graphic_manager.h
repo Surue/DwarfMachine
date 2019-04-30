@@ -87,7 +87,7 @@ class GraphicManager
 public:
 
 	GraphicManager(Engine& engine);
-	~GraphicManager() = default;
+	~GraphicManager();
 	/**
 	 * \brief Init graphic manager (GLFW and Vulkan)
 	 */
@@ -127,6 +127,8 @@ public:
 	RenderStage *GetRenderStage(const uint32_t &index) const;
 
 	const VkPipelineCache &GetPipelineCache() const { return m_PipelineCache; }
+
+	RendererContainer *GetRendererContainer() const { return &m_RenderManager->GetRendererContainer(); }
 
 private:
 	void CreatePipelineCache();
