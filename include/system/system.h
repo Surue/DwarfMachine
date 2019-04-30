@@ -47,7 +47,7 @@ public:
 	virtual void Draw(){}
 	void Destroy();
 
-	void RegisterEntity(const Entity entity);
+	virtual void RegisterEntity(const Entity entity);
 
 	void UnRegisterEntity(const Entity entity);
 

@@ -45,7 +45,7 @@ public:
 			return;
 		}
 
-		if(std::memcmp(m_Data.Get() + offset, &object, size) != 0)
+		if(std::memcmp(m_Data.get() + offset, &object, size) != 0)
 		{
 			std::memcpy(m_Data.get() + offset, &object, size);
 			m_HandleStatus = Buffer::Status::CHANGED;

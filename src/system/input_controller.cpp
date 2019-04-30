@@ -22,10 +22,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#define GLM_FORCE_RADIANS
-#define FLM_FORCE_DEPTH_ZERO_TO_ONE
-#include <glm/glm.hpp>
-
 #include <system/input_controller.h>
 #include <entity/entity_handle.h>
 #include <component/control_type.h>
@@ -54,9 +50,9 @@ void InputController::Update()
 			auto* inputManager = m_Engine.GetInputManager();
 
 			Vec3f camFront;
-			camFront.x = -cos(glm::radians(transform->rotation.x)) * sin(glm::radians(transform->rotation.y));
-			camFront.y = sin(glm::radians(transform->rotation.x));
-			camFront.z = cos(glm::radians(transform->rotation.x)) * cos(glm::radians(transform->rotation.y));
+			camFront.x = -cos(transform->rotation.x * (3.14f / 180)) * sin(transform->rotation.y * (3.14f / 180));
+			camFront.y = sin(transform->rotation.x  * (3.14f / 180));
+			camFront.z = cos(transform->rotation.x  * (3.14f / 180)) * cos(transform->rotation.y  * (3.14f / 180));
 			camFront = camFront.Normalized();
 
 			static Vec2i originalPos;

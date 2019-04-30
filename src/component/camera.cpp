@@ -40,13 +40,14 @@ void CameraManager::Init()
 
 void CameraManager::Update()
 {
+	
 }
 
 Camera* CameraManager::CreateComponent(const Entity entity)
 {
 	auto c = Camera();
 	c.componentType = ComponentType::CAMERA;
-	c.proj = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
+	c.proj = Matrix4::PerspectiveMatrix(45 * (3.14f / 180), 800.0f / 600.0f, 0.1f, 100.0f);
 	c.isMainCamera = false;
 	//TODO mettre les valeurs depuis l'exterieur
 

@@ -22,14 +22,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#define GLM_FORCE_RADIANS
-#define FLM_FORCE_DEPTH_ZERO_TO_ONE
-#include <glm/glm.hpp>
 
 #include <system/camera_view.h>
 #include <component/camera.h>
 #include <entity/entity_handle.h>
-#include <glm/ext/matrix_transform.inl>
 
 namespace dm
 {
@@ -47,17 +43,7 @@ void CameraView::Update()
 		auto camera = entity.GetComponent<Camera>(ComponentType::CAMERA);
 		const auto transform = entity.GetComponent<Transform>(ComponentType::TRANSFORM);
 
-		auto rotM = glm::mat4(1.0f);
-
-		rotM = rotate(rotM, glm::radians(transform->rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
-		rotM = rotate(rotM, glm::radians(transform->rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
-		rotM = rotate(rotM, glm::radians(transform->rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
-
-		const auto transM = translate(glm::mat4(1.0f), glm::vec3(transform->position.x, transform->position.y, transform->position.z));
-
-		camera->view = rotM * transM;
-
-		//std::cout << *transform << "\n";
+		camera->view = Matrix4::ViewMatrix(transform->position, transform->rotation);
 	}
 }
 }

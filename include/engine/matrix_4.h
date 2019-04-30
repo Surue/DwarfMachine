@@ -37,12 +37,12 @@ public:
 
 	const Vec4f &operator[](const uint32_t &index) const
 	{
-		return m_rows[index];
+		return m_Rows[index];
 	}
 
 	Vec4f &operator[](const uint32_t &index)
 	{
-		return m_rows[index];
+		return m_Rows[index];
 	}
 
 	Matrix4 Translate(const Vec3f& other) const;
@@ -51,18 +51,15 @@ public:
 
 	Matrix4 Scale(const Vec3f& other) const;
 
-	static Matrix4 TransformationMatrix(const Vec3f &translation, const Vec3f &rotation, const Vec3f &scale)
-	{
-		auto result = Matrix4();
-		result = result.Translate(translation);
-		result = result.Rotate(rotation.x, Vec3f::Right);
-		result = result.Rotate(rotation.y, Vec3f::Up);
-		result = result.Rotate(rotation.z, Vec3f::Front);
-		result = result.Scale(scale);
-		return result;
-	}
+	static Matrix4 TransformationMatrix(const Vec3f& translation, const Vec3f& rotation, const Vec3f& scale);
+
+	static Matrix4 ViewMatrix(const Vec3f& position, const Vec3f& rotation);
+
+	static Matrix4 LookAt(const Vec3f& eye, const Vec3f& centre, const Vec3f& up);
+
+	static Matrix4 PerspectiveMatrix(const float &fov, const float &aspectRatio, const float &zNear, const float &zFar);
 private:
-	Vec4f m_rows[4];
+	Vec4f m_Rows[4];
 };
 }
 

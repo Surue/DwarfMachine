@@ -22,7 +22,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 #include <stdexcept>
-#include <glm/gtc/matrix_transform.hpp>
 #include <chrono>
 #include <algorithm>
 #include <fstream>
@@ -31,7 +30,6 @@ SOFTWARE.
 #include <graphics/graphic_manager.h>
 #include <engine/Input.h>
 #include <iostream>
-#include <graphics/buffer.h>
 #include <graphics/window.h>
 
 #include <SPIRV/GlslangToSpv.h>
@@ -804,11 +802,11 @@ void GraphicManager::CreateUniformBuffers()
 
 void GraphicManager::UpdateUniformBuffer(const uint32_t currentImage)
 {
-	UniformBufferObject ubo = {};
-	ubo.model = glm::identity<glm::mat4>();
+	UniformBufferObject ubo;
+	ubo.model = Matrix4(1);
 	ubo.view = m_MainCamera->view;
 	ubo.proj = m_MainCamera->proj;
-	ubo.proj[1][1] *= -1; //Because glm was designed for openGl the y axis is inversed
+	ubo.proj[1][1] *= -1;
 
 	void* data;
 	vkMapMemory(m_LogicalDevice->GetLogicalDevice(), m_UniformBuffersMemory[currentImage], 0, sizeof(ubo), 0, &data);
@@ -1004,6 +1002,6 @@ void GraphicManager::CreateColorResources()
 void GraphicManager::UpdateMainCamera() const
 {
 	const auto windowSize = m_Engine.GetSettings().windowSize;
-	m_MainCamera->proj = glm::perspective(glm::radians(45.0f), windowSize.x / static_cast<float>(windowSize.y), 0.1f, 100.0f);
+	m_MainCamera->proj = Matrix4::PerspectiveMatrix(45 * (3.14f / 180), windowSize.x / static_cast<float>(windowSize.y), 0.1f, 100.0f);
 }
 }

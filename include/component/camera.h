@@ -24,15 +24,15 @@ SOFTWARE.
 
 #ifndef CAMERA_H
 #define CAMERA_H
-#include <glm/mat4x2.hpp>
 
 #include <component/component.h>
+#include <engine/matrix_4.h>
 
 namespace dm {
 struct Camera final : ComponentBase
 {
-	glm::mat4 proj{};
-	glm::mat4 view{};
+	Matrix4 proj{};
+	Matrix4 view{};
 
 	bool isMainCamera;
 };

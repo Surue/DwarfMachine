@@ -55,10 +55,18 @@ Transform* TransformManager::CreateComponent(const Entity entity)
 	t.rotation.y = 0;
 	t.rotation.z = 0;
 
+	t.scaling.x = 0;
+	t.scaling.y = 0;
+	t.scaling.z = 0;
+
 	m_Components[entity - 1] = t;
 
 	return &m_Components[entity - 1];
 }
 
 void TransformManager::DestroyComponent(Entity entity) { }
+Matrix4 TransformManager::GetWorldMatrix(Transform& component) 
+{
+	return Matrix4::TransformationMatrix(component.position, (3.14f / 180) * component.rotation, component.scaling);
+}
 }

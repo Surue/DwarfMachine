@@ -29,6 +29,7 @@ SOFTWARE.
 
 #include <component/component.h>
 #include <engine/vector.h>
+#include <engine/matrix_4.h>
 
 namespace dm
 {
@@ -36,6 +37,7 @@ struct Transform final : ComponentBase
 {
 	Vec3f position;
 	Vec3f rotation;
+	Vec3f scaling;
 
 	friend std::ostream & operator<<(std::ostream & out, const Transform transform)
 	{
@@ -58,6 +60,8 @@ public:
 	Transform* CreateComponent(Entity entity) override;
 
 	void DestroyComponent(Entity entity) override;
+
+	static Matrix4 GetWorldMatrix(Transform &component);
 };
 }
 

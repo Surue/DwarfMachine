@@ -28,11 +28,11 @@ namespace dm
 {
 Matrix4::Matrix4(const float& diagonal)
 {
-	memset(m_rows, 0, 4 * sizeof(Vec4f));
-	m_rows[0].x = diagonal;
-	m_rows[1].y = diagonal;
-	m_rows[2].z = diagonal;
-	m_rows[3].w = diagonal;
+	memset(m_Rows, 0, 4 * sizeof(Vec4f));
+	m_Rows[0].x = diagonal;
+	m_Rows[1].y = diagonal;
+	m_Rows[2].z = diagonal;
+	m_Rows[3].w = diagonal;
 }
 
 Matrix4 Matrix4::Translate(const Vec3f& other) const
@@ -41,7 +41,7 @@ Matrix4 Matrix4::Translate(const Vec3f& other) const
 
 	for (auto col = 0; col < 4; col++)
 	{
-		result[3][col] += m_rows[0][col] * other.x + m_rows[1][col] * other.y + m_rows[2][col] * other.z;
+		result[3][col] += m_Rows[0][col] * other.x + m_Rows[1][col] * other.y + m_Rows[2][col] * other.z;
 	}
 
 	return result;
@@ -76,7 +76,7 @@ Matrix4 Matrix4::Rotate(const float& angle, const Vec3f& axis)
 	{
 		for (auto col = 0; col < 4; col++)
 		{
-			result[row][col] = m_rows[0][col] * f[row][0] + m_rows[1][col] * f[row][1] + m_rows[2][col] * f[row][2];
+			result[row][col] = m_Rows[0][col] * f[row][0] + m_Rows[1][col] * f[row][1] + m_Rows[2][col] * f[row][2];
 		}
 	}
 
@@ -95,6 +95,63 @@ Matrix4 Matrix4::Scale(const Vec3f& other) const
 		}
 	}
 
+	return result;
+}
+
+Matrix4 Matrix4::TransformationMatrix(const Vec3f& translation, const Vec3f& rotation, const Vec3f& scale)
+{
+	auto result = Matrix4();
+	result = result.Translate(translation);
+	result = result.Rotate(rotation.x, Vec3f::Right);
+	result = result.Rotate(rotation.y, Vec3f::Up);
+	result = result.Rotate(rotation.z, Vec3f::Front);
+	result = result.Scale(scale);
+	return result;
+}
+
+Matrix4 Matrix4::ViewMatrix(const Vec3f& position, const Vec3f& rotation)
+{
+	auto result = Matrix4();
+	result = result.Rotate(rotation.x, Vec3f::Right);
+	result = result.Rotate(rotation.y, Vec3f::Up);
+	result = result.Rotate(rotation.z, Vec3f::Front);
+	result = result.Translate(position.Negate());
+	return result;
+}
+
+Matrix4 Matrix4::LookAt(const Vec3f& eye, const Vec3f& centre, const Vec3f& up)
+{
+	const auto f = (centre - eye).Normalized();
+	const auto s = Vec3f::Cross(f, up).Normalized();
+	const auto u = Vec3f::Cross(s, f);
+
+	auto result = Matrix4();
+	result[0][0] = s.x;
+	result[1][0] = s.y;
+	result[2][0] = s.z;
+	result[0][1] = u.x;
+	result[1][1] = u.y;
+	result[2][1] = u.z;
+	result[0][2] = -f.x;
+	result[1][2] = -f.y;
+	result[2][2] = -f.z;
+	result[3][0] = -Vec3f::Dot(s, eye);
+	result[3][1] = -Vec3f::Dot(u, eye);
+	result[3][2] = Vec3f::Dot(f, eye);
+	return result;
+}
+
+Matrix4 Matrix4::PerspectiveMatrix(const float& fov, const float& aspectRatio, const float& zNear, const float& zFar)
+{
+	auto result = Matrix4(0.0f);
+
+	const auto f = std::tan(0.5f * fov);
+
+	result[0][0] = 1.0f / (aspectRatio * f);
+	result[1][1] = 1.0f / f;
+	result[2][2] = zFar / (zNear - zFar);
+	result[2][3] = -1.0f;
+	result[3][2] = -(zFar * zNear) / (zFar - zNear);
 	return result;
 }
 }

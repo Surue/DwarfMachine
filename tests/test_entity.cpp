@@ -181,7 +181,7 @@ TEST(Entity, SystemAddComponent)
 	dm::Camera cameraInfo;
 	cameraInfo.componentType = ComponentType::CAMERA;
 	cameraInfo.isMainCamera = true;
-	cameraInfo.view = lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	cameraInfo.view = dm::Matrix4::LookAt(dm::Vec3f(10.0f, 0.0f, 0.0f), dm::Vec3f(0.0f, 0.0f, 0.0f), dm::Vec3f(0.0f, 1.0f, 0.0f));
 	cameraInfo.proj = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
 
 	auto camera = entity.AddComponent<dm::Camera>(cameraInfo);

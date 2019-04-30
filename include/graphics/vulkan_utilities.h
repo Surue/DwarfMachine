@@ -28,15 +28,9 @@ SOFTWARE.
 #include <vector>
 #include <optional>
 
-#define GLM_FORCE_RADIANS
-#define FLM_FORCE_DEPTH_ZERO_TO_ONE
-#include <glm/glm.hpp>
-
-#define GLM_ENABLE_EXPERIMENTAL
-#include <glm/gtx/hash.hpp>
-
 #include <array>
 #include <vulkan/vulkan.h>
+#include "engine/matrix_4.h"
 
 namespace dm
 {
@@ -73,9 +67,9 @@ struct SwapChainSupportDetails final
  */
 struct Vertex final
 {
-	glm::vec3 pos;
-	glm::vec3 color;
-	glm::vec2 texCoord;
+	Vec3f pos;
+	Vec3f color;
+	Vec2f texCoord;
 
 	static VkVertexInputBindingDescription GetBindingDescription() {
 		VkVertexInputBindingDescription bindingDescription;
@@ -115,9 +109,9 @@ struct Vertex final
 
 struct UniformBufferObject final
 {
-	alignas(16)glm::mat4 model;
-	alignas(16)glm::mat4 view;
-	alignas(16)glm::mat4 proj;
+	alignas(16)Matrix4 model;
+	alignas(16)Matrix4 view;
+	alignas(16)Matrix4 proj;
 };
 }
 
@@ -126,7 +120,7 @@ template<> struct hash<dm::Vertex>final
 {
 	size_t operator()(dm::Vertex const& vertex) const noexcept
 	{
-		return ((hash<glm::vec3>()(vertex.pos) ^ (hash<glm::vec3>()(vertex.color) << 1)) >> 1) ^ (hash<glm::vec2>()(vertex.texCoord) << 1);
+		return ((hash<dm::Vec3f>()(vertex.pos) ^ (hash<dm::Vec3f>()(vertex.color) << 1)) >> 1) ^ hash<dm::Vec2f>()(vertex.texCoord) << 1;
 	}
 };
 }

@@ -139,6 +139,11 @@ public:
 	float GetMagnitude() const;
 	Vec3f Normalized() const;
 
+	Vec3f Negate() const
+	{
+		return Vec3f(-x, -y, -z);
+	}
+
 	static Vec3f Lerp(const Vec3f& v1, const Vec3f& v2, float t);
 	static float AngleBetween(const Vec3f& v1, const Vec3f& v2);
 	static float Dot(const Vec3f& v1, const Vec3f& v2);
@@ -230,5 +235,40 @@ public:
 	//static float AngleBetween(const Vec4f& v1, const Vec4f& v2);
 	//static float Dot(const Vec4f& v1, const Vec4f& v2);
 };
+}
+
+namespace std
+{
+	template<typename T>
+	static void HashCombine(std::size_t &seed, const T &v)
+	{
+		std::hash<T> hasher;
+		seed ^= hasher(v) + 0x9e3779b9 + (seed << 6) + (seed >> 2);
+	}
+
+	template<>
+	struct hash<dm::Vec3f>
+	{
+		size_t operator()(dm::Vec3f const &vector) const noexcept
+		{
+			size_t seed = 0;
+			HashCombine(seed, vector.x);
+			HashCombine(seed, vector.y);
+			HashCombine(seed, vector.z);
+			return seed;
+		}
+	};
+
+	template<>
+	struct hash<dm::Vec2f>
+	{
+		size_t operator()(dm::Vec2f const &vector) const noexcept
+		{
+			size_t seed = 0;
+			HashCombine(seed, vector.x);
+			HashCombine(seed, vector.y);
+			return seed;
+		}
+	};
 }
 #endif VECTOR_H
