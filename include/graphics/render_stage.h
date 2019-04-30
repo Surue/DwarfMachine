@@ -165,6 +165,8 @@ public:
 	bool IsMultisampled(const uint32_t &subpass) const { return m_SubpassMultisampled[subpass]; }
 
 private:
+	friend class GraphicManager;
+
 	std::vector<Attachment> m_Attachments;
 	std::vector<SubpassType> m_Subpasses;
 

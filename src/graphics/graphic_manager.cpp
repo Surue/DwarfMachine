@@ -161,6 +161,55 @@ Window* GraphicManager::GetWindow() const
 	return m_Window.get();
 }
 
+void GraphicManager::SetRenderStages(std::vector<std::unique_ptr<RenderStage>> renderStages)
+{
+	VkExtent2D displayExtent = { static_cast<uint32_t>(m_Window->GetSize().x), static_cast<uint32_t>(m_Window->GetSize().y) };
+
+	m_RenderStages = std::move(renderStages);
+	m_Swapchain = std::make_unique<Swapchain>(displayExtent);
+
+	if(m_InFlightFences.size() != m_Swapchain->GetImageCount())
+	{
+		for(size_t i = 0; i < m_InFlightFences.size(); i++)
+		{
+			vkDestroyFence(*m_LogicalDevice, m_InFlightFences[i], nullptr);
+			vkDestroySemaphore(*m_LogicalDevice, m_RenderFinishedSemaphores[i], nullptr);
+			vkDestroySemaphore(*m_LogicalDevice, m_ImageAvailableSemaphores[i], nullptr);
+		}
+
+		m_ImageAvailableSemaphores.resize(m_Swapchain->GetImageCount());
+		m_RenderFinishedSemaphores.resize(m_Swapchain->GetImageCount());
+		m_InFlightFences.resize(m_Swapchain->GetImageCount());
+		m_CommandBuffers.resize(m_Swapchain->GetImageCount());
+
+		VkSemaphoreCreateInfo semaphoreCreateInfo = {};
+		semaphoreCreateInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
+
+		VkFenceCreateInfo fenceCreateInfo = {};
+		fenceCreateInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
+		fenceCreateInfo.flags = VK_FENCE_CREATE_SIGNALED_BIT;
+
+		for(size_t i = 0; i < m_InFlightFences.size(); i++)
+		{
+			if (vkCreateSemaphore(m_LogicalDevice->GetLogicalDevice(), &semaphoreCreateInfo, nullptr, &m_ImageAvailableSemaphores[i]) != VK_SUCCESS ||
+				vkCreateSemaphore(m_LogicalDevice->GetLogicalDevice(), &semaphoreCreateInfo, nullptr, &m_RenderFinishedSemaphores[i]) != VK_SUCCESS ||
+				vkCreateFence(m_LogicalDevice->GetLogicalDevice(), &fenceCreateInfo, nullptr, &m_InFlightFences[i]) != VK_SUCCESS)
+			{
+				throw std::runtime_error("failed to create synchronization objects for a frame");
+			}
+
+			m_CommandBuffers[i] = std::make_unique<CommandBuffer>(false);
+		}
+	}
+
+	for(const auto &renderStage : m_RenderStages)
+	{
+		renderStage->Rebuild(*m_Swapchain);
+	}
+
+	RecreateAttachmentsMap();
+}
+
 void GraphicManager::CreateSwapChain()
 {
 	const auto swapChainSupport = QuerySwapChainSupport(m_PhysicalDevice->GetPhysicalDevice());
@@ -1003,5 +1052,101 @@ void GraphicManager::UpdateMainCamera() const
 {
 	const auto windowSize = m_Engine.GetSettings().windowSize;
 	m_MainCamera->proj = Matrix4::PerspectiveMatrix(45 * (3.14f / 180), windowSize.x / static_cast<float>(windowSize.y), 0.1f, 100.0f);
+}
+
+void GraphicManager::RecreatePass(RenderStage& renderStage)
+{
+	auto graphicQueue = m_LogicalDevice->GetGraphicsQueue();
+
+	VkExtent2D displayExtent = { m_Window->GetSize().x, m_Window->GetSize().y };
+
+	if(renderStage.HasSwapchain() && m_Swapchain->IsSameExtent(displayExtent))
+	{
+		m_Swapchain = std::make_unique<Swapchain>(displayExtent);
+	}
+
+	renderStage.Rebuild(*m_Swapchain);
+	RecreateAttachmentsMap();
+}
+
+void GraphicManager::RecreateAttachmentsMap()
+{
+	m_Attachments.clear();
+
+	for(const auto &renderStage : m_RenderStages)
+	{
+		m_Attachments.insert(renderStage->m_Descriptors.begin(), renderStage->m_Descriptors.end());
+	}
+}
+
+bool GraphicManager::StartRenderpass(RenderStage& renderStage)
+{
+	if(renderStage.IsOutOfDate())
+	{
+		RecreatePass(renderStage);
+		return false;
+	}
+
+	if(!m_CommandBuffers[m_Swapchain->GetActiveImageIndex()]->IsRunning())
+	{
+		vkWaitForFences(*m_LogicalDevice, 1, &m_InFlightFences[m_CurrentFrame], VK_TRUE, std::numeric_limits<uint64_t>::max());
+		m_CommandBuffers[m_Swapchain->GetActiveImageIndex()]->Begin(VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT);
+	}
+
+	VkRect2D renderArea = {};
+	renderArea.offset = { 0 ,0 };
+	renderArea.extent = { static_cast<uint32_t>(renderStage.GetSize().x), static_cast<uint32_t>(renderStage.GetSize().y) };
+
+	VkViewport viewport = {};
+	viewport.x = 0.0f;
+	viewport.y = 0.0f;
+	viewport.width = static_cast<float>(renderArea.extent.width);
+	viewport.height = static_cast<float>(renderArea.extent.height);
+	viewport.minDepth = 0.0f;
+	viewport.maxDepth = 1.0f;
+	vkCmdSetViewport(*m_CommandBuffers[m_Swapchain->GetActiveImageIndex()], 0, 1, &viewport);
+
+	VkRect2D scissor = {};
+	scissor.offset = { 0,0 };
+	scissor.extent = renderArea.extent;
+	vkCmdSetScissor(*m_CommandBuffers[m_Swapchain->GetActiveImageIndex()], 0, 1, &scissor);
+
+	auto clearValues = renderStage.GetClearValues();
+
+	VkRenderPassBeginInfo renderPassBeginInfo = {};
+	renderPassBeginInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
+	renderPassBeginInfo.renderPass = renderStage.GetRenderPass()->GetRenderPass();
+	renderPassBeginInfo.framebuffer = renderStage.GetActiveFramebuffer(m_Swapchain->GetActiveImageIndex());
+	renderPassBeginInfo.renderArea = renderArea;
+	renderPassBeginInfo.pClearValues = clearValues.data();
+	vkCmdBeginRenderPass(*m_CommandBuffers[m_Swapchain->GetActiveImageIndex()], &renderPassBeginInfo, VK_SUBPASS_CONTENTS_INLINE);
+}
+
+void GraphicManager::EndRenderpass(RenderStage& renderStage)
+{
+	const auto presentQueue = m_LogicalDevice->GetPresentQueue();
+
+	vkCmdEndRenderPass(*m_CommandBuffers[m_Swapchain->GetActiveImageIndex()]);
+
+	if(!renderStage.HasSwapchain())
+	{
+		return;
+	}
+
+	m_CommandBuffers[m_Swapchain->GetActiveImageIndex()]->End();
+	m_CommandBuffers[m_Swapchain->GetActiveImageIndex()]->Submit(m_ImageAvailableSemaphores[m_CurrentFrame], m_RenderFinishedSemaphores[m_CurrentFrame], m_InFlightFences[m_CurrentFrame]);
+	const auto presentResult = m_Swapchain->QueuePresent(presentQueue, m_RenderFinishedSemaphores[m_CurrentFrame]);
+
+	if(!(presentResult == VK_SUCCESS || presentResult == VK_SUBOPTIMAL_KHR))
+	{
+		if(presentResult == VK_ERROR_OUT_OF_DATE_KHR)
+		{
+			RecreatePass(renderStage);
+			return;
+		}
+
+	}
+
+	m_CurrentFrame = (m_CurrentFrame + 1) % m_Swapchain->GetImageCount();
 }
 }

@@ -43,6 +43,7 @@ SOFTWARE.
 #include <graphics/swapchain.h>
 #include "render_stage.h"
 #include "uniform_handle.h"
+#include "render_manager.h"
 
 namespace dm
 {
@@ -113,6 +114,10 @@ public:
 	 * \return 
 	 */
 	Window* GetWindow() const;
+
+	void SetManager(RenderManager *managerRender) { m_renderManager.reset(managerRender); }
+
+	void SetRenderStages(std::vector<std::unique_ptr<RenderStage>> renderStages);
 
 	const PhysicalDevice* GetPhysicalDevice() const { return m_PhysicalDevice.get(); }
 
@@ -263,36 +268,45 @@ private:
 
 	void UpdateMainCamera() const;
 
+	void RecreatePass(RenderStage &renderStage); //News
+
+	void RecreateAttachmentsMap(); //News
+
+	bool StartRenderpass(RenderStage &renderStage); //News
+
+	void EndRenderpass(RenderStage &renderStage); //News
+
+
 	//WINDOW
 	std::unique_ptr<Window> m_Window = nullptr;
 
-	const std::string MODEL_PATH = "ressources/models/Tentacle_lp.obj";
-	const std::string TEXTURE_PATH = "ressources/textures/Tentacle_lp_defaultMat_BaseColor.png";
-
 	//VULKAN
-	std::unique_ptr<Instance> m_Instance = nullptr;
-	std::unique_ptr<Surface> m_Surface = nullptr;
-	std::unique_ptr<PhysicalDevice> m_PhysicalDevice = nullptr;
-	std::unique_ptr<LogicalDevice> m_LogicalDevice = nullptr;
+	std::unique_ptr<Instance> m_Instance = nullptr; //Keep
+	std::unique_ptr<Surface> m_Surface = nullptr; //Keep
+	std::unique_ptr<PhysicalDevice> m_PhysicalDevice = nullptr; //Keep
+	std::unique_ptr<LogicalDevice> m_LogicalDevice = nullptr; //Keep
 
-	std::unique_ptr<Swapchain> m_Swapchain = nullptr;
+	std::unique_ptr<Swapchain> m_Swapchain = nullptr; //Keep
 
-	std::vector<VkFence> m_InFlightFences;
-	size_t m_CurrentFrame = 0;
+	std::shared_ptr<CommandPool> m_CommandPool = nullptr; //Keep
+	std::vector< std::unique_ptr<CommandBuffer>> m_CommandBuffers; //Keep
 
-	VkRenderPass m_RenderPass{};
-	VkDescriptorSetLayout m_DescriptorSetLayout{};
-	VkPipelineLayout m_PipelineLayout{};
+	VkPipelineCache m_PipelineCache; //Keep
+	std::vector<VkSemaphore> m_ImageAvailableSemaphores; //Keep
+	std::vector<VkSemaphore> m_RenderFinishedSemaphores; //Keep
+	std::vector<VkFence> m_InFlightFences; //Keep
+	size_t m_CurrentFrame = 0; //Keep
 
-	VkPipeline m_GraphicsPipeline{};
+	Engine& m_Engine;
 
-	std::vector<VkFramebuffer> m_SwapChainFrameBuffers;
+	//Camera
+	Camera* m_MainCamera = nullptr;
 
-	std::shared_ptr<CommandPool> m_CommandPool = nullptr;
-	std::vector< std::unique_ptr<CommandBuffer>> m_CommandBuffers;
+	std::vector<std::unique_ptr<RenderStage>> m_RenderStages; //Keep
+	std::map<std::string, const Descriptor *> m_Attachments; //New
+	std::unique_ptr<RenderManager> m_renderManager; //New
 
-	std::vector<VkSemaphore> m_ImageAvailableSemaphores;
-	std::vector<VkSemaphore> m_RenderFinishedSemaphores;
+
 
 	bool m_FrameBufferResized = false;
 
@@ -314,17 +328,20 @@ private:
 	std::vector<VkDescriptorSet> m_DescriptorSets;
 
 	//Images
-	std::shared_ptr<Image2d> m_TextureImage = nullptr; //Textures tentacules
-	std::shared_ptr<ImageDepth> m_DepthImage = nullptr; //Depth
-	std::shared_ptr<Image2d> m_ColorImage = nullptr; //Multisample Anti Aliasing 
+	std::shared_ptr<Image2d> m_TextureImage = nullptr;
+	std::shared_ptr<ImageDepth> m_DepthImage = nullptr;
+	std::shared_ptr<Image2d> m_ColorImage = nullptr;
 
-	Engine& m_Engine;
+	VkRenderPass m_RenderPass{};
+	VkDescriptorSetLayout m_DescriptorSetLayout{};
+	VkPipelineLayout m_PipelineLayout{};
 
-	//Camera
-	Camera* m_MainCamera = nullptr;
+	VkPipeline m_GraphicsPipeline{};
 
-	VkPipelineCache m_PipelineCache;
-	std::vector<std::unique_ptr<RenderStage>> m_RenderStages;
+	std::vector<VkFramebuffer> m_SwapChainFrameBuffers;
+
+	const std::string MODEL_PATH = "ressources/models/Tentacle_lp.obj";
+	const std::string TEXTURE_PATH = "ressources/textures/Tentacle_lp_defaultMat_BaseColor.png";
 };
 }
 
