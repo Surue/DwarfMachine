@@ -74,5 +74,8 @@ void EditorRenderManager::Start()
 	//RendererMeshes rendererMeshes = RendererMeshes(*Engine::Get(), Pipeline::Stage(1, 0));
 	rendererContainer.Add<RendererMeshes>(*Engine::Get(), Pipeline::Stage(1, 0));
 }
-void EditorRenderManager::Update() {}
+void EditorRenderManager::Update()
+{
+	m_RendererContainer.Update();
+}
 }

@@ -109,7 +109,7 @@ void RendererMeshes::Draw(const CommandBuffer& commandBuffer)
 		// Draws the object.
 		descriptorSet.BindDescriptor(commandBuffer, pipeline);
 		meshModel->CmdRender(commandBuffer);
-
+		std::cout << "Draw success\n";
 		i++;
 	}
 }

@@ -45,7 +45,7 @@ public:
 	virtual void Update() = 0;
 
 	RendererContainer &GetRendererContainer() { return m_RendererContainer; }
-private:
+protected:
 	friend class Renderer; //TODO supprimer
 	friend class GraphicManager;
 
