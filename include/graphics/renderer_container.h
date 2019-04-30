@@ -109,7 +109,6 @@ public:
 
 	void AddComponent(const Entity entity, const ComponentMask oldMask, ComponentMask newMask)
 	{
-		std::cout << "Hola\n";
 		for (auto& stages : m_Stages)
 		{
 
@@ -119,7 +118,6 @@ public:
 				if (newMask.IsNewMatch(oldMask, systemMask))
 				{
 					system->RegisterEntity(entity);
-					std::cout << "Added\n";
 				}
 			}
 		}

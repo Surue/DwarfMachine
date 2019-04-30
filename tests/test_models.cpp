@@ -70,9 +70,9 @@ TEST(Models, Cube)
 
 	dm::MaterialDefault material;
 	material.componentType = ComponentType::MATERIAL_DEFAULT;
-	material.color = dm::Color(25, 25, 25, 1);
+	material.color = dm::Color(100, 200, 0, 1);
 	cube.AddComponent<dm::MaterialDefault>(material);
-
+	
 	try
 	{
 		engine.Start();

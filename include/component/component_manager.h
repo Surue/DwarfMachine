@@ -52,6 +52,8 @@ public:
 
 	CameraManager* GetCameraManager() const { return m_CameraManager.get(); }
 
+	MaterialDefaultManager* GetMaterialManager() const { return m_MaterialDefaultManager.get(); }
+
 private:
 	Engine& m_Engine;
 

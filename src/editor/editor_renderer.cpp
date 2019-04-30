@@ -32,6 +32,7 @@ namespace dm
 EditorRenderManager::EditorRenderManager()
 {
 	EditorRenderManager::Start();
+	m_Started = true;
 }
 
 void EditorRenderManager::Start()

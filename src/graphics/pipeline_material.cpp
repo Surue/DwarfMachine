@@ -39,7 +39,9 @@ PipelineMaterial::PipelineMaterial(const Pipeline::Stage pipelineStage, const Pi
 	m_PipelineGraphicsCreate(std::move(pipelineCreate)),
 	m_RenderStage(nullptr),
 	m_Pipeline(nullptr)
-{ }
+{
+	
+}
 
 bool PipelineMaterial::BindPipeline(const CommandBuffer& commandBuffer)
 {

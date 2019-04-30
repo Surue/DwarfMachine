@@ -43,6 +43,7 @@ void RendererMeshes::Update()
 {
 	std::cout << "Update mesh renderer\n";
 	int i = 0;
+	std::cout << "Update(): Size = " << m_RegisteredEntities.size() << "\n";
 	for (const auto &meshRender : m_RegisteredEntities)
 	{
 		auto entity = EntityHandle(meshRender, *Engine::Get());
@@ -60,6 +61,8 @@ void RendererMeshes::Draw(const CommandBuffer& commandBuffer)
 	m_UniformScene.Push("projection", camera->proj);
 	m_UniformScene.Push("view", camera->view);
 	m_UniformScene.Push("cameraPos", Engine::Get()->GetComponentManager()->GetCameraManager()->GetTransformOfCamera(*camera)); //TODO 
+
+	std::cout << m_RegisteredEntities.size() << "\n";
 
 	auto i = 0;
 	for (const auto &meshRender : m_RegisteredEntities)
@@ -80,7 +83,22 @@ void RendererMeshes::Draw(const CommandBuffer& commandBuffer)
 
 		if (meshModel == nullptr || materialPipeline == nullptr || materialPipeline->GetStage() != GetStage())
 		{
-			std::cout << "Missing model or material pipeline or stage is not the same\n";
+			std::cout << "Missing model or material pipeline or stage is not the same : \n";
+			if(meshModel == nullptr)
+			{
+				std::cout << "	- Missing model\n";
+			}
+
+			if (materialPipeline == nullptr)
+			{
+				std::cout << "	- Missing materialPipeline\n";
+			}
+
+			if (materialPipeline->GetStage() != GetStage())
+			{
+				std::cout << "	- MaterialPipeline->GetStage() != GetStage()\n";
+			}
+
 			return;
 		}
 
@@ -112,6 +130,8 @@ void RendererMeshes::Draw(const CommandBuffer& commandBuffer)
 		std::cout << "Draw success\n";
 		i++;
 	}
+
+	throw std::runtime_error("Stop");
 }
 
 void RendererMeshes::RegisterEntity(const Entity entity)
@@ -122,10 +142,12 @@ void RendererMeshes::RegisterEntity(const Entity entity)
 
 	auto entityHandle = EntityHandle(entity, *Engine::Get());
 	auto material = entityHandle.GetComponent<MaterialDefault>(ComponentType::MATERIAL_DEFAULT);
-
 	m_UniformObjects.resize(m_RegisteredEntities.size());
 
 	//TODO vérifier si c'est possible de mettre ça lors de la création du component
-	material->pipelineMaterial = PipelineMaterial::Create({ 1, 0 }, PipelineGraphicsCreate({ "Shaders/shader.vert", "Shaders/shader.frag" }, { MeshManager::GetVertexInput() }, MaterialDefaultManager::GetDefines(*material), PipelineGraphics::Mode::MRT));
+	material->pipelineMaterial = PipelineMaterial::Create({ 1, 0 }, PipelineGraphicsCreate({ "shaders/shader.vert", "shaders/shader.frag" }, { MeshManager::GetVertexInput() }, MaterialDefaultManager::GetDefines(*material), PipelineGraphics::Mode::MRT));
+	material->color = Color(0, 0, 0);
+
+	std::cout << "Size = " << m_RegisteredEntities.size() << "\n";
 }
 }

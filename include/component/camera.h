@@ -37,7 +37,7 @@ struct Camera final : ComponentBase
 	bool isMainCamera;
 };
 
-class Transform;
+struct Transform;
 
 class CameraManager final : public ComponentBaseManager<Camera>
 {

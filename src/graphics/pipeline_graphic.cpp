@@ -69,7 +69,7 @@ PipelineGraphics::PipelineGraphics(Stage stage, std::vector<std::string> shaderS
 	CreateShaderProgram();
 	CreateDescriptorLayout();
 	CreateDescriptorPool();
-	CreatePipeline();
+	CreatePipelineLayout();
 	CreateAttributes();
 
 	switch(m_Mode)

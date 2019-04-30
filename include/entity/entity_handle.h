@@ -43,11 +43,11 @@ public:
 	T* AddComponent(T& component)
 	{
 		const auto oldMask = m_EntityManager->GetEntityMask(m_Entity);
-
+		auto result = static_cast<T*>(m_ComponentManager->AddComponent(m_Entity, component));
 		m_EntityManager->AddComponent(m_Entity, component.componentType);
 		m_SystemManager->AddComponent(m_Entity, oldMask, m_EntityManager->GetEntityMask(m_Entity));
 		m_RendererContainer->AddComponent(m_Entity, oldMask, m_EntityManager->GetEntityMask(m_Entity));
-		return static_cast<T*>(m_ComponentManager->AddComponent(m_Entity, component));
+		return result;
 	}
 
 	template<class T>

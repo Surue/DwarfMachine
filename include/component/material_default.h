@@ -65,6 +65,11 @@ public:
 		uniform.Push("transform", worldPos);
 		uniform.Push("baseDiffuse", component.color);
 	}
+
+	MaterialDefault& Get(Entity entity)
+	{
+		return m_Components[entity - 1];
+	}
 private:
 };
 }

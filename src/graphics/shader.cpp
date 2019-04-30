@@ -286,12 +286,16 @@ std::optional<VkDescriptorType> Shader::GetDescriptorType(const uint32_t& locati
 
 	return it->second;
 }
-VkShaderStageFlagBits Shader::GetShaderStage(const std::string& filename)
-{
-	std::string fileExt = "";
-	std::transform(filename.begin(), filename.end(), fileExt.begin(), tolower);
 
-	auto start = fileExt.find_last_of("\\");
+std::string Lowercase(std::string str)
+{
+	std::transform(str.begin(), str.end(), str.begin(), tolower);
+	return str;
+}
+
+std::string FileSuffix(const std::string &path)
+{
+	auto start = path.find_last_of('\\');
 
 	if (start == std::string::npos)
 	{
@@ -303,14 +307,19 @@ VkShaderStageFlagBits Shader::GetShaderStage(const std::string& filename)
 		start++; // We do not want the separator.
 	}
 
-	auto end = fileExt.find_last_of('.');
+	auto end = path.find_last_of('.');
 
 	if (end == std::string::npos || end < start)
 	{
-		fileExt = "";
+		return "";
 	}
 
-	fileExt = fileExt.substr(end);
+	return path.substr(end);
+}
+
+VkShaderStageFlagBits Shader::GetShaderStage(const std::string& filename)
+{
+	std::string fileExt = Lowercase(FileSuffix(filename));
 
 	std::cout << "Shader extensions = " << fileExt << "\n";
 
