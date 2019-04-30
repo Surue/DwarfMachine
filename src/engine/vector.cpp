@@ -25,6 +25,7 @@ SOFTWARE.
 #include <engine/vector.h>
 #define _USE_MATH_DEFINES
 #include <cmath>
+#include <SDL_stdinc.h>
 
 namespace dm
 {
@@ -270,6 +271,15 @@ float Vec2f::Dot(const Vec2f& v1, const Vec2f& v2)
 	return v1.x*v2.x + v1.y*v2.y;
 }
 
+const Vec3f Vec3f::Zero = Vec3f(0.0f, 0.0f, 0.0f);
+const Vec3f Vec3f::One = Vec3f(1.0f, 1.0f, 1.0f);
+const Vec3f Vec3f::Left = Vec3f(-1.0f, 0.0f, 0.0f);
+const Vec3f Vec3f::Right = Vec3f(1.0f, 0.0f, 0.0f);
+const Vec3f Vec3f::Up = Vec3f(0.0f, 1.0f, 0.0f);
+const Vec3f Vec3f::Down = Vec3f(0.0f, -1.0f, 0.0f);
+const Vec3f Vec3f::Front = Vec3f(0.0f, 0.0f, 1.0f);
+const Vec3f Vec3f::Back = Vec3f(0.0f, 0.0f, -1.0f);
+
 Vec3f::Vec3f() : x(0), y(0), z(0) {}
 
 Vec3f::Vec3f(const float x, const float y, const float z) : x(x), y(y), z(z){}
@@ -398,5 +408,47 @@ float Vec3f::Dot(const Vec3f& v1, const Vec3f& v2)
 Vec3f Vec3f::Cross(const Vec3f& v1, const Vec3f& v2)
 {
 	return Vec3f(v1.y * v2.z - v1.z * v2.y, v1.z * v2.x - v1.x * v2.z, v1.x * v2.y - v1.y * v2.x);
+}
+
+Vec4f::Vec4f(): x(0), y(0), z(0), w(0) {}
+
+Vec4f::Vec4f(const float x, const float y, const float z, const float w):
+	x(x),
+	y(y),
+	z(z),
+	w(w) { }
+
+const float& Vec4f::operator[](const uint32_t& index) const
+{
+	switch (index)
+	{
+	case 0:
+		return x;
+	case 1:
+		return y;
+	case 2:
+		return z;
+	case 3:
+		return w;
+	default:
+		throw std::runtime_error("Vector4 index out of bounds!");
+	}
+}
+
+float& Vec4f::operator[](const uint32_t& index)
+{
+	switch (index)
+	{
+	case 0:
+		return x;
+	case 1:
+		return y;
+	case 2:
+		return z;
+	case 3:
+		return w;
+	default:
+		throw std::runtime_error("Vector4 index out of bounds!");
+	}
 }
 }

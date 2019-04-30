@@ -24,6 +24,9 @@ SOFTWARE.
 
 #ifndef VECTOR_H
 #define VECTOR_H
+#include <cstdint>
+#include <stdexcept>
+
 namespace dm
 {
 class Vec2i final
@@ -140,6 +143,92 @@ public:
 	static float AngleBetween(const Vec3f& v1, const Vec3f& v2);
 	static float Dot(const Vec3f& v1, const Vec3f& v2);
 	static Vec3f Cross(const Vec3f& v1, const Vec3f& v2);
+
+	const float &operator[](const uint32_t &index) const
+	{
+		switch (index)
+		{
+		case 0:
+			return x;
+		case 1:
+			return y;
+		case 2:
+			return z;
+		default:
+			throw std::runtime_error("Vector3 index out of bounds!");
+		}
+	}
+
+	float &operator[](const uint32_t &index)
+	{
+		switch (index)
+		{
+		case 0:
+			return x;
+		case 1:
+			return y;
+		case 2:
+			return z;
+		default:
+			throw std::runtime_error("Vector3 index out of bounds!");
+		}
+	}
+
+	static const Vec3f Zero;
+	static const Vec3f One;
+	static const Vec3f Left;
+	static const Vec3f Right;
+	static const Vec3f Up;
+	static const Vec3f Down;
+	static const Vec3f Front;
+	static const Vec3f Back;
+};
+
+inline auto operator*(const float &left, const Vec3f &right)
+{
+	return right * left;
+}
+
+class Vec4f final
+{
+public:
+	float x;
+	float y;
+	float z;
+	float w;
+
+	Vec4f();
+	Vec4f(float x, float y, float z, float w);
+
+	~Vec4f() = default;
+
+	const float& operator[](const uint32_t& index) const;
+
+	float& operator[](const uint32_t& index);
+
+	//bool operator==(const Vec4f &rhs) const;
+	//bool operator!=(const Vec4f &rhs) const;
+
+	//Vec4f operator+(const Vec4f &rhs) const;
+	//Vec4f& operator+=(const Vec4f &rhs);
+
+	//Vec4f operator-(const Vec4f &rhs) const;
+	//Vec4f& operator-=(const Vec4f &rhs);
+
+	//Vec4f operator*(int rhs) const;
+	//Vec4f& operator*=(int rhs);
+	//Vec4f operator*(float rhs) const;
+	//Vec4f& operator*=(float rhs);
+
+	//Vec4f operator/(float rhs) const;
+	//Vec4f& operator/=(float rhs);
+
+	//float GetMagnitude() const;
+	//Vec4f Normalized() const;
+
+	//static Vec4f Lerp(const Vec4f& v1, const Vec4f& v2, float t);
+	//static float AngleBetween(const Vec4f& v1, const Vec4f& v2);
+	//static float Dot(const Vec4f& v1, const Vec4f& v2);
 };
 }
 #endif VECTOR_H
