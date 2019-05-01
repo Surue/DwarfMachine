@@ -126,19 +126,20 @@ void PipelineGraphics::CreateShaderProgram()
 	std::stringstream defineBlock;
 	defineBlock << "\n";
 
-	for(const auto &define : m_Defines)
+	for (const auto &define : m_Defines)
 	{
-		defineBlock << "\define " << define.first << " " << define.second << "\n";
+		defineBlock << "#define " << define.first << " " << define.second << "\n";
 	}
 
-	for(const auto &shaderStage : m_ShaderStages)
+	for (const auto &shaderStage : m_ShaderStages)
 	{
 		auto fileLoaded = Files::Read(shaderStage);
 
-		if(!fileLoaded)
+		if (!fileLoaded)
 		{
-			std::cout << "shader stage could not be loaded : " << shaderStage << "\n";
+			std::cout << "Shader Stage could not be loaded: " << shaderStage.c_str() << "\n";
 			throw std::runtime_error("Could not create pipeline, missing shader stage");
+			return;
 		}
 
 		auto shaderCode = Shader::InsertDefineBlock(*fileLoaded, defineBlock.str());
@@ -354,7 +355,7 @@ void PipelineGraphics::CreatePipeline()
 	pipelineCreateInfo.subpass = m_Stage.second;
 	pipelineCreateInfo.basePipelineHandle = VK_NULL_HANDLE;
 	pipelineCreateInfo.basePipelineIndex = -1;
-
+	//TODO le m_ColorBlend est remis à 0, il doit passer par la mauvaise fonction
 	if (vkCreateGraphicsPipelines(*logicalDevice, pipelineCache, 1, &pipelineCreateInfo, nullptr, &m_Pipeline) != VK_SUCCESS) {
 		throw std::runtime_error("failed to create graphics pipeline");
 	}

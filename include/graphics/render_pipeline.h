@@ -45,7 +45,10 @@ public:
 
 	virtual void Draw(const CommandBuffer &commandBuffer) = 0;
 
-	const Pipeline::Stage &GetStage() const { return m_Stage; }
+	const Pipeline::Stage &GetStage() const
+	{
+		return m_Stage;
+	}
 
 	const bool &IsEnabled() const { return m_Enabled; }
 

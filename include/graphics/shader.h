@@ -238,7 +238,10 @@ public:
 
 	const std::array<std::optional<uint32_t>, 3> &GetLocalSizes() const { return m_LocalSizes; }
 
-	const std::vector<VkDescriptorSetLayoutBinding> &GetDescriptorSetLayouts() const { return m_DescriptorSetLayout; }
+	const std::vector<VkDescriptorSetLayoutBinding> &GetDescriptorSetLayouts() const
+	{
+		return m_DescriptorSetLayout;
+	}
 
 	const std::vector<VkDescriptorPoolSize> &GetDescriptorPools() const { return m_DescriptorPools; }
 

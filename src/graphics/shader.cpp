@@ -58,22 +58,26 @@ void Shader::ProcessShader()
 {
 	std::map<VkDescriptorType, uint32_t> descriptorPoolCounts;
 
-	for(const auto &[uniformBlockName, uniformBlock] : m_UniformBlocks)
+	// Process to descriptors.
+	for (const auto &[uniformBlockName, uniformBlock] : m_UniformBlocks)
 	{
 		VkDescriptorType descriptorType = VK_DESCRIPTOR_TYPE_MAX_ENUM;
 
-		switch(uniformBlock.m_Type)
+		switch (uniformBlock.m_Type)
 		{
-		case UniformBlock::Type::Uniform: 
+		case UniformBlock::Type::Uniform:
 			descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
 			m_DescriptorSetLayout.emplace_back(UniformBuffer::GetDescriptorSetLayout(static_cast<uint32_t>(uniformBlock.m_Binding), descriptorType, uniformBlock.m_StageFlags, 1));
 			break;
-		case UniformBlock::Type::Storage: 
+		case UniformBlock::Type::Storage:
 			descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
 			m_DescriptorSetLayout.emplace_back(StorageBuffer::GetDescriptorSetLayout(static_cast<uint32_t>(uniformBlock.m_Binding), descriptorType, uniformBlock.m_StageFlags, 1));
 			break;
-		case UniformBlock::Type::Push: break;
-		default: ;
+		case UniformBlock::Type::Push:
+			// Push constants are described in the pipeline.
+			break;
+		default:
+			break;
 		}
 
 		IncrementDescriptorPool(descriptorPoolCounts, descriptorType);
@@ -81,11 +85,11 @@ void Shader::ProcessShader()
 		m_DescriptorSizes.emplace(uniformBlockName, uniformBlock.m_Size);
 	}
 
-	for(const auto &[uniformName, uniform] : m_Uniform)
+	for (const auto &[uniformName, uniform] : m_Uniform)
 	{
 		VkDescriptorType descriptorType = VK_DESCRIPTOR_TYPE_MAX_ENUM;
 
-		switch(uniform.m_GlType)
+		switch (uniform.m_GlType)
 		{
 		case 0x8B5E: // GL_SAMPLER_2D
 		case 0x904D: // GL_IMAGE_2D
@@ -108,7 +112,7 @@ void Shader::ProcessShader()
 		m_DescriptorSizes.emplace(uniformName, uniform.m_Size);
 	}
 
-	for(const auto &[type, descriptorCount] : descriptorPoolCounts)
+	for (const auto &[type, descriptorCount] : descriptorPoolCounts)
 	{
 		VkDescriptorPoolSize descriptorPoolSize = {};
 		descriptorPoolSize.type = type;
@@ -116,6 +120,7 @@ void Shader::ProcessShader()
 		m_DescriptorPools.emplace_back(descriptorPoolSize);
 	}
 
+	// FIXME: This is a AMD workaround that works on Nvidia too...
 	m_DescriptorPools = std::vector<VkDescriptorPoolSize>(6);
 	m_DescriptorPools[0].type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
 	m_DescriptorPools[0].descriptorCount = 4096;
@@ -130,26 +135,30 @@ void Shader::ProcessShader()
 	m_DescriptorPools[5].type = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
 	m_DescriptorPools[5].descriptorCount = 2048;
 
+	// Sort descriptors by binding.
 	std::sort(m_DescriptorSetLayout.begin(), m_DescriptorSetLayout.end(), [](const VkDescriptorSetLayoutBinding &l, const VkDescriptorSetLayoutBinding &r)
 	{
 		return l.binding < r.binding;
 	});
 
-	if(!m_DescriptorSetLayout.empty())
+	// Gets the last descriptors binding.
+	if (!m_DescriptorSetLayout.empty())
 	{
 		m_LastDescriptorBinding = m_DescriptorSetLayout.back().binding;
 	}
 
-	for(const auto &descriptor : m_DescriptorSetLayout)
+	// Gets the descriptor type for each descriptor.
+	for (const auto &descriptor : m_DescriptorSetLayout)
 	{
 		m_DescriptorTypes.emplace(descriptor.binding, descriptor.descriptorType);
 	}
 
+	// Process attribute descriptions.
 	uint32_t currentOffset = 4;
 
-	for(const auto &[attributeName, attribute] : m_Attribute)
+	for (const auto &[attributeName, attribute] : m_Attribute)
 	{
-		VkVertexInputAttributeDescription attributeDescription = { };
+		VkVertexInputAttributeDescription attributeDescription = {};
 		attributeDescription.location = static_cast<uint32_t>(attribute.m_Location);
 		attributeDescription.binding = 0;
 		attributeDescription.format = GlTypeToVk(attribute.m_GlType);
@@ -352,73 +361,90 @@ std::string Shader::InsertDefineBlock(const std::string& shaderCode, const std::
 	return updatedCode;
 }
 
-std::string Shader::ProcessIncludes(const std::string& shaderCode)
+std::string Trim(std::string str, std::string_view whitespace = " \t\n\r")
 {
-	std::unique_ptr<char[]> copy(new char[strlen(shaderCode.c_str()) + 1]);
-	std::strcpy(copy.get(), shaderCode.c_str());
+	auto strBegin = str.find_first_not_of(whitespace);
+
+	if (strBegin == std::string::npos)
+	{
+		return "";
+	}
+
+	auto strEnd = str.find_last_not_of(whitespace);
+	auto strRange = strEnd - strBegin + 1;
+
+	auto trimmed = str;
+	trimmed = trimmed.substr(strBegin, strRange);
+	return trimmed;
+}
+
+std::vector<std::string> Split(const std::string &str, const std::string &sep, bool trim)
+{
+	std::unique_ptr<char[]> copy(new char[strlen(str.c_str()) + 1]);
+	std::strcpy(copy.get(), str.c_str());
 
 	std::vector<std::string> splitVector;
-	auto current = std::strtok(copy.get(), "\n");
+	auto current = std::strtok(copy.get(), sep.c_str());
 
 	while (current != nullptr)
 	{
 		auto currentS = std::string(current);
 
-		auto strBegin = currentS.find_first_not_of(" \t\n\r");
-
-		if (strBegin == std::string::npos)
+		if (trim)
 		{
-			return "";
+			currentS = Trim(currentS);
 		}
 
-		auto strEnd = currentS.find_last_not_of(" \t\n\r");
-		auto strRange = strEnd - strBegin + 1;
-
-		auto trimmed = currentS;
-		trimmed = trimmed.substr(strBegin, strRange);
-		currentS = trimmed;
-
 		splitVector.emplace_back(currentS);
-		current = std::strtok(nullptr, "\n");
+		current = std::strtok(nullptr, sep.c_str());
 	}
+
+	return splitVector;
+}
+
+std::string ReplaceFirst(std::string str, std::string_view token, std::string_view to)
+{
+	const auto startPos = str.find(token);
+
+	if (startPos == std::string::npos)
+	{
+		return str;
+	}
+
+	str.replace(startPos, token.length(), to);
+	return str;
+}
+
+bool Contains(std::string_view str, std::string_view token)
+{
+	return str.find(token) != std::string::npos;
+}
+
+std::string RemoveAll(std::string str, char token)
+{
+	str.erase(remove(str.begin(), str.end(), token), str.end());
+	return str;
+}
+
+std::string Shader::ProcessIncludes(const std::string& shaderCode)
+{
+	auto lines = Split(shaderCode, "\n", true);
 
 	std::stringstream stream;
 
-	for(const auto &line : splitVector)
+	for (const auto &line : lines)
 	{
-		if(line.find("#include") != std::string::npos)
+		if (Contains(line, "#include"))
 		{
-			//remove include
-			std::string_view from = "#include";
-			std::string to = "";
-			const auto startPos = line.find(from);
-			std::string filename = line;
-			filename.replace(startPos, from.length(), to);
+			std::string filename = ReplaceFirst(line, "#include", "");
+			filename = RemoveAll(filename, '\"');
+			filename = Trim(filename);
 
-			//remove all \ 
-			filename.erase(remove(filename.begin(), filename.end(), '\"'), filename.end());
-
-			//trim
-			auto strBegin = filename.find_first_not_of(" \t\n\r");
-
-			if (strBegin == std::string::npos)
-			{
-				return "";
-			}
-
-			auto strEnd = filename.find_last_not_of(" \t\n\r");
-			auto strRange = strEnd - strBegin + 1;
-
-			auto trimmed = filename;
-			trimmed = trimmed.substr(strBegin, strRange);
-			filename = trimmed;
-
-			//load file
 			auto fileLoaded = Files::Read(filename);
 
-			if(!fileLoaded)
+			if (!fileLoaded)
 			{
-				std::cout << "Shader include could not be loaded : " << filename << "\n";
+				std::cout << "Shader Include could not be loaded: " << filename.c_str() << "\n";
 				continue;
 			}
 
@@ -566,9 +592,13 @@ VkShaderModule Shader::ProcessShader(const std::string& shaderCode, const VkShad
 	const char *shaderSource = shaderCode.c_str();
 	shader.setStrings(&shaderSource, 1);
 
-	shader.setEnvInput(glslang::EShSourceGlsl, language, glslang::EShClientVulkan, 110);
-	shader.setEnvClient(glslang::EShClientVulkan, glslang::EShTargetVulkan_1_1);
-	shader.setEnvTarget(glslang::EShTargetSpv, glslang::EShTargetSpv_1_3);
+	//shader.setEnvInput(glslang::EShSourceGlsl, language, glslang::EShClientVulkan, 110);
+	//shader.setEnvClient(glslang::EShClientVulkan, glslang::EShTargetVulkan_1_1);
+	//shader.setEnvTarget(glslang::EShTargetSpv, glslang::EShTargetSpv_1_3);
+
+	shader.setEnvInput(glslang::EShSourceGlsl, language, glslang::EShClientVulkan, 100);
+	shader.setEnvClient(glslang::EShClientVulkan, glslang::EShTargetVulkan_1_0);
+	shader.setEnvTarget(glslang::EShTargetSpv, glslang::EShTargetSpv_1_0);
 
 	const int defaultVersion = glslang::EShTargetOpenGL_450;
 
@@ -679,60 +709,6 @@ void Shader::LoadUniformBlock(const glslang::TProgram& program, const VkShaderSt
 	}
 
 	m_UniformBlocks.emplace(program.getUniformBlockName(i), UniformBlock(program.getUniformBlockBinding(i), program.getUniformBlockSize(i), stageFlag, type));
-}
-
-std::string Trim(std::string str, std::string_view whitespace)
-{
-	auto strBegin = str.find_first_not_of(whitespace);
-
-	if (strBegin == std::string::npos)
-	{
-		return "";
-	}
-
-	auto strEnd = str.find_last_not_of(whitespace);
-	auto strRange = strEnd - strBegin + 1;
-
-	auto trimmed = str;
-	trimmed = trimmed.substr(strBegin, strRange);
-	return trimmed;
-}
-
-std::vector<std::string> Split(const std::string &str, const std::string &sep, bool trim)
-{
-	std::unique_ptr<char[]> copy(new char[strlen(str.c_str()) + 1]);
-	std::strcpy(copy.get(), str.c_str());
-
-	std::vector<std::string> splitVector;
-	auto current = std::strtok(copy.get(), sep.c_str());
-
-	while (current != nullptr)
-	{
-		auto currentS = std::string(current);
-
-		if (trim)
-		{
-			currentS = Trim(currentS, " \t\n\r");
-		}
-
-		splitVector.emplace_back(currentS);
-		current = std::strtok(nullptr, sep.c_str());
-	}
-
-	return splitVector;
-}
-
-std::string ReplaceFirst(std::string str, std::string_view token, std::string_view to)
-{
-	const auto startPos = str.find(token);
-
-	if (startPos == std::string::npos)
-	{
-		return str;
-	}
-
-	str.replace(startPos, token.length(), to);
-	return str;
 }
 
 void Shader::LoadUniform(const glslang::TProgram& program, const VkShaderStageFlags& stageFlag, const int32_t& i)

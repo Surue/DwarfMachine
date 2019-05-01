@@ -41,7 +41,7 @@ void EditorRenderManager::Start()
 
 	std::vector<Attachment> renderpassAttachment0 = {
 		Attachment(0, "depth", Attachment::Type::DEPTH, false),
-		Attachment(1, "swapchain", Attachment::Type::IMAGE, false, VK_FORMAT_R8G8B8A8_UNORM),
+		Attachment(1, "swapchain", Attachment::Type::SWAPCHAIN, false, VK_FORMAT_R8G8B8A8_UNORM),
 		Attachment(2, "position", Attachment::Type::IMAGE, false, VK_FORMAT_R16G16B16A16_SFLOAT),
 		Attachment(3, "diffuse", Attachment::Type::IMAGE, false, VK_FORMAT_R8G8B8A8_UNORM),
 		Attachment(4, "normal", Attachment::Type::IMAGE, false, VK_FORMAT_R16G16B16A16_SFLOAT),
@@ -57,15 +57,7 @@ void EditorRenderManager::Start()
 
 	renderStages.emplace_back(std::make_unique<RenderStage>(renderpassAttachment0, renderpassSubpasses0));
 
-	std::vector<Attachment> renderpassAttachment1 = { 
-		Attachment(0, "swapchainReal", Attachment::Type::SWAPCHAIN) 
-	};
-
-	std::vector<SubpassType> renderpassSubpasses1 = { 
-		SubpassType(0, { 0 }) 
-	};
-
-	renderStages.emplace_back(std::make_unique<RenderStage>(renderpassAttachment1, renderpassSubpasses1));
+//	renderStages.emplace_back(std::make_unique<RenderStage>(renderpassAttachment1, renderpassSubpasses1));
 
 	Engine::Get()->GetGraphicManager()->SetRenderStages(std::move(renderStages));
 
@@ -73,7 +65,7 @@ void EditorRenderManager::Start()
 	rendererContainer.Clear();
 
 	//RendererMeshes rendererMeshes = RendererMeshes(*Engine::Get(), Pipeline::Stage(1, 0));
-	rendererContainer.Add<RendererMeshes>(*Engine::Get(), Pipeline::Stage(1, 0));
+	rendererContainer.Add<RendererMeshes>(*Engine::Get(), Pipeline::Stage(0, 0));
 }
 void EditorRenderManager::Update()
 {

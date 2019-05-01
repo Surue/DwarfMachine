@@ -184,10 +184,10 @@ void Instance::CreateInstance()
 	VkApplicationInfo appInfo = {}; //pNext = nullptr
 	appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
 	appInfo.pApplicationName = "Vulkan application";
-	appInfo.applicationVersion = VK_MAKE_VERSION(1, 0, 0);
+	appInfo.applicationVersion = VK_MAKE_VERSION(0, 1, 0);
 	appInfo.pEngineName = "Dwarf Machine";
 	appInfo.engineVersion = VK_MAKE_VERSION(1, 0, 0);
-	appInfo.apiVersion = VK_API_VERSION_1_0;
+	appInfo.apiVersion = VK_MAKE_VERSION(1, 1, 0);
 
 	//Store data for creating an instance
 	VkInstanceCreateInfo createInfo = {};

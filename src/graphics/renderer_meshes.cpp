@@ -120,7 +120,7 @@ void RendererMeshes::Draw(const CommandBuffer& commandBuffer)
 
 		if (!updateSuccess)
 		{
-			std::cout << "Update fail\n";
+			std::cout << "RendererMeshes: Upadte() -> UpdateSuccess failed\n";
 			return;
 		}
 
@@ -145,7 +145,8 @@ void RendererMeshes::RegisterEntity(const Entity entity)
 	m_UniformObjects.resize(m_RegisteredEntities.size());
 
 	//TODO vérifier si c'est possible de mettre ça lors de la création du component
-	material->pipelineMaterial = PipelineMaterial::Create({ 1, 0 }, PipelineGraphicsCreate({ "shaders/shader.vert", "shaders/shader.frag" }, { MeshManager::GetVertexInput() }, MaterialDefaultManager::GetDefines(*material), PipelineGraphics::Mode::MRT));
+	//TODO Il faut lier la stage manuellement, il faut trouver une solution
+	material->pipelineMaterial = PipelineMaterial::Create({ 0, 0 }, PipelineGraphicsCreate({ "Shaders/shader.vert", "Shaders/shader.frag" }, { MeshManager::GetVertexInput() }, MaterialDefaultManager::GetDefines(*material), PipelineGraphics::Mode::MRT));
 	material->color = Color(0, 0, 0);
 
 	std::cout << "Size = " << m_RegisteredEntities.size() << "\n";
