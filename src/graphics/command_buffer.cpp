@@ -29,6 +29,7 @@ SOFTWARE.
 
 namespace dm
 {
+
 CommandBuffer::CommandBuffer(const bool &begin, const VkQueueFlagBits& queueType, const VkCommandBufferLevel& bufferLevel):
 	m_CommandPool(nullptr),
 	m_QueueType(queueType), 
@@ -129,10 +130,10 @@ void CommandBuffer::SubmitIdle()
 
 void CommandBuffer::Submit(const VkSemaphore& waitSemaphore, const VkSemaphore& signalSemaphore, VkFence fence)
 {
-	const auto logicalDevice = Engine::Get()->GetGraphicManager()->GetLogicalDevice();
-	const auto queueSelected = GetQueue();
+	auto logicalDevice = Engine::Get()->GetGraphicManager()->GetLogicalDevice();
+	auto queueSelected = GetQueue();
 
-	if(m_Running)
+	if (m_Running)
 	{
 		End();
 	}
@@ -160,10 +161,11 @@ void CommandBuffer::Submit(const VkSemaphore& waitSemaphore, const VkSemaphore& 
 
 	if (fence != VK_NULL_HANDLE)
 	{
-		vkResetFences(*logicalDevice, 1, &fence);
+		GraphicManager::CheckVk(vkResetFences(*logicalDevice, 1, &fence));
+		//Renderer::CheckVk(vkWaitForFences(*logicalDevice, 1, &fence, VK_TRUE, std::numeric_limits<uint64_t>::max()));
 	}
 
-	vkQueueSubmit(queueSelected, 1, &submitInfo, fence);
+	GraphicManager::CheckVk(vkQueueSubmit(queueSelected, 1, &submitInfo, fence));
 }
 
 VkQueue CommandBuffer::GetQueue() const

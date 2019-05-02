@@ -67,15 +67,15 @@ RenderPipeline* RendererContainer::Add(RenderPipeline* renderer)
 
 void RendererContainer::Remove(RenderPipeline* renderer)
 {
-	for(auto it = m_Stages.begin(); it != m_Stages.end(); ++it)
+	for (auto it = m_Stages.begin(); it != m_Stages.end(); ++it)
 	{
-		for(auto it2 = (*it).second.begin(); it2 != (*it).second.end(); ++it)
+		for (auto it2 = (*it).second.begin(); it2 != (*it).second.end(); ++it)
 		{
-			if((*it2).get() == renderer)
+			if ((*it2).get() == renderer)
 			{
 				(*it).second.erase(it2);
 
-				if((*it).second.empty())
+				if ((*it).second.empty())
 				{
 					m_Stages.erase(it);
 				}

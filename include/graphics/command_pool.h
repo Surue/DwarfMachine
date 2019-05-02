@@ -35,7 +35,7 @@ class LogicalDevice;
 class CommandPool
 {
 public:
-	CommandPool(const std::thread::id &threadId = std::this_thread::get_id());
+	explicit CommandPool(const std::thread::id &threadId = std::this_thread::get_id());
 
 	~CommandPool();
 

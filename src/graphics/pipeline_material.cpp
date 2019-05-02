@@ -34,7 +34,7 @@ std::shared_ptr<PipelineMaterial> PipelineMaterial::Create(const Pipeline::Stage
 	return std::make_shared<PipelineMaterial>(pipelineStage, pipelineCreate);
 }
 
-PipelineMaterial::PipelineMaterial(const Pipeline::Stage pipelineStage, const PipelineGraphicsCreate pipelineCreate) :
+PipelineMaterial::PipelineMaterial(Pipeline::Stage pipelineStage, PipelineGraphicsCreate pipelineCreate) :
 	m_PipelineStage(std::move(pipelineStage)),
 	m_PipelineGraphicsCreate(std::move(pipelineCreate)),
 	m_RenderStage(nullptr),

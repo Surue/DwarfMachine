@@ -34,26 +34,25 @@ Buffer::Buffer(const VkDeviceSize& size, const VkBufferUsageFlags& usage, const 
 	m_Buffer(VK_NULL_HANDLE),
     m_BufferMemory(VK_NULL_HANDLE)
 {
-	const auto logicalDevice = Engine::Get()->GetGraphicManager()->GetLogicalDevice();
-	const auto graphicFamily = logicalDevice->GetGraphicsFamily();
-	const auto presentFamily = logicalDevice->GetPresentFamily();
-	const auto computeFamily = logicalDevice->GetComputeFamily();
+	auto logicalDevice = Engine::Get()->GetGraphicManager()->GetLogicalDevice();
 
-	std::array<uint32_t, 3> queueFamily = {graphicFamily, presentFamily, computeFamily};
+	auto graphicsFamily = logicalDevice->GetGraphicsFamily();
+	auto presentFamily = logicalDevice->GetPresentFamily();
+	auto computeFamily = logicalDevice->GetComputeFamily();
 
-	VkBufferCreateInfo createInfo = {};
-	createInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
-	createInfo.size = size;
-	createInfo.usage = usage;
-	createInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
-	createInfo.queueFamilyIndexCount = static_cast<uint32_t>(queueFamily.size());
-	createInfo.pQueueFamilyIndices = queueFamily.data();
+	std::array<uint32_t, 3> queueFamily = { graphicsFamily, presentFamily, computeFamily };
 
-	if (vkCreateBuffer(*logicalDevice, &createInfo, nullptr, &m_Buffer) != VK_SUCCESS)
-	{
-		throw std::runtime_error("failed to create vertexx buffer");
-	}
+	// Create the buffer handle.
+	VkBufferCreateInfo bufferCreateInfo = {};
+	bufferCreateInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
+	bufferCreateInfo.size = size;
+	bufferCreateInfo.usage = usage;
+	bufferCreateInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
+	bufferCreateInfo.queueFamilyIndexCount = static_cast<uint32_t>(queueFamily.size());
+	bufferCreateInfo.pQueueFamilyIndices = queueFamily.data();
+	GraphicManager::CheckVk(vkCreateBuffer(*logicalDevice, &bufferCreateInfo, nullptr, &m_Buffer));
 
+	// Create the memory backing up the buffer handle.
 	VkMemoryRequirements memoryRequirements;
 	vkGetBufferMemoryRequirements(*logicalDevice, m_Buffer, &memoryRequirements);
 
@@ -61,18 +60,16 @@ Buffer::Buffer(const VkDeviceSize& size, const VkBufferUsageFlags& usage, const 
 	memoryAllocateInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
 	memoryAllocateInfo.allocationSize = memoryRequirements.size;
 	memoryAllocateInfo.memoryTypeIndex = FindMemoryType(memoryRequirements.memoryTypeBits, properties);
-	if (vkAllocateMemory(logicalDevice->GetLogicalDevice(), &memoryAllocateInfo, nullptr, &m_BufferMemory) !=
-		VK_SUCCESS)
-	{
-		throw std::runtime_error("failed to allocate vertex buffer memory");
-	}
+	GraphicManager::CheckVk(vkAllocateMemory(*logicalDevice, &memoryAllocateInfo, nullptr, &m_BufferMemory));
 
+	// If a pointer to the buffer data has been passed, map the buffer and copy over the data.
 	if (data != nullptr)
 	{
-		void* mapped;
+		void *mapped;
 		MapMemory(&mapped);
 		std::memcpy(mapped, data, size);
 
+		// If host coherency hasn't been requested, do a manual flush to make writes visible.
 		if ((properties & VK_MEMORY_PROPERTY_HOST_COHERENT_BIT) == 0)
 		{
 			VkMappedMemoryRange mappedMemoryRange = {};
@@ -86,7 +83,8 @@ Buffer::Buffer(const VkDeviceSize& size, const VkBufferUsageFlags& usage, const 
 		UnmapMemory();
 	}
 
-	vkBindBufferMemory(*logicalDevice, m_Buffer, m_BufferMemory, 0);
+	// Attach the memory to the buffer object.
+	GraphicManager::CheckVk(vkBindBufferMemory(*logicalDevice, m_Buffer, m_BufferMemory, 0));
 }
 
 Buffer::~Buffer()
@@ -99,7 +97,7 @@ Buffer::~Buffer()
 void Buffer::MapMemory(void** data) const
 {
 	const auto logicalDevice = Engine::Get()->GetGraphicManager()->GetLogicalDevice();
-	vkMapMemory(*logicalDevice, GetBufferMemory(), 0, m_Size, 0, data);
+	GraphicManager::CheckVk(vkMapMemory(*logicalDevice, GetBufferMemory(), 0, m_Size, 0, data));
 }
 
 void Buffer::UnmapMemory() const

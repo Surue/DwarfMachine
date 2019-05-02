@@ -49,17 +49,17 @@ public:
 	template<typename T>
 	T *Get(const bool &allowDisabled = false) const
 	{
-		T* alternative = nullptr;
+		T *alternative = nullptr;
 
-		for(const auto &[key, renderers] : m_Stages)
+		for (const auto &[key, renderers] : m_Stages)
 		{
-			for(const auto &renderer : renderers)
+			for (const auto &renderer : renderers)
 			{
-				auto casted = dynamic_cast<T*>(renderer.get());
+				auto casted = dynamic_cast<T *>(renderer.get());
 
-				if(casted != nullptr)
+				if (casted != nullptr)
 				{
-					if(!allowDisabled && !casted->IsEnabled())
+					if (!allowDisabled && !casted->IsEnabled())
 					{
 						alternative = casted;
 						continue;
@@ -88,17 +88,17 @@ public:
 	template<typename T>
 	void Remove()
 	{
-		for(auto it = m_Stages.begin(); it != m_Stages.end(); ++it)
+		for (auto it = m_Stages.begin(); it != m_Stages.end(); ++it)
 		{
-			for(auto it2 = (*it).second.begin(); it2 != (*it).second.end(); ++it)
+			for (auto it2 = (*it).second.begin(); it2 != (*it).second.end(); ++it)
 			{
 				auto casted = dynamic_cast<T *>((*it2).get());
 
-				if(casted != nullptr)
+				if (casted != nullptr)
 				{
 					(*it).second.erase(it2);
 
-					if((*it).second.empty())
+					if ((*it).second.empty())
 					{
 						m_Stages.erase(it);
 					}

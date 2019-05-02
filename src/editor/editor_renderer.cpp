@@ -50,9 +50,7 @@ void EditorRenderManager::Start()
 	};
 
 	std::vector<SubpassType> renderpassSubpasses0 = { 
-		SubpassType(0, { 0, 2, 3, 4, 5 }), 
-		SubpassType(1, { 0, 6 }), 
-		SubpassType(2, { 0, 1 }) 
+		SubpassType(0, { 0, 2, 3, 4, 5 }) 
 	};
 
 	renderStages.emplace_back(std::make_unique<RenderStage>(renderpassAttachment0, renderpassSubpasses0));
@@ -62,7 +60,6 @@ void EditorRenderManager::Start()
 	auto &rendererContainer = GetRendererContainer();
 	rendererContainer.Clear();
 
-	//RendererMeshes rendererMeshes = RendererMeshes(*Engine::Get(), Pipeline::Stage(1, 0));
 	rendererContainer.Add<RendererMeshes>(*Engine::Get(), Pipeline::Stage(0, 0));
 }
 void EditorRenderManager::Update()

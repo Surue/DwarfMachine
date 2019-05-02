@@ -156,7 +156,10 @@ private:
 class PipelineGraphicsCreate
 {
 public:
-	explicit PipelineGraphicsCreate(std::vector<std::string> shaderStages = {}, std::vector<Shader::VertexInput> vertexInputs = {}, std::vector<Shader::Define> defines = {}, const PipelineGraphics::Mode &mode = PipelineGraphics::Mode::POLYGON, const PipelineGraphics::Depth &depth = PipelineGraphics::Depth::READ_WRITE, const VkPrimitiveTopology &topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST, const VkPolygonMode &polygonMode = VK_POLYGON_MODE_FILL, const VkCullModeFlags &cullMode = VK_CULL_MODE_BACK_BIT, const VkFrontFace &frontFace = VK_FRONT_FACE_CLOCKWISE, const bool &pushDescriptor = false) :
+	explicit PipelineGraphicsCreate(std::vector<std::string> shaderStages = {}, std::vector<Shader::VertexInput> vertexInputs = {}, std::vector<Shader::Define> defines = {},
+		const PipelineGraphics::Mode &mode = PipelineGraphics::Mode::POLYGON, const PipelineGraphics::Depth &depth = PipelineGraphics::Depth::READ_WRITE,
+		const VkPrimitiveTopology &topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST, const VkPolygonMode &polygonMode = VK_POLYGON_MODE_FILL,
+		const VkCullModeFlags &cullMode = VK_CULL_MODE_BACK_BIT, const VkFrontFace &frontFace = VK_FRONT_FACE_CLOCKWISE, const bool &pushDescriptors = false) :
 		m_ShaderStages(std::move(shaderStages)),
 		m_VertexInputs(std::move(vertexInputs)),
 		m_Defines(std::move(defines)),
@@ -166,7 +169,7 @@ public:
 		m_PolygonMode(polygonMode),
 		m_CullMode(cullMode),
 		m_FrontFace(frontFace),
-		m_PushDescriptor(pushDescriptor)
+		m_PushDescriptor(pushDescriptors)
 	{}
 
 	PipelineGraphics *Create(const Pipeline::Stage &pipelineStage) const

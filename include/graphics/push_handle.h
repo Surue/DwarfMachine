@@ -39,7 +39,7 @@ public:
 	template<typename T>
 	void Push(const T &object, const std::size_t &offset, const std::size_t &size)
 	{
-		std::memcpy(m_data.get() + offset, &object, size);
+		std::memcpy(m_Data.get() + offset, &object, size);
 	}
 
 	template<typename T>

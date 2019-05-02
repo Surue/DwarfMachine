@@ -32,7 +32,7 @@ CommandPool::CommandPool(const std::thread::id& threadId) :
 	m_CommandPool(VK_NULL_HANDLE),
 	m_ThreadId(threadId)
 {
-	auto logicalDevice = Engine::Get()->GetGraphicManager()->GetLogicalDevice();
+	const auto logicalDevice = Engine::Get()->GetGraphicManager()->GetLogicalDevice();
 	const auto graphicsFamily = logicalDevice->GetGraphicsFamily();
 
 	VkCommandPoolCreateInfo poolInfo = {};
@@ -40,10 +40,7 @@ CommandPool::CommandPool(const std::thread::id& threadId) :
 	poolInfo.queueFamilyIndex = graphicsFamily;
 	poolInfo.flags = VK_COMMAND_POOL_CREATE_TRANSIENT_BIT | VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
 
-	if (vkCreateCommandPool(*logicalDevice, &poolInfo, nullptr, &m_CommandPool) != VK_SUCCESS)
-	{
-		throw std::runtime_error("failed to create command pool");
-	}
+	GraphicManager::CheckVk(vkCreateCommandPool(*logicalDevice, &poolInfo, nullptr, &m_CommandPool));
 }
 
 CommandPool::~CommandPool()

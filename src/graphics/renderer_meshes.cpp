@@ -125,12 +125,12 @@ void RendererMeshes::Draw(const CommandBuffer& commandBuffer)
 
 		// Draws the object.
 		m_DescriptorSet[i].BindDescriptor(commandBuffer, pipeline);
-		meshModel->CmdRender(commandBuffer);
-		std::cout << "Draw success\n";
+		if (meshModel->CmdRender(commandBuffer)) {
+			std::cout << "Draw success\n";
+		}
+
 		i++;
 	}
-
-	throw std::runtime_error("Stop");
 }
 
 void RendererMeshes::RegisterEntity(const Entity entity)

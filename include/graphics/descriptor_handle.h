@@ -60,16 +60,18 @@ public:
 	template<typename T>
 	void Push(const std::string &descriptorName, const T &descriptor, const std::optional<OffsetSize> &offsetSize = {})
 	{
-		if(m_Shader == nullptr)
+		if (m_Shader == nullptr)
 		{
 			return;
 		}
 
+		// Finds the local value given to the descriptor name.
 		auto it = m_Descriptor.find(descriptorName);
 
-		if(it != m_Descriptor.end())
+		if (it != m_Descriptor.end())
 		{
-			if(it->second.descriptor == AsPtr(descriptor) && it->second.offsetSize == offsetSize)
+			// If the descriptor and size have not changed then the write is not modified.
+			if (it->second.descriptor == AsPtr(descriptor) && it->second.offsetSize == offsetSize)
 			{
 				return;
 			}
@@ -77,18 +79,20 @@ public:
 			m_Descriptor.erase(it);
 		}
 
-		if(AsPtr(descriptor) == nullptr)
+		// Only non-null descriptors can be mapped.
+		if (AsPtr(descriptor) == nullptr)
 		{
 			return;
 		}
 
+		// When adding the descriptor find the location in the shader.
 		auto location = m_Shader->GetDescriptorLocation(descriptorName);
 
-		if(!location)
+		if (!location)
 		{
 			if (m_Shader->ReportedNotFound(descriptorName, true))
 			{
-				std::cout << "Could not find descriptor in shader : " << m_Shader->GetName().c_str() << ", " << descriptorName.c_str() << "\n";
+				std::cout << "Could not find descriptor in shader '%s' of name '%s'\n" << m_Shader->GetName().c_str() << ", " << descriptorName.c_str();
 			}
 
 			return;
@@ -96,32 +100,32 @@ public:
 
 		auto descriptorType = m_Shader->GetDescriptorType(*location);
 
-		if(!descriptorType)
+		if (!descriptorType)
 		{
 			if (m_Shader->ReportedNotFound(descriptorName, true))
 			{
-				std::cout << "Could not find descriptor in shader '%s' of name '%s' at location '%i'\n" <<  m_Shader->GetName().c_str() << ", " << descriptorName.c_str() << "\n";
+				std::cout << "Could not find descriptor in shader '%s' of name '%s' at location '%i'\n" << m_Shader->GetName().c_str() << descriptorName.c_str() << *location;
 			}
-
 			return;
 		}
 
+		// Adds the new descriptor value.
 		auto writeDescriptor = AsPtr(descriptor)->GetWriteDescriptor(*location, *descriptorType, offsetSize);
-		m_Descriptor.emplace(descriptorName, DescriptorValue{ AsPtr(descriptor), std::move(writeDescriptor), offsetSize });
+		m_Descriptor.emplace(descriptorName, DescriptorValue{ AsPtr(descriptor), std::move(writeDescriptor), offsetSize, *location });
 		m_Changed = true;
 	}
 
 	template<typename T>
 	void Push(const std::string &descriptorName, const T &descriptor, WriteDescriptorSet writeDescriptorSet)
 	{
-		if(m_Shader == nullptr)
+		if (m_Shader == nullptr)
 		{
 			return;
 		}
 
 		auto it = m_Descriptor.find(descriptorName);
 
-		if(it != m_Descriptor.end())
+		if (it != m_Descriptor.end())
 		{
 			m_Descriptor.erase(it);
 		}
@@ -129,7 +133,7 @@ public:
 		auto location = m_Shader->GetDescriptorLocation(descriptorName);
 		auto descriptorType = m_Shader->GetDescriptorType(*location);
 
-		m_Descriptor.emplace(descriptorName, DescriptorValue(AsPtr(descriptor), std::move(writeDescriptorSet), {}, *location));
+		m_Descriptor.emplace(descriptorName, DescriptorValue{ AsPtr(descriptor), std::move(writeDescriptorSet), {}, *location });
 		m_Changed = true;
 	}
 

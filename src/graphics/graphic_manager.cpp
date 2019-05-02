@@ -33,7 +33,7 @@ SOFTWARE.
 
 namespace dm
 {
-std::string StringifyResultVk(const VkResult &result)
+std::string GraphicManager::StringifyResultVk(const VkResult &result)
 {
 	switch (result)
 	{
@@ -90,7 +90,7 @@ std::string StringifyResultVk(const VkResult &result)
 	}
 }
 
-void CheckVk(const VkResult &result)
+void GraphicManager::CheckVk(const VkResult &result)
 {
 	if (result >= 0)
 	{
@@ -145,7 +145,7 @@ void GraphicManager::InitWindow()
 
 void GraphicManager::FrameBufferResizeCallback(SDL_Window* window, int width, int height)
 {
-	//TODO Faire en sorte que quand on resize une window cette fonction soit appelée 
+	//TODO Faire en sorte que quand on resize une window cette fonction soit appelï¿½e 
 	const auto app = reinterpret_cast<GraphicManager*>(SDL_GetWindowData(window, "Vulkan App"));
 	//app->m_FrameBufferResized = true; 
 }
@@ -164,10 +164,10 @@ GraphicManager::~GraphicManager()
 {
 	auto graphicsQueue = m_LogicalDevice->GetGraphicsQueue();
 
-	vkQueueWaitIdle(graphicsQueue);
+	CheckVk(vkQueueWaitIdle(graphicsQueue));
 
 	glslang::FinalizeProcess();
-		
+
 	vkDestroyPipelineCache(*m_LogicalDevice, m_PipelineCache, nullptr);
 
 	for (size_t i = 0; i < m_InFlightFences.size(); i++)
@@ -290,14 +290,14 @@ Window* GraphicManager::GetWindow() const
 
 void GraphicManager::SetRenderStages(std::vector<std::unique_ptr<RenderStage>> renderStages)
 {
-	VkExtent2D displayExtent = { static_cast<uint32_t>(m_Window->GetSize().x), static_cast<uint32_t>(m_Window->GetSize().y) };
+	VkExtent2D displayExtent = { m_Window->GetSize().x, m_Window->GetSize().y };
 
 	m_RenderStages = std::move(renderStages);
 	m_Swapchain = std::make_unique<Swapchain>(displayExtent);
 
-	if(m_InFlightFences.size() != m_Swapchain->GetImageCount())
+	if (m_InFlightFences.size() != m_Swapchain->GetImageCount())
 	{
-		for(size_t i = 0; i < m_InFlightFences.size(); i++)
+		for (size_t i = 0; i < m_InFlightFences.size(); i++)
 		{
 			vkDestroyFence(*m_LogicalDevice, m_InFlightFences[i], nullptr);
 			vkDestroySemaphore(*m_LogicalDevice, m_RenderFinishedSemaphores[i], nullptr);
@@ -316,14 +316,13 @@ void GraphicManager::SetRenderStages(std::vector<std::unique_ptr<RenderStage>> r
 		fenceCreateInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
 		fenceCreateInfo.flags = VK_FENCE_CREATE_SIGNALED_BIT;
 
-		for(size_t i = 0; i < m_InFlightFences.size(); i++)
+		for (size_t i = 0; i < m_InFlightFences.size(); i++)
 		{
-			if (vkCreateSemaphore(m_LogicalDevice->GetLogicalDevice(), &semaphoreCreateInfo, nullptr, &m_ImageAvailableSemaphores[i]) != VK_SUCCESS ||
-				vkCreateSemaphore(m_LogicalDevice->GetLogicalDevice(), &semaphoreCreateInfo, nullptr, &m_RenderFinishedSemaphores[i]) != VK_SUCCESS ||
-				vkCreateFence(m_LogicalDevice->GetLogicalDevice(), &fenceCreateInfo, nullptr, &m_InFlightFences[i]) != VK_SUCCESS)
-			{
-				throw std::runtime_error("failed to create synchronization objects for a frame");
-			}
+			CheckVk(vkCreateSemaphore(*m_LogicalDevice, &semaphoreCreateInfo, nullptr, &m_ImageAvailableSemaphores[i]));
+
+			CheckVk(vkCreateSemaphore(*m_LogicalDevice, &semaphoreCreateInfo, nullptr, &m_RenderFinishedSemaphores[i]));
+
+			CheckVk(vkCreateFence(*m_LogicalDevice, &fenceCreateInfo, nullptr, &m_InFlightFences[i]));
 
 			m_CommandBuffers[i] = std::make_unique<CommandBuffer>(false);
 		}
@@ -347,7 +346,7 @@ const std::shared_ptr<CommandPool> &GraphicManager::GetCommandPool(const std::th
 	}
 
 	m_CommandPools.emplace(threadId, std::make_shared<CommandPool>(threadId));
-	return m_CommandPools.find(threadId)->second; // TODO: Cleanup.
+	return m_CommandPools.find(threadId)->second;
 }
 
 void GraphicManager::UpdateMainCamera() const
@@ -383,20 +382,20 @@ void GraphicManager::RecreateAttachmentsMap()
 
 bool GraphicManager::StartRenderpass(RenderStage& renderStage)
 {
-	if(renderStage.IsOutOfDate())
+	if (renderStage.IsOutOfDate())
 	{
 		RecreatePass(renderStage);
 		return false;
 	}
 
-	if(!m_CommandBuffers[m_Swapchain->GetActiveImageIndex()]->IsRunning())
+	if (!m_CommandBuffers[m_Swapchain->GetActiveImageIndex()]->IsRunning())
 	{
-		vkWaitForFences(*m_LogicalDevice, 1, &m_InFlightFences[m_CurrentFrame], VK_TRUE, std::numeric_limits<uint64_t>::max());
+		CheckVk(vkWaitForFences(*m_LogicalDevice, 1, &m_InFlightFences[m_CurrentFrame], VK_TRUE, std::numeric_limits<uint64_t>::max()));
 		m_CommandBuffers[m_Swapchain->GetActiveImageIndex()]->Begin(VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT);
 	}
 
 	VkRect2D renderArea = {};
-	renderArea.offset = { 0 ,0 };
+	renderArea.offset = { 0, 0 };
 	renderArea.extent = { static_cast<uint32_t>(renderStage.GetSize().x), static_cast<uint32_t>(renderStage.GetSize().y) };
 
 	VkViewport viewport = {};
@@ -409,7 +408,7 @@ bool GraphicManager::StartRenderpass(RenderStage& renderStage)
 	vkCmdSetViewport(*m_CommandBuffers[m_Swapchain->GetActiveImageIndex()], 0, 1, &viewport);
 
 	VkRect2D scissor = {};
-	scissor.offset = { 0,0 };
+	scissor.offset = { 0, 0 };
 	scissor.extent = renderArea.extent;
 	vkCmdSetScissor(*m_CommandBuffers[m_Swapchain->GetActiveImageIndex()], 0, 1, &scissor);
 
@@ -422,10 +421,9 @@ bool GraphicManager::StartRenderpass(RenderStage& renderStage)
 	renderPassBeginInfo.renderArea = renderArea;
 	renderPassBeginInfo.clearValueCount = static_cast<uint32_t>(clearValues.size());
 	renderPassBeginInfo.pClearValues = clearValues.data();
-	vkCmdBeginRenderPass(
-		*m_CommandBuffers[m_Swapchain->GetActiveImageIndex()], 
-		&renderPassBeginInfo, 
-		VK_SUBPASS_CONTENTS_INLINE);
+	vkCmdBeginRenderPass(*m_CommandBuffers[m_Swapchain->GetActiveImageIndex()], &renderPassBeginInfo, VK_SUBPASS_CONTENTS_INLINE);
+
+	return true;
 }
 
 void GraphicManager::EndRenderpass(RenderStage& renderStage)
@@ -450,7 +448,7 @@ void GraphicManager::EndRenderpass(RenderStage& renderStage)
 			RecreatePass(renderStage);
 			return;
 		}
-		std::cout << presentResult << "\n";
+		CheckVk(presentResult);
 	}
 
 	m_CurrentFrame = (m_CurrentFrame + 1) % m_Swapchain->GetImageCount();

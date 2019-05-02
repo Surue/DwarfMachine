@@ -130,6 +130,10 @@ public:
 
 	RendererContainer *GetRendererContainer() const { return &m_RenderManager->GetRendererContainer(); }
 
+	static std::string StringifyResultVk(const VkResult &result);
+
+	static void CheckVk(const VkResult &result);
+
 private:
 	void CreatePipelineCache();
 	/**
@@ -151,15 +155,15 @@ private:
 
 
 	//WINDOW
-	std::unique_ptr<Window> m_Window = nullptr;
+	std::unique_ptr<Window> m_Window;
 
 	//VULKAN
-	std::unique_ptr<Instance> m_Instance = nullptr; 
-	std::unique_ptr<Surface> m_Surface = nullptr;
-	std::unique_ptr<PhysicalDevice> m_PhysicalDevice = nullptr; 
-	std::unique_ptr<LogicalDevice> m_LogicalDevice = nullptr; 
+	std::unique_ptr<Instance> m_Instance; 
+	std::unique_ptr<Surface> m_Surface;
+	std::unique_ptr<PhysicalDevice> m_PhysicalDevice; 
+	std::unique_ptr<LogicalDevice> m_LogicalDevice; 
 
-	std::unique_ptr<Swapchain> m_Swapchain = nullptr;
+	std::unique_ptr<Swapchain> m_Swapchain;
 
 	std::map<std::thread::id, std::shared_ptr<CommandPool>> m_CommandPools; 
 	std::vector< std::unique_ptr<CommandBuffer>> m_CommandBuffers;
@@ -168,7 +172,7 @@ private:
 	std::vector<VkSemaphore> m_ImageAvailableSemaphores; 
 	std::vector<VkSemaphore> m_RenderFinishedSemaphores; 
 	std::vector<VkFence> m_InFlightFences; 
-	size_t m_CurrentFrame = 0; 
+	size_t m_CurrentFrame; 
 
 	Engine& m_Engine;
 

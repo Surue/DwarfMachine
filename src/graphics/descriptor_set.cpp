@@ -38,22 +38,20 @@ DescriptorSet::DescriptorSet(const Pipeline& pipeline) :
 
 	VkDescriptorSetLayout layouts[1] = { pipeline.GetDescriptorSetLayout() };
 
-	VkDescriptorSetAllocateInfo allocateInfo = {};
-	allocateInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
-	allocateInfo.descriptorPool = m_DescriptorPool;
-	allocateInfo.descriptorSetCount = 1;
-	allocateInfo.pSetLayouts = layouts;
+	VkDescriptorSetAllocateInfo descriptorSetAllocateInfo = {};
+	descriptorSetAllocateInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
+	descriptorSetAllocateInfo.descriptorPool = m_DescriptorPool;
+	descriptorSetAllocateInfo.descriptorSetCount = 1;
+	descriptorSetAllocateInfo.pSetLayouts = layouts;
 
-	if (vkAllocateDescriptorSets(*logicalDevice, &allocateInfo, &m_DescriptorSet) != VK_SUCCESS) {
-		throw std::runtime_error("failed to allocate descriptor sets!");
-	}
+	GraphicManager::CheckVk(vkAllocateDescriptorSets(*logicalDevice, &descriptorSetAllocateInfo, &m_DescriptorSet));
 }
 
 DescriptorSet::~DescriptorSet()
 {
 	const auto logicalDevice = Engine::Get()->GetGraphicManager()->GetLogicalDevice();
 
-	vkFreeDescriptorSets(*logicalDevice, m_DescriptorPool, 1, &m_DescriptorSet);
+	GraphicManager::CheckVk(vkFreeDescriptorSets(*logicalDevice, m_DescriptorPool, 1, &m_DescriptorSet));
 }
 
 void DescriptorSet::Update(const std::vector<VkWriteDescriptorSet>& descriptorWrites)
