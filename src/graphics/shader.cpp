@@ -378,7 +378,7 @@ std::string Trim(std::string str, std::string_view whitespace = " \t\n\r")
 	return trimmed;
 }
 
-std::vector<std::string> Split(const std::string &str, const std::string &sep, bool trim)
+std::vector<std::string> Split(const std::string &str, const std::string &sep, bool trim = false)
 {
 	std::unique_ptr<char[]> copy(new char[strlen(str.c_str()) + 1]);
 	std::strcpy(copy.get(), str.c_str());
@@ -713,27 +713,29 @@ void Shader::LoadUniformBlock(const glslang::TProgram& program, const VkShaderSt
 
 void Shader::LoadUniform(const glslang::TProgram& program, const VkShaderStageFlags& stageFlag, const int32_t& i)
 {
-	if(program.getUniformBinding(i) == -1)
+	if (program.getUniformBinding(i) == -1)
 	{
 		auto uniformName = program.getUniformName(i);
-		auto splitName = Split(uniformName, ".", false);
+		auto splitName = Split(uniformName, ".");
 
-		if(splitName.size() > 1)
+		if (splitName.size() > 1)
 		{
-			for(auto &[uniformBlockName, uniformBlock] : m_UniformBlocks)
+			for (auto &[uniformBlockName, uniformBlock] : m_UniformBlocks)
 			{
-				if(uniformBlockName == splitName.at(0))
+				if (uniformBlockName == splitName.at(0))
 				{
-					uniformBlock.m_Uniforms.emplace(ReplaceFirst(uniformName, splitName.at(0) + ".", ""), Uniform(program.getUniformBinding(i), program.getUniformBufferOffset(i), ComputeSize(program.getUniformTType(i)), program.getUniformType(i), false, false, stageFlag));
+					uniformBlock.m_Uniforms.emplace(ReplaceFirst(uniformName, splitName.at(0) + ".", ""),
+						Uniform(program.getUniformBinding(i), program.getUniformBufferOffset(i), ComputeSize(program.getUniformTType(i)), program.getUniformType(i), false, false,
+							stageFlag));
 					return;
 				}
 			}
 		}
 	}
 
-	for(auto &[uniformName, uniform] : m_Uniform)
+	for (auto &[uniformName, uniform] : m_Uniform)
 	{
-		if(uniformName == program.getUniformName(i))
+		if (uniformName == program.getUniformName(i))
 		{
 			uniform.m_StageFlags |= stageFlag;
 			return;
@@ -741,7 +743,8 @@ void Shader::LoadUniform(const glslang::TProgram& program, const VkShaderStageFl
 	}
 
 	auto &qualifier = program.getUniformTType(i)->getQualifier();
-	m_Uniform.emplace(program.getUniformName(i), Uniform(program.getUniformBinding(i), program.getUniformBufferOffset(i), -1, program.getUniformType(i), qualifier.readonly, qualifier.writeonly, stageFlag));
+	m_Uniform.emplace(program.getUniformName(i),
+		Uniform(program.getUniformBinding(i), program.getUniformBufferOffset(i), -1, program.getUniformType(i), qualifier.readonly, qualifier.writeonly, stageFlag));
 }
 
 void Shader::LoadVertexAttribute(const glslang::TProgram& program, const VkShaderStageFlags& stageFlag,

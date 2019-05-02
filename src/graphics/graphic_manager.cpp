@@ -253,7 +253,7 @@ void GraphicManager::SetRenderStages(std::vector<std::unique_ptr<RenderStage>> r
 		}
 	}
 
-	for(const auto &renderStage : m_RenderStages)
+	for (const auto &renderStage : m_RenderStages)
 	{
 		renderStage->Rebuild(*m_Swapchain);
 	}

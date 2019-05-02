@@ -35,45 +35,44 @@ Framebuffers::Framebuffers(const uint32_t& width, const uint32_t& height, const 
 {
 	auto logicalDevice = Engine::Get()->GetGraphicManager()->GetLogicalDevice();
 
-	for(const auto &attachment : renderStage.GetAttachments())
+	for (const auto &attachment : renderStage.GetAttachments())
 	{
 		auto attachmentSamples = attachment.IsMultisampled() ? samples : VK_SAMPLE_COUNT_1_BIT;
 
-		switch(attachment.GetType())
+		switch (attachment.GetType())
 		{
-		case Attachment::Type::IMAGE: 
-			m_ImageAttachments.emplace_back(std::make_unique<Image2d>(width, height, nullptr, attachment.GetFormat(), VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL, VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_STORAGE_BIT, VK_FILTER_LINEAR, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE, attachmentSamples));
+		case Attachment::Type::IMAGE:
+			m_ImageAttachments.emplace_back(std::make_unique<Image2d>(width, height, nullptr, attachment.GetFormat(), VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
+				VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_STORAGE_BIT, VK_FILTER_LINEAR, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE, attachmentSamples));
 			break;
-		case Attachment::Type::DEPTH: 
+		case Attachment::Type::DEPTH:
 			m_ImageAttachments.emplace_back(nullptr);
 			break;
-		case Attachment::Type::SWAPCHAIN: 
+		case Attachment::Type::SWAPCHAIN:
 			m_ImageAttachments.emplace_back(nullptr);
 			break;
-		default: ;
 		}
 	}
 
 	m_Framebuffers.resize(swapchain.GetImageCount());
 
-	for(uint32_t i = 0; i < swapchain.GetImageCount(); i++)
+	for (uint32_t i = 0; i < swapchain.GetImageCount(); i++)
 	{
 		std::vector<VkImageView> attachments;
 
-		for(const auto &attachment : renderStage.GetAttachments())
+		for (const auto &attachment : renderStage.GetAttachments())
 		{
-			switch(attachment.GetType())
+			switch (attachment.GetType())
 			{
-			case Attachment::Type::IMAGE: 
+			case Attachment::Type::IMAGE:
 				attachments.emplace_back(GetAttachment(attachment.GetBinding())->GetView());
 				break;
-			case Attachment::Type::DEPTH: 
+			case Attachment::Type::DEPTH:
 				attachments.emplace_back(depthStencil.GetView());
 				break;
-			case Attachment::Type::SWAPCHAIN: 
+			case Attachment::Type::SWAPCHAIN:
 				attachments.emplace_back(swapchain.GetImageViews().at(i));
 				break;
-			default: ;
 			}
 		}
 

@@ -57,8 +57,6 @@ void EditorRenderManager::Start()
 
 	renderStages.emplace_back(std::make_unique<RenderStage>(renderpassAttachment0, renderpassSubpasses0));
 
-//	renderStages.emplace_back(std::make_unique<RenderStage>(renderpassAttachment1, renderpassSubpasses1));
-
 	Engine::Get()->GetGraphicManager()->SetRenderStages(std::move(renderStages));
 
 	auto &rendererContainer = GetRendererContainer();
