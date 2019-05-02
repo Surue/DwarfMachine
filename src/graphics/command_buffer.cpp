@@ -45,10 +45,7 @@ CommandBuffer::CommandBuffer(const bool &begin, const VkQueueFlagBits& queueType
 	allocInfo.level = bufferLevel;
 	allocInfo.commandBufferCount = 1;
 
-	if (vkAllocateCommandBuffers(*logicalDevice, &allocInfo, &m_CommandBuffer) != VK_SUCCESS)
-	{
-		throw std::runtime_error("failed to allocate command buffers!");
-	}
+	GraphicManager::CheckVk(vkAllocateCommandBuffers(*logicalDevice, &allocInfo, &m_CommandBuffer));
 
 	if(begin)
 	{
@@ -73,10 +70,7 @@ void CommandBuffer::Begin(const VkCommandBufferUsageFlags& usage)
 	beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
 	beginInfo.flags = usage;
 
-	if (vkBeginCommandBuffer(m_CommandBuffer, &beginInfo) != VK_SUCCESS)
-	{
-		throw std::runtime_error("failed to begin recording command buffer!");
-	}
+	GraphicManager::CheckVk(vkBeginCommandBuffer(m_CommandBuffer, &beginInfo));
 
 	m_Running = true;
 }
@@ -88,10 +82,7 @@ void CommandBuffer::End()
 		return;
 	}
 
-	if (vkEndCommandBuffer(m_CommandBuffer) != VK_SUCCESS)
-	{
-		throw std::runtime_error("failed to record command buffer!");
-	}
+	GraphicManager::CheckVk(vkEndCommandBuffer(m_CommandBuffer));
 
 	m_Running = false;
 }
@@ -99,9 +90,9 @@ void CommandBuffer::End()
 void CommandBuffer::SubmitIdle()
 {
 	const auto logicalDevice = Engine::Get()->GetGraphicManager()->GetLogicalDevice();
-	auto queueSelected = GetQueue();
+	const auto queueSelected = GetQueue();
 
-	if(m_Running)
+	if (m_Running)
 	{
 		End();
 	}
@@ -115,15 +106,13 @@ void CommandBuffer::SubmitIdle()
 	fenceCreateInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
 
 	VkFence fence;
-	vkCreateFence(*logicalDevice, &fenceCreateInfo, nullptr, &fence);
-	vkResetFences(*logicalDevice, 1, &fence);
+	GraphicManager::CheckVk(vkCreateFence(*logicalDevice, &fenceCreateInfo, nullptr, &fence));
 
-	if (vkQueueSubmit(logicalDevice->GetGraphicsQueue(), 1, &submitInfo, fence) != VK_SUCCESS)
-	{
-		throw std::runtime_error("failed to submit draw command buffer");
-	}
+	GraphicManager::CheckVk(vkResetFences(*logicalDevice, 1, &fence));
 
-	vkWaitForFences(*logicalDevice, 1, &fence, VK_TRUE, std::numeric_limits<uint64_t>::max());
+	GraphicManager::CheckVk(vkQueueSubmit(queueSelected, 1, &submitInfo, fence));
+
+	GraphicManager::CheckVk(vkWaitForFences(*logicalDevice, 1, &fence, VK_TRUE, std::numeric_limits<uint64_t>::max()));
 
 	vkDestroyFence(*logicalDevice, fence, nullptr);
 }
@@ -162,7 +151,7 @@ void CommandBuffer::Submit(const VkSemaphore& waitSemaphore, const VkSemaphore& 
 	if (fence != VK_NULL_HANDLE)
 	{
 		GraphicManager::CheckVk(vkResetFences(*logicalDevice, 1, &fence));
-		//Renderer::CheckVk(vkWaitForFences(*logicalDevice, 1, &fence, VK_TRUE, std::numeric_limits<uint64_t>::max()));
+		//GraphicManager::CheckVk(vkWaitForFences(*logicalDevice, 1, &fence, VK_TRUE, std::numeric_limits<uint64_t>::max()));
 	}
 
 	GraphicManager::CheckVk(vkQueueSubmit(queueSelected, 1, &submitInfo, fence));

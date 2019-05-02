@@ -114,7 +114,10 @@ void RendererMeshes::Draw(const CommandBuffer& commandBuffer)
 
 		m_DescriptorSet[i].Push("UniformScene", m_UniformScene);
 		m_DescriptorSet[i].Push("UniformObject", m_UniformObjects[i]);
-		MaterialDefaultManager::PushDescriptor(*material, m_DescriptorSet[i]);
+
+		//MaterialDefaultManager::PushDescriptor(*material, m_DescriptorSet[i]);
+		m_DescriptorSet[i].Push("samplerDiffuse", material->textureDiffuse);
+
 		const auto updateSuccess = m_DescriptorSet[i].Update(pipeline);
 
 		if (!updateSuccess)

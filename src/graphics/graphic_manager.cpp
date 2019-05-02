@@ -346,7 +346,7 @@ const std::shared_ptr<CommandPool> &GraphicManager::GetCommandPool(const std::th
 	}
 
 	m_CommandPools.emplace(threadId, std::make_shared<CommandPool>(threadId));
-	return m_CommandPools.find(threadId)->second;
+	return m_CommandPools.find(threadId)->second; 
 }
 
 void GraphicManager::UpdateMainCamera() const
