@@ -112,11 +112,10 @@ void RendererMeshes::Draw(const CommandBuffer& commandBuffer)
 
 		auto &pipeline = *materialPipeline->GetPipeline();
 
-		DescriptorHandle descriptorSet;
-		descriptorSet.Push("UniformScene", m_UniformScene);
-		descriptorSet.Push("UniformObject", m_UniformObjects[i]);
-		MaterialDefaultManager::PushDescriptor(*material, descriptorSet);
-		const auto updateSuccess = descriptorSet.Update(pipeline);
+		m_DescriptorSet[i].Push("UniformScene", m_UniformScene);
+		m_DescriptorSet[i].Push("UniformObject", m_UniformObjects[i]);
+		MaterialDefaultManager::PushDescriptor(*material, m_DescriptorSet[i]);
+		const auto updateSuccess = m_DescriptorSet[i].Update(pipeline);
 
 		if (!updateSuccess)
 		{
@@ -125,7 +124,7 @@ void RendererMeshes::Draw(const CommandBuffer& commandBuffer)
 		}
 
 		// Draws the object.
-		descriptorSet.BindDescriptor(commandBuffer, pipeline);
+		m_DescriptorSet[i].BindDescriptor(commandBuffer, pipeline);
 		meshModel->CmdRender(commandBuffer);
 		std::cout << "Draw success\n";
 		i++;
@@ -143,6 +142,7 @@ void RendererMeshes::RegisterEntity(const Entity entity)
 	auto entityHandle = EntityHandle(entity, *Engine::Get());
 	auto material = entityHandle.GetComponent<MaterialDefault>(ComponentType::MATERIAL_DEFAULT);
 	m_UniformObjects.resize(m_RegisteredEntities.size());
+	m_DescriptorSet.resize(m_RegisteredEntities.size());
 
 	//TODO vérifier si c'est possible de mettre ça lors de la création du component
 	//TODO Il faut lier la stage manuellement, il faut trouver une solution

@@ -27,6 +27,7 @@ SOFTWARE.
 #include <graphics/render_pipeline.h>
 #include <system/system.h>
 #include <graphics/uniform_handle.h>
+#include "descriptor_handle.h"
 
 namespace dm
 {
@@ -44,6 +45,7 @@ private:
 	UniformHandle m_UniformScene;
 
 	std::vector<UniformHandle> m_UniformObjects;
+	std::vector<DescriptorHandle> m_DescriptorSet;
 };
 }
 

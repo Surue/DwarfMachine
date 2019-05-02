@@ -78,14 +78,14 @@ void DescriptorHandle::Push(const std::string& descriptorName, PushHandle& pushH
 
 bool DescriptorHandle::Update(const Pipeline& pipeline)
 {
-	if(m_Shader != pipeline.GetShader())
+	if (m_Shader != pipeline.GetShader())
 	{
 		m_Shader = pipeline.GetShader();
 		m_PushDescriptor = pipeline.IsPushDescriptor();
 		m_Descriptor.clear();
 		m_WriteDescriptorSets.clear();
 
-		if(!m_PushDescriptor)
+		if (!m_PushDescriptor)
 		{
 			m_DescriptorSet = std::make_unique<DescriptorSet>(pipeline);
 		}
@@ -94,17 +94,17 @@ bool DescriptorHandle::Update(const Pipeline& pipeline)
 		return false;
 	}
 
-	if(m_Changed)
+	if (m_Changed)
 	{
 		m_WriteDescriptorSets.clear();
-		m_WriteDescriptorSets.resize(m_Descriptor.size());
+		m_WriteDescriptorSets.reserve(m_Descriptor.size());
 
-		for(const auto &[descriptorName, descriptor] : m_Descriptor)
+		for (const auto &[descriptorName, descriptor] : m_Descriptor)
 		{
 			auto writeDescriptorSet = descriptor.writeDescriptor.GetWriteDescriptorSet();
 			writeDescriptorSet.dstSet = VK_NULL_HANDLE;
 
-			if(!m_PushDescriptor)
+			if (!m_PushDescriptor)
 			{
 				writeDescriptorSet.dstSet = m_DescriptorSet->GetDescriptorSet();
 			}
@@ -112,7 +112,7 @@ bool DescriptorHandle::Update(const Pipeline& pipeline)
 			m_WriteDescriptorSets.emplace_back(writeDescriptorSet);
 		}
 
-		if(!m_PushDescriptor)
+		if (!m_PushDescriptor)
 		{
 			m_DescriptorSet->Update(m_WriteDescriptorSets);
 		}

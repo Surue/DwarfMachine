@@ -96,7 +96,8 @@ public:
 
 		bool operator==(const Uniform &other) const
 		{
-			return m_Binding == other.m_Binding && m_Offset == other.m_Offset && m_Size == other.m_Size && m_GlType == other.m_GlType && m_ReadOnly == other.m_ReadOnly && m_WriteOnly == other.m_WriteOnly && m_StageFlags == other.m_StageFlags;
+			return m_Binding == other.m_Binding && m_Offset == other.m_Offset && m_Size == other.m_Size && m_GlType == other.m_GlType && m_ReadOnly == other.m_ReadOnly
+				&& m_WriteOnly == other.m_WriteOnly && m_StageFlags == other.m_StageFlags;
 		}
 
 		bool operator!=(const Uniform &other) const
@@ -190,7 +191,7 @@ public:
 
 		bool operator==(const Attribute &other) const
 		{
-			return m_Set == other.m_Set && m_Size == other.m_Size && m_Location == other.m_Location && m_GlType == other.m_GlType;
+			return m_Set == other.m_Set && m_Location == other.m_Location && m_Size == other.m_Size && m_GlType == other.m_GlType;
 		}
 
 		bool operator!=(const Attribute &other) const
