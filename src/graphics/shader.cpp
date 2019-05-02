@@ -330,8 +330,6 @@ VkShaderStageFlagBits Shader::GetShaderStage(const std::string& filename)
 {
 	std::string fileExt = Lowercase(FileSuffix(filename));
 
-	std::cout << "Shader extensions = " << fileExt << "\n";
-
 	if(fileExt == ".comp")
 	{
 		return VK_SHADER_STAGE_COMPUTE_BIT;
@@ -602,60 +600,67 @@ VkShaderModule Shader::ProcessShader(const std::string& shaderCode, const VkShad
 
 	const int defaultVersion = glslang::EShTargetOpenGL_450;
 
-	if(!shader.parse(&resources, defaultVersion, false, messages))
+	if (!shader.parse(&resources, defaultVersion, false, messages))
 	{
-		std::cout << shader.getInfoLog() << "\n";
-		std::cout << shader.getInfoDebugLog() << "\n";
-		std::cout << "SPRIV shader compile failed" << "\n";
+		std::cout << "%s\n", shader.getInfoLog();
+		std::cout << "%s\n", shader.getInfoDebugLog();
+		std::cout << "SPRIV shader compile failed!\n";
 	}
 
 	program.addShader(&shader);
 
-	if(!program.link(messages) || !program.mapIO())
+	if (!program.link(messages) || !program.mapIO())
 	{
-		std::cout << "Error while linkging shader program.\n";
+		std::cout << "Error while linking shader program.\n";
 	}
 
 	program.buildReflection();
+	//program.dumpReflection();
 
-	for(uint32_t dim = 0; dim < 3; ++dim)
+	for (uint32_t dim = 0; dim < 3; ++dim)
 	{
 		auto localSize = program.getLocalSize(dim);
 
-		if(localSize > 1)
+		if (localSize > 1)
 		{
 			m_LocalSizes[dim] = localSize;
 		}
 	}
 
-	for(int32_t i = program.getNumLiveUniformBlocks() - 1; i > 0; i--)
+	for (int32_t i = program.getNumLiveUniformBlocks() - 1; i >= 0; i--)
 	{
 		LoadUniformBlock(program, stageFlag, i);
 	}
 
-	for(int32_t i = 0; i < program.getNumLiveUniformVariables(); i++)
+	for (int32_t i = 0; i < program.getNumLiveUniformVariables(); i++)
 	{
 		LoadUniform(program, stageFlag, i);
 	}
 
-	for(int32_t i = 0; i < program.getNumLiveAttributes(); i++)
+	for (int32_t i = 0; i < program.getNumLiveAttributes(); i++)
 	{
 		LoadVertexAttribute(program, stageFlag, i);
 	}
 
 	glslang::SpvOptions spvOptions;
+#if defined(ACID_VERBOSE)
+	spvOptions.generateDebugInfo = true;
+	spvOptions.disableOptimizer = true;
+	spvOptions.optimizeSize = false;
+#else
 	spvOptions.generateDebugInfo = false;
 	spvOptions.disableOptimizer = false;
 	spvOptions.optimizeSize = true;
+#endif
 
 	spv::SpvBuildLogger logger;
-	std::vector<uint32_t> spriv;
-	glslang::GlslangToSpv(*program.getIntermediate((EShLanguage)language), spriv, &logger, &spvOptions);
+	std::vector<uint32_t> spirv;
+	GlslangToSpv(*program.getIntermediate((EShLanguage)language), spirv, &logger, &spvOptions);
 
-	VkShaderModuleCreateInfo createInfo = { };
+	VkShaderModuleCreateInfo createInfo = {};
 	createInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
-	createInfo.codeSize = spriv.size() * sizeof(uint32_t);
-	createInfo.pCode = spriv.data();
+	createInfo.codeSize = spirv.size() * sizeof(uint32_t);
+	createInfo.pCode = spirv.data();
 
 	VkShaderModule shaderModule;
 	if (vkCreateShaderModule(*logicalDevice, &createInfo, nullptr, &shaderModule) != VK_SUCCESS)
@@ -668,17 +673,18 @@ VkShaderModule Shader::ProcessShader(const std::string& shaderCode, const VkShad
 void Shader::IncrementDescriptorPool(std::map<VkDescriptorType, uint32_t>& descriptorPoolCounts,
 	const VkDescriptorType& type)
 {
-	if(type == VK_DESCRIPTOR_TYPE_MAX_ENUM)
+	if (type == VK_DESCRIPTOR_TYPE_MAX_ENUM)
 	{
 		return;
 	}
 
 	auto it = descriptorPoolCounts.find(type);
 
-	if(it != descriptorPoolCounts.end())
+	if (it != descriptorPoolCounts.end())
 	{
 		it->second++;
-	}else
+	}
+	else
 	{
 		descriptorPoolCounts.emplace(type, 1);
 	}
@@ -689,7 +695,7 @@ void Shader::LoadUniformBlock(const glslang::TProgram& program, const VkShaderSt
 {
 	for (auto &[uniformBlockName, uniformBlock] : m_UniformBlocks)
 	{
-		if(uniformBlockName == program.getUniformBlockName(i))
+		if (uniformBlockName == program.getUniformBlockName(i))
 		{
 			uniformBlock.m_StageFlags |= stageFlag;
 			return;
@@ -698,12 +704,12 @@ void Shader::LoadUniformBlock(const glslang::TProgram& program, const VkShaderSt
 
 	auto type = UniformBlock::Type::Uniform;
 
-	if(strcmp(program.getUniformBlockTType(i)->getStorageQualifierString(), "buffer") == 0)
+	if (strcmp(program.getUniformBlockTType(i)->getStorageQualifierString(), "buffer") == 0)
 	{
 		type = UniformBlock::Type::Storage;
 	}
 
-	if(program.getUniformBlockTType(i)->getQualifier().layoutPushConstant)
+	if (program.getUniformBlockTType(i)->getQualifier().layoutPushConstant)
 	{
 		type = UniformBlock::Type::Push;
 	}
@@ -752,50 +758,54 @@ void Shader::LoadVertexAttribute(const glslang::TProgram& program, const VkShade
 {
 	std::string name = program.getAttributeName(i);
 
-	if(name.empty())
+	if (name.empty())
 	{
 		return;
 	}
 
-	for(const auto&[attributeName, attribute] : m_Attribute)
+	for (const auto &[attributeName, attribute] : m_Attribute)
 	{
-		if(attributeName == name)
+		if (attributeName == name)
 		{
 			return;
 		}
 	}
 
-	auto &qualifer = program.getAttributeTType(i)->getQualifier();
-	m_Attribute.emplace(name, Attribute(qualifer.layoutSet, qualifer.layoutLocation, ComputeSize(program.getAttributeTType(i)), program.getAttributeType(i)));
+	auto &qualifier = program.getAttributeTType(i)->getQualifier();
+	m_Attribute.emplace(name, Attribute(qualifier.layoutSet, qualifier.layoutLocation, ComputeSize(program.getAttributeTType(i)), program.getAttributeType(i)));
 }
 
 int32_t Shader::ComputeSize(const glslang::TType* ttype)
 {
+	// glslang::TType::computeNumComponents is available but has many issues resolved in this method.
 	int components = 0;
 
-	if(ttype->getBasicType() == glslang::EbtStruct || ttype->getBasicType() == glslang::EbtBlock)
+	if (ttype->getBasicType() == glslang::EbtStruct || ttype->getBasicType() == glslang::EbtBlock)
 	{
-		for(const auto &tl : *ttype->getStruct())
+		for (const auto &tl : *ttype->getStruct())
 		{
 			components += ComputeSize(tl.type);
 		}
-	}else if(ttype->getMatrixCols() != 0)
+	}
+	else if (ttype->getMatrixCols() != 0)
 	{
 		components = ttype->getMatrixCols() * ttype->getMatrixRows();
-	}else
+	}
+	else
 	{
 		components = ttype->getVectorSize();
 	}
 
-	if(ttype->getArraySizes() != nullptr)
+	if (ttype->getArraySizes() != nullptr)
 	{
 		int32_t arraySize = 1;
 
-		for(int32_t d = 0; d < ttype->getArraySizes()->getNumDims(); ++d)
+		for (int32_t d = 0; d < ttype->getArraySizes()->getNumDims(); ++d)
 		{
 			auto dimSize = ttype->getArraySizes()->getDimSize(d);
 
-			if(dimSize != glslang::UnsizedArraySize)
+			// This only makes sense in paths that have a known array size.
+			if (dimSize != glslang::UnsizedArraySize)
 			{
 				arraySize *= dimSize;
 			}

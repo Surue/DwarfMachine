@@ -110,7 +110,7 @@ GraphicManager::~GraphicManager()
 
 void GraphicManager::Update()
 {
-	if(m_RenderManager == nullptr)
+	if (m_RenderManager == nullptr)
 	{
 		return;
 	}
@@ -128,22 +128,24 @@ void GraphicManager::Update()
 	std::optional<uint32_t> renderpass;
 	uint32_t subpass = 0;
 
-	auto acquireResult = m_Swapchain->AcquireNextImage(m_ImageAvailableSemaphores[m_CurrentFrame]);
-	if(acquireResult == VK_ERROR_OUT_OF_DATE_KHR)
-	{
-		return;
-	}
-	
-	if(acquireResult != VK_SUCCESS && acquireResult != VK_SUBOPTIMAL_KHR)
+	VkResult acquireResult = m_Swapchain->AcquireNextImage(m_ImageAvailableSemaphores[m_CurrentFrame]);
+
+	if (acquireResult == VK_ERROR_OUT_OF_DATE_KHR)
 	{
 		return;
 	}
 
-	for(auto &[key, renderPipelines] : stages)
+	if (acquireResult != VK_SUCCESS && acquireResult != VK_SUBOPTIMAL_KHR)
 	{
-		if(renderpass != key.first)
+		return;
+	}
+
+	for (auto &[key, renderPipelines] : stages)
+	{
+		if (renderpass != key.first)
 		{
-			if(renderpass)
+			// Ends the previous renderpass.
+			if (renderpass)
 			{
 				EndRenderpass(*GetRenderStage(*renderpass));
 			}
@@ -151,28 +153,30 @@ void GraphicManager::Update()
 			renderpass = key.first;
 			subpass = 0;
 
+			// Starts the next renderpass.
 			auto renderStage = GetRenderStage(*renderpass);
 			renderStage->Update();
-			const auto startResult = StartRenderpass(*renderStage);
+			auto startResult = StartRenderpass(*renderStage);
 
-			if(!startResult)
+			if (!startResult)
 			{
 				return;
 			}
 		}
 
-		const auto renderStage = GetRenderStage(*renderpass);
+		auto renderStage = GetRenderStage(*renderpass);
 
-		if(subpass != key.second)
+		// Changes the subpass.
+		if (subpass != key.second)
 		{
-			auto difference = key.second - subpass;
+			uint32_t difference = key.second - subpass;
 
-			if(subpass == static_cast<uint32_t>(renderStage->GetSubpasses().size() - 1))
+			if (subpass == static_cast<uint32_t>(renderStage->GetSubpasses().size() - 1))
 			{
 				difference -= 1;
 			}
 
-			for(uint32_t d = 0; d < difference; d++)
+			for (uint32_t d = 0; d < difference; d++)
 			{
 				vkCmdNextSubpass(*m_CommandBuffers[m_Swapchain->GetActiveImageIndex()], VK_SUBPASS_CONTENTS_INLINE);
 			}
@@ -180,9 +184,10 @@ void GraphicManager::Update()
 			subpass = key.second;
 		}
 
-		for(auto &renderPipeline : renderPipelines)
+		// Renders subpass render pipeline.
+		for (auto &renderPipeline : renderPipelines)
 		{
-			if(!renderPipeline->IsEnabled())
+			if (!renderPipeline->IsEnabled())
 			{
 				continue;
 			}
@@ -191,9 +196,10 @@ void GraphicManager::Update()
 		}
 	}
 
-	if(renderpass)
+	// Ends the last renderpass.
+	if (renderpass)
 	{
-		const auto renderStage = GetRenderStage(*renderpass);
+		auto renderStage = GetRenderStage(*renderpass);
 
 		if (renderStage != nullptr)
 		{
@@ -354,27 +360,27 @@ bool GraphicManager::StartRenderpass(RenderStage& renderStage)
 
 void GraphicManager::EndRenderpass(RenderStage& renderStage)
 {
-	const auto presentQueue = m_LogicalDevice->GetPresentQueue();
+	auto presentQueue = m_LogicalDevice->GetPresentQueue();
 
 	vkCmdEndRenderPass(*m_CommandBuffers[m_Swapchain->GetActiveImageIndex()]);
 
-	if(!renderStage.HasSwapchain())
+	if (!renderStage.HasSwapchain())
 	{
 		return;
 	}
 
 	m_CommandBuffers[m_Swapchain->GetActiveImageIndex()]->End();
 	m_CommandBuffers[m_Swapchain->GetActiveImageIndex()]->Submit(m_ImageAvailableSemaphores[m_CurrentFrame], m_RenderFinishedSemaphores[m_CurrentFrame], m_InFlightFences[m_CurrentFrame]);
-	const auto presentResult = m_Swapchain->QueuePresent(presentQueue, m_RenderFinishedSemaphores[m_CurrentFrame]);
+	VkResult presentResult = m_Swapchain->QueuePresent(presentQueue, m_RenderFinishedSemaphores[m_CurrentFrame]);
 
-	if(!(presentResult == VK_SUCCESS || presentResult == VK_SUBOPTIMAL_KHR))
+	if (!(presentResult == VK_SUCCESS || presentResult == VK_SUBOPTIMAL_KHR))
 	{
-		if(presentResult == VK_ERROR_OUT_OF_DATE_KHR)
+		if (presentResult == VK_ERROR_OUT_OF_DATE_KHR)
 		{
 			RecreatePass(renderStage);
 			return;
 		}
-
+		std::cout << presentResult << "\n";
 	}
 
 	m_CurrentFrame = (m_CurrentFrame + 1) % m_Swapchain->GetImageCount();
