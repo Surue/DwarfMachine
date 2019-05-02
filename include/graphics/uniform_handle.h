@@ -40,12 +40,7 @@ public:
 	template<typename T>
 	void Push(const T &object, const std::size_t &offset, const std::size_t &size)
 	{
-		if (!m_UniformBlock)
-		{
-			return;
-		}
-
-		if(std::memcmp(m_Data.get() + offset, &object, size) != 0)
+		if (std::memcmp(m_Data.get() + offset, &object, size) != 0)
 		{
 			std::memcpy(m_Data.get() + offset, &object, size);
 			m_HandleStatus = Buffer::Status::CHANGED;
@@ -55,23 +50,23 @@ public:
 	template<typename T>
 	void Push(const std::string &uniformName, const T &object, const std::size_t &size = 0)
 	{
-		if(!m_UniformBlock)
+		if (!m_UniformBlock)
 		{
 			return;
 		}
 
 		auto uniform = m_UniformBlock->GetUniform(uniformName);
 
-		if(!uniform)
+		if (!uniform)
 		{
 			return;
 		}
 
 		auto realSize = size;
 
-		if(realSize == 0)
+		if (realSize == 0)
 		{
-			realSize == std::min(sizeof(object), static_cast<std::size_t>(uniform->GetSize()));
+			realSize = std::min(sizeof(object), static_cast<std::size_t>(uniform->GetSize()));
 		}
 
 		Push(object, static_cast<std::size_t>(uniform->GetOffset()), realSize);

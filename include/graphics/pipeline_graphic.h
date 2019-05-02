@@ -52,7 +52,10 @@ public:
 		READ_WRITE = READ | WRITE
 	};
 
-	PipelineGraphics(Stage stage, std::vector<std::string> shaderStage, std::vector<Shader::VertexInput> vertexInputs, std::vector<Shader::Define> defines = {}, const Mode &mode = Mode::POLYGON, const Depth &depthMode = Depth::READ_WRITE, const VkPrimitiveTopology &topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST, const VkPolygonMode &polygonMode = VK_POLYGON_MODE_FILL, const VkCullModeFlags &cullMode = VK_CULL_MODE_BACK_BIT, const VkFrontFace &frontFace = VK_FRONT_FACE_CLOCKWISE, const bool &pushDescriptor = false);
+	PipelineGraphics(Stage stage, std::vector<std::string> shaderStages, std::vector<Shader::VertexInput> vertexInputs, std::vector<Shader::Define> defines = {},
+		const Mode &mode = Mode::POLYGON, const Depth &depthMode = Depth::READ_WRITE, const VkPrimitiveTopology &topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST,
+		const VkPolygonMode &polygonMode = VK_POLYGON_MODE_FILL, const VkCullModeFlags &cullMode = VK_CULL_MODE_BACK_BIT, const VkFrontFace &frontFace = VK_FRONT_FACE_CLOCKWISE,
+		const bool &pushDescriptors = false);
 
 	~PipelineGraphics();
 

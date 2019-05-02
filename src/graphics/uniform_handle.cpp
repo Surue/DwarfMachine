@@ -45,9 +45,10 @@ UniformHandle::UniformHandle(const Shader::UniformBlock& uniformBlock, const boo
 
 bool UniformHandle::Update(const std::optional<Shader::UniformBlock>& uniformBlock)
 {
-	if(m_HandleStatus == Buffer::Status::RESET || (m_MultiPipeline && !m_UniformBlock) || (!m_MultiPipeline && m_UniformBlock != uniformBlock))
+	if (m_HandleStatus == Buffer::Status::RESET || (m_MultiPipeline && !m_UniformBlock) || (!m_MultiPipeline && m_UniformBlock != uniformBlock))
 	{
-		if((m_Size == 0 && !m_UniformBlock) || (m_UniformBlock && m_UniformBlock != uniformBlock && static_cast<uint32_t>(m_UniformBlock->GetSize()) == m_Size)){
+		if ((m_Size == 0 && !m_UniformBlock) || (m_UniformBlock && m_UniformBlock != uniformBlock && static_cast<uint32_t>(m_UniformBlock->GetSize()) == m_Size))
+		{
 			m_Size = static_cast<uint32_t>(uniformBlock->GetSize());
 		}
 
@@ -58,7 +59,7 @@ bool UniformHandle::Update(const std::optional<Shader::UniformBlock>& uniformBlo
 		return false;
 	}
 
-	if(m_HandleStatus != Buffer::Status::NORMAL)
+	if (m_HandleStatus != Buffer::Status::NORMAL)
 	{
 		m_UniformBuffer->Update(m_Data.get());
 		m_HandleStatus = Buffer::Status::NORMAL;

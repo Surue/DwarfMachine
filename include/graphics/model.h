@@ -29,6 +29,7 @@ SOFTWARE.
 #include <graphics/command_buffer.h>
 #include <graphics/buffer.h>
 #include "engine/vector.h"
+#include "model_vertex.h"
 
 namespace dm
 {
@@ -63,15 +64,17 @@ protected:
 	template<typename T>
 	void Initialize(const std::vector<T> &vertices, const std::vector<uint32_t> &indices = {})
 	{
+		static_assert(std::is_base_of<VertexModel, T>::value, "T must derive from IVertex!");
+
 		m_VertexBuffer = nullptr;
 		m_IndexBuffer = nullptr;
 
-		if(!vertices.empty())
+		if (!vertices.empty())
 		{
-			auto vertexStaging = Buffer(sizeof(T) * vertices.size(), VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, vertices.data());
-
-			m_VertexBuffer = std::make_unique<Buffer>(sizeof(T) * vertices.size(), VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
-
+			auto vertexStaging = Buffer(sizeof(T) * vertices.size(), VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
+				vertices.data());
+			m_VertexBuffer = std::make_unique<Buffer>(sizeof(T) * vertices.size(), VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
+				VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
 			m_VertexCount = static_cast<uint32_t>(vertices.size());
 
 			CommandBuffer commandBuffer = CommandBuffer();
@@ -83,18 +86,18 @@ protected:
 			commandBuffer.SubmitIdle();
 		}
 
-		if(!indices.empty())
+		if (!indices.empty())
 		{
-			auto indexStaging = Buffer(sizeof(uint32_t) * indices.size(), VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, indices.data());
-
-			m_IndexBuffer = std::make_unique<Buffer>(sizeof(uint32_t) * indices.size(), VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
-
+			auto indexStaging = Buffer(sizeof(uint32_t) * indices.size(), VK_BUFFER_USAGE_TRANSFER_SRC_BIT,
+				VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, indices.data());
+			m_IndexBuffer = std::make_unique<Buffer>(sizeof(uint32_t) * indices.size(), VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
+				VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
 			m_IndexCount = static_cast<uint32_t>(indices.size());
 
 			CommandBuffer commandBuffer = CommandBuffer();
 
 			VkBufferCopy copyRegion = {};
-			copyRegion.size = sizeof(uint32_t) * vertices.size();
+			copyRegion.size = sizeof(uint32_t) * indices.size();
 			vkCmdCopyBuffer(commandBuffer, indexStaging.GetBuffer(), m_IndexBuffer->GetBuffer(), 1, &copyRegion);
 
 			commandBuffer.SubmitIdle();

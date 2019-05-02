@@ -107,11 +107,8 @@ void CommandBuffer::SubmitIdle()
 
 	VkFence fence;
 	GraphicManager::CheckVk(vkCreateFence(*logicalDevice, &fenceCreateInfo, nullptr, &fence));
-
 	GraphicManager::CheckVk(vkResetFences(*logicalDevice, 1, &fence));
-
 	GraphicManager::CheckVk(vkQueueSubmit(queueSelected, 1, &submitInfo, fence));
-
 	GraphicManager::CheckVk(vkWaitForFences(*logicalDevice, 1, &fence, VK_TRUE, std::numeric_limits<uint64_t>::max()));
 
 	vkDestroyFence(*logicalDevice, fence, nullptr);
@@ -150,8 +147,8 @@ void CommandBuffer::Submit(const VkSemaphore& waitSemaphore, const VkSemaphore& 
 
 	if (fence != VK_NULL_HANDLE)
 	{
+		GraphicManager::CheckVk(vkWaitForFences(*logicalDevice, 1, &fence, VK_TRUE, std::numeric_limits<uint64_t>::max()));
 		GraphicManager::CheckVk(vkResetFences(*logicalDevice, 1, &fence));
-		//GraphicManager::CheckVk(vkWaitForFences(*logicalDevice, 1, &fence, VK_TRUE, std::numeric_limits<uint64_t>::max()));
 	}
 
 	GraphicManager::CheckVk(vkQueueSubmit(queueSelected, 1, &submitInfo, fence));

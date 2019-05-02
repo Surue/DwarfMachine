@@ -123,10 +123,12 @@ void Engine::MainLoop()
 		m_SystemManager->Update();
 		m_GraphicManager->Update();
 	}
+
 }
 
 void Engine::Destroy()
 {
+	m_GraphicManager->SetManager(nullptr);
 	m_SystemManager->Destroy();
 }
 

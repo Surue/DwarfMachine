@@ -76,18 +76,15 @@ Framebuffers::Framebuffers(const uint32_t& width, const uint32_t& height, const 
 			}
 		}
 
-		VkFramebufferCreateInfo createInfo = {};
-		createInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
-		createInfo.renderPass = renderpass.GetRenderPass();
-		createInfo.attachmentCount = static_cast<uint32_t>(attachments.size());
-		createInfo.pAttachments = attachments.data();
-		createInfo.width = width;
-		createInfo.height = height;
-		createInfo.layers = 1;
-
-		if (vkCreateFramebuffer(*logicalDevice, &createInfo, nullptr, &m_Framebuffers[i]) != VK_SUCCESS) {
-			throw std::runtime_error("failed to create framebuffer!");
-		}
+		VkFramebufferCreateInfo framebufferCreateInfo = {};
+		framebufferCreateInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
+		framebufferCreateInfo.renderPass = renderpass.GetRenderPass();
+		framebufferCreateInfo.attachmentCount = static_cast<uint32_t>(attachments.size());
+		framebufferCreateInfo.pAttachments = attachments.data();
+		framebufferCreateInfo.width = width;
+		framebufferCreateInfo.height = height;
+		framebufferCreateInfo.layers = 1;
+		GraphicManager::CheckVk(vkCreateFramebuffer(*logicalDevice, &framebufferCreateInfo, nullptr, &m_Framebuffers[i]));
 	}
 }
 

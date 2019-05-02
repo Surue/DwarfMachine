@@ -82,11 +82,11 @@ private:
 
 	Window* m_Window = nullptr;
 
-	std::unique_ptr<GraphicManager> m_GraphicManager = nullptr;
-	std::unique_ptr<InputManager> m_InputManager = nullptr;
-	std::unique_ptr<EntityManager> m_EntityManager = nullptr;
-	std::unique_ptr<ComponentManagerContainer> m_ComponentManager = nullptr;
-	std::unique_ptr<SystemManager> m_SystemManager = nullptr;
+	std::unique_ptr<GraphicManager> m_GraphicManager;
+	std::unique_ptr<InputManager> m_InputManager;
+	std::unique_ptr<EntityManager> m_EntityManager;
+	std::unique_ptr<ComponentManagerContainer> m_ComponentManager;
+	std::unique_ptr<SystemManager> m_SystemManager;
 };
 }
 

@@ -72,16 +72,16 @@ PipelineGraphics::PipelineGraphics(Stage stage, std::vector<std::string> shaderS
 	CreatePipelineLayout();
 	CreateAttributes();
 
-	switch(m_Mode)
+	switch (m_Mode)
 	{
-	case Mode::POLYGON: 
+	case Mode::POLYGON:
 		CreatePipelinePolygon();
 		break;
-	case Mode::MRT: 
+	case Mode::MRT:
 		CreatePipelineMrt();
 		break;
-	default: 
-		throw std::runtime_error("unknown pipeline mode");
+	default:
+		throw std::runtime_error("Unknown pipeline mode");
 		break;
 	}
 }
@@ -148,12 +148,12 @@ void PipelineGraphics::CreateShaderProgram()
 		auto stageFlag = Shader::GetShaderStage(shaderStage);
 		auto shaderModule = m_Shader->ProcessShader(shaderCode, stageFlag);
 
-		VkPipelineShaderStageCreateInfo createInfo = {};
-		createInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
-		createInfo.stage = stageFlag;
-		createInfo.module = shaderModule;
-		createInfo.pName = "main";
-		m_Stages.emplace_back(createInfo);
+		VkPipelineShaderStageCreateInfo pipelineShaderStageCreateInfo = {};
+		pipelineShaderStageCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
+		pipelineShaderStageCreateInfo.stage = stageFlag;
+		pipelineShaderStageCreateInfo.module = shaderModule;
+		pipelineShaderStageCreateInfo.pName = "main";
+		m_Stages.emplace_back(pipelineShaderStageCreateInfo);
 		m_Modules.emplace_back(shaderModule);
 	}
 
@@ -162,37 +162,31 @@ void PipelineGraphics::CreateShaderProgram()
 
 void PipelineGraphics::CreateDescriptorLayout()
 {
-	auto logicalDevice = Engine::Get()->GetGraphicManager()->GetLogicalDevice();
+	const auto logicalDevice = Engine::Get()->GetGraphicManager()->GetLogicalDevice();
 
-	auto &descriptorSetLayout = m_Shader->GetDescriptorSetLayouts();
+	auto &descriptorSetLayouts = m_Shader->GetDescriptorSetLayouts();
 
-	VkDescriptorSetLayoutCreateInfo createInfo = {};
-	createInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
-	createInfo.flags = m_PushDescriptors ? VK_DESCRIPTOR_SET_LAYOUT_CREATE_PUSH_DESCRIPTOR_BIT_KHR : 0;
-	createInfo.bindingCount = static_cast<uint32_t>(descriptorSetLayout.size());
-	createInfo.pBindings = descriptorSetLayout.data();
-
-	if (vkCreateDescriptorSetLayout(*logicalDevice, &createInfo, nullptr, &m_DescriptorSetLayout) != VK_SUCCESS) {
-		throw std::runtime_error("failed to create descriptor set layout!");
-	}
+	VkDescriptorSetLayoutCreateInfo descriptorSetLayoutCreateInfo = {};
+	descriptorSetLayoutCreateInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
+	descriptorSetLayoutCreateInfo.flags = m_PushDescriptors ? VK_DESCRIPTOR_SET_LAYOUT_CREATE_PUSH_DESCRIPTOR_BIT_KHR : 0;
+	descriptorSetLayoutCreateInfo.bindingCount = static_cast<uint32_t>(descriptorSetLayouts.size());
+	descriptorSetLayoutCreateInfo.pBindings = descriptorSetLayouts.data();
+	GraphicManager::CheckVk(vkCreateDescriptorSetLayout(*logicalDevice, &descriptorSetLayoutCreateInfo, nullptr, &m_DescriptorSetLayout));
 }
 
 void PipelineGraphics::CreateDescriptorPool()
 {
-	auto logicalDevice = Engine::Get()->GetGraphicManager()->GetLogicalDevice();
+	const auto logicalDevice = Engine::Get()->GetGraphicManager()->GetLogicalDevice();
 
 	auto descriptorPools = m_Shader->GetDescriptorPools();
 
-	VkDescriptorPoolCreateInfo createInfo = {};
-	createInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
-	createInfo.flags = VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT;
-	createInfo.maxSets = 8192;
-	createInfo.poolSizeCount = static_cast<uint32_t>(descriptorPools.size());
-	createInfo.pPoolSizes = descriptorPools.data();
-
-	if (vkCreateDescriptorPool(*logicalDevice, &createInfo, nullptr, &m_DescriptorPool) != VK_SUCCESS) {
-		throw std::runtime_error("failed to create Descriptor pool");
-	}
+	VkDescriptorPoolCreateInfo descriptorPoolCreateInfo = {};
+	descriptorPoolCreateInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
+	descriptorPoolCreateInfo.flags = VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT;
+	descriptorPoolCreateInfo.maxSets = 8192; // 16384;
+	descriptorPoolCreateInfo.poolSizeCount = static_cast<uint32_t>(descriptorPools.size());
+	descriptorPoolCreateInfo.pPoolSizes = descriptorPools.data();
+	GraphicManager::CheckVk(vkCreateDescriptorPool(*logicalDevice, &descriptorPoolCreateInfo, nullptr, &m_DescriptorPool));
 }
 
 void PipelineGraphics::CreatePipelineLayout()
@@ -201,16 +195,13 @@ void PipelineGraphics::CreatePipelineLayout()
 
 	auto pushConstantRanges = m_Shader->GetPushConstantRanges();
 
-	VkPipelineLayoutCreateInfo createInfo = {};
-	createInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
-	createInfo.setLayoutCount = 1;
-	createInfo.pSetLayouts = &m_DescriptorSetLayout;
-	createInfo.pushConstantRangeCount = static_cast<uint32_t>(pushConstantRanges.size());
-	createInfo.pPushConstantRanges = pushConstantRanges.data();
-
-	if (vkCreatePipelineLayout(*logicalDevice, &createInfo, nullptr, &m_PipelineLayout) != VK_SUCCESS) {
-		throw std::runtime_error("failed to create pipeline layout");
-	}
+	VkPipelineLayoutCreateInfo pipelineLayoutCreateInfo = {};
+	pipelineLayoutCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
+	pipelineLayoutCreateInfo.setLayoutCount = 1;
+	pipelineLayoutCreateInfo.pSetLayouts = &m_DescriptorSetLayout;
+	pipelineLayoutCreateInfo.pushConstantRangeCount = static_cast<uint32_t>(pushConstantRanges.size());
+	pipelineLayoutCreateInfo.pPushConstantRanges = pushConstantRanges.data();
+	GraphicManager::CheckVk(vkCreatePipelineLayout(*logicalDevice, &pipelineLayoutCreateInfo, nullptr, &m_PipelineLayout));
 }
 
 void PipelineGraphics::CreateAttributes()
@@ -356,9 +347,8 @@ void PipelineGraphics::CreatePipeline()
 	pipelineCreateInfo.basePipelineHandle = VK_NULL_HANDLE;
 	pipelineCreateInfo.basePipelineIndex = -1;
 	//TODO le m_ColorBlend est remis à 0, il doit passer par la mauvaise fonction
-	if (vkCreateGraphicsPipelines(*logicalDevice, pipelineCache, 1, &pipelineCreateInfo, nullptr, &m_Pipeline) != VK_SUCCESS) {
-		throw std::runtime_error("failed to create graphics pipeline");
-	}
+	GraphicManager::CheckVk(vkCreateGraphicsPipelines(*logicalDevice, pipelineCache, 1, &pipelineCreateInfo, nullptr, &m_Pipeline));
+
 }
 
 void PipelineGraphics::CreatePipelinePolygon()
