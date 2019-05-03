@@ -37,6 +37,13 @@ ComponentManagerContainer::ComponentManagerContainer(Engine& engine):
 
 void ComponentManagerContainer::Destroy()
 {
+	m_TransformManager.reset(nullptr);
+	m_CameraManager.reset(nullptr);
+	m_ControllerTypeManager.reset(nullptr);
+	m_MaterialDefaultManager.reset(nullptr);
+	m_MaterialDefaultManager.reset(nullptr);
+	m_MaterialDefaultManager.reset(nullptr);
+	m_MeshManager.reset(nullptr);
 }
 
 ComponentBase* ComponentManagerContainer::CreateComponent(const Entity entity, const ComponentType componentType) const

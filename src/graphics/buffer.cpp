@@ -34,11 +34,11 @@ Buffer::Buffer(const VkDeviceSize& size, const VkBufferUsageFlags& usage, const 
 	m_Buffer(VK_NULL_HANDLE),
     m_BufferMemory(VK_NULL_HANDLE)
 {
-	auto logicalDevice = Engine::Get()->GetGraphicManager()->GetLogicalDevice();
+	const auto logicalDevice = Engine::Get()->GetGraphicManager()->GetLogicalDevice();
 
-	auto graphicsFamily = logicalDevice->GetGraphicsFamily();
-	auto presentFamily = logicalDevice->GetPresentFamily();
-	auto computeFamily = logicalDevice->GetComputeFamily();
+	const auto graphicsFamily = logicalDevice->GetGraphicsFamily();
+	const auto presentFamily = logicalDevice->GetPresentFamily();
+	const auto computeFamily = logicalDevice->GetComputeFamily();
 
 	std::array<uint32_t, 3> queueFamily = { graphicsFamily, presentFamily, computeFamily };
 

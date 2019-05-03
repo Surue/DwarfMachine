@@ -29,7 +29,7 @@ SOFTWARE.
 #include <engine/color.h>
 #include <graphics/uniform_handle.h>
 #include <graphics/descriptor_handle.h>
-#include "engine/matrix_4.h"
+#include <engine/matrix_4.h>
 
 namespace dm
 {
@@ -38,6 +38,18 @@ struct MaterialDefault : public Material
 {
 	Color color;
 	std::shared_ptr<Image2d> textureDiffuse;
+
+	float metallic;
+	float roughness;
+	std::shared_ptr<Image2d> materialTexture;
+	std::shared_ptr<Image2d> normalTexture;
+
+	bool castsShadows;
+	bool ignoreLighting;
+	bool ignoreFog;
+
+	DescriptorHandle descriptorSet;
+	UniformHandle uniformObject;
 };
 
 class MaterialDefaultManager final : public ComponentBaseManager<MaterialDefault>
@@ -49,18 +61,18 @@ public:
 
 	void Update() override;
 
-	MaterialDefault* CreateComponent(const Entity entity) override;
+	MaterialDefault* CreateComponent(Entity entity) override;
 
 	void DestroyComponent(Entity entity) override;
 
 	static std::vector<Shader::Define> GetDefines(const MaterialDefault &component);
 
-	static void PushDescriptor(const MaterialDefault &component, DescriptorHandle &descriptor)
+	static void PushDescriptor(MaterialDefault &material)
 	{
-		descriptor.Push("samplerDiffuse", component.textureDiffuse);
+		material.descriptorSet.Push("samplerDiffuse", material.textureDiffuse);
 	}
 
-	static void PushUniform(const MaterialDefault &component, UniformHandle &uniform, const Matrix4 worldPos)
+	static void PushUniform(MaterialDefault &material, const Matrix4 worldPos)
 	{
 		//if (m_animated)
 		//{
@@ -69,15 +81,15 @@ public:
 		//	uniformObject.Push("jointTransforms", *joints.data(), sizeof(Matrix4) * joints.size());
 		//}
 
-		uniform.Push("transform", worldPos);
-		uniform.Push("baseDiffuse", component.textureDiffuse);
-		/*uniform.Push("metallic", m_metallic);
-		uniform.Push("roughness", m_roughness);
-		uniform.Push("ignoreFog", static_cast<float>(m_ignoreFog));
-		uniform.Push("ignoreLighting", static_cast<float>(m_ignoreLighting));*/
+		material.uniformObject.Push("transform", worldPos);
+		material.uniformObject.Push("baseDiffuse", material.textureDiffuse);
+		material.uniformObject.Push("metallic", material.metallic);
+		material.uniformObject.Push("roughness", material.roughness);
+		material.uniformObject.Push("ignoreFog", static_cast<float>(material.ignoreFog));
+		material.uniformObject.Push("ignoreLighting", static_cast<float>(material.ignoreLighting));
 	}
 
-	MaterialDefault& Get(Entity entity)
+	MaterialDefault& Get(const Entity entity)
 	{
 		return m_Components[entity - 1];
 	}

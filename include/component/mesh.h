@@ -28,12 +28,18 @@ SOFTWARE.
 #include "graphics/model.h"
 #include "graphics/shader.h"
 #include "graphics/model_vertex.h"
+#include <iostream>
 
 namespace dm
 {
 struct Mesh final : ComponentBase
 {
 	std::shared_ptr<Model> model;
+
+	~Mesh() override
+	{
+		std::cout << "Mesh destructor ~\n";
+	}
 };
 
 class MeshManager : public ComponentBaseManager<Mesh>

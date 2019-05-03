@@ -43,9 +43,6 @@ public:
 	void RegisterEntity(const Entity entity) override;
 private:
 	UniformHandle m_UniformScene;
-
-	std::vector<UniformHandle> m_UniformObjects;
-	std::vector<DescriptorHandle> m_DescriptorSet;
 };
 }
 

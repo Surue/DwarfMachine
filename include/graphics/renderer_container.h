@@ -109,10 +109,10 @@ public:
 
 	void AddComponent(const Entity entity, const ComponentMask oldMask, ComponentMask newMask)
 	{
-		for (auto& stages : m_Stages)
+		for (const auto &[key, renderer] : m_Stages)
 		{
 
-			for (auto& system : stages.second)
+			for (auto& system : renderer)
 			{
 				const auto systemMask = system->GetSignature();
 				if (newMask.IsNewMatch(oldMask, systemMask))

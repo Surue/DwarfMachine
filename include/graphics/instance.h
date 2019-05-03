@@ -30,7 +30,7 @@ SOFTWARE.
 #include <SDL.h>
 
 #ifdef NDEBUG
-const bool ENABLE_VALIDATION_LAYERS = false;
+const bool ENABLE_VALIDATION_LAYERS = true; //TODO Changer pour mettre à false
 #else
 const bool ENABLE_VALIDATION_LAYERS = true;
 #endif

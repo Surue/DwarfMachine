@@ -28,8 +28,8 @@ SOFTWARE.
 #include <string>
 #include <graphics/command_buffer.h>
 #include <graphics/buffer.h>
-#include "engine/vector.h"
 #include "model_vertex.h"
+#include <iostream>
 
 namespace dm
 {
@@ -39,6 +39,11 @@ public:
 	static std::shared_ptr<Model> Create(const std::string filename);
 
 	Model();
+
+	~Model()
+	{
+		std::cout << "Model destructor ~\n";
+	}
 
 	template<typename T>
 	explicit Model(const std::vector<T> &vertices, const std::vector<uint32_t> &indices = {}) :

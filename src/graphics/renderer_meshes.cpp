@@ -48,7 +48,7 @@ void RendererMeshes::Update()
 		const auto material = entity.GetComponent<MaterialDefault>(ComponentType::MATERIAL_DEFAULT);
 		const auto transform = entity.GetComponent<Transform>(ComponentType::TRANSFORM);
 
-		MaterialDefaultManager::PushUniform(*material, m_UniformObjects[i], TransformManager::GetWorldMatrix(*transform));
+		MaterialDefaultManager::PushUniform(*material, TransformManager::GetWorldMatrix(*transform));
 		i++;
 	}
 }
@@ -111,12 +111,12 @@ void RendererMeshes::Draw(const CommandBuffer& commandBuffer)
 
 		auto &pipeline = *materialPipeline->GetPipeline();
 
-		m_DescriptorSet[i].Push("UboScene", m_UniformScene);
-		m_DescriptorSet[i].Push("UboObject", m_UniformObjects[i]);
+		material->descriptorSet.Push("UboScene", m_UniformScene);
+		material->descriptorSet.Push("UboObject", material->uniformObject);
 
-		MaterialDefaultManager::PushDescriptor(*material, m_DescriptorSet[i]);
+		MaterialDefaultManager::PushDescriptor(*material);
 
-		const auto updateSuccess = m_DescriptorSet[i].Update(pipeline);
+		const auto updateSuccess = material->descriptorSet.Update(pipeline);
 
 		if (!updateSuccess)
 		{
@@ -125,7 +125,7 @@ void RendererMeshes::Draw(const CommandBuffer& commandBuffer)
 		}
 
 		// Draws the object.
-		m_DescriptorSet[i].BindDescriptor(commandBuffer, pipeline);
+		material->descriptorSet.BindDescriptor(commandBuffer, pipeline);
 		if (meshModel->CmdRender(commandBuffer)) {
 			std::cout << "Draw success\n";
 		}
@@ -140,8 +140,6 @@ void RendererMeshes::RegisterEntity(const Entity entity)
 
 	auto entityHandle = EntityHandle(entity, *Engine::Get());
 	auto material = entityHandle.GetComponent<MaterialDefault>(ComponentType::MATERIAL_DEFAULT);
-	m_UniformObjects.resize(m_RegisteredEntities.size());
-	m_DescriptorSet.resize(m_RegisteredEntities.size());
 
 	//TODO vérifier si c'est possible de mettre ça lors de la création du component
 	//TODO Il faut lier la stage manuellement, il faut trouver une solution

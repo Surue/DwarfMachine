@@ -36,18 +36,18 @@ Swapchain::Swapchain(const VkExtent2D& extent) :
 	m_ImageCount(0),
 	m_PreTransform(VK_SURFACE_TRANSFORM_IDENTITY_BIT_KHR),
 	m_CompositeAlpha(VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR),
-	m_Swapchain(VK_NULL_HANDLE),
-	m_FenceImage(VK_NULL_HANDLE),
+	m_Swapchain(nullptr),
+	m_FenceImage(nullptr),
 	m_ActiveImageIndex(std::numeric_limits<uint32_t>::max())
 {
-	const auto logicalDevice = Engine::Get()->GetGraphicManager()->GetLogicalDevice();
-	const auto physicalDevice = Engine::Get()->GetGraphicManager()->GetPhysicalDevice();
-	const auto surface = Engine::Get()->GetGraphicManager()->GetSurface();
+	auto physicalDevice = Engine::Get()->GetGraphicManager()->GetPhysicalDevice();
+	auto surface = Engine::Get()->GetGraphicManager()->GetSurface();
+	auto logicalDevice = Engine::Get()->GetGraphicManager()->GetLogicalDevice();
 
-	const auto surfaceFormat = surface->GetFormat();
-	const auto surfaceCapabilities = surface->GetCapabilities();
-	const auto graphicsFamily = logicalDevice->GetGraphicsFamily();
-	const auto presentFamily = logicalDevice->GetPresentFamily();
+	auto surfaceFormat = surface->GetFormat();
+	auto surfaceCapabilities = surface->GetCapabilities();
+	auto graphicsFamily = logicalDevice->GetGraphicsFamily();
+	auto presentFamily = logicalDevice->GetPresentFamily();
 
 	uint32_t physicalPresentModeCount = 0;
 	vkGetPhysicalDeviceSurfacePresentModesKHR(*physicalDevice, *surface, &physicalPresentModeCount, nullptr);
@@ -77,6 +77,7 @@ Swapchain::Swapchain(const VkExtent2D& extent) :
 
 	if (surfaceCapabilities.supportedTransforms & VK_SURFACE_TRANSFORM_IDENTITY_BIT_KHR)
 	{
+		// We prefer a non-rotated transform.
 		m_PreTransform = VK_SURFACE_TRANSFORM_IDENTITY_BIT_KHR;
 	}
 	else
@@ -84,65 +85,67 @@ Swapchain::Swapchain(const VkExtent2D& extent) :
 		m_PreTransform = surfaceCapabilities.currentTransform;
 	}
 
-	for(const auto &compositeAlphaFlag : COMPOSITE_ALPHA_FLAGS)
+	for (const auto &compositeAlphaFlag : COMPOSITE_ALPHA_FLAGS)
 	{
-		if(surfaceCapabilities.supportedCompositeAlpha & compositeAlphaFlag)
+		if (surfaceCapabilities.supportedCompositeAlpha & compositeAlphaFlag)
 		{
 			m_CompositeAlpha = compositeAlphaFlag;
 			break;
 		}
 	}
 
-	VkSwapchainCreateInfoKHR createInfo = {};
-	createInfo.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
-	createInfo.surface = *surface;
-	createInfo.minImageCount = desiredImageCount;
-	createInfo.imageFormat = surfaceFormat.format;
-	createInfo.imageColorSpace = surfaceFormat.colorSpace;
-	createInfo.imageExtent = m_Extent;
-	createInfo.imageArrayLayers = 1;
-	createInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
-	createInfo.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;
-	createInfo.preTransform = static_cast<VkSurfaceTransformFlagBitsKHR>(m_PreTransform);
-	createInfo.compositeAlpha = m_CompositeAlpha;
-	createInfo.presentMode = m_PresentMode;
-	createInfo.clipped = VK_TRUE;
-	createInfo.oldSwapchain = VK_NULL_HANDLE;
+	VkSwapchainCreateInfoKHR swapchainCreateInfo = {};
+	swapchainCreateInfo.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
+	swapchainCreateInfo.surface = *surface;
+	swapchainCreateInfo.minImageCount = desiredImageCount;
+	swapchainCreateInfo.imageFormat = surfaceFormat.format;
+	swapchainCreateInfo.imageColorSpace = surfaceFormat.colorSpace;
+	swapchainCreateInfo.imageExtent = m_Extent;
+	swapchainCreateInfo.imageArrayLayers = 1;
+	swapchainCreateInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
+	swapchainCreateInfo.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;
+	swapchainCreateInfo.preTransform = static_cast<VkSurfaceTransformFlagBitsKHR>(m_PreTransform);
+	swapchainCreateInfo.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
+	swapchainCreateInfo.compositeAlpha = m_CompositeAlpha;
+	swapchainCreateInfo.presentMode = m_PresentMode;
+	swapchainCreateInfo.clipped = VK_TRUE;
+	swapchainCreateInfo.oldSwapchain = nullptr;
 
 	if (surfaceCapabilities.supportedUsageFlags & VK_IMAGE_USAGE_TRANSFER_SRC_BIT)
 	{
-		createInfo.imageUsage |= VK_IMAGE_USAGE_TRANSFER_SRC_BIT;
+		swapchainCreateInfo.imageUsage |= VK_IMAGE_USAGE_TRANSFER_SRC_BIT;
 	}
 
 	if (surfaceCapabilities.supportedUsageFlags & VK_IMAGE_USAGE_TRANSFER_DST_BIT)
 	{
-		createInfo.imageUsage |= VK_IMAGE_USAGE_TRANSFER_DST_BIT;
+		swapchainCreateInfo.imageUsage |= VK_IMAGE_USAGE_TRANSFER_DST_BIT;
 	}
 
 	if (Engine::Get()->GetGraphicManager()->GetSwapchain() != nullptr)
 	{
-		createInfo.oldSwapchain = Engine::Get()->GetGraphicManager()->GetSwapchain()->GetSwapchain();
+		swapchainCreateInfo.oldSwapchain = Engine::Get()->GetGraphicManager()->GetSwapchain()->GetSwapchain();
 	}
 
 	if (graphicsFamily != presentFamily)
 	{
 		std::array<uint32_t, 2> queueFamily = { graphicsFamily, presentFamily };
-		createInfo.imageSharingMode = VK_SHARING_MODE_CONCURRENT;
-		createInfo.queueFamilyIndexCount = static_cast<uint32_t>(queueFamily.size());
-		createInfo.pQueueFamilyIndices = queueFamily.data();
-	}
-
-	if (vkCreateSwapchainKHR(*logicalDevice, &createInfo, nullptr, &m_Swapchain) != VK_SUCCESS)
+		swapchainCreateInfo.imageSharingMode = VK_SHARING_MODE_CONCURRENT;
+		swapchainCreateInfo.queueFamilyIndexCount = static_cast<uint32_t>(queueFamily.size());
+		swapchainCreateInfo.pQueueFamilyIndices = queueFamily.data();
+	}else
 	{
-		throw std::runtime_error("failed to create swap chain!");
+		swapchainCreateInfo.queueFamilyIndexCount = 0;
+		swapchainCreateInfo.pQueueFamilyIndices = {};
 	}
-
-	vkGetSwapchainImagesKHR(*logicalDevice, m_Swapchain, &m_ImageCount, nullptr);
+	
+	GraphicManager::CheckVk(vkCreateSwapchainKHR(*logicalDevice, &swapchainCreateInfo, nullptr, &m_Swapchain));
+	
+	GraphicManager::CheckVk(vkGetSwapchainImagesKHR(*logicalDevice, m_Swapchain, &m_ImageCount, nullptr));
 	m_Images.resize(m_ImageCount);
 	m_ImageViews.resize(m_ImageCount);
-	vkGetSwapchainImagesKHR(*logicalDevice, m_Swapchain, &m_ImageCount, m_Images.data());
+	GraphicManager::CheckVk(vkGetSwapchainImagesKHR(*logicalDevice, m_Swapchain, &m_ImageCount, m_Images.data()));
 
-	for(uint32_t i = 0; i < m_ImageCount; i++)
+	for (uint32_t i = 0; i < m_ImageCount; i++)
 	{
 		Image::CreateImageView(m_Images.at(i), m_ImageViews.at(i), VK_IMAGE_VIEW_TYPE_2D, surfaceFormat.format, VK_IMAGE_ASPECT_COLOR_BIT, 1, 0, 1, 0);
 	}
@@ -174,7 +177,7 @@ VkResult Swapchain::AcquireNextImage(const VkSemaphore& presentCompleteSemaphore
 
 	if(acquireResult != VK_SUCCESS && acquireResult != VK_SUBOPTIMAL_KHR)
 	{
-		throw std::runtime_error("failed to acquire swap chain image");
+		throw std::runtime_error("failed to acquire swapchain image");
 		return acquireResult;
 	}
 

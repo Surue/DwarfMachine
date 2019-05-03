@@ -97,6 +97,11 @@ void GraphicManager::CheckVk(const VkResult &result)
 		return;
 	}
 
+	if constexpr (!ENABLE_VALIDATION_LAYERS)
+	{
+		return;
+	}
+
 	std::string failure = StringifyResultVk(result);
 
 	std::cout << "Vulkan error: " <<  failure.c_str() << ", " << result;
@@ -291,8 +296,8 @@ Window* GraphicManager::GetWindow() const
 void GraphicManager::SetRenderStages(std::vector<std::unique_ptr<RenderStage>> renderStages)
 {
 	VkExtent2D displayExtent = { m_Window->GetSize().x, m_Window->GetSize().y };
-
 	m_RenderStages = std::move(renderStages);
+	std::cout << "SetRenderStages\n";
 	m_Swapchain = std::make_unique<Swapchain>(displayExtent);
 
 	if (m_InFlightFences.size() != m_Swapchain->GetImageCount())
