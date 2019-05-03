@@ -63,7 +63,7 @@ TEST(Models, Cube)
 	const auto e1 = entityManager->CreateEntity();
 	auto cube = dm::EntityHandle(e1, engine);
 	auto transform = cube.CreateComponent<dm::Transform>(ComponentType::TRANSFORM);
-	transform->position = dm::Vec3f(0, 0, 0);
+	transform->position = dm::Vec3f(10, 10, 10);
 	dm::Mesh mesh;
 	mesh.componentType = ComponentType::MESH;
 	mesh.model = dm::ModelCube::Create(dm::Vec3f(1.0f, 1.0f, 1.0f));

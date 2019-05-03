@@ -143,6 +143,6 @@ void RendererMeshes::RegisterEntity(const Entity entity)
 
 	//TODO vérifier si c'est possible de mettre ça lors de la création du component
 	//TODO Il faut lier la stage manuellement, il faut trouver une solution
-	material->pipelineMaterial = PipelineMaterial::Create({ 0, 0 }, PipelineGraphicsCreate({ "Shaders/shader.vert", "Shaders/shader.frag" }, { MeshManager::GetVertexInput() }, MaterialDefaultManager::GetDefines(*material), PipelineGraphics::Mode::MRT));
+	material->pipelineMaterial = PipelineMaterial::Create({ 0, 0 }, PipelineGraphicsCreate({ "../Shaders/shader.vert", "../Shaders/shader.frag" }, { MeshManager::GetVertexInput() }, MaterialDefaultManager::GetDefines(*material), PipelineGraphics::Mode::MRT));
 }
 }
