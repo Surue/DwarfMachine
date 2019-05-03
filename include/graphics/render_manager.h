@@ -46,7 +46,6 @@ public:
 
 	RendererContainer &GetRendererContainer() { return m_RendererContainer; }
 protected:
-	friend class Renderer; //TODO supprimer
 	friend class GraphicManager;
 
 	bool m_Started;

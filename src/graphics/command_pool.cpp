@@ -45,6 +45,7 @@ CommandPool::CommandPool(const std::thread::id& threadId) :
 
 CommandPool::~CommandPool()
 {
+	std::cout << "~CommandPool\n";
 	const auto logicalDevice = Engine::Get()->GetGraphicManager()->GetLogicalDevice();
 	vkDestroyCommandPool(*logicalDevice, m_CommandPool, nullptr);
 }

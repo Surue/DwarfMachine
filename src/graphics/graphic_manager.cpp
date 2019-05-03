@@ -167,6 +167,7 @@ void GraphicManager::Destroy()
 
 GraphicManager::~GraphicManager()
 {
+	std::cout << "=============== GraphicManager ===============\n";
 	auto graphicsQueue = m_LogicalDevice->GetGraphicsQueue();
 
 	CheckVk(vkQueueWaitIdle(graphicsQueue));
@@ -291,6 +292,13 @@ void GraphicManager::SetMainCamera(Camera* camera)
 Window* GraphicManager::GetWindow() const
 {
 	return m_Window.get();
+}
+
+void GraphicManager::SetManager(RenderManager* managerRender)
+{
+	std::cout << "Set RenderManager\n";
+	vkDeviceWaitIdle(*m_LogicalDevice);
+	m_RenderManager.reset(managerRender);
 }
 
 void GraphicManager::SetRenderStages(std::vector<std::unique_ptr<RenderStage>> renderStages)

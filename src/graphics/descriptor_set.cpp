@@ -49,8 +49,8 @@ DescriptorSet::DescriptorSet(const Pipeline& pipeline) :
 
 DescriptorSet::~DescriptorSet()
 {
+	std::cout << "~DescriptorSet\n";
 	const auto logicalDevice = Engine::Get()->GetGraphicManager()->GetLogicalDevice();
-
 	GraphicManager::CheckVk(vkFreeDescriptorSets(*logicalDevice, m_DescriptorPool, 1, &m_DescriptorSet));
 }
 

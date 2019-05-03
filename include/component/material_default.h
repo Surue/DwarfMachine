@@ -57,6 +57,12 @@ class MaterialDefaultManager final : public ComponentBaseManager<MaterialDefault
 public:
 	explicit MaterialDefaultManager(Engine& engine);
 
+	~MaterialDefaultManager()
+	{
+		std::cout << "=============== MaterialDefaultManager ===============\n";
+		m_Components.clear();
+	}
+
 	void Init() override;
 
 	void Update() override;

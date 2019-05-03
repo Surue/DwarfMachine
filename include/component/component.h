@@ -26,7 +26,6 @@ SOFTWARE.
 #define COMPONENT_H
 #include <entity/entity.h>
 #include <component/component_type.h>
-#include <iostream>
 
 #define INIT_COMPONENT_NMB 10
 
@@ -37,11 +36,6 @@ struct ComponentBase
 {
 	ComponentType componentType = ComponentType::NONE;
 	//TODO corriger cette connerie qui augmente la taille de tout les components
-
-	virtual ~ComponentBase()
-	{
-		std::cout << "ComponentBase destructor ~\n";
-	};
 };
 
 template<typename T>

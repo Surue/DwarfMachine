@@ -40,6 +40,11 @@ public:
 
 	RendererContainer &operator=(const RendererContainer &) = delete;
 
+	~RendererContainer()
+	{
+		std::cout << "=============== RendererContainer ===============\n";
+	}
+
 	void Update();
 
 	const std::map<Pipeline::Stage, std::vector<std::unique_ptr<RenderPipeline>>> &GetStages() const { return m_Stages; }

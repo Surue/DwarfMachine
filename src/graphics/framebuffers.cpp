@@ -90,6 +90,7 @@ Framebuffers::Framebuffers(const uint32_t& width, const uint32_t& height, const 
 
 Framebuffers::~Framebuffers()
 {
+	std::cout << "~Framebuffer\n";
 	const auto logicalDevice = Engine::Get()->GetGraphicManager()->GetLogicalDevice();
 
 	for(const auto &framebuffer : m_Framebuffers)

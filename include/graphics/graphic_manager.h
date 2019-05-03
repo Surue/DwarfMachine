@@ -108,7 +108,7 @@ public:
 	 */
 	Window* GetWindow() const;
 
-	void SetManager(RenderManager *managerRender) { m_RenderManager.reset(managerRender); }
+	void SetManager(RenderManager* managerRender);
 
 	void SetRenderStages(std::vector<std::unique_ptr<RenderStage>> renderStages);
 
