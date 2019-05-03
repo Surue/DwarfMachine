@@ -32,7 +32,7 @@ namespace dm {
 struct Camera final : ComponentBase
 {
 	Matrix4 proj{};
-	Matrix4 view{};
+	Matrix4 viewMatrix{};
 
 	bool isMainCamera;
 };

@@ -43,7 +43,7 @@ void CameraView::Update()
 		auto camera = entity.GetComponent<Camera>(ComponentType::CAMERA);
 		const auto transform = entity.GetComponent<Transform>(ComponentType::TRANSFORM);
 
-		camera->view = Matrix4::ViewMatrix(transform->position, transform->rotation);
+		camera->viewMatrix = Matrix4::ViewMatrix(transform->position, transform->rotation * (3.14f/180));
 	}
 }
 }

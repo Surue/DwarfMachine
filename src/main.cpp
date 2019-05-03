@@ -47,7 +47,7 @@ int main()
 	dm::Camera cameraInfo;
 	cameraInfo.componentType = ComponentType::CAMERA;
 	cameraInfo.isMainCamera = true;
-	cameraInfo.view = dm::Matrix4::ViewMatrix(t->position, t->rotation);
+	cameraInfo.viewMatrix = dm::Matrix4::ViewMatrix(t->position, t->rotation);
 	cameraInfo.proj = dm::Matrix4::PerspectiveMatrix(45.0f  * (3.14f / 180), 800.0f / 600.0f, 0.1f, 100.0f);
 
 	auto camera = entity.AddComponent<dm::Camera>(cameraInfo);

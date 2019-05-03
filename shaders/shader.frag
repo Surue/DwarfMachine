@@ -4,9 +4,6 @@
 
 layout(binding = 1) uniform UboObject
 {
-#if ANIMATED
-	mat4 jointTransforms[MAX_JOINTS];
-#endif
 	mat4 transform;
 
 	vec4 baseDiffuse;

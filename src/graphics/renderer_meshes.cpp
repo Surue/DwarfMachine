@@ -58,7 +58,7 @@ void RendererMeshes::Draw(const CommandBuffer& commandBuffer)
 	std::cout << "Draw all meshs\n";
 	auto camera = Engine::Get()->GetGraphicManager()->GetCamera();
 	m_UniformScene.Push("projection", camera->proj);
-	m_UniformScene.Push("view", camera->view);
+	m_UniformScene.Push("view", camera->viewMatrix);
 	m_UniformScene.Push("cameraPos", Engine::Get()->GetComponentManager()->GetCameraManager()->GetTransformOfCamera(*camera)); //TODO 
 
 	std::cout << m_RegisteredEntities.size() << "\n";

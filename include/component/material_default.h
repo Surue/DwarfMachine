@@ -88,7 +88,7 @@ public:
 		//}
 
 		material.uniformObject.Push("transform", worldPos);
-		material.uniformObject.Push("baseDiffuse", material.textureDiffuse);
+		material.uniformObject.Push("baseDiffuse", material.color);
 		material.uniformObject.Push("metallic", material.metallic);
 		material.uniformObject.Push("roughness", material.roughness);
 		material.uniformObject.Push("ignoreFog", static_cast<float>(material.ignoreFog));

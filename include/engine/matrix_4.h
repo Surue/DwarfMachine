@@ -59,7 +59,18 @@ public:
 
 	static Matrix4 PerspectiveMatrix(const float &fov, const float &aspectRatio, const float &zNear, const float &zFar);
 private:
-	Vec4f m_Rows[4];
+	union
+	{
+		struct
+		{
+			Vec4f m_Rows[4];
+		};
+
+		struct
+		{
+			float m_Linear[16];
+		};
+	};
 };
 }
 
