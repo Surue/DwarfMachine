@@ -45,11 +45,13 @@ public:
 	class VertexInput
 	{
 	public:
-		explicit VertexInput(const uint32_t &binding = 0, std::vector<VkVertexInputBindingDescription> bindingDescription = {}, std::vector<VkVertexInputAttributeDescription> attributeDescriptions = {}) :
+		explicit VertexInput(const uint32_t &binding = 0, std::vector<VkVertexInputBindingDescription> bindingDescriptions = {},
+			std::vector<VkVertexInputAttributeDescription> attributeDescriptions = {}) :
 			m_Binding(binding),
-			m_BindingDescriptions(std::move(bindingDescription)),
+			m_BindingDescriptions(std::move(bindingDescriptions)),
 			m_AttributeDescription(std::move(attributeDescriptions))
-		{}
+		{
+		}
 
 		const uint32_t &GetBinding() const { return m_Binding; }
 
@@ -103,6 +105,13 @@ public:
 		bool operator!=(const Uniform &other) const
 		{
 			return !(*this == other);
+		}
+
+		std::string ToString() const
+		{
+			std::stringstream stream;
+			stream << "Uniform(binding " << m_Binding << ", offset " << m_Offset << ", size " << m_Size << ", glType " << m_GlType << ")";
+			return stream.str();
 		}
 	private:
 		friend class Shader;
@@ -162,6 +171,13 @@ public:
 		{
 			return !(*this == other);
 		}
+
+		std::string ToString() const
+		{
+			std::stringstream stream;
+			stream << "UniformBlock(binding " << m_Binding << ", size " << m_Size << ", type " << static_cast<uint32_t>(m_Type) << ")";
+			return stream.str();
+		}
 	private:
 		friend class Shader;
 		int32_t m_Binding;
@@ -197,6 +213,13 @@ public:
 		bool operator!=(const Attribute &other) const
 		{
 			return !(*this == other);
+		}
+
+		std::string ToString() const
+		{
+			std::stringstream stream;
+			stream << "VertexAttribute(set " << m_Set << "', location " << m_Location << ", size " << m_Size << ", glType " << m_GlType << ")";
+			return stream.str();
 		}
 	private:
 		friend Shader;
@@ -257,6 +280,8 @@ public:
 	static std::string ProcessIncludes(const std::string &shaderCode);
 
 	VkShaderModule ProcessShader(const std::string &shaderCode, const VkShaderStageFlags &stageFlag);
+
+	std::string ToString() const;
 
 private:
 	static void IncrementDescriptorPool(std::map<VkDescriptorType, uint32_t> &descriptorPoolCounts, const VkDescriptorType &type);

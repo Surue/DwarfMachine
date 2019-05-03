@@ -2,8 +2,11 @@
 #extension GL_ARB_separate_shader_objects : enable
 #extension GL_ARB_shading_language_420pack : enable
 
-layout(binding = 1) uniform UniformObject
+layout(binding = 1) uniform UboObject
 {
+#if ANIMATED
+	mat4 jointTransforms[MAX_JOINTS];
+#endif
 	mat4 transform;
 
 	vec4 baseDiffuse;

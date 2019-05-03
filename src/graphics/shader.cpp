@@ -590,11 +590,11 @@ VkShaderModule Shader::ProcessShader(const std::string& shaderCode, const VkShad
 	const char *shaderSource = shaderCode.c_str();
 	shader.setStrings(&shaderSource, 1);
 
-	//shader.setEnvInput(glslang::EShSourceGlsl, language, glslang::EShClientVulkan, 110);
+	shader.setEnvInput(glslang::EShSourceGlsl, language, glslang::EShClientVulkan, 110);
 	//shader.setEnvClient(glslang::EShClientVulkan, glslang::EShTargetVulkan_1_1);
 	//shader.setEnvTarget(glslang::EShTargetSpv, glslang::EShTargetSpv_1_3);
 
-	shader.setEnvInput(glslang::EShSourceGlsl, language, glslang::EShClientVulkan, 100);
+	//shader.setEnvInput(glslang::EShSourceGlsl, language, glslang::EShClientVulkan, 100);
 	shader.setEnvClient(glslang::EShClientVulkan, glslang::EShTargetVulkan_1_0);
 	shader.setEnvTarget(glslang::EShTargetSpv, glslang::EShTargetSpv_1_0);
 
@@ -643,15 +643,9 @@ VkShaderModule Shader::ProcessShader(const std::string& shaderCode, const VkShad
 	}
 
 	glslang::SpvOptions spvOptions;
-#if defined(ACID_VERBOSE)
 	spvOptions.generateDebugInfo = true;
 	spvOptions.disableOptimizer = true;
 	spvOptions.optimizeSize = false;
-#else
-	spvOptions.generateDebugInfo = false;
-	spvOptions.disableOptimizer = false;
-	spvOptions.optimizeSize = true;
-#endif
 
 	spv::SpvBuildLogger logger;
 	std::vector<uint32_t> spirv;
@@ -668,6 +662,58 @@ VkShaderModule Shader::ProcessShader(const std::string& shaderCode, const VkShad
 		throw std::runtime_error("failed to create shader module!");
 	}
 	return shaderModule;
+}
+
+std::string Shader::ToString() const
+{
+	std::stringstream stream;
+
+	if (!m_Attribute.empty())
+	{
+		stream << "Vertex Attributes: \n";
+
+		for (const auto &[attributeName, attribute] : m_Attribute)
+		{
+			stream << "  - " << attributeName << ": " << attribute.ToString() << "\n";
+		}
+	}
+
+	if (!m_Uniform.empty())
+	{
+		stream << "Uniforms: \n";
+
+		for (const auto &[uniformName, uniform] : m_Uniform)
+		{
+			stream << "  - " << uniformName << ": " << uniform.ToString() << "\n";
+		}
+	}
+
+	if (!m_UniformBlocks.empty())
+	{
+		stream << "Uniform Blocks: \n";
+
+		for (const auto &[uniformBlockName, uniformBlock] : m_UniformBlocks)
+		{
+			stream << "  - " << uniformBlockName << ": " << uniformBlock.ToString() << " \n";
+
+			for (const auto &[uniformName, uniform] : uniformBlock.GetUniforms())
+			{
+				stream << "	- " << uniformName << ": " << uniform.ToString() << " \n";
+			}
+		}
+	}
+
+	for (uint32_t dim = 0; dim < m_LocalSizes.size(); dim++)
+	{
+		static const std::string AXES[] = { "X", "Y", "Z" };
+
+		if (m_LocalSizes[dim])
+		{
+			stream << "Local size " << AXES[dim] << ": " << *m_LocalSizes[dim] << " \n";
+		}
+	}
+
+	return stream.str();
 }
 
 void Shader::IncrementDescriptorPool(std::map<VkDescriptorType, uint32_t>& descriptorPoolCounts,

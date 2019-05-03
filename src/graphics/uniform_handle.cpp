@@ -34,15 +34,6 @@ UniformHandle::UniformHandle(const bool& multiPipeline) :
 	m_HandleStatus(Buffer::Status::NORMAL)
 { }
 
-UniformHandle::UniformHandle(const Shader::UniformBlock& uniformBlock, const bool& multiPipeline) :
-	m_MultiPipeline(multiPipeline),
-	m_UniformBlock(uniformBlock),
-	m_Size(static_cast<uint32_t>(m_UniformBlock->GetSize())),
-	m_Data(std::make_unique<char[]>(m_Size)),
-	m_UniformBuffer(std::make_unique<UniformBuffer>(static_cast<VkDeviceSize>(m_Size))),
-	m_HandleStatus(Buffer::Status::NORMAL)
-{ }
-
 bool UniformHandle::Update(const std::optional<Shader::UniformBlock>& uniformBlock)
 {
 	if (m_HandleStatus == Buffer::Status::RESET || (m_MultiPipeline && !m_UniformBlock) || (!m_MultiPipeline && m_UniformBlock != uniformBlock))
@@ -67,4 +58,13 @@ bool UniformHandle::Update(const std::optional<Shader::UniformBlock>& uniformBlo
 
 	return true;
 }
+
+UniformHandle::UniformHandle(const Shader::UniformBlock& uniformBlock, const bool& multiPipeline) :
+	m_MultiPipeline(multiPipeline),
+	m_UniformBlock(uniformBlock),
+	m_Size(static_cast<uint32_t>(m_UniformBlock->GetSize())),
+	m_Data(std::make_unique<char[]>(m_Size)),
+	m_UniformBuffer(std::make_unique<UniformBuffer>(static_cast<VkDeviceSize>(m_Size))),
+	m_HandleStatus(Buffer::Status::NORMAL)
+{ }
 }

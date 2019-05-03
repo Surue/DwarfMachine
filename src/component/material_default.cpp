@@ -41,7 +41,7 @@ MaterialDefault* MaterialDefaultManager::CreateComponent(const Entity entity)
 
 	t.textureDiffuse = nullptr;
 
-	m_Components[entity - 1] = t;
+	m_Components[entity - 1] = std::move(t);
 
 	return &m_Components[entity - 1];
 }
@@ -73,7 +73,13 @@ static std::string To(const T &val)
 std::vector<Shader::Define> MaterialDefaultManager::GetDefines(const MaterialDefault& component)
 {
 	std::vector<Shader::Define> defines;
-	defines.emplace_back("DIFFUSE_MAPPING", To(component.textureDiffuse != nullptr));
+	//TODO Changer pour mettre correctement les valeur poru les defines
+	defines.emplace_back("DIFFUSE_MAPPING", To<int32_t>(false));
+	defines.emplace_back("MATERIAL_MAPPING", To<int32_t>(false));
+	defines.emplace_back("NORMAL_MAPPING", To<int32_t>(false));
+	defines.emplace_back("ANIMATED", To<int32_t>(false));
+	defines.emplace_back("MAX_JOINTS", To(false));
+	defines.emplace_back("MAX_WEIGHTS", To(false));
 	return defines;
 }
 }

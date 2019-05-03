@@ -41,16 +41,15 @@ RendererMeshes::RendererMeshes(Engine& engine, const Pipeline::Stage& pipelineSt
 
 void RendererMeshes::Update()
 {
-	std::cout << "Update mesh renderer\n";
 	int i = 0;
-	std::cout << "Update(): Size = " << m_RegisteredEntities.size() << "\n";
 	for (const auto &meshRender : m_RegisteredEntities)
 	{
 		auto entity = EntityHandle(meshRender, *Engine::Get());
-		auto material = entity.GetComponent<MaterialDefault>(ComponentType::MATERIAL_DEFAULT);
-		auto transform = entity.GetComponent<Transform>(ComponentType::TRANSFORM);
+		const auto material = entity.GetComponent<MaterialDefault>(ComponentType::MATERIAL_DEFAULT);
+		const auto transform = entity.GetComponent<Transform>(ComponentType::TRANSFORM);
 
 		MaterialDefaultManager::PushUniform(*material, m_UniformObjects[i], TransformManager::GetWorldMatrix(*transform));
+		i++;
 	}
 }
 
@@ -112,11 +111,10 @@ void RendererMeshes::Draw(const CommandBuffer& commandBuffer)
 
 		auto &pipeline = *materialPipeline->GetPipeline();
 
-		m_DescriptorSet[i].Push("UniformScene", m_UniformScene);
-		m_DescriptorSet[i].Push("UniformObject", m_UniformObjects[i]);
+		m_DescriptorSet[i].Push("UboScene", m_UniformScene);
+		m_DescriptorSet[i].Push("UboObject", m_UniformObjects[i]);
 
-		//MaterialDefaultManager::PushDescriptor(*material, m_DescriptorSet[i]);
-		m_DescriptorSet[i].Push("samplerDiffuse", material->textureDiffuse);
+		MaterialDefaultManager::PushDescriptor(*material, m_DescriptorSet[i]);
 
 		const auto updateSuccess = m_DescriptorSet[i].Update(pipeline);
 
@@ -138,8 +136,6 @@ void RendererMeshes::Draw(const CommandBuffer& commandBuffer)
 
 void RendererMeshes::RegisterEntity(const Entity entity)
 {
-	std::cout << "Add new entity to mesh renderer\n";
-
 	m_RegisteredEntities.push_back(entity);
 
 	auto entityHandle = EntityHandle(entity, *Engine::Get());
@@ -150,8 +146,5 @@ void RendererMeshes::RegisterEntity(const Entity entity)
 	//TODO vérifier si c'est possible de mettre ça lors de la création du component
 	//TODO Il faut lier la stage manuellement, il faut trouver une solution
 	material->pipelineMaterial = PipelineMaterial::Create({ 0, 0 }, PipelineGraphicsCreate({ "Shaders/shader.vert", "Shaders/shader.frag" }, { MeshManager::GetVertexInput() }, MaterialDefaultManager::GetDefines(*material), PipelineGraphics::Mode::MRT));
-	material->color = Color(0, 0, 0);
-
-	std::cout << "Size = " << m_RegisteredEntities.size() << "\n";
 }
 }
