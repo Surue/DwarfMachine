@@ -46,6 +46,7 @@ public:
 		auto result = static_cast<T*>(m_ComponentManager->AddComponent(m_Entity, component));
 		m_EntityManager->AddComponent(m_Entity, component.componentType);
 		m_SystemManager->AddComponent(m_Entity, oldMask, m_EntityManager->GetEntityMask(m_Entity));
+		if(m_RendererContainer != nullptr)
 		m_RendererContainer->AddComponent(m_Entity, oldMask, m_EntityManager->GetEntityMask(m_Entity));
 		return result;
 	}
@@ -57,6 +58,7 @@ public:
 
 		m_EntityManager->AddComponent(m_Entity, componentType);
 		m_SystemManager->AddComponent(m_Entity, oldMask, m_EntityManager->GetEntityMask(m_Entity));
+		if (m_RendererContainer != nullptr)
 		m_RendererContainer->AddComponent(m_Entity, oldMask, m_EntityManager->GetEntityMask(m_Entity));
 		return static_cast<T*>(m_ComponentManager->CreateComponent(m_Entity, componentType));
 	}

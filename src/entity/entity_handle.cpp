@@ -48,7 +48,9 @@ void EntityHandle::DestroyComponent(const ComponentType componentType) const
 
 	m_EntityManager->DestroyComponent(m_Entity, componentType);
 	m_SystemManager->DestroyComponent(m_Entity, oldMask, m_EntityManager->GetEntityMask(m_Entity));
-	m_RendererContainer->DestroyComponent(m_Entity, oldMask, m_EntityManager->GetEntityMask(m_Entity));
+	if (m_RendererContainer != nullptr)
+		m_RendererContainer->DestroyComponent(m_Entity, oldMask, m_EntityManager->GetEntityMask(m_Entity));
+
 	m_ComponentManager->DestroyComponent(m_Entity, componentType);
 }
 

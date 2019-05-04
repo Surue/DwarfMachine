@@ -40,10 +40,7 @@ public:
 
 	RendererContainer &operator=(const RendererContainer &) = delete;
 
-	~RendererContainer()
-	{
-		std::cout << "=============== RendererContainer ===============\n";
-	}
+	~RendererContainer() = default;
 
 	void Update();
 
@@ -116,7 +113,6 @@ public:
 	{
 		for (const auto &[key, renderer] : m_Stages)
 		{
-
 			for (auto& system : renderer)
 			{
 				const auto systemMask = system->GetSignature();
@@ -132,7 +128,6 @@ public:
 	{
 		for (auto& stages : m_Stages)
 		{
-			
 			for (auto& system : stages.second)
 			{
 				const auto systemMask = system->GetSignature();
@@ -148,4 +143,4 @@ private:
 };
 }
 
-#endif RENDERER_CONTAINER_H
+#endif //RENDERER_CONTAINER_H

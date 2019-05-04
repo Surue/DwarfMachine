@@ -95,7 +95,7 @@ TEST(Entity, TransformComponentEntity)
 
 	const auto e1 = entityManager->CreateEntity();
 	auto entity1 = dm::EntityHandle(e1, engine);
-
+	std::cout << "ici\n";
 	dm::Transform transformInfo;
 	transformInfo.componentType = ComponentType::TRANSFORM;
 	transformInfo.position.x = x;
@@ -189,14 +189,6 @@ TEST(Entity, SystemAddComponent)
 	auto controller = entity.CreateComponent<dm::ControllerType>(ComponentType::CONTROL_TYPE);
 	controller->type = dm::ControllerType::ControllerTypeEnum::CAMERA_EDITOR;
 
-	engine.GetGraphicManager()->SetManager(new dm::EditorRenderManager());
-
-	try
-	{
-		engine.Start();
-	}
-	catch (const std::exception& e)
-	{
-		std::cerr << e.what() << "\n";
-	}
+	ASSERT_TRUE(entity.HasComponent(ComponentType::CONTROL_TYPE));
+	ASSERT_TRUE(entity.GetComponent<dm::ControllerType>(ComponentType::CONTROL_TYPE)->type == dm::ControllerType::ControllerTypeEnum::CAMERA_EDITOR);
 }
