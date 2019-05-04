@@ -364,6 +364,17 @@ Vec3f& Vec3f::operator*=(const float rhs)
 	return *this;
 }
 
+Vec3f Vec3f::operator*(const Vec3f other) const
+{
+	return Vec3f(x * other.x, y * other.y, z * other.z);
+}
+
+Vec3f& Vec3f::operator*=(const Vec3f other)
+{
+	*this = *this * other;
+	return *this;
+}
+
 Vec3f Vec3f::operator/(const float rhs) const
 {
 	return Vec3f(x / rhs, y / rhs, z / rhs);
@@ -386,6 +397,11 @@ float Vec3f::GetMagnitude() const
 Vec3f Vec3f::Normalized() const
 {
 	return *this / GetMagnitude();
+}
+
+Vec3f Vec3f::Negate() const
+{
+	return Vec3f(-x, -y, -z);
 }
 
 Vec3f Vec3f::Lerp(const Vec3f& v1, const Vec3f& v2, float t)

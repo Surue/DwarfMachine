@@ -89,7 +89,6 @@ Buffer::Buffer(const VkDeviceSize& size, const VkBufferUsageFlags& usage, const 
 
 Buffer::~Buffer()
 {
-	std::cout << "~Buffer\n";
 	const auto logicalDevice = Engine::Get()->GetGraphicManager()->GetLogicalDevice();
 	vkDestroyBuffer(*logicalDevice, m_Buffer, nullptr);
 	vkFreeMemory(*logicalDevice, m_BufferMemory, nullptr);

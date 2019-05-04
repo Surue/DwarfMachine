@@ -28,6 +28,11 @@ namespace dm
 {
 MaterialDefaultManager::MaterialDefaultManager(Engine& engine) : ComponentBaseManager<MaterialDefault>(engine) { }
 
+MaterialDefaultManager::~MaterialDefaultManager()
+{
+	m_Components.clear();
+}
+
 void MaterialDefaultManager::Init() {}
 
 void MaterialDefaultManager::Update() {}

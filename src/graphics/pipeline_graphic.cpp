@@ -88,16 +88,14 @@ PipelineGraphics::PipelineGraphics(Stage stage, std::vector<std::string> shaderS
 
 PipelineGraphics::~PipelineGraphics()
 {
-	std::cout << "=============== PipelineGraphics ===============\n";
-	auto logicalDevice = Engine::Get()->GetGraphicManager()->GetLogicalDevice();
+	const auto logicalDevice = Engine::Get()->GetGraphicManager()->GetLogicalDevice();
 
 	for(const auto &shaderModule : m_Modules)
 	{
 		vkDestroyShaderModule(*logicalDevice, shaderModule, nullptr);
 	}
-	std::cout << "~DescriptorPool\n";
+
 	vkDestroyDescriptorPool(*logicalDevice, m_DescriptorPool, nullptr);
-	std::cout << "~Pipeline\n";
 	vkDestroyPipeline(*logicalDevice, m_Pipeline, nullptr);
 	vkDestroyPipelineLayout(*logicalDevice, m_PipelineLayout, nullptr);
 	vkDestroyDescriptorSetLayout(*logicalDevice, m_DescriptorSetLayout, nullptr);

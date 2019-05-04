@@ -55,13 +55,10 @@ void RendererMeshes::Update()
 
 void RendererMeshes::Draw(const CommandBuffer& commandBuffer)
 {
-	std::cout << "Draw all meshs\n";
 	auto camera = Engine::Get()->GetGraphicManager()->GetCamera();
 	m_UniformScene.Push("projection", camera->proj);
 	m_UniformScene.Push("view", camera->viewMatrix);
-	m_UniformScene.Push("cameraPos", Engine::Get()->GetComponentManager()->GetCameraManager()->GetTransformOfCamera(*camera)); //TODO 
-
-	std::cout << m_RegisteredEntities.size() << "\n";
+	m_UniformScene.Push("cameraPos", Engine::Get()->GetComponentManager()->GetCameraManager()->GetTransformOfCamera(*camera)); //TODO la position de la caméra ne passe pas
 
 	auto i = 0;
 	for (const auto &meshRender : m_RegisteredEntities)
@@ -127,7 +124,7 @@ void RendererMeshes::Draw(const CommandBuffer& commandBuffer)
 		// Draws the object.
 		material->descriptorSet.BindDescriptor(commandBuffer, pipeline);
 		if (meshModel->CmdRender(commandBuffer)) {
-			std::cout << "Draw success\n";
+			//std::cout << "Draw success\n";
 		}
 
 		i++;

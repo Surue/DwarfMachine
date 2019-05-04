@@ -55,7 +55,6 @@ CommandBuffer::CommandBuffer(const bool &begin, const VkQueueFlagBits& queueType
 
 CommandBuffer::~CommandBuffer()
 {
-	std::cout << "~CommandBuffer\n";
 	const auto logicalDevice = Engine::Get()->GetGraphicManager()->GetLogicalDevice();
 	vkFreeCommandBuffers(*logicalDevice, m_CommandPool->GetCommandPool(), 1, &m_CommandBuffer);
 }
@@ -66,7 +65,6 @@ void CommandBuffer::Begin(const VkCommandBufferUsageFlags& usage)
 	{
 		return;
 	}
-	std::cout << "CommandBuffer::Begin()\n";
 	VkCommandBufferBeginInfo beginInfo = {};
 	beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
 	beginInfo.flags = usage;
@@ -82,7 +80,6 @@ void CommandBuffer::End()
 	{
 		return;
 	}
-	std::cout << "CommandBuffer::End()\n";
 	GraphicManager::CheckVk(vkEndCommandBuffer(m_CommandBuffer));
 
 	m_Running = false;
@@ -111,7 +108,7 @@ void CommandBuffer::SubmitIdle()
 	GraphicManager::CheckVk(vkResetFences(*logicalDevice, 1, &fence));
 	GraphicManager::CheckVk(vkQueueSubmit(queueSelected, 1, &submitInfo, fence));
 	GraphicManager::CheckVk(vkWaitForFences(*logicalDevice, 1, &fence, VK_TRUE, std::numeric_limits<uint64_t>::max()));
-	std::cout << "CommandBuffer::SubmitIdle()\n";
+	
 	vkDestroyFence(*logicalDevice, fence, nullptr);
 }
 
@@ -151,7 +148,7 @@ void CommandBuffer::Submit(const VkSemaphore& waitSemaphore, const VkSemaphore& 
 		GraphicManager::CheckVk(vkWaitForFences(*logicalDevice, 1, &fence, VK_TRUE, std::numeric_limits<uint64_t>::max()));
 		GraphicManager::CheckVk(vkResetFences(*logicalDevice, 1, &fence));
 	}
-	std::cout << "CommandBuffer::Submit()\n";
+	
 	GraphicManager::CheckVk(vkQueueSubmit(queueSelected, 1, &submitInfo, fence));
 }
 

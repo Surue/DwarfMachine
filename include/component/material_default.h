@@ -39,14 +39,14 @@ struct MaterialDefault : public Material
 	Color color;
 	std::shared_ptr<Image2d> textureDiffuse;
 
-	float metallic;
-	float roughness;
+	float metallic = 0;
+	float roughness = 0;
 	std::shared_ptr<Image2d> materialTexture;
 	std::shared_ptr<Image2d> normalTexture;
 
-	bool castsShadows;
-	bool ignoreLighting;
-	bool ignoreFog;
+	bool castsShadows = false;
+	bool ignoreLighting = false;
+	bool ignoreFog = false;
 
 	DescriptorHandle descriptorSet;
 	UniformHandle uniformObject;
@@ -57,11 +57,7 @@ class MaterialDefaultManager final : public ComponentBaseManager<MaterialDefault
 public:
 	explicit MaterialDefaultManager(Engine& engine);
 
-	~MaterialDefaultManager()
-	{
-		std::cout << "=============== MaterialDefaultManager ===============\n";
-		m_Components.clear();
-	}
+	~MaterialDefaultManager();
 
 	void Init() override;
 
@@ -89,10 +85,10 @@ public:
 
 		material.uniformObject.Push("transform", worldPos);
 		material.uniformObject.Push("baseDiffuse", material.color);
-		material.uniformObject.Push("metallic", material.metallic);
-		material.uniformObject.Push("roughness", material.roughness);
-		material.uniformObject.Push("ignoreFog", static_cast<float>(material.ignoreFog));
-		material.uniformObject.Push("ignoreLighting", static_cast<float>(material.ignoreLighting));
+		material.uniformObject.Push("metallic", static_cast<float>(material.metallic));
+		material.uniformObject.Push("roughness", static_cast<float>( material.roughness));
+		material.uniformObject.Push("ignoreFog", material.ignoreFog);
+		material.uniformObject.Push("ignoreLighting", material.ignoreLighting);
 	}
 
 	MaterialDefault& Get(const Entity entity)

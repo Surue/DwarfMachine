@@ -23,7 +23,6 @@ SOFTWARE.
 */
 
 #include <graphics/model.h>
-#include "../../externals/SDL2-2.0.9/src/video/SDL_egl_c.h"
 
 namespace dm
 {

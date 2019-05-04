@@ -58,7 +58,7 @@ Shader::VertexInput VertexModel::GetVertexInput(const uint32_t& binding)
 	//normal
 	attributeDescriptions[2].binding = binding;
 	attributeDescriptions[2].location = 2;
-	attributeDescriptions[2].format = VK_FORMAT_R32G32_SFLOAT;
+	attributeDescriptions[2].format = VK_FORMAT_R32G32B32_SFLOAT;
 	attributeDescriptions[2].offset = offsetof(VertexModel, normal);
 
 	return Shader::VertexInput(binding, bindingDescriptions, attributeDescriptions);

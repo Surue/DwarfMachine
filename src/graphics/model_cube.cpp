@@ -92,7 +92,7 @@ void ModelCube::Load()
 
 	for (auto &vertex : vertices)
 	{
-		vertex.position = Vec3f(m_Extents.x * vertex.position.x, m_Extents.y * vertex.position.y, m_Extents.z * vertex.position.z) ;
+		vertex.position *= m_Extents;
 	}
 
 	Initialize(vertices, indices);

@@ -133,16 +133,16 @@ public:
 	Vec3f operator*(float rhs) const;
 	Vec3f& operator*=(float rhs);
 
+	Vec3f operator*(Vec3f other) const;
+	Vec3f& operator*=(Vec3f other);
+
 	Vec3f operator/(float rhs) const;
 	Vec3f& operator/=(float rhs);
 
 	float GetMagnitude() const;
 	Vec3f Normalized() const;
 
-	Vec3f Negate() const
-	{
-		return Vec3f(-x, -y, -z);
-	}
+	Vec3f Negate() const;
 
 	static Vec3f Lerp(const Vec3f& v1, const Vec3f& v2, float t);
 	static float AngleBetween(const Vec3f& v1, const Vec3f& v2);
