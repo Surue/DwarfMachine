@@ -348,7 +348,7 @@ void PipelineGraphics::CreatePipeline()
 	pipelineCreateInfo.subpass = m_Stage.second;
 	pipelineCreateInfo.basePipelineHandle = VK_NULL_HANDLE;
 	pipelineCreateInfo.basePipelineIndex = -1;
-	//TODO le m_ColorBlend est remis à 0, il doit passer par la mauvaise fonction
+	
 	GraphicManager::CheckVk(vkCreateGraphicsPipelines(*logicalDevice, pipelineCache, 1, &pipelineCreateInfo, nullptr, &m_Pipeline));
 
 }

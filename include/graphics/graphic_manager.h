@@ -178,8 +178,8 @@ private:
 	std::vector< std::unique_ptr<CommandBuffer>> m_CommandBuffers;
 
 	VkPipelineCache m_PipelineCache; 
-	std::vector<VkSemaphore> m_ImageAvailableSemaphores; 
-	std::vector<VkSemaphore> m_RenderFinishedSemaphores; 
+	std::vector<VkSemaphore> m_PresentCompletesSemaphore; 
+	std::vector<VkSemaphore> m_RenderCompletesSemaphore; 
 	std::vector<VkFence> m_InFlightFences; 
 	size_t m_CurrentFrame; 
 

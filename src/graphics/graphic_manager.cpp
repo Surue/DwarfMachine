@@ -179,8 +179,8 @@ GraphicManager::~GraphicManager()
 	for (size_t i = 0; i < m_InFlightFences.size(); i++)
 	{
 		vkDestroyFence(*m_LogicalDevice, m_InFlightFences[i], nullptr);
-		vkDestroySemaphore(*m_LogicalDevice, m_RenderFinishedSemaphores[i], nullptr);
-		vkDestroySemaphore(*m_LogicalDevice, m_ImageAvailableSemaphores[i], nullptr);
+		vkDestroySemaphore(*m_LogicalDevice, m_RenderCompletesSemaphore[i], nullptr);
+		vkDestroySemaphore(*m_LogicalDevice, m_PresentCompletesSemaphore[i], nullptr);
 	}
 }
 
@@ -204,7 +204,7 @@ void GraphicManager::Update()
 	std::optional<uint32_t> renderpass;
 	uint32_t subpass = 0;
 
-	VkResult acquireResult = m_Swapchain->AcquireNextImage(m_ImageAvailableSemaphores[m_CurrentFrame]);
+	const auto acquireResult = m_Swapchain->AcquireNextImage(m_PresentCompletesSemaphore[m_CurrentFrame]);
 
 	if (acquireResult == VK_ERROR_OUT_OF_DATE_KHR)
 	{
@@ -313,12 +313,12 @@ void GraphicManager::SetRenderStages(std::vector<std::unique_ptr<RenderStage>> r
 		for (size_t i = 0; i < m_InFlightFences.size(); i++)
 		{
 			vkDestroyFence(*m_LogicalDevice, m_InFlightFences[i], nullptr);
-			vkDestroySemaphore(*m_LogicalDevice, m_RenderFinishedSemaphores[i], nullptr);
-			vkDestroySemaphore(*m_LogicalDevice, m_ImageAvailableSemaphores[i], nullptr);
+			vkDestroySemaphore(*m_LogicalDevice, m_RenderCompletesSemaphore[i], nullptr);
+			vkDestroySemaphore(*m_LogicalDevice, m_PresentCompletesSemaphore[i], nullptr);
 		}
 
-		m_ImageAvailableSemaphores.resize(m_Swapchain->GetImageCount());
-		m_RenderFinishedSemaphores.resize(m_Swapchain->GetImageCount());
+		m_PresentCompletesSemaphore.resize(m_Swapchain->GetImageCount());
+		m_RenderCompletesSemaphore.resize(m_Swapchain->GetImageCount());
 		m_InFlightFences.resize(m_Swapchain->GetImageCount());
 		m_CommandBuffers.resize(m_Swapchain->GetImageCount());
 
@@ -331,9 +331,9 @@ void GraphicManager::SetRenderStages(std::vector<std::unique_ptr<RenderStage>> r
 
 		for (size_t i = 0; i < m_InFlightFences.size(); i++)
 		{
-			CheckVk(vkCreateSemaphore(*m_LogicalDevice, &semaphoreCreateInfo, nullptr, &m_ImageAvailableSemaphores[i]));
+			CheckVk(vkCreateSemaphore(*m_LogicalDevice, &semaphoreCreateInfo, nullptr, &m_PresentCompletesSemaphore[i]));
 
-			CheckVk(vkCreateSemaphore(*m_LogicalDevice, &semaphoreCreateInfo, nullptr, &m_RenderFinishedSemaphores[i]));
+			CheckVk(vkCreateSemaphore(*m_LogicalDevice, &semaphoreCreateInfo, nullptr, &m_RenderCompletesSemaphore[i]));
 
 			CheckVk(vkCreateFence(*m_LogicalDevice, &fenceCreateInfo, nullptr, &m_InFlightFences[i]));
 
@@ -373,6 +373,8 @@ void GraphicManager::RecreatePass(RenderStage& renderStage)
 	auto graphicQueue = m_LogicalDevice->GetGraphicsQueue();
 
 	VkExtent2D displayExtent = { m_Window->GetSize().x, m_Window->GetSize().y };
+
+	CheckVk(vkQueueWaitIdle(graphicQueue));
 
 	if(renderStage.HasSwapchain() && m_Swapchain->IsSameExtent(displayExtent))
 	{
@@ -441,7 +443,7 @@ bool GraphicManager::StartRenderpass(RenderStage& renderStage)
 
 void GraphicManager::EndRenderpass(RenderStage& renderStage)
 {
-	auto presentQueue = m_LogicalDevice->GetPresentQueue();
+	const auto presentQueue = m_LogicalDevice->GetPresentQueue();
 
 	vkCmdEndRenderPass(*m_CommandBuffers[m_Swapchain->GetActiveImageIndex()]);
 
@@ -451,8 +453,8 @@ void GraphicManager::EndRenderpass(RenderStage& renderStage)
 	}
 
 	m_CommandBuffers[m_Swapchain->GetActiveImageIndex()]->End();
-	m_CommandBuffers[m_Swapchain->GetActiveImageIndex()]->Submit(m_ImageAvailableSemaphores[m_CurrentFrame], m_RenderFinishedSemaphores[m_CurrentFrame], m_InFlightFences[m_CurrentFrame]);
-	VkResult presentResult = m_Swapchain->QueuePresent(presentQueue, m_RenderFinishedSemaphores[m_CurrentFrame]);
+	m_CommandBuffers[m_Swapchain->GetActiveImageIndex()]->Submit(m_PresentCompletesSemaphore[m_CurrentFrame], m_RenderCompletesSemaphore[m_CurrentFrame], m_InFlightFences[m_CurrentFrame]);
+	const auto presentResult = m_Swapchain->QueuePresent(presentQueue, m_RenderCompletesSemaphore[m_CurrentFrame]);
 
 	if (!(presentResult == VK_SUCCESS || presentResult == VK_SUBOPTIMAL_KHR))
 	{

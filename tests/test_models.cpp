@@ -74,6 +74,21 @@ TEST(Models, Cube)
 	material.componentType = ComponentType::MATERIAL_DEFAULT;
 	material.color = dm::Color(100, 200, 0, 1);
 	cube.AddComponent<dm::MaterialDefault>(material);
+
+	const auto e2 = entityManager->CreateEntity();
+	auto cube2 = dm::EntityHandle(e2, engine);
+	auto transform2 = cube2.CreateComponent<dm::Transform>(ComponentType::TRANSFORM);
+	transform2->position = dm::Vec3f(2, 0, 0);
+	transform2->scaling = dm::Vec3f(1, 1, 1);
+	dm::Mesh mesh2;
+	mesh2.componentType = ComponentType::MESH;
+	mesh2.model = dm::ModelCube::Create(dm::Vec3f(1.0f, 1.0f, 1.0f));
+	cube2.AddComponent<dm::Mesh>(mesh2);
+
+	dm::MaterialDefault material2;
+	material2.componentType = ComponentType::MATERIAL_DEFAULT;
+	material2.color = dm::Color(100, 200, 0, 1);
+	cube2.AddComponent<dm::MaterialDefault>(material2);
 	
 	try
 	{

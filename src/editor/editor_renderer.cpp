@@ -50,7 +50,7 @@ void EditorRenderManager::Start()
 	};
 
 	std::vector<SubpassType> renderpassSubpasses0 = { 
-		SubpassType(0, { 0, 2, 3, 4, 5 }) 
+		SubpassType(0, { 0, 1, 2, 3, 4, 5 }) //TODO remove the swapchain attachment, use it only for post rendering
 	};
 
 	renderStages.emplace_back(std::make_unique<RenderStage>(renderpassAttachment0, renderpassSubpasses0));

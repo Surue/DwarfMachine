@@ -147,7 +147,7 @@ Swapchain::Swapchain(const VkExtent2D& extent) :
 
 	for (uint32_t i = 0; i < m_ImageCount; i++)
 	{
-		Image::CreateImageView(m_Images.at(i), m_ImageViews.at(i), VK_IMAGE_VIEW_TYPE_2D, surfaceFormat.format, VK_IMAGE_ASPECT_COLOR_BIT, 1, 0, 1, 0);
+		Image::CreateImageView(m_Images[i], m_ImageViews[i], VK_IMAGE_VIEW_TYPE_2D, surfaceFormat.format, VK_IMAGE_ASPECT_COLOR_BIT, 1, 0, 1, 0);
 	}
 
 	VkFenceCreateInfo fenceCreateInfo = {};
