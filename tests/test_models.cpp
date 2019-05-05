@@ -46,7 +46,7 @@ TEST(Models, Cube)
 	auto entity = dm::EntityHandle(e0, engine);
 
 	auto t = entity.CreateComponent<dm::Transform>(ComponentType::TRANSFORM);
-	t->position = dm::Vec3f(10, 0, 0);
+	t->position = dm::Vec3f(0, 0, 10);
 	t->rotation = dm::Vec3f(0, 0, 0);
 
 	dm::Camera cameraInfo;
@@ -63,7 +63,8 @@ TEST(Models, Cube)
 	const auto e1 = entityManager->CreateEntity();
 	auto cube = dm::EntityHandle(e1, engine);
 	auto transform = cube.CreateComponent<dm::Transform>(ComponentType::TRANSFORM);
-	transform->position = dm::Vec3f(10, 10, 10);
+	transform->position = dm::Vec3f(0, 0, 0);
+	transform->scaling = dm::Vec3f(1, 1, 1);
 	dm::Mesh mesh;
 	mesh.componentType = ComponentType::MESH;
 	mesh.model = dm::ModelCube::Create(dm::Vec3f(1.0f, 1.0f, 1.0f));

@@ -75,5 +75,5 @@ void main()
 	outPosition = vec4(inPosition, 1.0f);
 	outDiffuse = diffuse;
 	outNormal = vec4(normalize(normal), 1.0f);
-	outMaterial = vec4(material, 1.0f);
+	outMaterial = diffuse;
 }

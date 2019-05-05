@@ -55,9 +55,9 @@ Transform* TransformManager::CreateComponent(const Entity entity)
 	t.rotation.y = 0;
 	t.rotation.z = 0;
 
-	t.scaling.x = 0;
-	t.scaling.y = 0;
-	t.scaling.z = 0;
+	t.scaling.x = 1;
+	t.scaling.y = 1;
+	t.scaling.z = 1;
 
 	m_Components[entity - 1] = t;
 
