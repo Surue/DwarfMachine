@@ -128,16 +128,9 @@ public:
 
 	const VkPipelineCache &GetPipelineCache() const { return m_PipelineCache; }
 
-	RendererContainer *GetRendererContainer() const
-	{
-		if(m_RenderManager == nullptr)
-		{
-			return nullptr;
-		}
-		else {
-			return &m_RenderManager->GetRendererContainer();
-		}
-	}
+	RendererContainer* GetRendererContainer() const;
+
+	const Descriptor *GetAttachment(const std::string &name) const;
 
 	static std::string StringifyResultVk(const VkResult &result);
 

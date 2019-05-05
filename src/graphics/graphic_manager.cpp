@@ -33,6 +33,30 @@ SOFTWARE.
 
 namespace dm
 {
+RendererContainer* GraphicManager::GetRendererContainer() const
+{
+	if (m_RenderManager == nullptr)
+	{
+		return nullptr;
+	}
+	else
+	{
+		return &m_RenderManager->GetRendererContainer();
+	}
+}
+
+const Descriptor* GraphicManager::GetAttachment(const std::string& name) const
+{
+	auto it = m_Attachments.find(name);
+
+	if (it == m_Attachments.end())
+	{
+		return nullptr;
+	}
+
+	return it->second;
+}
+
 std::string GraphicManager::StringifyResultVk(const VkResult &result)
 {
 	switch (result)
