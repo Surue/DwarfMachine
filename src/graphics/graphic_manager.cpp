@@ -208,6 +208,8 @@ void GraphicManager::Update()
 
 	if (acquireResult == VK_ERROR_OUT_OF_DATE_KHR)
 	{
+		VkExtent2D displayExtent = { m_Window->GetSize().x, m_Window->GetSize().y };
+		m_Swapchain = std::make_unique<Swapchain>(displayExtent);
 		return;
 	}
 
