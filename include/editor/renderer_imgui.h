@@ -25,40 +25,26 @@ SOFTWARE.
 #ifndef EDITOR_IMGUI_H
 #define EDITOR_IMGUI_H
 
-#include <graphics/buffer.h>
 #include <graphics/render_pipeline.h>
 #include <graphics/pipeline_graphic.h>
-#include <graphics/descriptor_handle.h>
 
 namespace dm
 {
 class RendererImGui : public RenderPipeline
 {
 public:
-	struct PushConstBlock {
-		Vec2f scale;
-		Vec2f translate;
-	} pushConstBlock;
-
 	explicit RendererImGui(const Pipeline::Stage &pipelineStage);
 
 	~RendererImGui();
 
 	void Update() override {}
 
-	void NewFrame(bool updateFrameGraph);
+	void NewFrame();
 
 	void Draw(const CommandBuffer& commandBuffer) override;
 private:
-	std::unique_ptr<Buffer> m_VertexBuffer;
-	std::unique_ptr<Buffer> m_IndexBuffer;
-	int32_t m_VertexCount;
-	int32_t m_IndexCount;
 
-	PipelineGraphics m_Pipeline;
-
-	DescriptorHandle m_DescriptorSet;
-	PushHandle m_PushScene;
+	VkDescriptorPool g_DescriptorPool;
 };
 }
 

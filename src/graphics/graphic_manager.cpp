@@ -191,7 +191,6 @@ void GraphicManager::Destroy()
 
 GraphicManager::~GraphicManager()
 {
-	std::cout << "=============== GraphicManager ===============\n";
 	auto graphicsQueue = m_LogicalDevice->GetGraphicsQueue();
 
 	CheckVk(vkQueueWaitIdle(graphicsQueue));

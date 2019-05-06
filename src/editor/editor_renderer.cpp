@@ -63,8 +63,8 @@ void EditorRenderManager::Start()
 	rendererContainer.Clear();
 
 	rendererContainer.Add<RendererMeshes>(*Engine::Get(), Pipeline::Stage(0, 0));
-	rendererContainer.Add<RendererImGui>(Pipeline::Stage(0, 1));
 	rendererContainer.Add<FilterDefault>(Pipeline::Stage(0, 1), true);//Last filter pass
+	rendererContainer.Add<RendererImGui>(Pipeline::Stage(0, 1));
 }
 void EditorRenderManager::Update()
 {

@@ -55,6 +55,7 @@ inline VkResult CreateDebugUtilsMessengerEXT(const VkInstance instance,
 {
 	const auto func = reinterpret_cast<PFN_vkCreateDebugUtilsMessengerEXT>(vkGetInstanceProcAddr(
 		instance, "vkCreateDebugUtilsMessengerEXT"));
+	std::cout << "ici\n";
 	if (func != nullptr)
 	{
 		return func(instance, pCreateInfo, pAllocator, pDebugMessenger);
@@ -74,6 +75,7 @@ inline VkResult CreateDebugUtilsMessengerEXT(const VkInstance instance,
 inline void DestroyDebugUtilsMessengerEXT(const VkInstance instance, const VkDebugUtilsMessengerEXT debugMessenger,
 	const VkAllocationCallbacks* pAllocator)
 {
+	std::cout << "ici2\n";
 	const auto func = reinterpret_cast<PFN_vkDestroyDebugUtilsMessengerEXT>(vkGetInstanceProcAddr(
 		instance, "vkDestroyDebugUtilsMessengerEXT"));
 	if (func != nullptr)
@@ -115,6 +117,8 @@ public:
 	const PhysicalDevice* GetPhysicalDevice() const { return m_PhysicalDevice.get(); }
 
 	const LogicalDevice* GetLogicalDevice() const { return m_LogicalDevice.get(); }
+
+	const Instance* GetInstance() const { return m_Instance.get(); }
 
 	const std::shared_ptr<CommandPool> &GetCommandPool(const std::thread::id &threadId = std::this_thread::get_id());
 
