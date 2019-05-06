@@ -29,7 +29,6 @@ SOFTWARE.
 #include <graphics/command_buffer.h>
 #include <graphics/buffer.h>
 #include "model_vertex.h"
-#include <iostream>
 
 namespace dm
 {

@@ -46,7 +46,6 @@ public:
 
 	~MeshManager()
 	{
-		std::cout << "=============== MeshManager ===============\n";
 		m_Components.clear();
 	}
 

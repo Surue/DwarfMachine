@@ -26,7 +26,8 @@ SOFTWARE.
 #include <graphics/render_stage.h>
 #include <graphics/graphic_manager.h>
 #include <graphics/renderer_meshes.h>
-#include "graphics/filter_default.h"
+#include <graphics/filter_default.h>
+#include <editor/renderer_imgui.h>
 
 namespace dm
 {
@@ -62,7 +63,7 @@ void EditorRenderManager::Start()
 	rendererContainer.Clear();
 
 	rendererContainer.Add<RendererMeshes>(*Engine::Get(), Pipeline::Stage(0, 0));
-
+	rendererContainer.Add<RendererImGui>(Pipeline::Stage(0, 1));
 	rendererContainer.Add<FilterDefault>(Pipeline::Stage(0, 1), true);//Last filter pass
 }
 void EditorRenderManager::Update()
