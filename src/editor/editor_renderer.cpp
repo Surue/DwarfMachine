@@ -46,12 +46,12 @@ void EditorRenderManager::Start()
 		Attachment(2, "position", Attachment::Type::IMAGE, false, VK_FORMAT_R16G16B16A16_SFLOAT),
 		Attachment(3, "diffuse", Attachment::Type::IMAGE, false, VK_FORMAT_R8G8B8A8_UNORM),
 		Attachment(4, "normal", Attachment::Type::IMAGE, false, VK_FORMAT_R16G16B16A16_SFLOAT),
-		Attachment(5, "material", Attachment::Type::IMAGE, false, VK_FORMAT_R8G8B8A8_UNORM), 
-		Attachment(6, "resolved", Attachment::Type::IMAGE, false, VK_FORMAT_R8G8B8A8_UNORM)
+		Attachment(5, "material", Attachment::Type::IMAGE, false, VK_FORMAT_R8G8B8A8_UNORM)/*, 
+		Attachment(6, "resolved", Attachment::Type::IMAGE, false, VK_FORMAT_R8G8B8A8_UNORM)*/
 	};
 
 	std::vector<SubpassType> renderpassSubpasses0 = { 
-		SubpassType(0, { 0, 2, 3, 4 ,5, 1}),
+		SubpassType(0, { 0, 2, 3, 4 ,5}),
 		SubpassType(1, { 0, 1})
 	};
 
@@ -63,7 +63,7 @@ void EditorRenderManager::Start()
 
 	rendererContainer.Add<RendererMeshes>(*Engine::Get(), Pipeline::Stage(0, 0));
 
-	//rendererContainer.Add<FilterDefault>(Pipeline::Stage(0, 1), true);//Last filter pass
+	rendererContainer.Add<FilterDefault>(Pipeline::Stage(0, 1), true);//Last filter pass
 }
 void EditorRenderManager::Update()
 {

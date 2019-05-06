@@ -91,23 +91,21 @@ bool PostFilter::RemoveAttachment(const std::string& descriptorName)
 void PostFilter::PushConditional(const std::string& descriptorName1, const std::string& descriptorName2,
 	const std::string& rendererAttachment1, const std::string& rendererAttachment2)
 {
-	const auto it1 = m_Attachments.find(descriptorName1);
-	const auto it2 = m_Attachments.find(descriptorName2);
+	auto it1 = m_Attachments.find(descriptorName1);
+	auto it2 = m_Attachments.find(descriptorName1);
 
-	if(it1 != m_Attachments.end() || it2 != m_Attachments.end())
+	if (it1 != m_Attachments.end() || it2 != m_Attachments.end())
 	{
 		m_DescriptorSet.Push(descriptorName1, GetAttachment(descriptorName1, rendererAttachment1));
 		m_DescriptorSet.Push(descriptorName2, GetAttachment(descriptorName2, rendererAttachment1));
 		return;
 	}
-
-	if(it1 == m_Attachments.end() && it2 != m_Attachments.end())
+	if (it1 == m_Attachments.end() && it2 != m_Attachments.end())
 	{
 		m_DescriptorSet.Push(descriptorName1, Engine::Get()->GetGraphicManager()->GetAttachment(GlobalSwitching % 2 == 1 ? rendererAttachment1 : rendererAttachment2));
 		m_DescriptorSet.Push(descriptorName2, GetAttachment(descriptorName2, rendererAttachment1));
 		return;
 	}
-
 	if (it1 != m_Attachments.end() && it2 == m_Attachments.end())
 	{
 		m_DescriptorSet.Push(descriptorName1, GetAttachment(descriptorName1, rendererAttachment1));
@@ -115,11 +113,12 @@ void PostFilter::PushConditional(const std::string& descriptorName1, const std::
 		return;
 	}
 
-	if(GlobalSwitching % 2 == 1)
+	if (GlobalSwitching % 2 == 1)
 	{
 		m_DescriptorSet.Push(descriptorName1, Engine::Get()->GetGraphicManager()->GetAttachment(rendererAttachment1));
 		m_DescriptorSet.Push(descriptorName2, Engine::Get()->GetGraphicManager()->GetAttachment(rendererAttachment2));
-	}else
+	}
+	else
 	{
 		m_DescriptorSet.Push(descriptorName1, Engine::Get()->GetGraphicManager()->GetAttachment(rendererAttachment2));
 		m_DescriptorSet.Push(descriptorName2, Engine::Get()->GetGraphicManager()->GetAttachment(rendererAttachment1));
