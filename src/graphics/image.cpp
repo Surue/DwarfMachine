@@ -78,7 +78,7 @@ VkDescriptorSetLayoutBinding Image::GetDescriptorSetLayout(const uint32_t& bindi
 WriteDescriptorSet Image::GetWriteDescriptor(const uint32_t& binding, const VkDescriptorType& descriptorType,
 	const std::optional<OffsetSize>& offsetSize) const
 {
-	VkDescriptorImageInfo imageInfo = { };
+	VkDescriptorImageInfo imageInfo = {};
 	imageInfo.sampler = m_Sampler;
 	imageInfo.imageView = m_View;
 	imageInfo.imageLayout = m_Layout;
@@ -255,6 +255,7 @@ void Image::CreateImageView(const VkImage& image, VkImageView& imageView, const 
 	const uint32_t& baseMipLevel, const uint32_t& layerCount, const uint32_t& baseArrayLayer)
 {
 	const auto logicalDevice = Engine::Get()->GetGraphicManager()->GetLogicalDevice();
+
 	VkImageViewCreateInfo imageViewCreateInfo = {};
 	imageViewCreateInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
 	imageViewCreateInfo.image = image;

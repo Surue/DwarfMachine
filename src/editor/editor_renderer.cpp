@@ -26,6 +26,7 @@ SOFTWARE.
 #include <graphics/render_stage.h>
 #include <graphics/graphic_manager.h>
 #include <graphics/renderer_meshes.h>
+#include "graphics/filter_default.h"
 
 namespace dm
 {
@@ -50,7 +51,8 @@ void EditorRenderManager::Start()
 	};
 
 	std::vector<SubpassType> renderpassSubpasses0 = { 
-		SubpassType(0, { 0, 1, 2, 3, 4, 5 }) //TODO remove the swapchain attachment, use it only for post rendering
+		SubpassType(0, { 0, 2, 3, 4 ,5, 1}),
+		SubpassType(1, { 0, 1})
 	};
 
 	renderStages.emplace_back(std::make_unique<RenderStage>(renderpassAttachment0, renderpassSubpasses0));
@@ -60,6 +62,8 @@ void EditorRenderManager::Start()
 	rendererContainer.Clear();
 
 	rendererContainer.Add<RendererMeshes>(*Engine::Get(), Pipeline::Stage(0, 0));
+
+	//rendererContainer.Add<FilterDefault>(Pipeline::Stage(0, 1), true);//Last filter pass
 }
 void EditorRenderManager::Update()
 {

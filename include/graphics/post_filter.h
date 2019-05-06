@@ -50,7 +50,7 @@ public:
 
 	bool RemoveAttachment(const std::string &descriptorName);
 
-private:
+protected:
 	static uint32_t GlobalSwitching;
 
 	void PushConditional(const std::string &descriptorName1, const std::string &descriptorName2, const std::string &rendererAttachment1, const std::string &rendererAttachment2);

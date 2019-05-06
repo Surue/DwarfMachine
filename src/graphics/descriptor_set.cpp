@@ -57,7 +57,7 @@ void DescriptorSet::Update(const std::vector<VkWriteDescriptorSet>& descriptorWr
 {
 	const auto logicalDevice = Engine::Get()->GetGraphicManager()->GetLogicalDevice();
 
-	vkUpdateDescriptorSets(*logicalDevice, static_cast<uint32_t>(descriptorWrites.size()), descriptorWrites.data(), 0, nullptr);
+ 	vkUpdateDescriptorSets(*logicalDevice, static_cast<uint32_t>(descriptorWrites.size()), descriptorWrites.data(), 0, nullptr);
 }
 
 void DescriptorSet::BindDescriptor(const CommandBuffer& commandBuffer)

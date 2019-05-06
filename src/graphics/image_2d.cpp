@@ -85,7 +85,7 @@ Image2d::Image2d(const uint32_t& width, const uint32_t& height, std::unique_ptr<
 	m_View(VK_NULL_HANDLE),
 	m_Format(format)
 {
-	if (usage & VK_IMAGE_USAGE_TRANSIENT_ATTACHMENT_BIT) { m_Usage = usage; }
+	//if (usage & VK_IMAGE_USAGE_TRANSIENT_ATTACHMENT_BIT) { m_Usage = usage; }
 	Image2d::Load();
 }
 

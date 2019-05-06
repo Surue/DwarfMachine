@@ -591,12 +591,11 @@ VkShaderModule Shader::ProcessShader(const std::string& shaderCode, const VkShad
 	shader.setStrings(&shaderSource, 1);
 
 	shader.setEnvInput(glslang::EShSourceGlsl, language, glslang::EShClientVulkan, 110);
-	shader.setEnvClient(glslang::EShClientVulkan, glslang::EShTargetVulkan_1_1);
-	shader.setEnvTarget(glslang::EShTargetSpv, glslang::EShTargetSpv_1_3);
+	/*shader.setEnvClient(glslang::EShClientVulkan, glslang::EShTargetVulkan_1_1);
+	shader.setEnvTarget(glslang::EShTargetSpv, glslang::EShTargetSpv_1_3);*/
 
-	//shader.setEnvInput(glslang::EShSourceGlsl, language, glslang::EShClientVulkan, 100);
-	/*shader.setEnvClient(glslang::EShClientVulkan, glslang::EShTargetVulkan_1_0);
-	shader.setEnvTarget(glslang::EShTargetSpv, glslang::EShTargetSpv_1_0);*/
+	shader.setEnvClient(glslang::EShClientVulkan, glslang::EShTargetVulkan_1_0);
+	shader.setEnvTarget(glslang::EShTargetSpv, glslang::EShTargetSpv_1_0);
 
 	const int defaultVersion = glslang::EShTargetOpenGL_450;
 
