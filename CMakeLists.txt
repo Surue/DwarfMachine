@@ -81,6 +81,9 @@ set(SDL_SHARED OFF)
 add_subdirectory(${SDL_DIR})
 include_directories(${SDL2_DIR}/include ${SDL2_DIR}/src)
 
+#ImGui
+include_directories(externals/imgui)
+
 # SPIRV is needed (from Glslang)
 # NOTE: End-users can pass -DSPIRV_ROOT=/some/path to find the lib
 set(SPIRV_ROOT CACHE PATH "An optional path to the system's SPIRV root dir to help find it. Ignore if building Glslang locally.")
