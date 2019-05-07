@@ -94,29 +94,6 @@ set(SDL2_IMGUI ${EXTERNAL_DIR}/imgui-sdl/)
 add_subdirectory(${SDL2_IMGUI})
 include_directories(${IMGUI_ROOT} ${SDL2_IMGUI})
 
-# if(IMGUI_ROOT)
-    # message("IMGUI ROOT: ${IMGUI_ROOT}")
-	
-	# file(GLOB IMGUI_FILES
-		# "${IMGUI_ROOT}/imgui_draw.cpp"
-		# "${IMGUI_ROOT}/imgui_demo.cpp"
-		# "${IMGUI_ROOT}/imgui_internal.h"
-		# "${IMGUI_ROOT}/imgui.cpp"
-		# "${IMGUI_ROOT}/imgui.h"
-		# "${IMGUI_ROOT}/imgui_widgets.cpp"
-			# )
-	# include_directories(${IMGUI_ROOT})
-	# # Rename that pesky imconfig.h file for the user.
-	# install(FILES ${IMGUI_INCLUDE_DIR}/imconfig.h DESTINATION include RENAME imconfig-sample.h)
-
-# endif()
-# file(GLOB_RECURSE INCLUDES "imgui_impl_vulkan.h" "imgui_impl_sdl.h" )
-# include_directories(${SDL_DIR}/include ${IMGUI}/include)
-# file(GLOB_RECURSE SOURCES  "imgui_impl_vulkan.cpp" "imgui_impl_sdl.cpp")
-# add_library(imgui-sdl STATIC ${SOURCES} ${INCLUDES} ${IMGUI_FILES})
-
-# target_link_libraries(imgui-sdl PUBLIC SDL2main SDL2-static Vulkan::Vulkan)
-
 LIST(APPEND DWARF_MACHINE_LIBRARIES imgui-sdl)
 
 # SPIRV is needed (from Glslang)
@@ -224,7 +201,7 @@ if(APPLE)
 		RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR})
 ENDIF()
 
-		# set_target_properties(DWARF_MACHINE_COMMON PROPERTIES COMPILE_FLAGS "-save-temps -ffast-math")
+set_target_properties(DWARF_MACHINE_COMMON PROPERTIES COMPILE_FLAGS "-save-temps -ffast-math")
 
 #source
 add_custom_command(TARGET DWARF_MACHINE_COMMON POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/ressources ${CMAKE_BINARY_DIR}/ressources)

@@ -26,6 +26,8 @@ if(IMGUI_ROOT)
 		"${IMGUI_ROOT}/imgui.cpp"
 		"${IMGUI_ROOT}/imgui.h"
 		"${IMGUI_ROOT}/imgui_widgets.cpp"
+		"${IMGUI_ROOT}/imgui_gizmo.cpp"
+		"${IMGUI_ROOT}/imgui_gizmo.h"
 			)
 	include_directories(${IMGUI_ROOT})
 	# Rename that pesky imconfig.h file for the user.

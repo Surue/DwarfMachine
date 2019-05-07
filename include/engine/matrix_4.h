@@ -51,6 +51,11 @@ public:
 
 	Matrix4 Scale(const Vec3f& other) const;
 
+	float *GetLinear()
+	{
+		return &m_Linear[0];
+	}
+
 	static Matrix4 TransformationMatrix(const Vec3f& translation, const Vec3f& rotation, const Vec3f& scale);
 
 	static Matrix4 ViewMatrix(const Vec3f& position, const Vec3f& rotation);
