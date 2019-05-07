@@ -22,35 +22,12 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#ifndef RENDER_MANAGER_H
-#define RENDER_MANAGER_H
-
-#include <graphics/renderer_container.h>
+#include <engine/engine_application.h>
 
 namespace dm
 {
-class RenderPipeline;
-
-class RenderManager
+EngineApplication::EngineApplication()
 {
-public:
-	explicit RenderManager() :
-		m_Started(false)
-	{}
-
-	virtual ~RenderManager() = default;
-
-	virtual void Start() = 0;
-
-	virtual void Update(float dt) = 0;
-
-	RendererContainer &GetRendererContainer() { return m_RendererContainer; }
-protected:
-	friend class GraphicManager;
-
-	bool m_Started;
-	RendererContainer m_RendererContainer;
-};
+	
 }
-
-#endif RENDER_MANAGER
+}

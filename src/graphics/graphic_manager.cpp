@@ -207,7 +207,7 @@ GraphicManager::~GraphicManager()
 	}
 }
 
-void GraphicManager::Update()
+void GraphicManager::Update(float dt)
 {
 	if (m_RenderManager == nullptr)
 	{
@@ -220,7 +220,7 @@ void GraphicManager::Update()
 		m_RenderManager->m_Started = true;
 	}
 
-	m_RenderManager->Update();
+	m_RenderManager->Update(dt);
 
 	auto &stages = m_RenderManager->GetRendererContainer().GetStages();
 

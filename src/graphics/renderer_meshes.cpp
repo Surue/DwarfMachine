@@ -39,7 +39,7 @@ RendererMeshes::RendererMeshes(Engine& engine, const Pipeline::Stage& pipelineSt
 	m_Signature.AddComponent(ComponentType::TRANSFORM);
 }
 
-void RendererMeshes::Update()
+void RendererMeshes::Update(float dt)
 {
 	int i = 0;
 	for (const auto &meshRender : m_RegisteredEntities)

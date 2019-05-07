@@ -28,6 +28,7 @@ SOFTWARE.
 #include <graphics/window.h>
 #include <imgui.h>
 #include "imgui_impl_sdl.h"
+#include "imgui_internal.h"
 
 namespace dm
 {
@@ -62,7 +63,9 @@ void InputManager::Update()
 	SDL_Event event;
 	while (SDL_PollEvent(&event))
 	{
-		ImGui_ImplSDL2_ProcessEvent(&event);
+		if(ImGui::GetCurrentContext() != nullptr) //TODO trouver une meilleur solution pour ne l'appeler qu'une seule fois
+			ImGui_ImplSDL2_ProcessEvent(&event);
+
 		switch (event.type)
 		{
 		case SDL_QUIT:

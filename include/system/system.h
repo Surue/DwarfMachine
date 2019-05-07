@@ -40,7 +40,7 @@ public:
 	virtual ~System() = default;
 
 	virtual void Init(){}
-	virtual void Update()
+	virtual void Update(float dt)
 	{
 		std::cout << "parent update\n";
 	}

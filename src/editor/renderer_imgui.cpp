@@ -71,7 +71,7 @@ RendererImGui::RendererImGui(const Pipeline::Stage &pipelineStage) :
 	pool_info.maxSets = 1000 * IM_ARRAYSIZE(pool_sizes);
 	pool_info.poolSizeCount = (uint32_t)IM_ARRAYSIZE(pool_sizes);
 	pool_info.pPoolSizes = pool_sizes;
-	check_vk_result(vkCreateDescriptorPool(*logicalDevice, &pool_info, nullptr, &g_DescriptorPool));
+	check_vk_result(vkCreateDescriptorPool(*logicalDevice, &pool_info, nullptr, &m_GDescriptorPool));
 
 	ImGui::CreateContext();
 
@@ -95,7 +95,7 @@ RendererImGui::RendererImGui(const Pipeline::Stage &pipelineStage) :
 	initInfo.QueueFamily = logicalDevice->GetGraphicsFamily();
 	initInfo.Queue = logicalDevice->GetGraphicsQueue(); //Not sure about that
 	initInfo.PipelineCache = VK_NULL_HANDLE;
-	initInfo.DescriptorPool = g_DescriptorPool;
+	initInfo.DescriptorPool = m_GDescriptorPool;
 	initInfo.Allocator = nullptr;
 	initInfo.MinImageCount = surfaceCapabilities.minImageCount + 1;
 	initInfo.ImageCount = Engine::Get()->GetGraphicManager()->GetSwapchain()->GetImageCount();
@@ -117,11 +117,9 @@ RendererImGui::RendererImGui(const Pipeline::Stage &pipelineStage) :
 		// Use any command queue
 		CommandBuffer commandBuffer = CommandBuffer();
 
-		commandBuffer.Begin();
+		ImGui_ImplVulkan_CreateFontsTexture(commandBuffer);
 
-		ImGui_ImplVulkan_CreateFontsTexture(commandBuffer.GetCommandBuffer());
-
-		commandBuffer.Submit();
+		commandBuffer.SubmitIdle();
 
 		check_vk_result(vkDeviceWaitIdle(*logicalDevice));
 		ImGui_ImplVulkan_DestroyFontUploadObjects();
@@ -131,7 +129,7 @@ RendererImGui::RendererImGui(const Pipeline::Stage &pipelineStage) :
 RendererImGui::~RendererImGui()
 {
 	auto logicalDevice = Engine::Get()->GetGraphicManager()->GetLogicalDevice();
-	vkDestroyDescriptorPool(*logicalDevice, g_DescriptorPool, nullptr);
+	vkDestroyDescriptorPool(*logicalDevice, m_GDescriptorPool, nullptr);
 
 	ImGui_ImplVulkan_Shutdown();
 	ImGui_ImplSDL2_Shutdown();

@@ -66,8 +66,8 @@ void EditorRenderManager::Start()
 	rendererContainer.Add<FilterDefault>(Pipeline::Stage(0, 1), true);//Last filter pass
 	rendererContainer.Add<RendererImGui>(Pipeline::Stage(0, 1));
 }
-void EditorRenderManager::Update()
+void EditorRenderManager::Update(float dt)
 {
-	m_RendererContainer.Update();
+	m_RendererContainer.Update(dt);
 }
 }

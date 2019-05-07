@@ -37,14 +37,14 @@ public:
 
 	~RendererImGui();
 
-	void Update() override {}
+	void Update(float dt) override {}
 
 	void NewFrame();
 
 	void Draw(const CommandBuffer& commandBuffer) override;
 private:
 
-	VkDescriptorPool g_DescriptorPool;
+	VkDescriptorPool m_GDescriptorPool;
 };
 }
 

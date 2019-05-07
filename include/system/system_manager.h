@@ -39,7 +39,7 @@ public:
 	~SystemManager() = default;
 
 	void Init();
-	void Update();
+	void Update(float dt);
 	void Destroy();
 
 	void AddComponent(const Entity entity, const ComponentMask oldMask, ComponentMask newMask)

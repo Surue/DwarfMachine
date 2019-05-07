@@ -35,7 +35,7 @@ CameraView::CameraView(Engine& engine) : System(engine)
 	m_Signature.AddComponent(ComponentType::CAMERA);
 }
 
-void CameraView::Update()
+void CameraView::Update(float dt)
 {
 	for (auto registeredEntity : m_RegisteredEntities)
 	{

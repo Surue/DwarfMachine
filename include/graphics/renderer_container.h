@@ -42,7 +42,7 @@ public:
 
 	~RendererContainer() = default;
 
-	void Update();
+	void Update(float dt);
 
 	const std::map<Pipeline::Stage, std::vector<std::unique_ptr<RenderPipeline>>> &GetStages() const { return m_Stages; }
 

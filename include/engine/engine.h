@@ -27,6 +27,7 @@ SOFTWARE.
 
 #include <engine/vector.h>
 #include <memory>
+#include <chrono>
 
 namespace dm
 {
@@ -36,6 +37,7 @@ class EntityManager;
 class ComponentManagerContainer;
 class SystemManager;
 class Window;
+class EngineApplication;
 
 struct EngineSettings
 {
@@ -68,6 +70,8 @@ public:
 	SystemManager* GetSystemManager() const;
 
 	EngineSettings& GetSettings();
+
+	void SetApplication(EngineApplication* app);
 private:
 	/**
 	 * \brief Main loop of the game
@@ -75,6 +79,8 @@ private:
 	void MainLoop();
 
 	void Destroy();
+
+	void CalculateDeltaTime();
 
 	static Engine *m_Instance;
 
@@ -87,6 +93,17 @@ private:
 	std::unique_ptr<EntityManager> m_EntityManager;
 	std::unique_ptr<ComponentManagerContainer> m_ComponentManager;
 	std::unique_ptr<SystemManager> m_SystemManager;
+
+	std::unique_ptr<EngineApplication> m_App;
+
+	//Timer
+	std::chrono::high_resolution_clock m_Timer;
+
+	std::chrono::high_resolution_clock::time_point m_PreviousFrameTime;
+	std::chrono::high_resolution_clock::time_point m_CurrentFrame;
+
+	float m_Fps;
+	float m_DeltaTime;
 };
 }
 

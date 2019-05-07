@@ -29,24 +29,24 @@ namespace dm
 FilterDefault::FilterDefault(const Pipeline::Stage& pipelineStage, const bool& lastFilter) :
 	PostFilter(pipelineStage, {"../Shaders/filter_default.vert", "../Shaders/filter_default.frag"}, {}),
 	m_LastFilter(lastFilter)
-{}
+{
+}
 
 void FilterDefault::Draw(const CommandBuffer& commandBuffer)
 {
-	PushConditional("writeColor", "samplerColor", "resolved", "diffuse");
-
-	const bool updateSucceed = m_DescriptorSet.Update(m_Pipeline);
+	//PushConditional("writeColor", "samplerColor", "resolved", "diffuse");
+	PushConditional("writeColor", "samplerColor", "diffuse", "diffuse");
+	const bool updateSucceed = m_DescriptorSet.Update(m_Pipeline); //error #1 (imageLayout invalid) //error #3 command buffer still acit
 
 	if(!updateSucceed)
 	{
-		std::cout << "update fail\n";
 		return;
 	}
 
-	m_Pipeline.BindPipeline(commandBuffer);
+	m_Pipeline.BindPipeline(commandBuffer); 
 
 	m_DescriptorSet.BindDescriptor(commandBuffer, m_Pipeline);
-	vkCmdDraw(commandBuffer, 3, 1, 0, 0);
+	vkCmdDraw(commandBuffer, 3, 1, 0, 0); //error #2 (descriptor 0 not updated)
 
 	if(m_LastFilter)
 	{

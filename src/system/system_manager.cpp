@@ -39,11 +39,11 @@ namespace dm {
 		
 	}
 
-	void SystemManager::Update()
+	void SystemManager::Update(float dt)
 	{
 		for (auto& system : m_Systems)
 		{
-			system->Update();
+			system->Update(dt);
 		}
 	}
 

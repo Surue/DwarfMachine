@@ -76,13 +76,6 @@ public:
 
 	static void PushUniform(MaterialDefault &material, const Matrix4 worldPos)
 	{
-		//if (m_animated)
-		//{
-		//	auto meshAnimated = GetParent()->GetComponent<MeshAnimated>();
-		//	auto joints = meshAnimated->GetJointTransforms(); // TODO: Move into storage buffer and update every frame.
-		//	uniformObject.Push("jointTransforms", *joints.data(), sizeof(Matrix4) * joints.size());
-		//}
-
 		material.uniformObject.Push("transform", worldPos);
 		material.uniformObject.Push("baseDiffuse", material.color);
 		material.uniformObject.Push("metallic", static_cast<float>(material.metallic));

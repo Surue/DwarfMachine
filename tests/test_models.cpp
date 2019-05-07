@@ -32,13 +32,14 @@ SOFTWARE.
 #include <graphics/graphic_manager.h>
 #include "component/mesh.h"
 #include "graphics/model_cube.h"
+#include <editor/editor.h>
 
 TEST(Models, Cube)
 {
 	dm::Engine engine;
 	engine.Init();
 
-	engine.GetGraphicManager()->SetManager(new dm::EditorRenderManager());
+	engine.SetApplication(new dm::Editor());
 
 	auto entityManager = engine.GetEntityManager();
 

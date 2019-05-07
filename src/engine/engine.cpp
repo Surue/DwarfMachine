@@ -30,11 +30,14 @@ SOFTWARE.
 #include <system/system_manager.h>
 #include <graphics/window.h>
 
+#include <engine/engine_application.h>
+
 namespace dm
 {
 Engine *Engine::m_Instance = nullptr;
 
-Engine::Engine()
+Engine::Engine() :
+	m_App(nullptr)
 {
 	m_Instance = this;
 
@@ -46,9 +49,13 @@ Engine::Engine()
 	m_EntityManager = std::make_unique<EntityManager>(*this);
 	m_ComponentManager = std::make_unique<ComponentManagerContainer>(*this);
 	m_SystemManager = std::make_unique<SystemManager>(*this);
+
+	m_PreviousFrameTime = m_Timer.now();
+	m_CurrentFrame = m_Timer.now();
 }
 
-Engine::Engine(const EngineSettings engineSettings)
+Engine::Engine(const EngineSettings engineSettings) :
+	m_App(nullptr)
 {
 	m_Settings = engineSettings;
 
@@ -57,6 +64,9 @@ Engine::Engine(const EngineSettings engineSettings)
 	m_EntityManager = std::make_unique<EntityManager>(*this);
 	m_ComponentManager = std::make_unique<ComponentManagerContainer>(*this);
 	m_SystemManager = std::make_unique<SystemManager>(*this);
+
+	m_PreviousFrameTime = m_Timer.now();
+	m_CurrentFrame = m_Timer.now();
 }
 
 Engine::~Engine() {}
@@ -110,18 +120,24 @@ EngineSettings& Engine::GetSettings()
 	return m_Settings;
 }
 
+void Engine::SetApplication(EngineApplication* app)
+{
+	m_App.reset(app);
+}
+
 void Engine::MainLoop()
 {
 	while (!m_Window->ShouldClose())
 	{
-		m_InputManager->Update();
-		if (m_InputManager->IsKeyDown(KeyCode::ESCAPE))
-			m_Window->SetShouldClose();
+		CalculateDeltaTime();
 
+		std::cout << "dt = " << m_DeltaTime << ", FPS = " << m_Fps << "\n";
+
+		m_InputManager->Update();
 
 		//Updates
-		m_SystemManager->Update();
-		m_GraphicManager->Update();
+		m_SystemManager->Update(m_DeltaTime);
+		m_GraphicManager->Update(m_DeltaTime);
 	}
 
 }
@@ -132,4 +148,13 @@ void Engine::Destroy()
 	m_SystemManager->Destroy();
 }
 
+void Engine::CalculateDeltaTime()
+{
+	m_CurrentFrame = m_Timer.now();
+	const auto dt = std::chrono::duration_cast<std::chrono::duration<float, std::milli>>(m_CurrentFrame - m_PreviousFrameTime).count() / 1000.0f;
+	m_PreviousFrameTime = m_CurrentFrame;
+
+	m_Fps = 1.0f / dt;
+	m_DeltaTime = dt;
+}
 }

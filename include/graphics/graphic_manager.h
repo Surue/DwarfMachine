@@ -100,7 +100,7 @@ public:
 	 */
 	void Destroy();
 
-	void Update();
+	void Update(float dt);
 
 	void SetMainCamera(Camera* camera);
 
