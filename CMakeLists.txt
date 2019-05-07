@@ -40,6 +40,8 @@ set(_DWARF_MACHINE_ALL_SYSTEM_LIBS true)
 find_package(Threads REQUIRED)
 # Finds and loads Vulkan, env "VULKAN_SDK" must be set
 find_package(Vulkan REQUIRED)
+LIST(APPEND DWARF_MACHINE_LIBRARIES Vulkan::Vulkan)
+
 
 include_directories(include ${CMAKE_SOURCE_DIR}/include)
 
@@ -80,12 +82,10 @@ set(SDL_STATIC ON)
 set(SDL_SHARED OFF)
 add_subdirectory(${SDL_DIR})
 include_directories(${SDL2_DIR}/include ${SDL2_DIR}/src)
-LIST(APPEND DWARF_MACHINE_LIBRARIES
-				SDL2-static)
-		if(MSVC)
-			LIST(APPEND DWARF_MACHINE_LIBRARIES
-				SDL2main)
-		endif(MSVC)
+LIST(APPEND DWARF_MACHINE_LIBRARIES SDL2-static)
+if(MSVC)
+	LIST(APPEND DWARF_MACHINE_LIBRARIES SDL2main)
+endif(MSVC)
 
 #ImGui
 #include_directories(externals/imgui)
@@ -94,33 +94,30 @@ set(SDL2_IMGUI ${EXTERNAL_DIR}/imgui-sdl/)
 add_subdirectory(${SDL2_IMGUI})
 include_directories(${IMGUI_ROOT} ${SDL2_IMGUI})
 
-if(IMGUI_ROOT)
-    message("IMGUI ROOT: ${IMGUI_ROOT}")
+# if(IMGUI_ROOT)
+    # message("IMGUI ROOT: ${IMGUI_ROOT}")
 	
-	file(GLOB IMGUI_FILES
-		"${IMGUI_ROOT}/imgui_draw.cpp"
-		"${IMGUI_ROOT}/imgui_demo.cpp"
-		"${IMGUI_ROOT}/imgui.cpp"
-		"${IMGUI_ROOT}/imgui.h"
-		"${IMGUI_ROOT}/imgui_widgets.cpp"
-			)
-	include_directories(${IMGUI_ROOT})
-	# Rename that pesky imconfig.h file for the user.
-	install(FILES ${IMGUI_INCLUDE_DIR}/imconfig.h DESTINATION include RENAME imconfig-sample.h)
+	# file(GLOB IMGUI_FILES
+		# "${IMGUI_ROOT}/imgui_draw.cpp"
+		# "${IMGUI_ROOT}/imgui_demo.cpp"
+		# "${IMGUI_ROOT}/imgui_internal.h"
+		# "${IMGUI_ROOT}/imgui.cpp"
+		# "${IMGUI_ROOT}/imgui.h"
+		# "${IMGUI_ROOT}/imgui_widgets.cpp"
+			# )
+	# include_directories(${IMGUI_ROOT})
+	# # Rename that pesky imconfig.h file for the user.
+	# install(FILES ${IMGUI_INCLUDE_DIR}/imconfig.h DESTINATION include RENAME imconfig-sample.h)
 
-endif()
-file(GLOB_RECURSE INCLUDES "imgui_impl_vulkan.h" "imgui_impl_sdl.h" )
-include_directories(${SDL_DIR}/include ${IMGUI}/include)
-file(GLOB_RECURSE SOURCES  "imgui_impl_vulkan.cpp" "imgui_impl_sdl.cpp")
-add_library(imgui-sdl STATIC ${SOURCES} ${INCLUDES} ${IMGUI_FILES})
+# endif()
+# file(GLOB_RECURSE INCLUDES "imgui_impl_vulkan.h" "imgui_impl_sdl.h" )
+# include_directories(${SDL_DIR}/include ${IMGUI}/include)
+# file(GLOB_RECURSE SOURCES  "imgui_impl_vulkan.cpp" "imgui_impl_sdl.cpp")
+# add_library(imgui-sdl STATIC ${SOURCES} ${INCLUDES} ${IMGUI_FILES})
 
-add_library(imgui-vulkan STATIC ${SOURCES} ${INCLUDES})
+# target_link_libraries(imgui-sdl PUBLIC SDL2main SDL2-static Vulkan::Vulkan)
 
- target_link_libraries(imgui-sdl PUBLIC SDL2main SDL2-static Vulkan::Vulkan)
- target_link_libraries(imgui-vulkan PUBLIC SDL2main SDL2-static Vulkan::Vulkan imgui-sdl)
-
-LIST(APPEND DWARF_MACHINE_LIBRARIES
-		imgui-sdl imgui-vulkan)
+LIST(APPEND DWARF_MACHINE_LIBRARIES imgui-sdl)
 
 # SPIRV is needed (from Glslang)
 # NOTE: End-users can pass -DSPIRV_ROOT=/some/path to find the lib
@@ -194,8 +191,6 @@ add_library(DWARF_MACHINE_COMMON STATIC ${DWARF_MACHINE_SRC} ${DWARF_MACHINE_EXT
 message("DWARF MACHINE LIBRARIES : ${DWARF_MACHINE_LIBRARIES}")
 target_link_libraries(DWARF_MACHINE_COMMON PUBLIC ${DWARF_MACHINE_LIBRARIES})
 set_property(TARGET DWARF_MACHINE_COMMON PROPERTY CXX_STANDARD 17)
-
-target_link_libraries(DWARF_MACHINE_COMMON PUBLIC Vulkan::Vulkan)
 
 target_link_libraries(DWARF_MACHINE_COMMON PRIVATE ${SPIRV_LIBRARY})
 

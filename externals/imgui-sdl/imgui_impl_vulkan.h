@@ -58,7 +58,7 @@ IMGUI_IMPL_API void     ImGui_ImplVulkan_SetMinImageCount(uint32_t min_image_cou
 // You probably do NOT need to use or care about those functions.
 // Those functions only exist because:
 //   1) they facilitate the readability and maintenance of the multiple main.cpp examples files.
-//   2) the upcoming multi-viewport feature will need them internally.
+//   2) the multi-viewport / platform window implementation needs them internally.
 // Generally we avoid exposing any kind of superfluous high-level helpers in the bindings,
 // but it is too much code to duplicate everywhere so we exceptionally expose them.
 //
@@ -82,43 +82,43 @@ IMGUI_IMPL_API int                  ImGui_ImplVulkanH_GetMinImageCountFromPresen
 // [Please zero-clear before use!]
 struct ImGui_ImplVulkanH_Frame
 {
-    VkCommandPool       CommandPool;
-    VkCommandBuffer     CommandBuffer;
-    VkFence             Fence;
-    VkImage             Backbuffer;
-    VkImageView         BackbufferView;
-    VkFramebuffer       Framebuffer;
+	VkCommandPool       CommandPool;
+	VkCommandBuffer     CommandBuffer;
+	VkFence             Fence;
+	VkImage             Backbuffer;
+	VkImageView         BackbufferView;
+	VkFramebuffer       Framebuffer;
 };
 
 struct ImGui_ImplVulkanH_FrameSemaphores
 {
-    VkSemaphore         ImageAcquiredSemaphore;
-    VkSemaphore         RenderCompleteSemaphore;
+	VkSemaphore         ImageAcquiredSemaphore;
+	VkSemaphore         RenderCompleteSemaphore;
 };
 
 // Helper structure to hold the data needed by one rendering context into one OS window
 // (Used by example's main.cpp. Used by multi-viewport features. Probably NOT used by your own engine/app.)
 struct ImGui_ImplVulkanH_Window
 {
-    int                 Width;
-    int                 Height;
-    VkSwapchainKHR      Swapchain;
-    VkSurfaceKHR        Surface;
-    VkSurfaceFormatKHR  SurfaceFormat;
-    VkPresentModeKHR    PresentMode;
-    VkRenderPass        RenderPass;
-    bool                ClearEnable;
-    VkClearValue        ClearValue;
-    uint32_t            FrameIndex;             // Current frame being rendered to (0 <= FrameIndex < FrameInFlightCount)
-    uint32_t            ImageCount;             // Number of simultaneous in-flight frames (returned by vkGetSwapchainImagesKHR, usually derived from min_image_count)
-    uint32_t            SemaphoreIndex;         // Current set of swapchain wait semaphores we're using (needs to be distinct from per frame data)
-    ImGui_ImplVulkanH_Frame*            Frames;
-    ImGui_ImplVulkanH_FrameSemaphores*  FrameSemaphores;
+	int                 Width;
+	int                 Height;
+	VkSwapchainKHR      Swapchain;
+	VkSurfaceKHR        Surface;
+	VkSurfaceFormatKHR  SurfaceFormat;
+	VkPresentModeKHR    PresentMode;
+	VkRenderPass        RenderPass;
+	bool                ClearEnable;
+	VkClearValue        ClearValue;
+	uint32_t            FrameIndex;             // Current frame being rendered to (0 <= FrameIndex < FrameInFlightCount)
+	uint32_t            ImageCount;             // Number of simultaneous in-flight frames (returned by vkGetSwapchainImagesKHR, usually derived from min_image_count)
+	uint32_t            SemaphoreIndex;         // Current set of swapchain wait semaphores we're using (needs to be distinct from per frame data)
+	ImGui_ImplVulkanH_Frame*            Frames;
+	ImGui_ImplVulkanH_FrameSemaphores*  FrameSemaphores;
 
-    ImGui_ImplVulkanH_Window() 
-    { 
-        memset(this, 0, sizeof(*this)); 
-        PresentMode = VK_PRESENT_MODE_MAX_ENUM_KHR;
-        ClearEnable = true;
-    }
+	ImGui_ImplVulkanH_Window()
+	{
+		memset(this, 0, sizeof(*this));
+		PresentMode = VK_PRESENT_MODE_MAX_ENUM_KHR;
+		ClearEnable = true;
+	}
 };

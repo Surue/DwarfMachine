@@ -22,6 +22,7 @@ if(IMGUI_ROOT)
 	file(GLOB IMGUI_FILES
 		"${IMGUI_ROOT}/imgui_draw.cpp"
 		"${IMGUI_ROOT}/imgui_demo.cpp"
+		"${IMGUI_ROOT}/imgui_internal.h"
 		"${IMGUI_ROOT}/imgui.cpp"
 		"${IMGUI_ROOT}/imgui.h"
 		"${IMGUI_ROOT}/imgui_widgets.cpp"
@@ -29,6 +30,12 @@ if(IMGUI_ROOT)
 	include_directories(${IMGUI_ROOT})
 	# Rename that pesky imconfig.h file for the user.
 	install(FILES ${IMGUI_INCLUDE_DIR}/imconfig.h DESTINATION include RENAME imconfig-sample.h)
+	
+	file(GLOB_RECURSE INCLUDES "imgui_impl_vulkan.h" "imgui_impl_sdl.h" )
+	include_directories(${SDL_DIR}/include ${IMGUI}/include)
+	file(GLOB_RECURSE SOURCES  "imgui_impl_vulkan.cpp" "imgui_impl_sdl.cpp")
+	add_library(imgui-sdl STATIC ${SOURCES} ${INCLUDES} ${IMGUI_FILES})
+
+	target_link_libraries(imgui-sdl PUBLIC SDL2main SDL2-static Vulkan::Vulkan)
 
 endif()
-

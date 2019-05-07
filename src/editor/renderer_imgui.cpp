@@ -30,6 +30,7 @@ SOFTWARE.
 #include <graphics/graphic_manager.h>
 #include <graphics/model_vertex.h>
 #include <graphics/window.h>
+#include <imgui_internal.h>
 
 namespace dm
 {
@@ -79,24 +80,27 @@ RendererImGui::RendererImGui(const Pipeline::Stage &pipelineStage) :
 	// Color scheme
 	// Dimensions
 	ImGuiIO& io = ImGui::GetIO();
+	(void)io;
+	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 	ImGui::StyleColorsDark();
 
 	auto surfaceCapabilities = surface->GetCapabilities();
 
-	ImGui_ImplVulkan_InitInfo init_info = {};
-	init_info.Instance = *Engine::Get()->GetGraphicManager()->GetInstance();
-	init_info.PhysicalDevice = *Engine::Get()->GetGraphicManager()->GetPhysicalDevice();
-	init_info.Device = *logicalDevice;
-	init_info.QueueFamily = logicalDevice->GetGraphicsFamily();
-	init_info.Queue = logicalDevice->GetGraphicsQueue(); //Not sure about that
-	init_info.PipelineCache = VK_NULL_HANDLE;
-	init_info.DescriptorPool = g_DescriptorPool;
-	init_info.Allocator = nullptr;
-	init_info.MinImageCount = surfaceCapabilities.minImageCount + 1;
-	init_info.ImageCount = Engine::Get()->GetGraphicManager()->GetSwapchain()->GetImageCount();
-	init_info.Subpass = pipelineStage.second;
-	init_info.CheckVkResultFn = check_vk_result;
-	ImGui_ImplVulkan_Init(&init_info, Engine::Get()->GetGraphicManager()->GetRenderStage(pipelineStage.first)->GetRenderPass()->GetRenderPass()); //Not sure about that
+	ImGui_ImplVulkan_InitInfo initInfo = {};
+	initInfo.Instance = *Engine::Get()->GetGraphicManager()->GetInstance();
+	initInfo.PhysicalDevice = *Engine::Get()->GetGraphicManager()->GetPhysicalDevice();
+	initInfo.Device = *logicalDevice;
+	initInfo.QueueFamily = logicalDevice->GetGraphicsFamily();
+	initInfo.Queue = logicalDevice->GetGraphicsQueue(); //Not sure about that
+	initInfo.PipelineCache = VK_NULL_HANDLE;
+	initInfo.DescriptorPool = g_DescriptorPool;
+	initInfo.Allocator = nullptr;
+	initInfo.MinImageCount = surfaceCapabilities.minImageCount + 1;
+	initInfo.ImageCount = Engine::Get()->GetGraphicManager()->GetSwapchain()->GetImageCount();
+	initInfo.Subpass = pipelineStage.second;
+	initInfo.CheckVkResultFn = check_vk_result;
+	ImGui_ImplVulkan_Init(&initInfo, Engine::Get()->GetGraphicManager()->GetRenderStage(pipelineStage.first)->GetRenderPass()->GetRenderPass()); //Not sure about that
 
 	io.DisplaySize = ImVec2(window->GetSize().x, window->GetSize().y);
 	io.DisplayFramebufferScale = ImVec2(1.0f, 1.0f);
@@ -179,6 +183,20 @@ void RendererImGui::NewFrame()
 			show_another_window = false;
 		ImGui::End();
 	}
+
+	//ImGui::DockBuilderRemoveNode(1); // Clear out existing layout
+	//ImGui::DockBuilderAddNode(1, ImGuiConfigFlags_DockingEnable); // Add empty node
+	//ImGui::DockBuilderSetNodeSize(1, ImVec2(100, 100));
+
+	//ImGuiID dock_main_id = 1; // This variable will track the document node, however we are not using it here as we aren't docking anything into it.
+	//ImGuiID dock_id_prop = ImGui::DockBuilderSplitNode(dock_main_id, ImGuiDir_Left, 0.20f, NULL, &dock_main_id);
+	//ImGuiID dock_id_bottom = ImGui::DockBuilderSplitNode(dock_main_id, ImGuiDir_Down, 0.20f, NULL, &dock_main_id);
+
+	//ImGui::DockBuilderDockWindow("Log", dock_id_bottom);
+	//ImGui::DockBuilderDockWindow("Properties", dock_id_prop);
+	//ImGui::DockBuilderDockWindow("Mesh", dock_id_prop);
+	//ImGui::DockBuilderDockWindow("Extra", dock_id_prop);
+	//ImGui::DockBuilderFinish(1);
 
 
 	// Render to generate draw buffers
