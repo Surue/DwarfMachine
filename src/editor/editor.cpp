@@ -26,8 +26,9 @@ SOFTWARE.
 #include <engine/engine.h>
 #include <graphics/graphic_manager.h>
 #include <editor/editor_renderer.h>
-#include "imgui.h"
+#include <imgui.h>
 #include <fstream>
+#include <component/component_manager.h>
 
 namespace dm
 {
@@ -51,22 +52,27 @@ void Editor::Draw()
 	DrawHierarchy();
 }
 
-void Editor::DrawInspector() {
-	//Inspector
+void Editor::DrawInspector() 
+{
 	ImGui::Begin("Inspector");
-	
+
+	if(m_CurrentEntitySelected != INVALID_ENTITY)
+	{
+		Engine::Get()->GetComponentManager()->DrawOnInspector(m_CurrentEntitySelected);
+	}
+
 	ImGui::End();
 }
 
 void Editor::DrawDock()
 {
-	bool show_demo_window = true;
+	bool showDemoWindow = true;
 
 	static ImGuiDockNodeFlags dockspaceFlags = ImGuiDockNodeFlags_None | ImGuiDockNodeFlags_PassthruCentralNode;
 
 	// We are using the ImGuiWindowFlags_NoDocking flag to make the parent window not dockable into,
 	// because it would be confusing to have two docking targets within each others.
-	ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
+	ImGuiWindowFlags windowFlags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
 
 	ImGuiViewport* viewport = ImGui::GetMainViewport();
 	ImGui::SetNextWindowPos(viewport->Pos);
@@ -74,16 +80,16 @@ void Editor::DrawDock()
 	ImGui::SetNextWindowViewport(viewport->ID);
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
-	window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
-	window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
+	windowFlags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
+	windowFlags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
 
 
 	// When using ImGuiDockNodeFlags_PassthruCentralNode, DockSpace() will render our background and handle the pass-thru hole, so we ask Begin() to not render a background.
 	if (dockspaceFlags & ImGuiDockNodeFlags_PassthruCentralNode)
-		window_flags |= ImGuiWindowFlags_NoBackground;
+		windowFlags |= ImGuiWindowFlags_NoBackground;
 
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
-	ImGui::Begin("DockSpace Demo", &show_demo_window, window_flags);
+	ImGui::Begin("DockSpace Demo", &showDemoWindow, windowFlags);
 	ImGui::PopStyleVar();
 
 	ImGui::PopStyleVar(2);
@@ -92,8 +98,8 @@ void Editor::DrawDock()
 	ImGuiIO& io = ImGui::GetIO();
 	if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
 	{
-		ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
-		ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspaceFlags);
+		const ImGuiID dockspaceId = ImGui::GetID("MyDockSpace");
+		ImGui::DockSpace(dockspaceId, ImVec2(0.0f, 0.0f), dockspaceFlags);
 	}
 
 	if (ImGui::BeginMenuBar())
@@ -117,7 +123,6 @@ void Editor::DrawDock()
 
 void Editor::DrawHierarchy()
 {
-	//Hierarchy
 	ImGui::Begin("Hierarchy");
 
 	EntityManager* manager = Engine::Get()->GetEntityManager();

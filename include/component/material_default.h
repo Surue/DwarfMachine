@@ -76,6 +76,8 @@ public:
 	static void PushUniform(MaterialDefault& material, const Matrix4 worldPos);
 
 	MaterialDefault& Get(const Entity entity);
+
+	void OnDrawInspector(Entity entity) override;
 private:
 };
 }

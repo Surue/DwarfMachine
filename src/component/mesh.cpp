@@ -52,4 +52,5 @@ Mesh* MeshManager::CreateComponent(const Entity entity)
 	return &m_Components[entity - 1];
 }
 void MeshManager::DestroyComponent(Entity entity) {}
+void MeshManager::OnDrawInspector(Entity entity) {}
 }

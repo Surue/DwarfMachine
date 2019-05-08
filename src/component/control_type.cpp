@@ -49,4 +49,6 @@ void ControllerTypeManager::DestroyComponent(Entity entity)
 {
 	
 }
+
+void ControllerTypeManager::OnDrawInspector(Entity entity) {}
 }

@@ -23,9 +23,11 @@ SOFTWARE.
 */
 
 #include <component/transform.h>
+#include "imgui.h"
 
 namespace dm
 {
+
 TransformManager::TransformManager()
 {
 	
@@ -63,5 +65,14 @@ void TransformManager::DestroyComponent(Entity entity) { }
 Matrix4 TransformManager::GetWorldMatrix(Transform& component) 
 {
 	return Matrix4::TransformationMatrix(component.position, (3.14f / 180) * component.rotation, component.scaling);
+}
+
+void TransformManager::OnDrawInspector(Entity entity)
+{
+	ImGui::Separator();
+	ImGui::TextWrapped("Transform");
+	ImGui::DragFloat3("Position", &m_Components[entity].position[0], 0.5f);
+	ImGui::DragFloat3("Rotation", &m_Components[entity].rotation[0], 0.5f);
+	ImGui::DragFloat3("Scale", &m_Components[entity].scaling[0], 0.5f);
 }
 }

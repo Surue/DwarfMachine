@@ -58,6 +58,7 @@ public:
 
 	void DestroyComponent(Entity entity) override;
 
+	void OnDrawInspector(Entity entity) override;
 private:
 	GraphicManager* m_GraphicManager;
 };

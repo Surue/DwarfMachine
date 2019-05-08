@@ -49,8 +49,6 @@ struct Transform final : ComponentBase
 class TransformManager final : public ComponentBaseManager<Transform>
 {
 public:
-	static Transform Create();
-
 	TransformManager();
 
 	void Awake() override;
@@ -64,6 +62,8 @@ public:
 	void DestroyComponent(Entity entity) override;
 
 	static Matrix4 GetWorldMatrix(Transform &component);
+
+	void OnDrawInspector(Entity entity) override;
 };
 }
 

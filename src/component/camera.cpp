@@ -83,4 +83,6 @@ Transform* CameraManager::GetTransformOfCamera(Camera& component)
 void CameraManager::DestroyComponent(Entity entity)
 {
 }
+
+void CameraManager::OnDrawInspector(Entity entity) {}
 }

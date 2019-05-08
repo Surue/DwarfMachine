@@ -54,6 +54,8 @@ public:
 	void DestroyComponent(Entity entity) override;
 
 	static Shader::VertexInput GetVertexInput(const uint32_t &binding = 0) { return VertexModel::GetVertexInput(binding); }
+	
+	void OnDrawInspector(Entity entity) override;
 };
 }
 

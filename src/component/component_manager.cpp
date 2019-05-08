@@ -23,6 +23,7 @@ SOFTWARE.
 */
 
 #include <component/component_manager.h>
+#include "entity/entity_handle.h"
 
 namespace dm
 {
@@ -133,6 +134,26 @@ void ComponentManagerContainer::DestroyComponent(const Entity entity, const Comp
 	case ComponentType::LENGTH: break;
 	default: 
 		throw std::runtime_error("Fail to bind component to its own component manager");
+	}
+}
+
+void ComponentManagerContainer::DrawOnInspector(Entity entity)
+{
+	auto entityHandle = EntityHandle(entity);
+
+	if(entityHandle.HasComponent(ComponentType::TRANSFORM))
+	{
+		m_TransformManager->OnDrawInspector(entity);
+	}
+
+	if (entityHandle.HasComponent(ComponentType::CAMERA))
+	{
+		m_CameraManager->OnDrawInspector(entity);
+	}
+
+	if (entityHandle.HasComponent(ComponentType::MATERIAL_DEFAULT))
+	{
+		m_MaterialDefaultManager->OnDrawInspector(entity);
 	}
 }
 }

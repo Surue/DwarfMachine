@@ -108,4 +108,6 @@ MaterialDefault& MaterialDefaultManager::Get(const Entity entity)
 {
 	return m_Components[entity - 1];
 }
+
+void MaterialDefaultManager::OnDrawInspector(Entity entity) {}
 }

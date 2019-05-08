@@ -75,7 +75,7 @@ public:
 		return m_Components;
 	}
 
-
+	virtual void OnDrawInspector(Entity entity) = 0;
 protected:
 	std::vector<T> m_Components{INIT_COMPONENT_NMB};
 };

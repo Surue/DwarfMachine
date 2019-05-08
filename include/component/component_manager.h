@@ -55,6 +55,8 @@ public:
 
 	MaterialDefaultManager* GetMaterialManager() const { return m_MaterialDefaultManager.get(); }
 
+	void DrawOnInspector(Entity entity);
+
 private:
 	std::unique_ptr<TransformManager> m_TransformManager;
 	std::unique_ptr<CameraManager> m_CameraManager;

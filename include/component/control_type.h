@@ -51,6 +51,8 @@ public:
 	ControllerType* CreateComponent(const Entity entity) override;
 
 	void DestroyComponent(Entity entity) override;
+
+	void OnDrawInspector(Entity entity) override;
 };
 }
 #endif CONTROLLER_TYPE_H
