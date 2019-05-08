@@ -27,14 +27,14 @@ SOFTWARE.
 
 namespace dm
 {
-EntityHandle::EntityHandle(const Entity entity, Engine& engine) : m_Engine(engine)
+EntityHandle::EntityHandle(const Entity entity)
 {
 	m_Entity = entity;
 
-	m_ComponentManager = m_Engine.GetComponentManager();
-	m_EntityManager = m_Engine.GetEntityManager();
-	m_SystemManager = m_Engine.GetSystemManager();
-	m_RendererContainer = m_Engine.GetGraphicManager()->GetRendererContainer();
+	m_ComponentManager = Engine::Get()->GetComponentManager();
+	m_EntityManager = Engine::Get()->GetEntityManager();
+	m_SystemManager = Engine::Get()->GetSystemManager();
+	m_RendererContainer = Engine::Get()->GetGraphicManager()->GetRendererContainer();
 }
 
 bool EntityHandle::HasComponent(const ComponentType componentType) const

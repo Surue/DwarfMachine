@@ -55,11 +55,13 @@ struct MaterialDefault : public Material
 class MaterialDefaultManager final : public ComponentBaseManager<MaterialDefault>
 {
 public:
-	explicit MaterialDefaultManager(Engine& engine);
+	explicit MaterialDefaultManager();
 
 	~MaterialDefaultManager();
 
-	void Init() override;
+	void Awake() override;
+
+	void Start() override;
 
 	void Update() override;
 
@@ -69,25 +71,11 @@ public:
 
 	static std::vector<Shader::Define> GetDefines(const MaterialDefault &component);
 
-	static void PushDescriptor(MaterialDefault &material)
-	{
-		material.descriptorSet.Push("samplerDiffuse", material.textureDiffuse);
-	}
+	static void PushDescriptor(MaterialDefault& material);
 
-	static void PushUniform(MaterialDefault &material, const Matrix4 worldPos)
-	{
-		material.uniformObject.Push("transform", worldPos);
-		material.uniformObject.Push("baseDiffuse", material.color);
-		material.uniformObject.Push("metallic", static_cast<float>(material.metallic));
-		material.uniformObject.Push("roughness", static_cast<float>( material.roughness));
-		material.uniformObject.Push("ignoreFog", material.ignoreFog);
-		material.uniformObject.Push("ignoreLighting", material.ignoreLighting);
-	}
+	static void PushUniform(MaterialDefault& material, const Matrix4 worldPos);
 
-	MaterialDefault& Get(const Entity entity)
-	{
-		return m_Components[entity - 1];
-	}
+	MaterialDefault& Get(const Entity entity);
 private:
 };
 }

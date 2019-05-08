@@ -44,7 +44,7 @@ TEST(Models, Cube)
 	auto entityManager = engine.GetEntityManager();
 
 	const auto e0 = entityManager->CreateEntity();
-	auto entity = dm::EntityHandle(e0, engine);
+	auto entity = dm::EntityHandle(e0);
 
 	auto t = entity.CreateComponent<dm::Transform>(ComponentType::TRANSFORM);
 	t->position = dm::Vec3f(0, 0, 10);
@@ -62,7 +62,7 @@ TEST(Models, Cube)
 	controller->type = dm::ControllerType::ControllerTypeEnum::CAMERA_EDITOR;
 
 	const auto e1 = entityManager->CreateEntity();
-	auto cube = dm::EntityHandle(e1, engine);
+	auto cube = dm::EntityHandle(e1);
 	auto transform = cube.CreateComponent<dm::Transform>(ComponentType::TRANSFORM);
 	transform->position = dm::Vec3f(0, 0, 0);
 	transform->scaling = dm::Vec3f(1, 1, 1);
@@ -77,7 +77,7 @@ TEST(Models, Cube)
 	cube.AddComponent<dm::MaterialDefault>(material);
 
 	const auto e2 = entityManager->CreateEntity();
-	auto cube2 = dm::EntityHandle(e2, engine);
+	auto cube2 = dm::EntityHandle(e2);
 	auto transform2 = cube2.CreateComponent<dm::Transform>(ComponentType::TRANSFORM);
 	transform2->position = dm::Vec3f(2, 0, 0);
 	transform2->scaling = dm::Vec3f(1, 1, 1);

@@ -42,14 +42,17 @@ struct Transform;
 class CameraManager final : public ComponentBaseManager<Camera>
 {
 public:
-	CameraManager(Engine& engine);
+	CameraManager();
 
-	void Init() override;
+	void Awake() override;
+
+	void Start() override;
+
 	void Update() override;
 
-	Camera* CreateComponent(const Entity entity) override;
+	Camera* CreateComponent(Entity entity) override;
 
-	Camera* AddComponent(const Entity entity, Camera& componentBase) override;
+	Camera* AddComponent(Entity entity, Camera& componentBase) override;
 
 	Transform* GetTransformOfCamera(Camera& component);
 

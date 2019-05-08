@@ -26,7 +26,12 @@ SOFTWARE.
 
 namespace dm
 {
-System::System(Engine& engine) : m_Engine(engine){}
+System::System() {}
+
+void System::Update(float dt)
+{
+	std::cout << "parent update\n";
+}
 
 void System::Destroy()
 {

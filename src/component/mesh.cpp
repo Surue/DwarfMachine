@@ -27,8 +27,19 @@ SOFTWARE.
 
 namespace dm
 {
-void MeshManager::Init() {}
+MeshManager::MeshManager() { }
+
+MeshManager::~MeshManager()
+{
+	m_Components.clear();
+}
+
+void MeshManager::Awake() {}
+
+void MeshManager::Start() {}
+
 void MeshManager::Update() {}
+
 Mesh* MeshManager::CreateComponent(const Entity entity)
 {
 	auto mesh = Mesh();

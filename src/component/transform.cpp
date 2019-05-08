@@ -26,21 +26,16 @@ SOFTWARE.
 
 namespace dm
 {
-TransformManager::TransformManager(Engine& engine) : 
-ComponentBaseManager<Transform>(engine)
+TransformManager::TransformManager()
 {
 	
 }
 
-void TransformManager::Init()
-{
-	
-}
+void TransformManager::Awake() {}
 
-void TransformManager::Update()
-{
+void TransformManager::Start() {}
 
-}
+void TransformManager::Update() {}
 
 Transform* TransformManager::CreateComponent(const Entity entity)
 {

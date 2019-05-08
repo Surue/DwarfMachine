@@ -35,40 +35,22 @@ class Engine;
 class SystemManager final
 {
 public:
-	SystemManager(Engine& engine);
+	SystemManager();
 	~SystemManager() = default;
 
-	void Init();
+	void Awake();
+
+	void Start();
+
 	void Update(float dt);
+
 	void Destroy();
 
-	void AddComponent(const Entity entity, const ComponentMask oldMask, ComponentMask newMask)
-	{
-		for (auto& system : m_Systems)
-		{
-			const auto systemMask = system->GetSignature();
-			if(newMask.IsNewMatch(oldMask, systemMask))
-			{
-				system->RegisterEntity(entity);
-			}
-		}
-	}
+	void AddComponent(Entity entity, ComponentMask oldMask, ComponentMask newMask);
 
-	void DestroyComponent(const Entity entity, const ComponentMask oldMask, ComponentMask newMask)
-	{
-		for (auto& system : m_Systems)
-		{
-			const auto systemMask = system->GetSignature();
-			if (newMask.IsNoLongerMatch(oldMask, systemMask))
-			{
-				system->UnRegisterEntity(entity);
-			}
-		}
-	}
+	void DestroyComponent(Entity entity, ComponentMask oldMask, ComponentMask newMask);
 
 private:
-	Engine& m_Engine;
-
 	std::vector<std::unique_ptr<System>> m_Systems;
 
 };

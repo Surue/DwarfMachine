@@ -39,7 +39,7 @@ const Entity INVALID_ENTITY = 0U;
 class EntityManager final
 {
 public:
-	EntityManager(Engine& engine);
+	EntityManager();
 
 	~EntityManager() = default;
 
@@ -65,8 +65,6 @@ private:
 	unsigned int m_LastEntity = 0;
 	std::vector<Entity> m_EntityInfos;
 	std::vector<ComponentMask> m_EntityMask;
-
-	Engine& m_Engine;
 };
 }
 

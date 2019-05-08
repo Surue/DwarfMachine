@@ -27,10 +27,11 @@ SOFTWARE.
 #include <component/control_type.h>
 #include <engine/Input.h>
 #include <engine/vector.h>
+#include <engine/engine.h>
 
 namespace dm
 {
-InputController::InputController(Engine& engine) : System(engine)
+InputController::InputController()
 {
 	m_Signature.AddComponent(ComponentType::TRANSFORM);
 	m_Signature.AddComponent(ComponentType::CONTROL_TYPE);
@@ -40,14 +41,14 @@ void InputController::Update(float dt)
 {
 	for (auto registeredEntity : m_RegisteredEntities)
 	{
-		auto entity = EntityHandle(registeredEntity, m_Engine);
+		auto entity = EntityHandle(registeredEntity);
 		auto transform = entity.GetComponent<Transform>(ComponentType::TRANSFORM);
 		const auto controller = entity.GetComponent<ControllerType>(ComponentType::CONTROL_TYPE);
 
 		switch(controller->type)
 		{
 		case ControllerType::ControllerTypeEnum::CAMERA_EDITOR: {
-			auto* inputManager = m_Engine.GetInputManager();
+			auto* inputManager = Engine::Get()->GetInputManager();
 
 			Vec3f camFront;
 			camFront.x = -cos(transform->rotation.x * (3.14f / 180)) * sin(transform->rotation.y * (3.14f / 180));

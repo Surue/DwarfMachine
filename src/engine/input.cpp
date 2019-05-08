@@ -28,13 +28,11 @@ SOFTWARE.
 #include <graphics/window.h>
 #include <imgui.h>
 #include "imgui_impl_sdl.h"
-#include "imgui_internal.h"
 
 namespace dm
 {
 
-InputManager::InputManager(Engine& engine) : 
-	m_Engine(engine), 
+InputManager::InputManager() : 
 	keyboard(nullptr), 
 	mouse(0), 
 	m_MousePos(0, 0)
@@ -69,7 +67,7 @@ void InputManager::Update()
 		switch (event.type)
 		{
 		case SDL_QUIT:
-			m_Engine.GetGraphicManager()->GetWindow()->SetShouldClose();
+			Engine::Get()->GetGraphicManager()->GetWindow()->SetShouldClose();
 			break;
 
 			// SDL2's new way of handling input

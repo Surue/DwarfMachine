@@ -94,7 +94,7 @@ TEST(Entity, TransformComponentEntity)
 	auto entityManager = engine.GetEntityManager();
 
 	const auto e1 = entityManager->CreateEntity();
-	auto entity1 = dm::EntityHandle(e1, engine);
+	auto entity1 = dm::EntityHandle(e1);
 	std::cout << "ici\n";
 	dm::Transform transformInfo;
 	transformInfo.componentType = ComponentType::TRANSFORM;
@@ -134,7 +134,7 @@ TEST(Entity, HasComponentEntity)
 	auto entityManager = engine.GetEntityManager();
 
 	const auto e0 = entityManager->CreateEntity();
-	auto entity = dm::EntityHandle(e0, engine);
+	auto entity = dm::EntityHandle(e0);
 
 	entity.CreateComponent<dm::Transform>(ComponentType::TRANSFORM);
 
@@ -151,7 +151,7 @@ TEST(Entity, DestroyComponentEntity)
 	auto entityManager = engine.GetEntityManager();
 
 	const auto e0 = entityManager->CreateEntity();
-	auto entity = dm::EntityHandle(e0, engine);
+	auto entity = dm::EntityHandle(e0);
 
 	std::cout << "Create component Transform\n";
 	entity.CreateComponent<dm::Transform>(ComponentType::TRANSFORM);
@@ -172,7 +172,7 @@ TEST(Entity, SystemAddComponent)
 	auto entityManager = engine.GetEntityManager();
 
 	const auto e0 = entityManager->CreateEntity();
-	auto entity = dm::EntityHandle(e0, engine);
+	auto entity = dm::EntityHandle(e0);
 
 	auto t = entity.CreateComponent<dm::Transform>(ComponentType::TRANSFORM);
 	t->position = dm::Vec3f(0, 0, 10.0f);

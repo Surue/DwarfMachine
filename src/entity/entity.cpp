@@ -27,7 +27,7 @@ SOFTWARE.
 
 namespace dm
 {
-EntityManager::EntityManager(Engine& engine) : m_Engine(engine)
+EntityManager::EntityManager()
 {
 	ComponentMask emptyMask;
 	emptyMask.mask = static_cast<int>(ComponentType::NONE);

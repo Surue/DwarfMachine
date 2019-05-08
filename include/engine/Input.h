@@ -299,7 +299,7 @@ enum class ButtonCode
 class InputManager
 {
 public:
-	InputManager(Engine& engine);
+	InputManager();
 	~InputManager() = default;
 
 	void Init(SDL_Window* window);
@@ -324,8 +324,6 @@ public:
 	int scrollY = 0;
 	inline static int scrollUpdate = false;
 private:
-	Engine& m_Engine;
-
 	bool m_KeyPressedUp[KEYBOARD_SIZE];
 	bool m_KeyPressedDown[KEYBOARD_SIZE];
 	bool m_ButtonUp[static_cast<int>(ButtonCode::MOUSE_MAX)];

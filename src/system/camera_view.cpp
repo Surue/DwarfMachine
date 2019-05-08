@@ -29,7 +29,7 @@ SOFTWARE.
 
 namespace dm
 {
-CameraView::CameraView(Engine& engine) : System(engine)
+CameraView::CameraView() : System()
 {
 	m_Signature.AddComponent(ComponentType::TRANSFORM);
 	m_Signature.AddComponent(ComponentType::CAMERA);
@@ -39,7 +39,7 @@ void CameraView::Update(float dt)
 {
 	for (auto registeredEntity : m_RegisteredEntities)
 	{
-		auto entity = EntityHandle(registeredEntity, m_Engine);
+		auto entity = EntityHandle(registeredEntity);
 		auto camera = entity.GetComponent<Camera>(ComponentType::CAMERA);
 		const auto transform = entity.GetComponent<Transform>(ComponentType::TRANSFORM);
 

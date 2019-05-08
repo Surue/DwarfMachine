@@ -44,11 +44,11 @@ Engine::Engine() :
 	m_Settings = EngineSettings();
 	m_Settings.windowSize = Vec2i(800, 600);
 
-	m_GraphicManager = std::make_unique<GraphicManager>(*this);
-	m_InputManager = std::make_unique<InputManager>(*this);
-	m_EntityManager = std::make_unique<EntityManager>(*this);
-	m_ComponentManager = std::make_unique<ComponentManagerContainer>(*this);
-	m_SystemManager = std::make_unique<SystemManager>(*this);
+	m_GraphicManager = std::make_unique<GraphicManager>();
+	m_InputManager = std::make_unique<InputManager>();
+	m_EntityManager = std::make_unique<EntityManager>();
+	m_ComponentManager = std::make_unique<ComponentManagerContainer>();
+	m_SystemManager = std::make_unique<SystemManager>();
 
 	m_PreviousFrameTime = m_Timer.now();
 	m_CurrentFrame = m_Timer.now();
@@ -59,11 +59,11 @@ Engine::Engine(const EngineSettings engineSettings) :
 {
 	m_Settings = engineSettings;
 
-	m_GraphicManager = std::make_unique<GraphicManager>(*this);
-	m_InputManager = std::make_unique<InputManager>(*this);
-	m_EntityManager = std::make_unique<EntityManager>(*this);
-	m_ComponentManager = std::make_unique<ComponentManagerContainer>(*this);
-	m_SystemManager = std::make_unique<SystemManager>(*this);
+	m_GraphicManager = std::make_unique<GraphicManager>();
+	m_InputManager = std::make_unique<InputManager>();
+	m_EntityManager = std::make_unique<EntityManager>();
+	m_ComponentManager = std::make_unique<ComponentManagerContainer>();
+	m_SystemManager = std::make_unique<SystemManager>();
 
 	m_PreviousFrameTime = m_Timer.now();
 	m_CurrentFrame = m_Timer.now();
@@ -73,7 +73,7 @@ Engine::~Engine() {}
 
 void Engine::Init()
 {
-	m_GraphicManager->Init();
+	m_GraphicManager->Awake();
 	m_Window = m_GraphicManager->GetWindow();
 
 	m_InputManager->Init(m_Window->GetWindow());
@@ -141,6 +141,7 @@ void Engine::MainLoop()
 		m_App->Update(m_DeltaTime);
 
 		m_App->Draw();
+		m_GraphicManager->Draw();
 	}
 
 }

@@ -40,9 +40,12 @@ struct ControllerType final : ComponentBase
 class ControllerTypeManager final : public ComponentBaseManager<ControllerType>
 {
 public:
-	ControllerTypeManager(Engine& engine);
+	ControllerTypeManager();
 
-	void Init() override;
+	void Awake() override;
+
+	void Start() override;
+
 	void Update() override;
 
 	ControllerType* CreateComponent(const Entity entity) override;

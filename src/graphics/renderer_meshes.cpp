@@ -44,7 +44,7 @@ void RendererMeshes::Update(float dt)
 	int i = 0;
 	for (const auto &meshRender : m_RegisteredEntities)
 	{
-		auto entity = EntityHandle(meshRender, *Engine::Get());
+		auto entity = EntityHandle(meshRender);
 		const auto material = entity.GetComponent<MaterialDefault>(ComponentType::MATERIAL_DEFAULT);
 		const auto transform = entity.GetComponent<Transform>(ComponentType::TRANSFORM);
 
@@ -64,7 +64,7 @@ void RendererMeshes::Draw(const CommandBuffer& commandBuffer)
 	for (const auto &meshRender : m_RegisteredEntities)
 	{
 
-		auto entity = EntityHandle(meshRender, *Engine::Get());
+		auto entity = EntityHandle(meshRender);
 		const auto material = entity.GetComponent<MaterialDefault>(ComponentType::MATERIAL_DEFAULT);
 		const auto mesh = entity.GetComponent<Mesh>(ComponentType::MESH);
 
@@ -135,7 +135,7 @@ void RendererMeshes::RegisterEntity(const Entity entity)
 {
 	m_RegisteredEntities.push_back(entity);
 
-	auto entityHandle = EntityHandle(entity, *Engine::Get());
+	auto entityHandle = EntityHandle(entity);
 	auto material = entityHandle.GetComponent<MaterialDefault>(ComponentType::MATERIAL_DEFAULT);
 
 	//TODO vérifier si c'est possible de mettre ça lors de la création du component

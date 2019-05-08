@@ -51,9 +51,11 @@ class TransformManager final : public ComponentBaseManager<Transform>
 public:
 	static Transform Create();
 
-	TransformManager(Engine& engine);
+	TransformManager();
 
-	void Init() override;
+	void Awake() override;
+
+	void Start() override;
 
 	void Update() override;
 

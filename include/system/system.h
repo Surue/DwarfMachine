@@ -36,14 +36,14 @@ class Engine;
 class System
 {
 public:
-	System(Engine& engine);
+	System();
 	virtual ~System() = default;
 
-	virtual void Init(){}
-	virtual void Update(float dt)
-	{
-		std::cout << "parent update\n";
-	}
+	virtual void Awake(){}
+
+	virtual void Start(){}
+
+	virtual void Update(float dt);
 
 	void Destroy();
 
@@ -54,8 +54,6 @@ public:
 	ComponentMask GetSignature() const;
 
 protected:
-	Engine& m_Engine;
-
 	std::vector<Entity> m_RegisteredEntities;
 
 	ComponentMask m_Signature;

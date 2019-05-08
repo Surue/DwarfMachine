@@ -36,7 +36,7 @@ namespace dm
 class Window final
 {
 public:
-	Window(Engine& engine);
+	Window();
 	~Window();
 
 	void Init();
@@ -59,8 +59,6 @@ public:
 
 	void CreateSurface(const VkInstance &instance, const VkAllocationCallbacks *allocator, VkSurfaceKHR *surface) const;
 private:
-	Engine& m_Engine;
-
 	SDL_Window* m_Window = nullptr;
 	SDL_Event m_Event;
 

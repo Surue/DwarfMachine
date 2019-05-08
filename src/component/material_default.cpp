@@ -26,14 +26,15 @@ SOFTWARE.
 
 namespace dm
 {
-MaterialDefaultManager::MaterialDefaultManager(Engine& engine) : ComponentBaseManager<MaterialDefault>(engine) { }
+MaterialDefaultManager::MaterialDefaultManager() { }
 
 MaterialDefaultManager::~MaterialDefaultManager()
 {
 	m_Components.clear();
 }
 
-void MaterialDefaultManager::Init() {}
+void MaterialDefaultManager::Awake() {}
+void MaterialDefaultManager::Start() {}
 
 void MaterialDefaultManager::Update() {}
 
@@ -86,5 +87,25 @@ std::vector<Shader::Define> MaterialDefaultManager::GetDefines(const MaterialDef
 	defines.emplace_back("MAX_JOINTS", To(false));
 	defines.emplace_back("MAX_WEIGHTS", To(false));
 	return defines;
+}
+
+void MaterialDefaultManager::PushDescriptor(MaterialDefault& material)
+{
+	material.descriptorSet.Push("samplerDiffuse", material.textureDiffuse);
+}
+
+void MaterialDefaultManager::PushUniform(MaterialDefault& material, const Matrix4 worldPos)
+{
+	material.uniformObject.Push("transform", worldPos);
+	material.uniformObject.Push("baseDiffuse", material.color);
+	material.uniformObject.Push("metallic", static_cast<float>(material.metallic));
+	material.uniformObject.Push("roughness", static_cast<float>(material.roughness));
+	material.uniformObject.Push("ignoreFog", material.ignoreFog);
+	material.uniformObject.Push("ignoreLighting", material.ignoreLighting);
+}
+
+MaterialDefault& MaterialDefaultManager::Get(const Entity entity)
+{
+	return m_Components[entity - 1];
 }
 }

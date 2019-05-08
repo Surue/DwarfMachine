@@ -38,7 +38,8 @@ class Engine;
 class ComponentManagerContainer final
 {
 public:
-	ComponentManagerContainer(Engine& engine);
+	ComponentManagerContainer();
+	~ComponentManagerContainer() = default;
 
 	void Destroy();
 
@@ -46,17 +47,15 @@ public:
 
 	ComponentBase* AddComponent(Entity entity, ComponentBase& component) const;
 
-	ComponentBase* GetComponent(const Entity entity, const ComponentType componentType) const;
+	ComponentBase* GetComponent(Entity entity, ComponentType componentType) const;
 
-	void DestroyComponent(const Entity entity, ComponentType componentType) const;
+	void DestroyComponent(Entity entity, ComponentType componentType) const;
 
 	CameraManager* GetCameraManager() const { return m_CameraManager.get(); }
 
 	MaterialDefaultManager* GetMaterialManager() const { return m_MaterialDefaultManager.get(); }
 
 private:
-	Engine& m_Engine;
-
 	std::unique_ptr<TransformManager> m_TransformManager;
 	std::unique_ptr<CameraManager> m_CameraManager;
 	std::unique_ptr<ControllerTypeManager> m_ControllerTypeManager;

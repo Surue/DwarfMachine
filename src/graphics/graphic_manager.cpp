@@ -132,11 +132,11 @@ void GraphicManager::CheckVk(const VkResult &result)
 	throw std::runtime_error("Vulkan error: " + failure);
 }
 
-GraphicManager::GraphicManager(Engine& engine) : m_Engine(engine)
+GraphicManager::GraphicManager()
 {
 	glslang::InitializeProcess();
 
-	m_Window = std::make_unique<Window>(m_Engine);
+	m_Window = std::make_unique<Window>();
 	InitWindow();
 
 	m_Instance = std::make_unique<Instance>(m_Window->GetWindow());
@@ -147,7 +147,6 @@ GraphicManager::GraphicManager(Engine& engine) : m_Engine(engine)
 	m_CurrentFrame = 0;
 
 	CreatePipelineCache();
-
 }
 
 RenderStage* GraphicManager::GetRenderStage(const uint32_t& index) const
@@ -179,10 +178,12 @@ void GraphicManager::FrameBufferResizeCallback(SDL_Window* window, int width, in
 	//app->m_FrameBufferResized = true; 
 }
 
-void GraphicManager::Init()
+void GraphicManager::Awake()
 {
 	
 }
+
+void GraphicManager::Start() {}
 
 void GraphicManager::Destroy()
 {
@@ -221,7 +222,10 @@ void GraphicManager::Update(float dt)
 	}
 
 	m_RenderManager->Update(dt);
+}
 
+void GraphicManager::Draw()
+{
 	auto &stages = m_RenderManager->GetRendererContainer().GetStages();
 
 	std::optional<uint32_t> renderpass;
@@ -389,7 +393,7 @@ const std::shared_ptr<CommandPool> &GraphicManager::GetCommandPool(const std::th
 
 void GraphicManager::UpdateMainCamera() const
 {
-	const auto windowSize = m_Engine.GetSettings().windowSize;
+	const auto windowSize = Engine::Get()->GetSettings().windowSize;
 	m_MainCamera->proj = Matrix4::PerspectiveMatrix(45 * (3.14f / 180), windowSize.x / static_cast<float>(windowSize.y), 0.1f, 100.0f);
 }
 

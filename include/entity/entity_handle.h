@@ -37,7 +37,7 @@ namespace dm
 class EntityHandle
 {
 public:
-	EntityHandle(Entity entity, Engine& engine);
+	EntityHandle(Entity entity);
 
 	template<class T>
 	T* AddComponent(T& component)
@@ -82,7 +82,6 @@ private:
 	EntityManager* m_EntityManager = nullptr;
 	SystemManager* m_SystemManager = nullptr;
 	RendererContainer* m_RendererContainer = nullptr;
-	Engine& m_Engine;
 };
 }
 

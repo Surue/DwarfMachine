@@ -32,7 +32,7 @@ namespace dm
 class InputController : public System
 {
 public:
-	InputController(Engine& engine);
+	InputController();
 
 	void Update(float dt) override;
 private:

@@ -26,13 +26,12 @@ SOFTWARE.
 
 namespace dm
 {
-ComponentManagerContainer::ComponentManagerContainer(Engine& engine):
-	m_Engine(engine),
-	m_TransformManager(std::make_unique<TransformManager>(m_Engine)),
-	m_CameraManager(std::make_unique<CameraManager>(m_Engine)),
-	m_ControllerTypeManager(std::make_unique<ControllerTypeManager>(m_Engine)),
-	m_MaterialDefaultManager(std::make_unique<MaterialDefaultManager>(m_Engine)),
-	m_MeshManager(std::make_unique<MeshManager>(m_Engine))
+ComponentManagerContainer::ComponentManagerContainer() :
+	m_TransformManager(std::make_unique<TransformManager>()),
+	m_CameraManager(std::make_unique<CameraManager>()),
+	m_ControllerTypeManager(std::make_unique<ControllerTypeManager>()),
+	m_MaterialDefaultManager(std::make_unique<MaterialDefaultManager>()),
+	m_MeshManager(std::make_unique<MeshManager>())
 { }
 
 void ComponentManagerContainer::Destroy()
@@ -102,6 +101,9 @@ ComponentBase* ComponentManagerContainer::GetComponent(const Entity entity, cons
 		return m_MaterialDefaultManager->GetComponent(entity);
 	case ComponentType::MESH:
 		return m_MeshManager->GetComponent(entity);
+	case ComponentType::NONE: break;
+	case ComponentType::LENGTH: break;
+	default: ;
 	}
 
 	throw std::runtime_error("Try to get non existent component");
@@ -119,6 +121,16 @@ void ComponentManagerContainer::DestroyComponent(const Entity entity, const Comp
 	case ComponentType::CAMERA: 
 		m_CameraManager->DestroyComponent(entity);
 		break;
+	case ComponentType::CONTROL_TYPE: 
+		m_ControllerTypeManager->DestroyComponent(entity);
+		break;
+	case ComponentType::MATERIAL_DEFAULT: 
+		m_MaterialDefaultManager->DestroyComponent(entity);
+		break;
+	case ComponentType::MESH: 
+		m_MeshManager->DestroyComponent(entity);
+		break;
+	case ComponentType::LENGTH: break;
 	default: 
 		throw std::runtime_error("Fail to bind component to its own component manager");
 	}

@@ -32,7 +32,7 @@ namespace dm
 class CameraView : public System
 {
 public:
-	CameraView(Engine& engine);
+	CameraView();
 
 	void Update(float dt) override;
 private:

@@ -28,7 +28,7 @@ SOFTWARE.
 namespace dm
 {
 
-Window::Window(Engine& engine) : m_Engine(engine)
+Window::Window()
 {
 	
 }
@@ -43,7 +43,7 @@ void Window::Init()
 {
 	SDL_Init(SDL_INIT_VIDEO);
 
-	const auto windowSize = m_Engine.GetSettings().windowSize;
+	const auto windowSize = Engine::Get()->GetSettings().windowSize;
 	m_Window = SDL_CreateWindow(
 		"An SDL2 Vulkan window",					// window title
 		SDL_WINDOWPOS_UNDEFINED,					// initial x position

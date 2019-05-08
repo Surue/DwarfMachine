@@ -28,27 +28,65 @@ SOFTWARE.
 #include <graphics/renderer_meshes.h>
 
 namespace dm {
-	SystemManager::SystemManager(Engine& engine) : m_Engine(engine)
-	{
-		m_Systems.push_back(std::make_unique<CameraView>(engine));
-		m_Systems.push_back(std::make_unique<InputController>(engine));
-	}
+SystemManager::SystemManager()
+{
+	m_Systems.push_back(std::make_unique<CameraView>());
+	m_Systems.push_back(std::make_unique<InputController>());
+}
 
-	void SystemManager::Init()
+void SystemManager::Awake()
+{
+	for (auto& system : m_Systems)
 	{
-		
+		system->Awake();
 	}
+}
 
-	void SystemManager::Update(float dt)
+void SystemManager::Start()
+{
+	for (auto& system : m_Systems)
 	{
-		for (auto& system : m_Systems)
+		system->Start();
+	}
+}
+
+void SystemManager::Update(float dt)
+{
+	for (auto& system : m_Systems)
+	{
+		system->Update(dt);
+	}
+}
+
+void SystemManager::Destroy()
+{
+	for (auto& system : m_Systems)
+	{
+		system->Destroy();
+	}
+}
+
+void SystemManager::AddComponent(const Entity entity, const ComponentMask oldMask, ComponentMask newMask)
+{
+	for (auto& system : m_Systems)
+	{
+		const auto systemMask = system->GetSignature();
+		if (newMask.IsNewMatch(oldMask, systemMask))
 		{
-			system->Update(dt);
+			system->RegisterEntity(entity);
 		}
 	}
+}
 
-	void SystemManager::Destroy()
+void SystemManager::DestroyComponent(const Entity entity, const ComponentMask oldMask, ComponentMask newMask)
+{
+	for (auto& system : m_Systems)
 	{
-		
+		const auto systemMask = system->GetSignature();
+		if (newMask.IsNoLongerMatch(oldMask, systemMask))
+		{
+			system->UnRegisterEntity(entity);
+		}
 	}
+}
 }

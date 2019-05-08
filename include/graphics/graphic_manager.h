@@ -88,12 +88,14 @@ class GraphicManager
 {
 public:
 
-	GraphicManager(Engine& engine);
+	GraphicManager();
 	~GraphicManager();
 	/**
 	 * \brief Init graphic manager (GLFW and Vulkan)
 	 */
-	void Init();
+	void Awake();
+
+	void Start();
 
 	/**
 	 * \brief Use to cleanup vulkan's allocation
@@ -101,6 +103,7 @@ public:
 	void Destroy();
 
 	void Update(float dt);
+	void Draw();
 
 	void SetMainCamera(Camera* camera);
 
@@ -179,8 +182,6 @@ private:
 	std::vector<VkSemaphore> m_RenderCompletesSemaphore; 
 	std::vector<VkFence> m_InFlightFences; 
 	size_t m_CurrentFrame; 
-
-	Engine& m_Engine;
 
 	//Camera
 	Camera* m_MainCamera = nullptr;

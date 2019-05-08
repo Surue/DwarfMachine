@@ -30,20 +30,16 @@ SOFTWARE.
 
 namespace dm
 {
-CameraManager::CameraManager(Engine& engine) : ComponentBaseManager<Camera>(engine)
+CameraManager::CameraManager()
 {
-	m_GraphicManager = m_Engine.GetGraphicManager();
+	m_GraphicManager = Engine::Get()->GetGraphicManager();
 }
 
-void CameraManager::Init()
-{
-	
-}
+void CameraManager::Awake() {}
 
-void CameraManager::Update()
-{
-	
-}
+void CameraManager::Start() {}
+
+void CameraManager::Update() {}
 
 Camera* CameraManager::CreateComponent(const Entity entity)
 {
@@ -76,7 +72,7 @@ Transform* CameraManager::GetTransformOfCamera(Camera& component)
 	{
 		if(m_Components.at(i).isMainCamera)
 		{
-			auto entity = EntityHandle(i + 1, *Engine::Get());
+			auto entity = EntityHandle(i + 1);
 			return entity.GetComponent<Transform>(ComponentType::TRANSFORM);
 		}
 	}

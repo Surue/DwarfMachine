@@ -42,14 +42,16 @@ template<typename T>
 class ComponentBaseManager
 {
 public:
-	ComponentBaseManager(Engine& engine) : m_Engine(engine) {}
+	ComponentBaseManager() {}
 
 	virtual ~ComponentBaseManager()
 	{
 		m_Components.clear();
 	};
 
-	virtual void Init() = 0;
+	virtual void Awake() = 0;
+
+	virtual void Start() = 0;
 	 
 	virtual void Update() = 0;
 
@@ -76,8 +78,6 @@ public:
 
 protected:
 	std::vector<T> m_Components{INIT_COMPONENT_NMB};
-
-	Engine& m_Engine;
 };
 }
 
