@@ -38,6 +38,11 @@ public:
 	void Update(float dt) override;
 	void Draw() override;
 private:
+	void DrawInspector();
+
+	void DrawDock();
+
+	void DrawHierarchy();
 };
 }
 

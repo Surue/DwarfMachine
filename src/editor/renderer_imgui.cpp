@@ -86,7 +86,7 @@ RendererImGui::RendererImGui(const Pipeline::Stage &pipelineStage) :
 	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 	ImGui::StyleColorsDark();
 
-	auto surfaceCapabilities = surface->GetCapabilities();
+	const auto surfaceCapabilities = surface->GetCapabilities();
 
 	ImGui_ImplVulkan_InitInfo initInfo = {};
 	initInfo.Instance = *Engine::Get()->GetGraphicManager()->GetInstance();
@@ -110,7 +110,6 @@ RendererImGui::RendererImGui(const Pipeline::Stage &pipelineStage) :
 	unsigned char* fontData;
 	int texWidth, texHeight;
 	io.Fonts->GetTexDataAsRGBA32(&fontData, &texWidth, &texHeight);
-	VkDeviceSize uploadSize = texWidth * texHeight * 4 * sizeof(char);
 
 	// Upload Fonts
 	{
@@ -124,6 +123,8 @@ RendererImGui::RendererImGui(const Pipeline::Stage &pipelineStage) :
 		check_vk_result(vkDeviceWaitIdle(*logicalDevice));
 		ImGui_ImplVulkan_DestroyFontUploadObjects();
 	}
+
+	NewFrame();
 }
 
 RendererImGui::~RendererImGui()
@@ -162,99 +163,13 @@ void RendererImGui::NewFrame()
 	auto camera = Engine::Get()->GetGraphicManager()->GetCamera();
 	ImGuizmo::DrawCube(&camera->viewMatrix[0][0], &camera->proj[0][0], objectMatrix);
 	ImGuizmo::DrawGrid(&camera->viewMatrix[0][0], &camera->proj[0][0], identityMatrix, 10.f); //Fix this function
-	ImGuizmo::Manipulate(&camera->viewMatrix[0][0], &camera->proj[0][0], ImGuizmo::TRANSLATE, ImGuizmo::LOCAL, objectMatrix, NULL, NULL);
-
-	bool show_demo_window = true;
-
-	// 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
-	if (show_demo_window)
-		ImGui::ShowDemoWindow(&show_demo_window);
-
-	ImGui::DockBuilderRemoveNode(1); // Clear out existing layout
-	ImGui::DockBuilderAddNode(1, ImGuiConfigFlags_DockingEnable); // Add empty node
-	ImGui::DockBuilderSetNodeSize(1, ImVec2(100, 100));
-
-	ImGuiID dock_main_id = 1; // This variable will track the document node, however we are not using it here as we aren't docking anything into it.
-	ImGuiID dock_id_prop = ImGui::DockBuilderSplitNode(dock_main_id, ImGuiDir_Left, 0.20f, NULL, &dock_main_id);
-	ImGuiID dock_id_bottom = ImGui::DockBuilderSplitNode(dock_main_id, ImGuiDir_Down, 0.20f, NULL, &dock_main_id);
-
-	ImGui::DockBuilderDockWindow("Log", dock_id_bottom);
-	ImGui::DockBuilderDockWindow("Properties", dock_id_prop);
-	ImGui::DockBuilderDockWindow("Mesh", dock_id_prop);
-	ImGui::DockBuilderDockWindow("Extra", dock_id_prop);
-	ImGui::DockBuilderFinish(1);*/
-
-	bool show_demo_window = true;
-
-	static ImGuiDockNodeFlags dockspaceFlags = ImGuiDockNodeFlags_None | ImGuiDockNodeFlags_PassthruCentralNode;
-
-	// We are using the ImGuiWindowFlags_NoDocking flag to make the parent window not dockable into,
-	// because it would be confusing to have two docking targets within each others.
-	ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
-	
-		ImGuiViewport* viewport = ImGui::GetMainViewport();
-		ImGui::SetNextWindowPos(viewport->Pos);
-		ImGui::SetNextWindowSize(viewport->Size);
-		ImGui::SetNextWindowViewport(viewport->ID);
-		ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
-		ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
-		window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
-		window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
-	
-
-	// When using ImGuiDockNodeFlags_PassthruCentralNode, DockSpace() will render our background and handle the pass-thru hole, so we ask Begin() to not render a background.
-	if (dockspaceFlags & ImGuiDockNodeFlags_PassthruCentralNode)
-		window_flags |= ImGuiWindowFlags_NoBackground;
-
-	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
-	ImGui::Begin("DockSpace Demo", &show_demo_window, window_flags);
-	ImGui::PopStyleVar();
-
-	ImGui::PopStyleVar(2);
-
-	// DockSpace
-	ImGuiIO& io = ImGui::GetIO();
-	if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
-	{
-		ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
-		ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspaceFlags);
-	}
-
-	if (ImGui::BeginMenuBar())
-	{
-		if (ImGui::BeginMenu("Docking"))
-		{
-			if (ImGui::MenuItem("Flag: NoSplit", "", (dockspaceFlags & ImGuiDockNodeFlags_NoSplit) != 0))                 dockspaceFlags ^= ImGuiDockNodeFlags_NoSplit;
-			if (ImGui::MenuItem("Flag: NoResize", "", (dockspaceFlags & ImGuiDockNodeFlags_NoResize) != 0))                dockspaceFlags ^= ImGuiDockNodeFlags_NoResize;
-			if (ImGui::MenuItem("Flag: NoDockingInCentralNode", "", (dockspaceFlags & ImGuiDockNodeFlags_NoDockingInCentralNode) != 0))  dockspaceFlags ^= ImGuiDockNodeFlags_NoDockingInCentralNode;
-			if (ImGui::MenuItem("Flag: PassthruCentralNode", "", (dockspaceFlags & ImGuiDockNodeFlags_PassthruCentralNode) != 0))     dockspaceFlags ^= ImGuiDockNodeFlags_PassthruCentralNode;
-			if (ImGui::MenuItem("Flag: AutoHideTabBar", "", (dockspaceFlags & ImGuiDockNodeFlags_AutoHideTabBar) != 0))          dockspaceFlags ^= ImGuiDockNodeFlags_AutoHideTabBar;
-			ImGui::Separator();
-
-			ImGui::EndMenu();
-		}
-		ImGui::EndMenuBar();
-	}
-
-	ImGui::End();
-
-	//Hierarchy
-	ImGui::Begin("Hierarchy");
-
-	ImGui::End();
-
-	//Inspector
-	ImGui::Begin("Inspector");
-
-	ImGui::End();
-
-	//Render
-	ImGui::Render();
+	ImGuizmo::Manipulate(&camera->viewMatrix[0][0], &camera->proj[0][0], ImGuizmo::TRANSLATE, ImGuizmo::LOCAL, objectMatrix, NULL, NULL);*/
 }
 
 void RendererImGui::Draw(const CommandBuffer& commandBuffer)
 {
-	NewFrame();
+	ImGui::Render();
 	ImGui_ImplVulkan_RenderDrawData(ImGui::GetDrawData(), commandBuffer.GetCommandBuffer());
+	NewFrame();
 }
 }

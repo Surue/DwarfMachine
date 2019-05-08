@@ -138,6 +138,9 @@ void Engine::MainLoop()
 		//Updates
 		m_SystemManager->Update(m_DeltaTime);
 		m_GraphicManager->Update(m_DeltaTime);
+		m_App->Update(m_DeltaTime);
+
+		m_App->Draw();
 	}
 
 }
