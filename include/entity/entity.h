@@ -59,6 +59,11 @@ public:
 
 	ComponentMask GetEntityMask(Entity entity);
 
+	std::vector<Entity> GetEntities()
+	{
+		return m_EntityInfos;
+	}
+
 private:
 	void ResizeEntity();
 

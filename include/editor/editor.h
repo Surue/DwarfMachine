@@ -25,6 +25,7 @@ SOFTWARE.
 #ifndef EDITOR_H
 #define EDITOR_H
 #include <engine/engine_application.h>
+#include "entity/entity.h"
 
 namespace dm
 {
@@ -43,6 +44,8 @@ private:
 	void DrawDock();
 
 	void DrawHierarchy();
+
+	Entity m_CurrentEntitySelected = INVALID_ENTITY;
 };
 }
 

@@ -27,6 +27,7 @@ SOFTWARE.
 #include <graphics/graphic_manager.h>
 #include <editor/editor_renderer.h>
 #include "imgui.h"
+#include <fstream>
 
 namespace dm
 {
@@ -53,7 +54,7 @@ void Editor::Draw()
 void Editor::DrawInspector() {
 	//Inspector
 	ImGui::Begin("Inspector");
-
+	
 	ImGui::End();
 }
 
@@ -118,6 +119,19 @@ void Editor::DrawHierarchy()
 {
 	//Hierarchy
 	ImGui::Begin("Hierarchy");
+
+	EntityManager* manager = Engine::Get()->GetEntityManager();
+
+	for (auto entity : manager->GetEntities())
+	{
+		if (entity == INVALID_ENTITY) continue;
+		std::string oss = "entity " + std::to_string(entity);
+		if (ImGui::Selectable(oss.c_str(), m_CurrentEntitySelected == entity))
+		{
+			m_CurrentEntitySelected = entity;
+		}
+		ImGui::Separator();
+	}
 
 	ImGui::End();
 }
