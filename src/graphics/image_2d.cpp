@@ -91,7 +91,7 @@ Image2d::Image2d(const uint32_t& width, const uint32_t& height, std::unique_ptr<
 
 Image2d::~Image2d()
 {
-	auto logicalDevice = Engine::Get()->GetGraphicManager()->GetLogicalDevice();
+	auto logicalDevice = GraphicManager::Get()->GetLogicalDevice();
 
 	vkDestroySampler(*logicalDevice, m_Sampler, nullptr);
 	vkDestroyImageView(*logicalDevice, m_View, nullptr);
@@ -182,7 +182,7 @@ void Image2d::Load()
 
 std::unique_ptr<uint8_t[]> Image2d::GetPixels(VkExtent3D& extent, const uint32_t& mipLevel) const
 {
-	auto logicalDevice = Engine::Get()->GetGraphicManager()->GetLogicalDevice();
+	auto logicalDevice = GraphicManager::Get()->GetLogicalDevice();
 
 	extent.width = int32_t(m_Width >> mipLevel);
 	extent.height = int32_t(m_Height >> mipLevel);

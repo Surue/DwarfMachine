@@ -87,6 +87,7 @@ inline void DestroyDebugUtilsMessengerEXT(const VkInstance instance, const VkDeb
 class GraphicManager
 {
 public:
+	static GraphicManager* Get();
 
 	GraphicManager();
 	~GraphicManager();

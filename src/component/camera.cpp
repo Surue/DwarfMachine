@@ -32,7 +32,7 @@ namespace dm
 {
 CameraManager::CameraManager()
 {
-	m_GraphicManager = Engine::Get()->GetGraphicManager();
+	m_GraphicManager = GraphicManager::Get();
 }
 
 void CameraManager::Awake() {}

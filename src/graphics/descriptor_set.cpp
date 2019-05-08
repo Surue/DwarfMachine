@@ -34,7 +34,7 @@ DescriptorSet::DescriptorSet(const Pipeline& pipeline) :
 	m_DescriptorPool(pipeline.GetDescriptorPool()),
 	m_DescriptorSet(VK_NULL_HANDLE)
 {
-	const auto logicalDevice = Engine::Get()->GetGraphicManager()->GetLogicalDevice();
+	const auto logicalDevice = GraphicManager::Get()->GetLogicalDevice();
 
 	VkDescriptorSetLayout layouts[1] = { pipeline.GetDescriptorSetLayout() };
 
@@ -49,13 +49,13 @@ DescriptorSet::DescriptorSet(const Pipeline& pipeline) :
 
 DescriptorSet::~DescriptorSet()
 {
-	const auto logicalDevice = Engine::Get()->GetGraphicManager()->GetLogicalDevice();
+	const auto logicalDevice = GraphicManager::Get()->GetLogicalDevice();
 	GraphicManager::CheckVk(vkFreeDescriptorSets(*logicalDevice, m_DescriptorPool, 1, &m_DescriptorSet));
 }
 
 void DescriptorSet::Update(const std::vector<VkWriteDescriptorSet>& descriptorWrites)
 {
-	const auto logicalDevice = Engine::Get()->GetGraphicManager()->GetLogicalDevice();
+	const auto logicalDevice = GraphicManager::Get()->GetLogicalDevice();
 
  	vkUpdateDescriptorSets(*logicalDevice, static_cast<uint32_t>(descriptorWrites.size()), descriptorWrites.data(), 0, nullptr);
 }

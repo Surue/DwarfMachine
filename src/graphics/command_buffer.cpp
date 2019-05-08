@@ -36,8 +36,8 @@ CommandBuffer::CommandBuffer(const bool &begin, const VkQueueFlagBits& queueType
 	m_CommandBuffer(nullptr), 
 	m_Running(false)
 {
-	auto logicalDevice = Engine::Get()->GetGraphicManager()->GetLogicalDevice();
-	m_CommandPool = Engine::Get()->GetGraphicManager()->GetCommandPool();
+	auto logicalDevice = GraphicManager::Get()->GetLogicalDevice();
+	m_CommandPool = GraphicManager::Get()->GetCommandPool();
 
 	VkCommandBufferAllocateInfo allocInfo = {};
 	allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
@@ -55,7 +55,7 @@ CommandBuffer::CommandBuffer(const bool &begin, const VkQueueFlagBits& queueType
 
 CommandBuffer::~CommandBuffer()
 {
-	const auto logicalDevice = Engine::Get()->GetGraphicManager()->GetLogicalDevice();
+	const auto logicalDevice = GraphicManager::Get()->GetLogicalDevice();
 	vkFreeCommandBuffers(*logicalDevice, m_CommandPool->GetCommandPool(), 1, &m_CommandBuffer);
 }
 
@@ -87,7 +87,7 @@ void CommandBuffer::End()
 
 void CommandBuffer::SubmitIdle()
 {
-	const auto logicalDevice = Engine::Get()->GetGraphicManager()->GetLogicalDevice();
+	const auto logicalDevice = GraphicManager::Get()->GetLogicalDevice();
 	const auto queueSelected = GetQueue();
 
 	if (m_Running)
@@ -114,7 +114,7 @@ void CommandBuffer::SubmitIdle()
 
 void CommandBuffer::Submit(const VkSemaphore& waitSemaphore, const VkSemaphore& signalSemaphore, VkFence fence)
 {
-	auto logicalDevice = Engine::Get()->GetGraphicManager()->GetLogicalDevice();
+	auto logicalDevice = GraphicManager::Get()->GetLogicalDevice();
 	auto queueSelected = GetQueue();
 
 	if (m_Running)
@@ -154,7 +154,7 @@ void CommandBuffer::Submit(const VkSemaphore& waitSemaphore, const VkSemaphore& 
 
 VkQueue CommandBuffer::GetQueue() const
 {
-	const auto logicalDevice = Engine::Get()->GetGraphicManager()->GetLogicalDevice();
+	const auto logicalDevice = GraphicManager::Get()->GetLogicalDevice();
 	switch(m_QueueType)
 	{
 	case VK_QUEUE_GRAPHICS_BIT:

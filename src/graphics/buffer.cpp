@@ -34,7 +34,7 @@ Buffer::Buffer(const VkDeviceSize& size, const VkBufferUsageFlags& usage, const 
 	m_Buffer(VK_NULL_HANDLE),
     m_BufferMemory(VK_NULL_HANDLE)
 {
-	const auto logicalDevice = Engine::Get()->GetGraphicManager()->GetLogicalDevice();
+	const auto logicalDevice = GraphicManager::Get()->GetLogicalDevice();
 
 	const auto graphicsFamily = logicalDevice->GetGraphicsFamily();
 	const auto presentFamily = logicalDevice->GetPresentFamily();
@@ -89,26 +89,26 @@ Buffer::Buffer(const VkDeviceSize& size, const VkBufferUsageFlags& usage, const 
 
 Buffer::~Buffer()
 {
-	const auto logicalDevice = Engine::Get()->GetGraphicManager()->GetLogicalDevice();
+	const auto logicalDevice = GraphicManager::Get()->GetLogicalDevice();
 	vkDestroyBuffer(*logicalDevice, m_Buffer, nullptr);
 	vkFreeMemory(*logicalDevice, m_BufferMemory, nullptr);
 }
 
 void Buffer::MapMemory(void** data) const
 {
-	const auto logicalDevice = Engine::Get()->GetGraphicManager()->GetLogicalDevice();
+	const auto logicalDevice = GraphicManager::Get()->GetLogicalDevice();
 	GraphicManager::CheckVk(vkMapMemory(*logicalDevice, GetBufferMemory(), 0, m_Size, 0, data));
 }
 
 void Buffer::UnmapMemory() const
 {
-	const auto logicalDevice = Engine::Get()->GetGraphicManager()->GetLogicalDevice();
+	const auto logicalDevice = GraphicManager::Get()->GetLogicalDevice();
 	vkUnmapMemory(*logicalDevice, GetBufferMemory());
 }
 
 uint32_t Buffer::FindMemoryType(const uint32_t& typeFilter, const VkMemoryPropertyFlags& requiredProperties)
 {
-	const auto physicalDevice = Engine::Get()->GetGraphicManager()->GetPhysicalDevice();
+	const auto physicalDevice = GraphicManager::Get()->GetPhysicalDevice();
 	const auto memoryProperties = physicalDevice->GetMemoryProperties();
 
 	for (uint32_t i = 0; i < memoryProperties.memoryTypeCount; i++)

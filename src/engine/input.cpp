@@ -67,7 +67,7 @@ void InputManager::Update()
 		switch (event.type)
 		{
 		case SDL_QUIT:
-			Engine::Get()->GetGraphicManager()->GetWindow()->SetShouldClose();
+			GraphicManager::Get()->GetWindow()->SetShouldClose();
 			break;
 
 			// SDL2's new way of handling input

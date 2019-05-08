@@ -127,7 +127,7 @@ void DescriptorHandle::BindDescriptor(const CommandBuffer& commandBuffer, const 
 {
 	if(m_PushDescriptor)
 	{
-		auto logicalDevice = Engine::Get()->GetGraphicManager()->GetLogicalDevice();
+		auto logicalDevice = GraphicManager::Get()->GetLogicalDevice();
 
 		Instance::CmdPushDescriptorSetKHR(*logicalDevice, commandBuffer, pipeline.GetPipelineBindPoint(), pipeline.GetPipelineLayout(), 0,
 			static_cast<uint32_t>(m_WriteDescriptorSets.size()), m_WriteDescriptorSets.data());

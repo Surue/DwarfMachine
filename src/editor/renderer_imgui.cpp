@@ -46,9 +46,9 @@ static void check_vk_result(VkResult err)
 RendererImGui::RendererImGui(const Pipeline::Stage &pipelineStage) :
 	RenderPipeline(pipelineStage)
 {
-	auto surface = Engine::Get()->GetGraphicManager()->GetSurface();
-	auto logicalDevice = Engine::Get()->GetGraphicManager()->GetLogicalDevice();
-	auto window = Engine::Get()->GetGraphicManager()->GetWindow();
+	auto surface = GraphicManager::Get()->GetSurface();
+	auto logicalDevice = GraphicManager::Get()->GetLogicalDevice();
+	auto window = GraphicManager::Get()->GetWindow();
 
 	VkDescriptorPoolSize pool_sizes[] =
 	{
@@ -75,7 +75,7 @@ RendererImGui::RendererImGui(const Pipeline::Stage &pipelineStage) :
 
 	ImGui::CreateContext();
 
-	ImGui_ImplSDL2_InitForVulkan(Engine::Get()->GetGraphicManager()->GetWindow()->GetWindow());
+	ImGui_ImplSDL2_InitForVulkan(GraphicManager::Get()->GetWindow()->GetWindow());
 
 
 	// Color scheme
@@ -89,8 +89,8 @@ RendererImGui::RendererImGui(const Pipeline::Stage &pipelineStage) :
 	const auto surfaceCapabilities = surface->GetCapabilities();
 
 	ImGui_ImplVulkan_InitInfo initInfo = {};
-	initInfo.Instance = *Engine::Get()->GetGraphicManager()->GetInstance();
-	initInfo.PhysicalDevice = *Engine::Get()->GetGraphicManager()->GetPhysicalDevice();
+	initInfo.Instance = *GraphicManager::Get()->GetInstance();
+	initInfo.PhysicalDevice = *GraphicManager::Get()->GetPhysicalDevice();
 	initInfo.Device = *logicalDevice;
 	initInfo.QueueFamily = logicalDevice->GetGraphicsFamily();
 	initInfo.Queue = logicalDevice->GetGraphicsQueue(); //Not sure about that
@@ -98,10 +98,10 @@ RendererImGui::RendererImGui(const Pipeline::Stage &pipelineStage) :
 	initInfo.DescriptorPool = m_GDescriptorPool;
 	initInfo.Allocator = nullptr;
 	initInfo.MinImageCount = surfaceCapabilities.minImageCount + 1;
-	initInfo.ImageCount = Engine::Get()->GetGraphicManager()->GetSwapchain()->GetImageCount();
+	initInfo.ImageCount = GraphicManager::Get()->GetSwapchain()->GetImageCount();
 	initInfo.Subpass = pipelineStage.second;
 	initInfo.CheckVkResultFn = check_vk_result;
-	ImGui_ImplVulkan_Init(&initInfo, Engine::Get()->GetGraphicManager()->GetRenderStage(pipelineStage.first)->GetRenderPass()->GetRenderPass()); //Not sure about that
+	ImGui_ImplVulkan_Init(&initInfo, GraphicManager::Get()->GetRenderStage(pipelineStage.first)->GetRenderPass()->GetRenderPass()); //Not sure about that
 
 	io.DisplaySize = ImVec2(window->GetSize().x, window->GetSize().y);
 	io.DisplayFramebufferScale = ImVec2(1.0f, 1.0f);
@@ -129,7 +129,7 @@ RendererImGui::RendererImGui(const Pipeline::Stage &pipelineStage) :
 
 RendererImGui::~RendererImGui()
 {
-	auto logicalDevice = Engine::Get()->GetGraphicManager()->GetLogicalDevice();
+	auto logicalDevice = GraphicManager::Get()->GetLogicalDevice();
 	vkDestroyDescriptorPool(*logicalDevice, m_GDescriptorPool, nullptr);
 
 	ImGui_ImplVulkan_Shutdown();
@@ -152,7 +152,7 @@ float objectMatrix[16] =
 void RendererImGui::NewFrame()
 {
 	ImGui_ImplVulkan_NewFrame();
-	ImGui_ImplSDL2_NewFrame(Engine::Get()->GetGraphicManager()->GetWindow()->GetWindow());
+	ImGui_ImplSDL2_NewFrame(GraphicManager::Get()->GetWindow()->GetWindow());
 	ImGui::NewFrame();
 
 	/*ImGuizmo::SetOrthographic(false);

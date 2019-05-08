@@ -32,7 +32,7 @@ CommandPool::CommandPool(const std::thread::id& threadId) :
 	m_CommandPool(VK_NULL_HANDLE),
 	m_ThreadId(threadId)
 {
-	const auto logicalDevice = Engine::Get()->GetGraphicManager()->GetLogicalDevice();
+	const auto logicalDevice = GraphicManager::Get()->GetLogicalDevice();
 	const auto graphicsFamily = logicalDevice->GetGraphicsFamily();
 
 	VkCommandPoolCreateInfo poolInfo = {};
@@ -46,7 +46,7 @@ CommandPool::CommandPool(const std::thread::id& threadId) :
 CommandPool::~CommandPool()
 {
 	std::cout << "~CommandPool\n";
-	const auto logicalDevice = Engine::Get()->GetGraphicManager()->GetLogicalDevice();
+	const auto logicalDevice = GraphicManager::Get()->GetLogicalDevice();
 	vkDestroyCommandPool(*logicalDevice, m_CommandPool, nullptr);
 }
 }

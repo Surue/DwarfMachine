@@ -34,7 +34,7 @@ EntityHandle::EntityHandle(const Entity entity)
 	m_ComponentManager = Engine::Get()->GetComponentManager();
 	m_EntityManager = Engine::Get()->GetEntityManager();
 	m_SystemManager = Engine::Get()->GetSystemManager();
-	m_RendererContainer = Engine::Get()->GetGraphicManager()->GetRendererContainer();
+	m_RendererContainer = GraphicManager::Get()->GetRendererContainer();
 }
 
 bool EntityHandle::HasComponent(const ComponentType componentType) const

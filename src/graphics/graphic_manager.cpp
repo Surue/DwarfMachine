@@ -132,6 +132,11 @@ void GraphicManager::CheckVk(const VkResult &result)
 	throw std::runtime_error("Vulkan error: " + failure);
 }
 
+GraphicManager* GraphicManager::Get()
+{
+	return Engine::Get()->GetGraphicManager();
+}
+
 GraphicManager::GraphicManager()
 {
 	glslang::InitializeProcess();

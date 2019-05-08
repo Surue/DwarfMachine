@@ -33,7 +33,7 @@ Framebuffers::Framebuffers(const uint32_t& width, const uint32_t& height, const 
 	const RenderPass& renderpass, const Swapchain& swapchain, const ImageDepth& depthStencil,
 	const VkSampleCountFlagBits& samples)
 {
-	auto logicalDevice = Engine::Get()->GetGraphicManager()->GetLogicalDevice();
+	auto logicalDevice = GraphicManager::Get()->GetLogicalDevice();
 
 	for (const auto &attachment : renderStage.GetAttachments())
 	{
@@ -90,8 +90,7 @@ Framebuffers::Framebuffers(const uint32_t& width, const uint32_t& height, const 
 
 Framebuffers::~Framebuffers()
 {
-	std::cout << "~Framebuffer\n";
-	const auto logicalDevice = Engine::Get()->GetGraphicManager()->GetLogicalDevice();
+	const auto logicalDevice = GraphicManager::Get()->GetLogicalDevice();
 
 	for(const auto &framebuffer : m_Framebuffers)
 	{

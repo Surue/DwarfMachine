@@ -54,7 +54,7 @@ Image::Image(const VkExtent3D& extent, const VkImageType& imageType, const VkFor
 
 Image::~Image()
 {
-	auto logicalDevice = Engine::Get()->GetGraphicManager()->GetLogicalDevice();
+	auto logicalDevice = GraphicManager::Get()->GetLogicalDevice();
 
 	vkDestroyImageView(*logicalDevice, m_View, nullptr);
 	vkDestroySampler(*logicalDevice, m_Sampler, nullptr);
@@ -97,7 +97,7 @@ WriteDescriptorSet Image::GetWriteDescriptor(const uint32_t& binding, const VkDe
 std::unique_ptr<uint8_t[]> Image::GetPixels(VkExtent3D& extent, const uint32_t& mipLevel,
 	const uint32_t& arrayLayer) const
 {
-	auto logicalDevice = Engine::Get()->GetGraphicManager()->GetLogicalDevice();
+	auto logicalDevice = GraphicManager::Get()->GetLogicalDevice();
 
 	extent.width = int32_t(m_Extent.width >> mipLevel);
 	extent.height = int32_t(m_Extent.height >> mipLevel);
@@ -194,7 +194,7 @@ void Image::CreateImage(VkImage& image, VkDeviceMemory& memory, const VkExtent3D
 	const VkMemoryPropertyFlags& properties, const uint32_t& mipLevels, const uint32_t& arrayLayers,
 	const VkImageType& type)
 {
-	const auto logicalDevice = Engine::Get()->GetGraphicManager()->GetLogicalDevice();
+	const auto logicalDevice = GraphicManager::Get()->GetLogicalDevice();
 
 	VkImageCreateInfo imageCreateInfo = {};
 	imageCreateInfo.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
@@ -226,8 +226,8 @@ void Image::CreateImage(VkImage& image, VkDeviceMemory& memory, const VkExtent3D
 void Image::CreateImageSampler(VkSampler& sampler, const VkFilter& filter, const VkSamplerAddressMode& addressMode,
 	const bool& anisotropic, const uint32_t& mipLevels)
 {
-	const auto physicalDevice = Engine::Get()->GetGraphicManager()->GetPhysicalDevice();
-	const auto logicalDevice = Engine::Get()->GetGraphicManager()->GetLogicalDevice();
+	const auto physicalDevice = GraphicManager::Get()->GetPhysicalDevice();
+	const auto logicalDevice = GraphicManager::Get()->GetLogicalDevice();
 
 	VkSamplerCreateInfo samplerCreateInfo = {};
 	samplerCreateInfo.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
@@ -254,7 +254,7 @@ void Image::CreateImageView(const VkImage& image, VkImageView& imageView, const 
 	const VkFormat& format, const VkImageAspectFlags& imageAspect, const uint32_t& mipLevels,
 	const uint32_t& baseMipLevel, const uint32_t& layerCount, const uint32_t& baseArrayLayer)
 {
-	const auto logicalDevice = Engine::Get()->GetGraphicManager()->GetLogicalDevice();
+	const auto logicalDevice = GraphicManager::Get()->GetLogicalDevice();
 
 	VkImageViewCreateInfo imageViewCreateInfo = {};
 	imageViewCreateInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
@@ -274,7 +274,7 @@ void Image::CreateMipmaps(const VkImage& image, const VkExtent3D& extent, const 
 	const VkImageLayout& dstImageLayout, const uint32_t& mipLevels, const uint32_t& baseArrayLayer,
 	const uint32_t& layerCount)
 {
-	auto physicalDevice = Engine::Get()->GetGraphicManager()->GetPhysicalDevice();
+	auto physicalDevice = GraphicManager::Get()->GetPhysicalDevice();
 
 	// Get device properites for the requested texture format.
 	VkFormatProperties formatProperties;
@@ -484,8 +484,8 @@ bool Image::CopyImage(const VkImage& srcImage, VkImage& dstImage, VkDeviceMemory
 	const VkFormat& srcFormat, const VkExtent3D& extent, const VkImageLayout& srcImageLayout, const uint32_t& mipLevel,
 	const uint32_t& arrayLayer)
 {
-	auto physicalDevice = Engine::Get()->GetGraphicManager()->GetPhysicalDevice();
-	auto surface = Engine::Get()->GetGraphicManager()->GetSurface();
+	auto physicalDevice = GraphicManager::Get()->GetPhysicalDevice();
+	auto surface = GraphicManager::Get()->GetSurface();
 
 	// Checks blit swapchain support.
 	bool supportsBlit = true;

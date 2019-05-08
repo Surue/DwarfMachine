@@ -40,7 +40,7 @@ ImageDepth::ImageDepth(const uint32_t& width, const uint32_t& height, const VkSa
 	m_View(VK_NULL_HANDLE),
 	m_Format(VK_FORMAT_UNDEFINED)
 {
-	const auto physicalDevice = Engine::Get()->GetGraphicManager()->GetPhysicalDevice();
+	const auto physicalDevice = GraphicManager::Get()->GetPhysicalDevice();
 
 	for(const auto &format : TRY_FORMATS)
 	{
@@ -74,7 +74,7 @@ ImageDepth::ImageDepth(const uint32_t& width, const uint32_t& height, const VkSa
 
 ImageDepth::~ImageDepth()
 {
-	const auto logicalDevice = Engine::Get()->GetGraphicManager()->GetLogicalDevice();
+	const auto logicalDevice = GraphicManager::Get()->GetLogicalDevice();
 
 	vkDestroyImageView(*logicalDevice, m_View, nullptr);
 	vkDestroySampler(*logicalDevice, m_Sampler, nullptr);

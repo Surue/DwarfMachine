@@ -577,7 +577,7 @@ TBuiltInResource GetResources()
 
 VkShaderModule Shader::ProcessShader(const std::string& shaderCode, const VkShaderStageFlags &stageFlag)
 {
-	auto logicalDevice = Engine::Get()->GetGraphicManager()->GetLogicalDevice();
+	auto logicalDevice = GraphicManager::Get()->GetLogicalDevice();
 
 	EShLanguage language = GetEshLanguage(stageFlag);
 	glslang::TProgram program;

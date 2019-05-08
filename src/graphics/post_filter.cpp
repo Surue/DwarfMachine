@@ -56,7 +56,7 @@ const Descriptor* PostFilter::GetAttachment(const std::string& descriptorName,
 	if (it == m_Attachments.end())
 	{
 
-		return Engine::Get()->GetGraphicManager()->GetAttachment(descriptorName);
+		return GraphicManager::Get()->GetAttachment(descriptorName);
 	}
 
 	return it->second;
@@ -102,14 +102,14 @@ void PostFilter::PushConditional(const std::string& descriptorName1, const std::
 	}
 	if (it1 == m_Attachments.end() && it2 != m_Attachments.end())
 	{
-		m_DescriptorSet.Push(descriptorName1, Engine::Get()->GetGraphicManager()->GetAttachment(GlobalSwitching % 2 == 1 ? rendererAttachment1 : rendererAttachment2));
+		m_DescriptorSet.Push(descriptorName1, GraphicManager::Get()->GetAttachment(GlobalSwitching % 2 == 1 ? rendererAttachment1 : rendererAttachment2));
 		m_DescriptorSet.Push(descriptorName2, GetAttachment(descriptorName2, rendererAttachment1));
 		return;
 	}
 	if (it1 != m_Attachments.end() && it2 == m_Attachments.end())
 	{
 		m_DescriptorSet.Push(descriptorName1, GetAttachment(descriptorName1, rendererAttachment1));
-		m_DescriptorSet.Push(descriptorName2, Engine::Get()->GetGraphicManager()->GetAttachment(GlobalSwitching % 2 == 1 ? rendererAttachment1 : rendererAttachment2));
+		m_DescriptorSet.Push(descriptorName2, GraphicManager::Get()->GetAttachment(GlobalSwitching % 2 == 1 ? rendererAttachment1 : rendererAttachment2));
 		return;
 	}
 

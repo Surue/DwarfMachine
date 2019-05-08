@@ -88,7 +88,7 @@ PipelineGraphics::PipelineGraphics(Stage stage, std::vector<std::string> shaderS
 
 PipelineGraphics::~PipelineGraphics()
 {
-	const auto logicalDevice = Engine::Get()->GetGraphicManager()->GetLogicalDevice();
+	const auto logicalDevice = GraphicManager::Get()->GetLogicalDevice();
 
 	for(const auto &shaderModule : m_Modules)
 	{
@@ -103,22 +103,22 @@ PipelineGraphics::~PipelineGraphics()
 
 const ImageDepth* PipelineGraphics::GetDepthStencil(const std::optional<uint32_t>& stage) const
 {
-	return Engine::Get()->GetGraphicManager()->GetRenderStage(stage ? *stage : m_Stage.first)->GetDepthStencil();
+	return GraphicManager::Get()->GetRenderStage(stage ? *stage : m_Stage.first)->GetDepthStencil();
 }
 
 const Image2d* PipelineGraphics::GetTexture(const uint32_t& index, const std::optional<uint32_t>& stage) const
 {
-	return Engine::Get()->GetGraphicManager()->GetRenderStage(stage ? *stage : m_Stage.first)->GetFramebuffers()->GetAttachment(index);
+	return GraphicManager::Get()->GetRenderStage(stage ? *stage : m_Stage.first)->GetFramebuffers()->GetAttachment(index);
 }
 
 Vec2i PipelineGraphics::GetSize(const std::optional<uint32_t>& stage) const
 {
-	return Engine::Get()->GetGraphicManager()->GetRenderStage(stage ? *stage : m_Stage.first)->GetSize();
+	return GraphicManager::Get()->GetRenderStage(stage ? *stage : m_Stage.first)->GetSize();
 }
 
 float PipelineGraphics::GetAspectRatio(const std::optional<uint32_t>& stage) const
 {
-	return Engine::Get()->GetGraphicManager()->GetRenderStage(stage ? *stage : m_Stage.first)->GetAspectRatio();
+	return GraphicManager::Get()->GetRenderStage(stage ? *stage : m_Stage.first)->GetAspectRatio();
 }
 
 void PipelineGraphics::CreateShaderProgram()
@@ -164,7 +164,7 @@ void PipelineGraphics::CreateShaderProgram()
 
 void PipelineGraphics::CreateDescriptorLayout()
 {
-	const auto logicalDevice = Engine::Get()->GetGraphicManager()->GetLogicalDevice();
+	const auto logicalDevice = GraphicManager::Get()->GetLogicalDevice();
 
 	auto &descriptorSetLayouts = m_Shader->GetDescriptorSetLayouts();
 
@@ -178,7 +178,7 @@ void PipelineGraphics::CreateDescriptorLayout()
 
 void PipelineGraphics::CreateDescriptorPool()
 {
-	const auto logicalDevice = Engine::Get()->GetGraphicManager()->GetLogicalDevice();
+	const auto logicalDevice = GraphicManager::Get()->GetLogicalDevice();
 
 	auto descriptorPools = m_Shader->GetDescriptorPools();
 
@@ -193,7 +193,7 @@ void PipelineGraphics::CreateDescriptorPool()
 
 void PipelineGraphics::CreatePipelineLayout()
 {
-	auto logicalDevice = Engine::Get()->GetGraphicManager()->GetLogicalDevice();
+	auto logicalDevice = GraphicManager::Get()->GetLogicalDevice();
 
 	auto pushConstantRanges = m_Shader->GetPushConstantRanges();
 
@@ -208,8 +208,8 @@ void PipelineGraphics::CreatePipelineLayout()
 
 void PipelineGraphics::CreateAttributes()
 {
-	auto logicalDevice = Engine::Get()->GetGraphicManager()->GetLogicalDevice();
-	auto physicalDevice = Engine::Get()->GetGraphicManager()->GetPhysicalDevice();
+	auto logicalDevice = GraphicManager::Get()->GetLogicalDevice();
+	auto physicalDevice = GraphicManager::Get()->GetPhysicalDevice();
 
 	if(m_PolygonMode == VK_POLYGON_MODE_LINE && !logicalDevice->GetEnabledFeatures().fillModeNonSolid)
 	{
@@ -278,7 +278,7 @@ void PipelineGraphics::CreateAttributes()
 	m_ViewportStateCreateInfo.viewportCount = 1;
 	m_ViewportStateCreateInfo.scissorCount = 1;
 
-	auto renderStage = Engine::Get()->GetGraphicManager()->GetRenderStage(m_Stage.first);
+	auto renderStage = GraphicManager::Get()->GetRenderStage(m_Stage.first);
 	bool multisampled = renderStage->IsMultisampled(m_Stage.second);
 
 	m_MultisampleStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO;
@@ -295,9 +295,9 @@ void PipelineGraphics::CreateAttributes()
 
 void PipelineGraphics::CreatePipeline()
 {
-	auto logicalDevice = Engine::Get()->GetGraphicManager()->GetLogicalDevice();
-	auto pipelineCache = Engine::Get()->GetGraphicManager()->GetPipelineCache();
-	auto renderStage = Engine::Get()->GetGraphicManager()->GetRenderStage(m_Stage.first);
+	auto logicalDevice = GraphicManager::Get()->GetLogicalDevice();
+	auto pipelineCache = GraphicManager::Get()->GetPipelineCache();
+	auto renderStage = GraphicManager::Get()->GetRenderStage(m_Stage.first);
 
 	std::vector<VkVertexInputBindingDescription> bindingDescriptions;
 	std::vector<VkVertexInputAttributeDescription> attributeDescriptions;
@@ -360,7 +360,7 @@ void PipelineGraphics::CreatePipelinePolygon()
 
 void PipelineGraphics::CreatePipelineMrt()
 {
-	auto renderStage = Engine::Get()->GetGraphicManager()->GetRenderStage(m_Stage.first);
+	auto renderStage = GraphicManager::Get()->GetRenderStage(m_Stage.first);
 	uint32_t attachmentCount = renderStage->GetAttachmentCount(m_Stage.second);
 
 	std::vector<VkPipelineColorBlendAttachmentState> blendAttachmentStates;

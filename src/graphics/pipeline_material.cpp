@@ -45,7 +45,7 @@ PipelineMaterial::PipelineMaterial(Pipeline::Stage pipelineStage, PipelineGraphi
 
 bool PipelineMaterial::BindPipeline(const CommandBuffer& commandBuffer)
 {
-	const auto renderStage = Engine::Get()->GetGraphicManager()->GetRenderStage(m_PipelineStage.first);
+	const auto renderStage = GraphicManager::Get()->GetRenderStage(m_PipelineStage.first);
 
 	if(renderStage == nullptr)
 	{

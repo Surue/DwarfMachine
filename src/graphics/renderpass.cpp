@@ -34,7 +34,7 @@ RenderPass::RenderPass(const RenderStage& renderStage, const VkFormat& depthForm
 	const VkSampleCountFlagBits& samples) :
 	m_RenderPass(VK_NULL_HANDLE)
 {
-	auto logicalDevice = Engine::Get()->GetGraphicManager()->GetLogicalDevice();
+	auto logicalDevice = GraphicManager::Get()->GetLogicalDevice();
 
 	// Creates the renderpasses attachment descriptions,
 	std::vector<VkAttachmentDescription> attachmentDescriptions;
@@ -163,7 +163,7 @@ RenderPass::RenderPass(const RenderStage& renderStage, const VkFormat& depthForm
 
 RenderPass::~RenderPass()
 {
-	const auto logicalDevice = Engine::Get()->GetGraphicManager()->GetLogicalDevice();
+	const auto logicalDevice = GraphicManager::Get()->GetLogicalDevice();
 
 	vkDestroyRenderPass(*logicalDevice, m_RenderPass, nullptr);
 }

@@ -92,7 +92,7 @@ ImageCube::ImageCube(const uint32_t& width, const uint32_t& height, std::unique_
 
 ImageCube::~ImageCube()
 {
-	auto logicalDevice = Engine::Get()->GetGraphicManager()->GetLogicalDevice();
+	auto logicalDevice = GraphicManager::Get()->GetLogicalDevice();
 
 	vkDestroyImageView(*logicalDevice, m_View, nullptr);
 	vkDestroySampler(*logicalDevice, m_Sampler, nullptr);
@@ -186,7 +186,7 @@ void ImageCube::Load()
 std::unique_ptr<uint8_t[]> ImageCube::GetPixels(VkExtent3D& extent, const uint32_t& mipLevel,
 	const uint32_t& arrayLayer) const
 {
-	auto logicalDevice = Engine::Get()->GetGraphicManager()->GetLogicalDevice();
+	auto logicalDevice = GraphicManager::Get()->GetLogicalDevice();
 
 	extent.width = int32_t(m_Width >> mipLevel);
 	extent.height = int32_t(m_Height >> mipLevel);
