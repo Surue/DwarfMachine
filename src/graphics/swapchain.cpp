@@ -40,9 +40,9 @@ Swapchain::Swapchain(const VkExtent2D& extent) :
 	m_FenceImage(nullptr),
 	m_ActiveImageIndex(std::numeric_limits<uint32_t>::max())
 {
-	auto physicalDevice = Engine::Get()->GetGraphicManager()->GetPhysicalDevice();
-	auto surface = Engine::Get()->GetGraphicManager()->GetSurface();
-	auto logicalDevice = Engine::Get()->GetGraphicManager()->GetLogicalDevice();
+	auto physicalDevice = GraphicManager::Get()->GetPhysicalDevice();
+	auto surface = GraphicManager::Get()->GetSurface();
+	auto logicalDevice = GraphicManager::Get()->GetLogicalDevice();
 
 	auto surfaceFormat = surface->GetFormat();
 	auto surfaceCapabilities = surface->GetCapabilities();
@@ -121,9 +121,9 @@ Swapchain::Swapchain(const VkExtent2D& extent) :
 		swapchainCreateInfo.imageUsage |= VK_IMAGE_USAGE_TRANSFER_DST_BIT;
 	}
 
-	if (Engine::Get()->GetGraphicManager()->GetSwapchain() != nullptr)
+	if (GraphicManager::Get()->GetSwapchain() != nullptr)
 	{
-		swapchainCreateInfo.oldSwapchain = Engine::Get()->GetGraphicManager()->GetSwapchain()->GetSwapchain();
+		swapchainCreateInfo.oldSwapchain = GraphicManager::Get()->GetSwapchain()->GetSwapchain();
 	}
 
 	if (graphicsFamily != presentFamily)
@@ -157,7 +157,7 @@ Swapchain::Swapchain(const VkExtent2D& extent) :
 
 Swapchain::~Swapchain()
 {
-	const auto logicalDevice = Engine::Get()->GetGraphicManager()->GetLogicalDevice();
+	const auto logicalDevice = GraphicManager::Get()->GetLogicalDevice();
 
 	vkDestroySwapchainKHR(*logicalDevice, m_Swapchain, nullptr);
 
@@ -171,7 +171,7 @@ Swapchain::~Swapchain()
 
 VkResult Swapchain::AcquireNextImage(const VkSemaphore& presentCompleteSemaphore)
 {
-	const auto logicalDevice = Engine::Get()->GetGraphicManager()->GetLogicalDevice();
+	const auto logicalDevice = GraphicManager::Get()->GetLogicalDevice();
 
 	VkResult acquireResult = vkAcquireNextImageKHR(*logicalDevice, m_Swapchain, std::numeric_limits<uint64_t>::max(), presentCompleteSemaphore, VK_NULL_HANDLE, &m_ActiveImageIndex);
 

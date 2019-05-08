@@ -32,13 +32,10 @@ namespace dm
 {
 Editor::Editor()
 {
-	Engine::Get()->GetGraphicManager()->SetManager(new EditorRenderManager());
+	GraphicManager::Get()->SetManager(new EditorRenderManager());
 }
 
-void Editor::Awake()
-{
-	//Engine::Get()->GetGraphicManager()->SetManager(new EditorRenderManager());
-}
+void Editor::Awake() {}
 
 void Editor::Start() {}
 

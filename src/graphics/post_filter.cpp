@@ -115,13 +115,13 @@ void PostFilter::PushConditional(const std::string& descriptorName1, const std::
 
 	if (GlobalSwitching % 2 == 1)
 	{
-		m_DescriptorSet.Push(descriptorName1, Engine::Get()->GetGraphicManager()->GetAttachment(rendererAttachment1));
-		m_DescriptorSet.Push(descriptorName2, Engine::Get()->GetGraphicManager()->GetAttachment(rendererAttachment2));
+		m_DescriptorSet.Push(descriptorName1, GraphicManager::Get()->GetAttachment(rendererAttachment1));
+		m_DescriptorSet.Push(descriptorName2, GraphicManager::Get()->GetAttachment(rendererAttachment2));
 	}
 	else
 	{
-		m_DescriptorSet.Push(descriptorName1, Engine::Get()->GetGraphicManager()->GetAttachment(rendererAttachment2));
-		m_DescriptorSet.Push(descriptorName2, Engine::Get()->GetGraphicManager()->GetAttachment(rendererAttachment1));
+		m_DescriptorSet.Push(descriptorName1, GraphicManager::Get()->GetAttachment(rendererAttachment2));
+		m_DescriptorSet.Push(descriptorName2, GraphicManager::Get()->GetAttachment(rendererAttachment1));
 	}
 
 	GlobalSwitching++;

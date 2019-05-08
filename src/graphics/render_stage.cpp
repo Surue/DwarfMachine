@@ -91,7 +91,7 @@ void RenderStage::Update()
 		m_Size = *m_Viewport.GetSize();
 	}else
 	{
-		m_Size = Engine::Get()->GetGraphicManager()->GetWindow()->GetSize();
+		m_Size = GraphicManager::Get()->GetWindow()->GetSize();
 	}
 
 	m_Size = Vec2i(m_Viewport.GetScale().x * m_Size.x, m_Viewport.GetScale().y * m_Size.y);
@@ -105,8 +105,8 @@ void RenderStage::Rebuild(const Swapchain& swapchain)
 {
 	Update();
 
-	const auto physicalDevice = Engine::Get()->GetGraphicManager()->GetPhysicalDevice();
-	const auto surface = Engine::Get()->GetGraphicManager()->GetSurface();
+	const auto physicalDevice = GraphicManager::Get()->GetPhysicalDevice();
+	const auto surface = GraphicManager::Get()->GetSurface();
 
 	auto msaaSamples = physicalDevice->GetMsaaSamples();
 
