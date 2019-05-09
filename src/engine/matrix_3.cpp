@@ -26,11 +26,11 @@ SOFTWARE.
 
 namespace dm
 {
-Matrix3::Matrix3(const float& diagonal)
-{
-	std::memset(m_rows, 0, 3 * 3 * sizeof(float));
-	m_rows[0][0] = diagonal;
-	m_rows[1][1] = diagonal;
-	m_rows[2][2] = diagonal;
-}
+//Matrix3::Matrix3(const float& diagonal)
+//{
+//	std::memset(m_rows, 0, 3 * 3 * sizeof(float));
+//	m_rows[0][0] = diagonal;
+//	m_rows[1][1] = diagonal;
+//	m_rows[2][2] = diagonal;
+//}
 }

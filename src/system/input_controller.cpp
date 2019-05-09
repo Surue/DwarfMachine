@@ -39,7 +39,7 @@ InputController::InputController()
 
 void InputController::Update(float dt)
 {
-	for (auto registeredEntity : m_RegisteredEntities)
+	/*for (auto registeredEntity : m_RegisteredEntities)
 	{
 		auto entity = EntityHandle(registeredEntity);
 		auto transform = entity.GetComponent<Transform>(ComponentType::TRANSFORM);
@@ -177,6 +177,6 @@ void InputController::Update(float dt)
 			break;
 		default: ;
 		}
-	}
+	}*/
 }
 }

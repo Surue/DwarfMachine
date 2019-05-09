@@ -34,6 +34,10 @@ SOFTWARE.
 #include "graphics/model_cube.h"
 #include <editor/editor.h>
 
+#include <glm/ext/matrix_clip_space.inl>
+#include <glm/detail/func_trigonometric.inl>
+#include <glm/ext/matrix_transform.inl>
+
 TEST(Models, Cube)
 {
 	dm::Engine engine;
@@ -43,29 +47,28 @@ TEST(Models, Cube)
 
 	auto entityManager = engine.GetEntityManager();
 
+	//Camera
 	const auto e0 = entityManager->CreateEntity();
 	auto entity = dm::EntityHandle(e0);
 
 	auto t = entity.CreateComponent<dm::Transform>(ComponentType::TRANSFORM);
-	t->position = dm::Vec3f(0, 0, 10);
-	t->rotation = dm::Vec3f(0, 0, 0);
+	t->position = glm::vec3(0, 0, 10);
+	t->rotation = glm::vec3(0, 0, 0);
 
 	dm::Camera cameraInfo;
 	cameraInfo.componentType = ComponentType::CAMERA;
 	cameraInfo.isMainCamera = true;
-	cameraInfo.viewMatrix = dm::Matrix4::ViewMatrix(t->position, t->rotation);
-	cameraInfo.proj = dm::Matrix4::PerspectiveMatrix(45.0f  * (3.14f / 180), 800.0f / 600.0f, 0.1f, 100.0f);
+	cameraInfo.viewMatrix = glm::lookAt(glm::vec3(10, 0, 0), glm::vec3(0, 0, 0), glm::vec3(0, 0, 0));
+	cameraInfo.proj = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
 
 	auto camera = entity.AddComponent<dm::Camera>(cameraInfo);
 
-	auto controller = entity.CreateComponent<dm::ControllerType>(ComponentType::CONTROL_TYPE);
-	controller->type = dm::ControllerType::ControllerTypeEnum::CAMERA_EDITOR;
-
+	//Cube 0
 	const auto e1 = entityManager->CreateEntity();
 	auto cube = dm::EntityHandle(e1);
 	auto transform = cube.CreateComponent<dm::Transform>(ComponentType::TRANSFORM);
-	transform->position = dm::Vec3f(0, 0, 0);
-	transform->scaling = dm::Vec3f(1, 1, 1);
+	transform->position = glm::vec3(0, 0, 0);
+	transform->scaling = glm::vec3(1, 1, 1);
 	dm::Mesh mesh;
 	mesh.componentType = ComponentType::MESH;
 	mesh.model = dm::ModelCube::Create(dm::Vec3f(1.0f, 1.0f, 1.0f));
@@ -76,11 +79,12 @@ TEST(Models, Cube)
 	material.color = dm::Color(100, 200, 0, 1);
 	cube.AddComponent<dm::MaterialDefault>(material);
 
-	const auto e2 = entityManager->CreateEntity();
+	//Cube 1
+	/*const auto e2 = entityManager->CreateEntity();
 	auto cube2 = dm::EntityHandle(e2);
 	auto transform2 = cube2.CreateComponent<dm::Transform>(ComponentType::TRANSFORM);
-	transform2->position = dm::Vec3f(2, 0, 0);
-	transform2->scaling = dm::Vec3f(1, 1, 1);
+	transform2->position = glm::vec3(2, 0, 0);
+	transform2->scaling = glm::vec3(1, 1, 1);
 	dm::Mesh mesh2;
 	mesh2.componentType = ComponentType::MESH;
 	mesh2.model = dm::ModelCube::Create(dm::Vec3f(1.0f, 1.0f, 1.0f));
@@ -89,7 +93,7 @@ TEST(Models, Cube)
 	dm::MaterialDefault material2;
 	material2.componentType = ComponentType::MATERIAL_DEFAULT;
 	material2.color = dm::Color(100, 200, 0, 1);
-	cube2.AddComponent<dm::MaterialDefault>(material2);
+	cube2.AddComponent<dm::MaterialDefault>(material2);*/
 	
 	try
 	{

@@ -28,6 +28,8 @@ SOFTWARE.
 #include "component/mesh.h"
 #include <component/material_default.h>
 
+#include <glm/gtx/string_cast.hpp>
+
 namespace dm
 {
 RendererMeshes::RendererMeshes(Engine& engine, const Pipeline::Stage& pipelineStage) : 
@@ -47,6 +49,7 @@ void RendererMeshes::Update(float dt)
 		auto entity = EntityHandle(meshRender);
 		const auto material = entity.GetComponent<MaterialDefault>(ComponentType::MATERIAL_DEFAULT);
 		const auto transform = entity.GetComponent<Transform>(ComponentType::TRANSFORM);
+
 		transform->position.y *= -1;
 		MaterialDefaultManager::PushUniform(*material, TransformManager::GetWorldMatrix(*transform));
 		transform->position.y *= -1;

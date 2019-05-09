@@ -30,6 +30,8 @@ SOFTWARE.
 #include <graphics/window.h>
 
 #include <SPIRV/GlslangToSpv.h>
+#include <glm/detail/func_trigonometric.inl>
+#include <glm/ext/matrix_clip_space.inl>
 
 namespace dm
 {
@@ -399,7 +401,8 @@ const std::shared_ptr<CommandPool> &GraphicManager::GetCommandPool(const std::th
 void GraphicManager::UpdateMainCamera() const
 {
 	const auto windowSize = Engine::Get()->GetSettings().windowSize;
-	m_MainCamera->proj = Matrix4::PerspectiveMatrix(45 * (3.14f / 180), windowSize.x / static_cast<float>(windowSize.y), 0.1f, 100.0f);
+
+	m_MainCamera->proj = glm::perspective(glm::radians(45.0f), windowSize.x / static_cast<float>(windowSize.y), 0.1f, 100.0f);
 }
 
 void GraphicManager::RecreatePass(RenderStage& renderStage)

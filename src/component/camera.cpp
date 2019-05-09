@@ -27,6 +27,9 @@ SOFTWARE.
 #include <graphics/graphic_manager.h>
 #include <component/transform.h>
 #include "entity/entity_handle.h"
+#include <glm/ext/matrix_clip_space.inl>
+#include <glm/detail/func_trigonometric.inl>
+#include <glm/ext/matrix_transform.inl>
 
 namespace dm
 {
@@ -45,7 +48,8 @@ Camera* CameraManager::CreateComponent(const Entity entity)
 {
 	auto c = Camera();
 	c.componentType = ComponentType::CAMERA;
-	c.proj = Matrix4::PerspectiveMatrix(45 * (3.14f / 180), 800.0f / 600.0f, 0.1f, 100.0f);
+	c.viewMatrix = glm::lookAt(glm::vec3(10, 0, 0), glm::vec3(0, 0, 0), glm::vec3(0, 0, 0));
+	c.proj = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
 	c.isMainCamera = false;
 	//TODO mettre les valeurs depuis l'exterieur
 

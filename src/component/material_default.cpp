@@ -94,7 +94,7 @@ void MaterialDefaultManager::PushDescriptor(MaterialDefault& material)
 	material.descriptorSet.Push("samplerDiffuse", material.textureDiffuse);
 }
 
-void MaterialDefaultManager::PushUniform(MaterialDefault& material, const Matrix4 worldPos)
+void MaterialDefaultManager::PushUniform(MaterialDefault& material, const glm::mat4x4 worldPos)
 {
 	material.uniformObject.Push("transform", worldPos);
 	material.uniformObject.Push("baseDiffuse", material.color);

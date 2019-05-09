@@ -26,13 +26,14 @@ SOFTWARE.
 #define CAMERA_H
 
 #include <component/component.h>
-#include <engine/matrix_4.h>
+
+#include <glm/mat4x4.hpp>
 
 namespace dm {
 struct Camera final : ComponentBase
 {
-	Matrix4 proj{};
-	Matrix4 viewMatrix{};
+	glm::mat4x4 proj{};
+	glm::mat4x4 viewMatrix{};
 
 	bool isMainCamera;
 };

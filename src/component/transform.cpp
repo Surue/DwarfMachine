@@ -26,6 +26,8 @@ SOFTWARE.
 #include "imgui.h"
 #include "imgui_gizmo.h"
 #include <graphics/graphic_manager.h>
+#include <glm/ext/matrix_transform.inl>
+#include <glm/detail/func_trigonometric.inl>
 
 namespace dm
 {
@@ -60,8 +62,6 @@ Transform* TransformManager::CreateComponent(const Entity entity)
 
 	m_Components[entity - 1] = t;
 
-	m_Components[entity - 1].worldMatrix = GetWorldMatrix(t);
-
 	return &m_Components[entity - 1];
 }
 
@@ -69,39 +69,36 @@ Transform* TransformManager::AddComponent(const Entity entity, Transform& compon
 {
 	m_Components[entity - 1] = component;
 
-	m_Components[entity - 1].worldMatrix = GetWorldMatrix(component);
-
-	std::cout << "ICI\n";
-
 	return &m_Components[entity - 1];
 }
 
 void TransformManager::DestroyComponent(Entity entity) { }
 
-Matrix4 TransformManager::GetWorldMatrix(Transform& component) 
+glm::mat4x4 TransformManager::GetWorldMatrix(Transform& component) 
 {
-	return Matrix4::TransformationMatrix(component.position, (3.14f / 180) * component.rotation, component.scaling);
+	component.worldMatrix = glm::mat4x4(1.0f);
+	component.worldMatrix = glm::translate(component.worldMatrix, component.position);
+	component.worldMatrix = glm::rotate(component.worldMatrix, component.rotation.x, glm::vec3(1, 0, 0));
+	component.worldMatrix = glm::rotate(component.worldMatrix, component.rotation.y, glm::vec3(0, 1, 0));
+	component.worldMatrix = glm::rotate(component.worldMatrix, component.rotation.z, glm::vec3(0, 0, 1));
+	component.worldMatrix = glm::scale(component.worldMatrix, component.scaling);
+	return component.worldMatrix;
 }
 
 void TransformManager::OnDrawInspector(Entity entity)
 {
-	m_Components[entity - 1].worldMatrix = GetWorldMatrix(m_Components[entity - 1]);
+	//m_Components[entity - 1].worldMatrix = GetWorldMatrix(m_Components[entity - 1]);
 
 	ImGui::Separator();
-	ImGui::TextWrapped("Transform");/*
-	ImGui::DragFloat3("Position", &m_Components[entity - 1].position[0], 0.5f);
-	ImGui::DragFloat3("Rotation", &m_Components[entity - 1].rotation[0], 0.5f);
-	ImGui::DragFloat3("Scale", &m_Components[entity - 1].scaling[0], 0.5f);*/
+	ImGui::TextWrapped("Transform");
 
-	//ImGuizmo::DecomposeMatrixToComponents(&model[0][0], &m_Components[entity - 1].position[0], &m_Components[entity - 1].rotation[0], &matrixScale[0]);
-	ImGui::DragFloat3("Position", &m_Components[entity - 1].position[0], 3);
-	ImGui::DragFloat3("Rotation", &m_Components[entity - 1].rotation[0], 3);
-	ImGui::DragFloat3("Scale", &m_Components[entity - 1].scaling[0], 3);
-	//ImGuizmo::RecomposeMatrixFromComponents(&m_Components[entity - 1].position[0], &matrixRotation[0], &matrixRotation[0], &model[0][0]);
+	ImGui::DragFloat3("Position", &m_Components[entity - 1].position[0], 0.1f);
+	ImGui::DragFloat3("Rotation", &m_Components[entity - 1].rotation[0], 0.1f);
+	ImGui::DragFloat3("Scale", &m_Components[entity - 1].scaling[0], 0.1f);
 
 	m_Components[entity - 1].worldMatrix = GetWorldMatrix(m_Components[entity - 1]);
 
-	Matrix4 model = m_Components[entity - 1].worldMatrix;
+	glm::mat4x4 model = m_Components[entity - 1].worldMatrix;
 
 	ImGuizmo::BeginFrame();
 	ImGuiIO& io = ImGui::GetIO();
@@ -109,15 +106,12 @@ void TransformManager::OnDrawInspector(Entity entity)
 	auto camera = Engine::Get()->GetGraphicManager()->GetCamera();
 	ImGuizmo::Manipulate(&camera->viewMatrix[0][0], &camera->proj[0][0], ImGuizmo::TRANSLATE, ImGuizmo::LOCAL, &(model[0][0]), NULL, NULL);
 
-	m_Components[entity - 1].worldMatrix = model;
-	Vec3f pos;
-	Vec3f rot;
-	Vec3f sca;
+	glm::vec3 pos;
+	glm::vec3 rot;
+	glm::vec3 sca;
 	ImGuizmo::DecomposeMatrixToComponents(&model[0][0], &pos[0], &rot[0], &sca[0]);
 	m_Components[entity - 1].position = pos;
 	m_Components[entity - 1].rotation = rot;
 	m_Components[entity - 1].scaling = sca;
-
-
 }
 }

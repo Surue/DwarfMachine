@@ -29,7 +29,7 @@ SOFTWARE.
 #include <engine/color.h>
 #include <graphics/uniform_handle.h>
 #include <graphics/descriptor_handle.h>
-#include <engine/matrix_4.h>
+#include <glm/mat4x4.hpp>
 
 namespace dm
 {
@@ -73,7 +73,7 @@ public:
 
 	static void PushDescriptor(MaterialDefault& material);
 
-	static void PushUniform(MaterialDefault& material, const Matrix4 worldPos);
+	static void PushUniform(MaterialDefault& material, const glm::mat4x4 worldPos);
 
 	MaterialDefault& Get(const Entity entity);
 

@@ -26,6 +26,8 @@ SOFTWARE.
 #include <system/camera_view.h>
 #include <component/camera.h>
 #include <entity/entity_handle.h>
+#include <glm/ext/matrix_transform.inl>
+#include <glm/detail/func_trigonometric.inl>
 
 namespace dm
 {
@@ -43,7 +45,19 @@ void CameraView::Update(float dt)
 		auto camera = entity.GetComponent<Camera>(ComponentType::CAMERA);
 		const auto transform = entity.GetComponent<Transform>(ComponentType::TRANSFORM);
 
-		camera->viewMatrix = Matrix4::ViewMatrix(transform->position, transform->rotation * (3.14f/180));
+		// define your up vector
+		glm::vec3 upVector = glm::vec3(0, 1, 0);
+		// rotate around to a given bearing: yaw
+		glm::mat4 ca = glm::rotate(glm::mat4(), 0.0f, upVector);
+		// Define the 'look up' axis, should be orthogonal to the up axis
+		glm::vec3 pitchVector = glm::vec3(1, 0, 0);
+		// rotate around to the required head tilt: pitch
+		ca = glm::rotate(ca, 0.0f, pitchVector);
+
+		// now get the view matrix by taking the camera inverse
+		glm::mat4 view = glm::inverse(ca);
+
+		camera->viewMatrix = view;
 	}
 }
 }

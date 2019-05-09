@@ -29,17 +29,17 @@ SOFTWARE.
 
 #include <component/component.h>
 #include <engine/vector.h>
-#include <engine/matrix_4.h>
+
+#include <glm/mat4x4.hpp>
 
 namespace dm
 {
 struct Transform final : ComponentBase
 {
-	Vec3f position;
-	Vec3f rotation;
-	Vec3f scaling;
-
-	Matrix4 worldMatrix;
+	glm::vec3 position = glm::vec3(0.0f);
+	glm::vec3 rotation = glm::vec3(0.0f);
+	glm::vec3 scaling = glm::vec3(1.0f);
+	glm::mat4 worldMatrix = glm::mat4x4(1.0f);
 
 	friend std::ostream & operator<<(std::ostream & out, const Transform transform)
 	{
@@ -65,7 +65,7 @@ public:
 
 	void DestroyComponent(Entity entity) override;
 
-	static Matrix4 GetWorldMatrix(Transform &component);
+	static glm::mat4x4 GetWorldMatrix(Transform &component);
 
 	void OnDrawInspector(Entity entity) override;
 };

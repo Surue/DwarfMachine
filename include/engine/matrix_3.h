@@ -29,7 +29,7 @@ SOFTWARE.
 
 namespace dm
 {
-	class Matrix3
+	/*class Matrix3
 	{
 	public:
 		explicit Matrix3(const float& diagonal = 1.0f);
@@ -45,7 +45,7 @@ namespace dm
 		}
 	private:
 		Vec3f m_rows[4];
-	};
+	};*/
 }
 
 #endif MATRIX_3_H

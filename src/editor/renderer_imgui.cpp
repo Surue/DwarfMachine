@@ -31,7 +31,6 @@ SOFTWARE.
 #include <graphics/model_vertex.h>
 #include <graphics/window.h>
 #include <imgui_internal.h>
-#include "imgui_gizmo.h"
 
 namespace dm
 {
