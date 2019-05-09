@@ -39,6 +39,8 @@ struct Transform final : ComponentBase
 	Vec3f rotation;
 	Vec3f scaling;
 
+	Matrix4 worldMatrix;
+
 	friend std::ostream & operator<<(std::ostream & out, const Transform transform)
 	{
 		out << "(" << transform.position.x << ", " << transform.position.y << ", "<< transform.position.z << ")";
@@ -58,6 +60,8 @@ public:
 	void Update() override;
 
 	Transform* CreateComponent(Entity entity) override;
+
+	Transform* AddComponent(const Entity entity, Transform& component) override;
 
 	void DestroyComponent(Entity entity) override;
 

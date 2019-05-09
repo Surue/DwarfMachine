@@ -27,6 +27,7 @@ SOFTWARE.
 
 #include <cstdint>
 #include <engine/matrix_3.h>
+#include <sstream>
 
 namespace dm
 {
@@ -43,6 +44,18 @@ public:
 	Vec4f &operator[](const uint32_t &index)
 	{
 		return m_Rows[index];
+	}
+
+	friend std::ostream &operator<<(std::ostream &stream, const Matrix4 &matrix)
+	{
+		std::stringstream s;
+		s.precision(10);
+		s << "(" << matrix.m_Rows[0][0] << ", " << matrix.m_Rows[0][1] << ", " << matrix.m_Rows[0][2] << ", " << matrix.m_Rows[0][3] << ", \n" << matrix.m_Rows[1][0] << ", " << matrix.m_Rows[1][1] << ", "
+			<< matrix.m_Rows[1][2] << ", " << matrix.m_Rows[1][3] << ", \n" << matrix.m_Rows[2][0] << ", " << matrix.m_Rows[2][1] << ", " << matrix.m_Rows[2][2] << ", " << matrix.m_Rows[2][3] << ", \n" << matrix.m_Rows[3][0]
+			<< ", " << matrix.m_Rows[3][1] << ", " << matrix.m_Rows[3][2] << ", " << matrix.m_Rows[3][3] << ")";
+
+		stream << s.str();
+		return stream;
 	}
 
 	Matrix4 Translate(const Vec3f& other) const;

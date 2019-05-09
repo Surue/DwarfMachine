@@ -154,16 +154,6 @@ void RendererImGui::NewFrame()
 	ImGui_ImplVulkan_NewFrame();
 	ImGui_ImplSDL2_NewFrame(GraphicManager::Get()->GetWindow()->GetWindow());
 	ImGui::NewFrame();
-
-	/*ImGuizmo::SetOrthographic(false);
-
-	ImGuizmo::BeginFrame();
-	ImGuiIO& io = ImGui::GetIO();
-	ImGuizmo::SetRect(0, 0, io.DisplaySize.x, io.DisplaySize.y);
-	auto camera = Engine::Get()->GetGraphicManager()->GetCamera();
-	ImGuizmo::DrawCube(&camera->viewMatrix[0][0], &camera->proj[0][0], objectMatrix);
-	ImGuizmo::DrawGrid(&camera->viewMatrix[0][0], &camera->proj[0][0], identityMatrix, 10.f); //Fix this function
-	ImGuizmo::Manipulate(&camera->viewMatrix[0][0], &camera->proj[0][0], ImGuizmo::TRANSLATE, ImGuizmo::LOCAL, objectMatrix, NULL, NULL);*/
 }
 
 void RendererImGui::Draw(const CommandBuffer& commandBuffer)

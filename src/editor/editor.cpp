@@ -29,15 +29,23 @@ SOFTWARE.
 #include <imgui.h>
 #include <fstream>
 #include <component/component_manager.h>
+#include "imgui_gizmo.h"
+#include "entity/entity_handle.h"
 
 namespace dm
 {
 Editor::Editor()
 {
 	GraphicManager::Get()->SetManager(new EditorRenderManager());
+
+	ImGuizmo::SetOrthographic(false);
 }
 
-void Editor::Awake() {}
+void Editor::Awake()
+{
+	//TODO ajouter l'appel de la fonction 
+	//ImGuizmo::SetOrthographic(false); 
+}
 
 void Editor::Start() {}
 
@@ -50,6 +58,8 @@ void Editor::Draw()
 	DrawInspector();
 
 	DrawHierarchy();
+
+	DrawTransformHandle();
 }
 
 void Editor::DrawInspector() 
@@ -139,5 +149,22 @@ void Editor::DrawHierarchy()
 	}
 
 	ImGui::End();
+}
+
+void Editor::DrawTransformHandle()
+{
+	if (m_CurrentEntitySelected == INVALID_ENTITY) return;
+
+	auto entity = EntityHandle(m_CurrentEntitySelected);
+
+	auto transform = entity.GetComponent<Transform>(ComponentType::TRANSFORM);
+
+	Matrix4 model = TransformManager::GetWorldMatrix(*transform);
+
+	/*ImGuizmo::BeginFrame();
+	ImGuiIO& io = ImGui::GetIO();
+	ImGuizmo::SetRect(0, 0, io.DisplaySize.x, io.DisplaySize.y);
+	auto camera = Engine::Get()->GetGraphicManager()->GetCamera();
+	ImGuizmo::Manipulate(&camera->viewMatrix[0][0], &camera->proj[0][0], ImGuizmo::TRANSLATE, ImGuizmo::LOCAL, &(model[0][0]), NULL, NULL);*/
 }
 }

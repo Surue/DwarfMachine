@@ -45,6 +45,8 @@ private:
 
 	void DrawHierarchy();
 
+	void DrawTransformHandle();
+
 	Entity m_CurrentEntitySelected = INVALID_ENTITY;
 };
 }
