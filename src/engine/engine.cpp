@@ -131,7 +131,7 @@ void Engine::MainLoop()
 	{
 		CalculateDeltaTime();
 
-		std::cout << "dt = " << m_DeltaTime << ", FPS = " << m_Fps << "\n";
+		//std::cout << "dt = " << m_DeltaTime << ", FPS = " << m_Fps << "\n";
 
 		m_InputManager->Update();
 

@@ -87,23 +87,20 @@ glm::mat4x4 TransformManager::GetWorldMatrix(Transform& component)
 
 void TransformManager::OnDrawInspector(Entity entity)
 {
-	//m_Components[entity - 1].worldMatrix = GetWorldMatrix(m_Components[entity - 1]);
-
 	ImGui::Separator();
 	ImGui::TextWrapped("Transform");
-
 	ImGui::DragFloat3("Position", &m_Components[entity - 1].position[0], 0.1f);
 	ImGui::DragFloat3("Rotation", &m_Components[entity - 1].rotation[0], 0.1f);
 	ImGui::DragFloat3("Scale", &m_Components[entity - 1].scaling[0], 0.1f);
 
 	m_Components[entity - 1].worldMatrix = GetWorldMatrix(m_Components[entity - 1]);
 
+	auto camera = Engine::Get()->GetGraphicManager()->GetCamera();
 	glm::mat4x4 model = m_Components[entity - 1].worldMatrix;
 
 	ImGuizmo::BeginFrame();
 	ImGuiIO& io = ImGui::GetIO();
 	ImGuizmo::SetRect(0, 0, io.DisplaySize.x, io.DisplaySize.y);
-	auto camera = Engine::Get()->GetGraphicManager()->GetCamera();
 	ImGuizmo::Manipulate(&camera->viewMatrix[0][0], &camera->proj[0][0], ImGuizmo::TRANSLATE, ImGuizmo::LOCAL, &(model[0][0]), NULL, NULL);
 
 	glm::vec3 pos;

@@ -99,8 +99,7 @@ void InputManager::Update()
 			break;
 
 		case SDL_MOUSEBUTTONDOWN:
-			this->mouse = SDL_GetMouseState(&(m_MousePos.x),
-				&(m_MousePos.y));
+			this->mouse = SDL_GetMouseState(NULL, NULL);
 
 			if (event.button.button == SDL_BUTTON_LEFT)
 				m_ButtonDown[static_cast<int>(ButtonCode::LEFT)] = true;
@@ -113,8 +112,7 @@ void InputManager::Update()
 			break;
 
 		case SDL_MOUSEBUTTONUP:
-			this->mouse = SDL_GetMouseState(&(m_MousePos.x),
-				&(m_MousePos.y));
+			this->mouse = SDL_GetMouseState(NULL, NULL);
 
 			if (event.button.button == SDL_BUTTON_LEFT)
 				m_ButtonUp[static_cast<int>(ButtonCode::LEFT)] = true;

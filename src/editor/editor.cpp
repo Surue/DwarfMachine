@@ -33,6 +33,7 @@ SOFTWARE.
 #include "entity/entity_handle.h"
 #include <glm/ext/matrix_transform.inl>
 #include "engine/Input.h"
+#include <glm/detail/func_trigonometric.inl>
 
 namespace dm
 {
@@ -55,32 +56,69 @@ void Editor::Update(float dt)
 {
 	auto camera = GraphicManager::Get()->GetCamera();
 
-	glm::vec3 cameraPos = Engine::Get()->GetComponentManager()->GetCameraManager()->GetTransformOfCamera(*camera)->position;
-
-	glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
-	glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
-
-	const auto cameraSpeed = 2.5f * dt;
+	auto cameraSpeed = 4.5f * dt;
 	auto* inputManager = Engine::Get()->GetInputManager();
 
-	if (inputManager->IsKeyHeld(KeyCode::LEFT))
-		cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
-	
+	if (inputManager->IsKeyHeld(KeyCode::SHIFT_LEFT))
+		cameraSpeed *= 2;
 
-	if (inputManager->IsKeyHeld(KeyCode::RIGHT))
-		cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+	if (inputManager->IsKeyHeld(KeyCode::LEFT) || inputManager->IsKeyHeld(KeyCode::A))
+		camera->cameraPos -= glm::normalize(glm::cross(camera->cameraFront, camera->cameraUp)) * cameraSpeed;
 	
-
-	if (inputManager->IsKeyHeld(KeyCode::DOWN))
-		cameraPos -= cameraSpeed * cameraFront;
+	if (inputManager->IsKeyHeld(KeyCode::RIGHT) || inputManager->IsKeyHeld(KeyCode::D))
+		camera->cameraPos += glm::normalize(glm::cross(camera->cameraFront, camera->cameraUp)) * cameraSpeed;
 	
-	if (inputManager->IsKeyHeld(KeyCode::UP))
-		cameraPos += cameraSpeed * cameraFront;
+	if (inputManager->IsKeyHeld(KeyCode::DOWN) || inputManager->IsKeyHeld(KeyCode::S))
+		camera->cameraPos -= cameraSpeed * camera->cameraFront;
 	
+	if (inputManager->IsKeyHeld(KeyCode::UP) || inputManager->IsKeyHeld(KeyCode::W))
+		camera->cameraPos += cameraSpeed * camera->cameraFront;
 
-	camera->viewMatrix = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
+	if (inputManager->scrollY > 0.1f)
+	{
+		camera->cameraPos += 10 * cameraSpeed * camera->cameraFront;
+	}
+	else if (inputManager->scrollY < -0.1f)
+	{
+		camera->cameraPos -= 10 * cameraSpeed * camera->cameraFront;
+	}
 
-	Engine::Get()->GetComponentManager()->GetCameraManager()->GetTransformOfCamera(*camera)->position = cameraPos;
+	Vec2i mousePos = inputManager->GetMousePosition();
+	static Vec2i lastPos;
+
+	if (inputManager->IsButtonDown(ButtonCode::MIDDLE))
+	{
+		lastPos = mousePos;
+	}
+
+	const auto sensitivity = 0.005f;
+	const glm::vec2 offset = glm::vec2((mousePos.x - lastPos.x) * sensitivity, (lastPos.y - mousePos.y) * sensitivity);
+	
+	lastPos = mousePos;
+
+	if (inputManager->IsButtonHeld(ButtonCode::MIDDLE))
+	{
+		camera->cameraPos.x += offset.x;
+		camera->cameraPos.y -= offset.y;
+	}
+
+	if (inputManager->IsButtonHeld(ButtonCode::RIGHT)) {
+		camera->yaw -= offset.x * 10.0f;
+		camera->pitch -= offset.y * 10.0f;
+
+		if (camera->pitch > 89.0f)
+			camera->pitch = 89.0f;
+		if (camera->pitch < -89.0f)
+			camera->pitch = -89.0f;
+
+	}
+
+	glm::vec3 front;
+	front.x = cos(glm::radians(camera->yaw)) * cos(glm::radians(camera->pitch));
+	front.y = sin(glm::radians(camera->pitch));
+	front.z = sin(glm::radians(camera->yaw)) * cos(glm::radians(camera->pitch));
+	camera->cameraFront = glm::normalize(front);
+	camera->viewMatrix = glm::lookAt(camera->cameraPos, camera->cameraPos + camera->cameraFront, camera->cameraUp);
 }
 
 void Editor::Draw()

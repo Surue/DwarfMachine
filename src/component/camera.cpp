@@ -30,6 +30,7 @@ SOFTWARE.
 #include <glm/ext/matrix_clip_space.inl>
 #include <glm/detail/func_trigonometric.inl>
 #include <glm/ext/matrix_transform.inl>
+#include "imgui.h"
 
 namespace dm
 {
@@ -48,7 +49,7 @@ Camera* CameraManager::CreateComponent(const Entity entity)
 {
 	auto c = Camera();
 	c.componentType = ComponentType::CAMERA;
-	c.viewMatrix = glm::lookAt(glm::vec3(10, 0, 0), glm::vec3(0, 0, 0), glm::vec3(0, 0, 0));
+	c.viewMatrix = glm::lookAt(c.cameraPos, c.cameraPos + c.cameraFront, c.cameraUp);
 	c.proj = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
 	c.isMainCamera = false;
 	//TODO mettre les valeurs depuis l'exterieur
@@ -88,5 +89,14 @@ void CameraManager::DestroyComponent(Entity entity)
 {
 }
 
-void CameraManager::OnDrawInspector(Entity entity) {}
+void CameraManager::OnDrawInspector(Entity entity)
+{
+	ImGui::Separator();
+	ImGui::TextWrapped("Transform");
+	ImGui::DragFloat3("Position", &m_Components[entity - 1].cameraPos[0], 0.1f);
+	ImGui::DragFloat3("Front", &m_Components[entity - 1].cameraFront[0], 0.1f);
+	ImGui::DragFloat3("Up", &m_Components[entity - 1].cameraUp[0], 0.1f);
+	ImGui::DragFloat("Yaw", &m_Components[entity - 1].yaw, 0.1f);
+	ImGui::DragFloat("Pitch", &m_Components[entity - 1].pitch, 0.1f);
+}
 }

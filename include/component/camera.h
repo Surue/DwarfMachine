@@ -34,6 +34,11 @@ struct Camera final : ComponentBase
 {
 	glm::mat4x4 proj{};
 	glm::mat4x4 viewMatrix{};
+	float yaw = 90;
+	float pitch = 0;
+	glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
+	glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, -10.0f);
+	glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
 
 	bool isMainCamera;
 };

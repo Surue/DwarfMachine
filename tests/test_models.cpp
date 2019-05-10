@@ -51,14 +51,10 @@ TEST(Models, Cube)
 	const auto e0 = entityManager->CreateEntity();
 	auto entity = dm::EntityHandle(e0);
 
-	auto t = entity.CreateComponent<dm::Transform>(ComponentType::TRANSFORM);
-	t->position = glm::vec3(0, 0, 10);
-	t->rotation = glm::vec3(0, 0, 0);
-
 	dm::Camera cameraInfo;
 	cameraInfo.componentType = ComponentType::CAMERA;
 	cameraInfo.isMainCamera = true;
-	cameraInfo.viewMatrix = glm::lookAt(glm::vec3(10, 0, 0), glm::vec3(0, 0, 0), glm::vec3(0, 0, 0));
+	cameraInfo.viewMatrix = glm::lookAt(cameraInfo.cameraPos, cameraInfo.cameraPos + cameraInfo.cameraFront, cameraInfo.cameraUp);
 	cameraInfo.proj = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
 
 	auto camera = entity.AddComponent<dm::Camera>(cameraInfo);
