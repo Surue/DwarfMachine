@@ -27,7 +27,6 @@ SOFTWARE.
 
 namespace dm
 {
-
 Window::Window()
 {
 	

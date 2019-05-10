@@ -134,6 +134,7 @@ void Editor::DrawDock()
 
 	// DockSpace
 	ImGuiIO& io = ImGui::GetIO();
+
 	if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
 	{
 		const ImGuiID dockspaceId = ImGui::GetID("MyDockSpace");

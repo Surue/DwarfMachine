@@ -49,6 +49,15 @@ RendererImGui::RendererImGui(const Pipeline::Stage &pipelineStage) :
 	auto logicalDevice = GraphicManager::Get()->GetLogicalDevice();
 	auto window = GraphicManager::Get()->GetWindow();
 
+	ImGui::CreateContext();
+	// Color scheme
+	// Dimensions
+	ImGuiIO& io = ImGui::GetIO();
+	(void)io;
+	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+	ImGui::StyleColorsDark();
+
 	VkDescriptorPoolSize pool_sizes[] =
 	{
 		{ VK_DESCRIPTOR_TYPE_SAMPLER, 1000 },
@@ -72,18 +81,8 @@ RendererImGui::RendererImGui(const Pipeline::Stage &pipelineStage) :
 	pool_info.pPoolSizes = pool_sizes;
 	check_vk_result(vkCreateDescriptorPool(*logicalDevice, &pool_info, nullptr, &m_GDescriptorPool));
 
-	ImGui::CreateContext();
-
 	ImGui_ImplSDL2_InitForVulkan(GraphicManager::Get()->GetWindow()->GetWindow());
 
-
-	// Color scheme
-	// Dimensions
-	ImGuiIO& io = ImGui::GetIO();
-	(void)io;
-	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
-	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
-	ImGui::StyleColorsDark();
 
 	const auto surfaceCapabilities = surface->GetCapabilities();
 
@@ -158,6 +157,7 @@ void RendererImGui::NewFrame()
 void RendererImGui::Draw(const CommandBuffer& commandBuffer)
 {
 	ImGui::Render();
+
 	ImGui_ImplVulkan_RenderDrawData(ImGui::GetDrawData(), commandBuffer.GetCommandBuffer());
 	NewFrame();
 }

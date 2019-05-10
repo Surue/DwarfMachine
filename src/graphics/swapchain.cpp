@@ -49,6 +49,8 @@ Swapchain::Swapchain(const VkExtent2D& extent) :
 	auto graphicsFamily = logicalDevice->GetGraphicsFamily();
 	auto presentFamily = logicalDevice->GetPresentFamily();
 
+	vkGetPhysicalDeviceSurfaceCapabilitiesKHR(*physicalDevice, *surface, &surfaceCapabilities);
+
 	uint32_t physicalPresentModeCount = 0;
 	vkGetPhysicalDeviceSurfacePresentModesKHR(*physicalDevice, *surface, &physicalPresentModeCount, nullptr);
 	std::vector<VkPresentModeKHR> physicalPresentModes(physicalPresentModeCount);

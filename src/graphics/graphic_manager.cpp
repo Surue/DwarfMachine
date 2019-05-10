@@ -32,6 +32,8 @@ SOFTWARE.
 #include <SPIRV/GlslangToSpv.h>
 #include <glm/detail/func_trigonometric.inl>
 #include <glm/ext/matrix_clip_space.inl>
+#include "editor/log.h"
+#include "imgui.h"
 
 namespace dm
 {
@@ -332,7 +334,6 @@ Window* GraphicManager::GetWindow() const
 
 void GraphicManager::SetManager(RenderManager* managerRender)
 {
-	std::cout << "Set RenderManager\n";
 	vkDeviceWaitIdle(*m_LogicalDevice);
 	m_RenderManager.reset(managerRender);
 }
@@ -341,7 +342,6 @@ void GraphicManager::SetRenderStages(std::vector<std::unique_ptr<RenderStage>> r
 {
 	VkExtent2D displayExtent = { m_Window->GetSize().x, m_Window->GetSize().y };
 	m_RenderStages = std::move(renderStages);
-	std::cout << "SetRenderStages\n";
 	m_Swapchain = std::make_unique<Swapchain>(displayExtent);
 
 	if (m_InFlightFences.size() != m_Swapchain->GetImageCount())
@@ -413,8 +413,9 @@ void GraphicManager::RecreatePass(RenderStage& renderStage)
 
 	CheckVk(vkQueueWaitIdle(graphicQueue));
 
-	if(renderStage.HasSwapchain() && m_Swapchain->IsSameExtent(displayExtent))
+	if(renderStage.HasSwapchain() && !m_Swapchain->IsSameExtent(displayExtent))
 	{
+		log("Resizing swapchain from (%i, %i) to (%i, %i)\n", m_Swapchain->GetExtend().width, m_Swapchain->GetExtend().height, displayExtent.width, displayExtent.height);
 		m_Swapchain = std::make_unique<Swapchain>(displayExtent);
 	}
 
@@ -491,6 +492,7 @@ void GraphicManager::EndRenderpass(RenderStage& renderStage)
 
 	m_CommandBuffers[m_Swapchain->GetActiveImageIndex()]->End();
 	m_CommandBuffers[m_Swapchain->GetActiveImageIndex()]->Submit(m_PresentCompletesSemaphore[m_CurrentFrame], m_RenderCompletesSemaphore[m_CurrentFrame], m_InFlightFences[m_CurrentFrame]);
+
 	const auto presentResult = m_Swapchain->QueuePresent(presentQueue, m_RenderCompletesSemaphore[m_CurrentFrame]);
 
 	if (!(presentResult == VK_SUCCESS || presentResult == VK_SUBOPTIMAL_KHR))
