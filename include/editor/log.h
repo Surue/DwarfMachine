@@ -22,40 +22,41 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#ifndef EDITOR_H
-#define EDITOR_H
-#include <engine/engine_application.h>
-#include "entity/entity.h"
+#ifndef LOG_H
+#define LOG_H
+#include <fstream>
+#include <mutex>
+
+#define print(a, ...) Debug::Log("%s:%d		" a, __FILE__, __LINE__, __VA_ARGS__)
+//#define print(a, ...) Debug::Log("%s(%s:%d) " a,  __func__,__FILE__, __LINE__, __VA_ARGS__)
+#define log(a, ...) print(a "\n", __VA_ARGS__)
 
 namespace dm
 {
-class Editor : public EngineApplication
+class Debug
 {
 public:
-	Editor();
+	static void Log(const std::string& string);
 
-	void Awake() override;
-	void Start() override;
-	void Update(float dt) override;
-	void Draw() override;
+	template<typename... Args>
+	static void Log(const std::string &format, Args &&... args)
+	{
+		Log(StringFormat(format, std::forward<Args>(args)...));
+	}
+
+	static std::string Print();
 private:
-	void DrawInspector();
+	static std::mutex m_Mutex;
+	static std::string m_Stream;
 
-	void DrawDock();
-
-	void DrawHierarchy();
-
-	void DrawTransformHandle();
-
-	void DrawStats();
-
-	void DrawConsole();
-
-	void MoveEditorCamera(float dt);
-
-	Entity m_CurrentEntitySelected = INVALID_ENTITY;
-
-	float lastDeltaTime;
+	template<typename... Args>
+	static std::string StringFormat(const std::string &format, Args &&... args)
+	{
+		const size_t size = snprintf(nullptr, 0, format.c_str(), args ...) + 1; // Extra space for '\0'
+		std::unique_ptr<char[]> buf(new char[size]);
+		snprintf(buf.get(), size, format.c_str(), args ...);
+		return std::string(buf.get(), buf.get() + size - 1); // Excludes the '\0'
+	}
 };
 }
 

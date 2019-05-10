@@ -23,7 +23,6 @@ SOFTWARE.
 */
 
 #include <engine/Input.h>
-#include <iostream>
 #include <graphics/graphic_manager.h>
 #include <graphics/window.h>
 #include <imgui.h>

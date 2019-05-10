@@ -27,13 +27,13 @@ SOFTWARE.
 #include <graphics/graphic_manager.h>
 #include <editor/editor_renderer.h>
 #include <imgui.h>
-#include <fstream>
 #include <component/component_manager.h>
 #include "imgui_gizmo.h"
 #include "entity/entity_handle.h"
 #include <glm/ext/matrix_transform.inl>
 #include "engine/Input.h"
 #include <glm/detail/func_trigonometric.inl>
+#include "editor/log.h"
 
 namespace dm
 {
@@ -57,6 +57,24 @@ void Editor::Update(float dt)
 	MoveEditorCamera(dt);
 
 	lastDeltaTime = dt;
+
+	auto* inputManager = Engine::Get()->GetInputManager();
+
+	if (inputManager->IsKeyDown(KeyCode::SPACE)) {
+		log("space");
+	}
+
+	if (inputManager->IsKeyDown(KeyCode::W))
+		log("W");
+
+	if (inputManager->IsKeyDown(KeyCode::A))
+		log("A");
+
+	if (inputManager->IsKeyDown(KeyCode::S))
+		log("S");
+
+	if (inputManager->IsKeyDown(KeyCode::D))
+		log("D");
 }
 
 void Editor::Draw()
@@ -68,6 +86,8 @@ void Editor::Draw()
 	DrawHierarchy();
 
 	DrawTransformHandle();
+
+	DrawConsole();
 }
 
 void Editor::DrawInspector() 
@@ -180,6 +200,13 @@ void Editor::DrawStats()
 		ImGui::Text(fps.c_str());
 		ImGui::EndMenu();
 	}
+}
+
+void Editor::DrawConsole()
+{
+	ImGui::Begin("Console");
+	ImGui::Text(Debug::Print().c_str());
+	ImGui::End();
 }
 
 void Editor::MoveEditorCamera(float dt)

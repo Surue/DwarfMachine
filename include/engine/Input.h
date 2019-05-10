@@ -25,7 +25,6 @@ SOFTWARE.
 #ifndef INPUT_H
 #define INPUT_H
 
-#include <vector>
 #include <SDL.h>
 
 #include <engine/engine.h>

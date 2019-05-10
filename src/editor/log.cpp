@@ -22,41 +22,21 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#ifndef EDITOR_H
-#define EDITOR_H
-#include <engine/engine_application.h>
-#include "entity/entity.h"
+#include <editor/log.h>
 
 namespace dm
 {
-class Editor : public EngineApplication
+std::mutex Debug::m_Mutex = std::mutex();
+std::string Debug::m_Stream = std::string();
+
+void Debug::Log(const std::string& string)
 {
-public:
-	Editor();
-
-	void Awake() override;
-	void Start() override;
-	void Update(float dt) override;
-	void Draw() override;
-private:
-	void DrawInspector();
-
-	void DrawDock();
-
-	void DrawHierarchy();
-
-	void DrawTransformHandle();
-
-	void DrawStats();
-
-	void DrawConsole();
-
-	void MoveEditorCamera(float dt);
-
-	Entity m_CurrentEntitySelected = INVALID_ENTITY;
-
-	float lastDeltaTime;
-};
+	std::lock_guard<std::mutex> lock(m_Mutex);
+	m_Stream = string + "\n" + m_Stream;
 }
 
-#endif
+std::string Debug::Print()
+{
+	return m_Stream;
+}
+}

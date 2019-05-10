@@ -28,7 +28,6 @@ SOFTWARE.
 
 #include <component/transform.h>
 #include <entity/entity_handle.h>
-#include <editor/editor_renderer.h>
 #include <graphics/graphic_manager.h>
 #include "component/mesh.h"
 #include "graphics/model_cube.h"
@@ -76,7 +75,7 @@ TEST(Models, Cube)
 	cube.AddComponent<dm::MaterialDefault>(material);
 
 	//Cube 1
-	/*const auto e2 = entityManager->CreateEntity();
+	const auto e2 = entityManager->CreateEntity();
 	auto cube2 = dm::EntityHandle(e2);
 	auto transform2 = cube2.CreateComponent<dm::Transform>(ComponentType::TRANSFORM);
 	transform2->position = glm::vec3(2, 0, 0);
@@ -89,7 +88,7 @@ TEST(Models, Cube)
 	dm::MaterialDefault material2;
 	material2.componentType = ComponentType::MATERIAL_DEFAULT;
 	material2.color = dm::Color(100, 200, 0, 1);
-	cube2.AddComponent<dm::MaterialDefault>(material2);*/
+	cube2.AddComponent<dm::MaterialDefault>(material2);
 	
 	try
 	{
