@@ -47,9 +47,13 @@ private:
 
 	void DrawTransformHandle();
 
+	void DrawStats();
+
 	void MoveEditorCamera(float dt);
 
 	Entity m_CurrentEntitySelected = INVALID_ENTITY;
+
+	float lastDeltaTime;
 };
 }
 

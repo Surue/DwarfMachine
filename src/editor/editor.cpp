@@ -55,6 +55,8 @@ void Editor::Start() {}
 void Editor::Update(float dt)
 {
 	MoveEditorCamera(dt);
+
+	lastDeltaTime = dt;
 }
 
 void Editor::Draw()
@@ -131,6 +133,9 @@ void Editor::DrawDock()
 
 			ImGui::EndMenu();
 		}
+
+		DrawStats();
+
 		ImGui::EndMenuBar();
 	}
 
@@ -160,6 +165,21 @@ void Editor::DrawHierarchy()
 void Editor::DrawTransformHandle()
 {
 	
+}
+
+void Editor::DrawStats()
+{
+	if (ImGui::BeginMenu("Stats"))
+	{
+		std::string deltaTime = "Delta Time [ms] : ";
+		deltaTime += std::to_string(lastDeltaTime);
+		ImGui::Text(deltaTime.c_str());
+
+		std::string fps = "FPS : ";
+		fps += std::to_string(1 / lastDeltaTime);
+		ImGui::Text(fps.c_str());
+		ImGui::EndMenu();
+	}
 }
 
 void Editor::MoveEditorCamera(float dt)
