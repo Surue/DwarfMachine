@@ -47,6 +47,8 @@ private:
 
 	void DrawTransformHandle();
 
+	void MoveEditorCamera(float dt);
+
 	Entity m_CurrentEntitySelected = INVALID_ENTITY;
 };
 }

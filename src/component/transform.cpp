@@ -101,14 +101,17 @@ void TransformManager::OnDrawInspector(Entity entity)
 	ImGuizmo::BeginFrame();
 	ImGuiIO& io = ImGui::GetIO();
 	ImGuizmo::SetRect(0, 0, io.DisplaySize.x, io.DisplaySize.y);
-	ImGuizmo::Manipulate(&camera->viewMatrix[0][0], &camera->proj[0][0], ImGuizmo::TRANSLATE, ImGuizmo::LOCAL, &(model[0][0]), NULL, NULL);
+	ImGuizmo::Manipulate(&camera->viewMatrix[0][0], &camera->proj[0][0], ImGuizmo::TRANSLATE, ImGuizmo::LOCAL, &m_Components[entity - 1].worldMatrix[0][0], NULL, NULL);
 
 	glm::vec3 pos;
 	glm::vec3 rot;
 	glm::vec3 sca;
-	ImGuizmo::DecomposeMatrixToComponents(&model[0][0], &pos[0], &rot[0], &sca[0]);
+	ImGuizmo::DecomposeMatrixToComponents(&m_Components[entity - 1].worldMatrix[0][0], &pos[0], &rot[0], &sca[0]);
+	
 	m_Components[entity - 1].position = pos;
-	m_Components[entity - 1].rotation = rot;
-	m_Components[entity - 1].scaling = sca;
+	/*m_Components[entity - 1].rotation = rot;
+	m_Components[entity - 1].scaling = sca;*/
+
+	m_Components[entity - 1].worldMatrix = GetWorldMatrix(m_Components[entity - 1]);
 }
 }

@@ -54,71 +54,7 @@ void Editor::Start() {}
 
 void Editor::Update(float dt)
 {
-	auto camera = GraphicManager::Get()->GetCamera();
-
-	auto cameraSpeed = 4.5f * dt;
-	auto* inputManager = Engine::Get()->GetInputManager();
-
-	if (inputManager->IsKeyHeld(KeyCode::SHIFT_LEFT))
-		cameraSpeed *= 2;
-
-	if (inputManager->IsKeyHeld(KeyCode::LEFT) || inputManager->IsKeyHeld(KeyCode::A))
-		camera->cameraPos -= glm::normalize(glm::cross(camera->cameraFront, camera->cameraUp)) * cameraSpeed;
-	
-	if (inputManager->IsKeyHeld(KeyCode::RIGHT) || inputManager->IsKeyHeld(KeyCode::D))
-		camera->cameraPos += glm::normalize(glm::cross(camera->cameraFront, camera->cameraUp)) * cameraSpeed;
-	
-	if (inputManager->IsKeyHeld(KeyCode::DOWN) || inputManager->IsKeyHeld(KeyCode::S))
-		camera->cameraPos -= cameraSpeed * camera->cameraFront;
-	
-	if (inputManager->IsKeyHeld(KeyCode::UP) || inputManager->IsKeyHeld(KeyCode::W))
-		camera->cameraPos += cameraSpeed * camera->cameraFront;
-
-	if (inputManager->scrollY > 0.1f)
-	{
-		camera->cameraPos += 10 * cameraSpeed * camera->cameraFront;
-	}
-	else if (inputManager->scrollY < -0.1f)
-	{
-		camera->cameraPos -= 10 * cameraSpeed * camera->cameraFront;
-	}
-
-	Vec2i mousePos = inputManager->GetMousePosition();
-	static Vec2i lastPos;
-
-	if (inputManager->IsButtonDown(ButtonCode::MIDDLE))
-	{
-		lastPos = mousePos;
-	}
-
-	const auto sensitivity = 0.005f;
-	const glm::vec2 offset = glm::vec2((mousePos.x - lastPos.x) * sensitivity, (lastPos.y - mousePos.y) * sensitivity);
-	
-	lastPos = mousePos;
-
-	if (inputManager->IsButtonHeld(ButtonCode::MIDDLE))
-	{
-		camera->cameraPos.x += offset.x;
-		camera->cameraPos.y -= offset.y;
-	}
-
-	if (inputManager->IsButtonHeld(ButtonCode::RIGHT)) {
-		camera->yaw -= offset.x * 10.0f;
-		camera->pitch -= offset.y * 10.0f;
-
-		if (camera->pitch > 89.0f)
-			camera->pitch = 89.0f;
-		if (camera->pitch < -89.0f)
-			camera->pitch = -89.0f;
-
-	}
-
-	glm::vec3 front;
-	front.x = cos(glm::radians(camera->yaw)) * cos(glm::radians(camera->pitch));
-	front.y = sin(glm::radians(camera->pitch));
-	front.z = sin(glm::radians(camera->yaw)) * cos(glm::radians(camera->pitch));
-	camera->cameraFront = glm::normalize(front);
-	camera->viewMatrix = glm::lookAt(camera->cameraPos, camera->cameraPos + camera->cameraFront, camera->cameraUp);
+	MoveEditorCamera(dt);
 }
 
 void Editor::Draw()
@@ -224,5 +160,74 @@ void Editor::DrawHierarchy()
 void Editor::DrawTransformHandle()
 {
 	
+}
+
+void Editor::MoveEditorCamera(float dt)
+{
+	auto camera = GraphicManager::Get()->GetCamera();
+
+	auto cameraSpeed = 4.5f * dt;
+	auto* inputManager = Engine::Get()->GetInputManager();
+
+	if (inputManager->IsKeyHeld(KeyCode::SHIFT_LEFT))
+		cameraSpeed *= 2;
+
+	if (inputManager->IsKeyHeld(KeyCode::LEFT) || inputManager->IsKeyHeld(KeyCode::A))
+		camera->cameraPos -= glm::normalize(glm::cross(camera->cameraFront, camera->cameraUp)) * cameraSpeed;
+
+	if (inputManager->IsKeyHeld(KeyCode::RIGHT) || inputManager->IsKeyHeld(KeyCode::D))
+		camera->cameraPos += glm::normalize(glm::cross(camera->cameraFront, camera->cameraUp)) * cameraSpeed;
+
+	if (inputManager->IsKeyHeld(KeyCode::DOWN) || inputManager->IsKeyHeld(KeyCode::S))
+		camera->cameraPos -= cameraSpeed * camera->cameraFront;
+
+	if (inputManager->IsKeyHeld(KeyCode::UP) || inputManager->IsKeyHeld(KeyCode::W))
+		camera->cameraPos += cameraSpeed * camera->cameraFront;
+
+	if (inputManager->scrollY > 0.1f)
+	{
+		camera->cameraPos += 10 * cameraSpeed * camera->cameraFront;
+	}
+	else if (inputManager->scrollY < -0.1f)
+	{
+		camera->cameraPos -= 10 * cameraSpeed * camera->cameraFront;
+	}
+
+	Vec2i mousePos = inputManager->GetMousePosition();
+	static Vec2i lastPos;
+
+	if (inputManager->IsButtonDown(ButtonCode::MIDDLE))
+	{
+		lastPos = mousePos;
+	}
+
+	const auto sensitivity = 0.005f;
+	const glm::vec2 offset = glm::vec2((mousePos.x - lastPos.x) * sensitivity, (lastPos.y - mousePos.y) * sensitivity);
+
+	lastPos = mousePos;
+
+	if (inputManager->IsButtonHeld(ButtonCode::MIDDLE))
+	{
+		camera->cameraPos.x += offset.x;
+		camera->cameraPos.y -= offset.y;
+	}
+
+	if (inputManager->IsButtonHeld(ButtonCode::RIGHT)) {
+		camera->yaw += offset.x * 10.0f;
+		camera->pitch -= offset.y * 10.0f;
+
+		if (camera->pitch > 89.0f)
+			camera->pitch = 89.0f;
+		if (camera->pitch < -89.0f)
+			camera->pitch = -89.0f;
+
+	}
+
+	glm::vec3 front;
+	front.x = cos(glm::radians(camera->yaw)) * cos(glm::radians(camera->pitch));
+	front.y = sin(glm::radians(camera->pitch));
+	front.z = sin(glm::radians(camera->yaw)) * cos(glm::radians(camera->pitch));
+	camera->cameraFront = glm::normalize(front);
+	camera->viewMatrix = glm::lookAt(camera->cameraPos, camera->cameraPos + camera->cameraFront, camera->cameraUp);
 }
 }

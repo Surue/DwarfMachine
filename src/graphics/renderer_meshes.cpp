@@ -50,9 +50,9 @@ void RendererMeshes::Update(float dt)
 		const auto material = entity.GetComponent<MaterialDefault>(ComponentType::MATERIAL_DEFAULT);
 		const auto transform = entity.GetComponent<Transform>(ComponentType::TRANSFORM);
 
-		transform->position.y *= -1;
+		transform->position.y *= 1;
 		MaterialDefaultManager::PushUniform(*material, TransformManager::GetWorldMatrix(*transform));
-		transform->position.y *= -1;
+		transform->position.y *= 1;
 		i++;
 	}
 }

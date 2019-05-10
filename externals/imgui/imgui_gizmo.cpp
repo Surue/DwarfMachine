@@ -722,7 +722,7 @@ namespace ImGuizmo
        gContext.mHeight = height;
        gContext.mXMax = gContext.mX + gContext.mWidth;
        gContext.mYMax = gContext.mY + gContext.mXMax;
-      gContext.mDisplayRatio = width / height;
+       gContext.mDisplayRatio = width / height;
    }
 
    IMGUI_API void SetOrthographic(bool isOrthographic)
@@ -1551,8 +1551,6 @@ namespace ImGuizmo
          ImGui::CaptureMouseFromApp();
          const float len = fabsf(IntersectRayPlane(gContext.mRayOrigin, gContext.mRayVector, gContext.mTranslationPlan)); // near plan
          vec_t newPos = gContext.mRayOrigin + gContext.mRayVector * len;
-
-
 
          // compute delta
          vec_t newOrigin = newPos - gContext.mRelativeOrigin * gContext.mScreenFactor;
