@@ -32,6 +32,13 @@ VertexModel::VertexModel(const Vec3f& pos, const Vec2f& uv, const Vec3f& normal)
 	normal(normal)
 { }
 
+VertexModel::VertexModel(const glm::vec3& pos, const glm::vec2& uv, const glm::vec3& normal)
+{
+	position = Vec3f(pos.x, pos.y, pos.z);
+	this->uv = Vec2f(uv.x, uv.y);
+	this->normal = Vec3f(normal.x, normal.y, normal.z);
+}
+
 Shader::VertexInput VertexModel::GetVertexInput(const uint32_t& binding)
 {
 	std::vector<VkVertexInputBindingDescription> bindingDescriptions(1);

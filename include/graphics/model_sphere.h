@@ -22,37 +22,22 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#ifndef MODEL_VERTEX_H
-#define MODEL_VERTEX_H
-#include "engine/vector.h"
-#include "shader.h"
-#include <glm/vec3.hpp>
-#include <glm/vec2.hpp>
+#ifndef MODEL_SPHERE_H
+#define MODEL_SPHERE_H
+#include <graphics/model.h>
 
 namespace dm
 {
-struct VertexModel
+class ModelSphere : public Model
 {
-	VertexModel(const Vec3f &pos, const Vec2f &uv, const Vec3f &normal);
+public:
+	static std::shared_ptr<ModelSphere> Create(float radius = 1.0f);
 
-	VertexModel(const glm::vec3 &pos, const glm::vec2 &uv, const glm::vec3 &normal);
+	ModelSphere(float radius = 1.0f, const bool &load = true);
 
-	static Shader::VertexInput GetVertexInput(const uint32_t &binding = 0);
-
-	bool operator==(const VertexModel &other) const
-	{
-		return position == other.position && uv == other.uv && normal == other.normal;
-	}
-
-	bool operator!=(const VertexModel &other) const
-	{
-		return !(*this == other);
-	}
-
-	Vec3f position;
-	Vec2f uv;
-	Vec3f normal;
+	void Load() override;
+private:
+	float m_Radius;
 };
 }
-
-#endif MODEL_VERTEX_H
+#endif

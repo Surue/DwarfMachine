@@ -28,12 +28,12 @@ SOFTWARE.
 #include <editor/editor_renderer.h>
 #include <imgui.h>
 #include <component/component_manager.h>
-#include "imgui_gizmo.h"
-#include "entity/entity_handle.h"
+#include <imgui_gizmo.h>
+#include <entity/entity_handle.h>
 #include <glm/ext/matrix_transform.inl>
-#include "engine/Input.h"
+#include <engine/Input.h>
 #include <glm/detail/func_trigonometric.inl>
-#include "editor/log.h"
+#include <editor/log.h>
 
 namespace dm
 {

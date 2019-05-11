@@ -36,6 +36,7 @@ SOFTWARE.
 #include <glm/ext/matrix_clip_space.inl>
 #include <glm/detail/func_trigonometric.inl>
 #include <glm/ext/matrix_transform.inl>
+#include "graphics/model_sphere.h"
 
 TEST(Models, Cube)
 {
@@ -74,7 +75,7 @@ TEST(Models, Cube)
 	material.color = dm::Color(100, 200, 0, 1);
 	cube.AddComponent<dm::MaterialDefault>(material);
 
-	//Cube 1
+	//Sphere 1
 	const auto e2 = entityManager->CreateEntity();
 	auto cube2 = dm::EntityHandle(e2);
 	auto transform2 = cube2.CreateComponent<dm::Transform>(ComponentType::TRANSFORM);
@@ -82,7 +83,7 @@ TEST(Models, Cube)
 	transform2->scaling = glm::vec3(1, 1, 1);
 	dm::Mesh mesh2;
 	mesh2.componentType = ComponentType::MESH;
-	mesh2.model = dm::ModelCube::Create(dm::Vec3f(1.0f, 1.0f, 1.0f));
+	mesh2.model = dm::ModelSphere::Create(1.0f);
 	cube2.AddComponent<dm::Mesh>(mesh2);
 
 	dm::MaterialDefault material2;

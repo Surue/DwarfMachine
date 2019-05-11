@@ -39,7 +39,7 @@ public:
 
 	Model();
 
-	~Model()
+	virtual ~Model()
 	{
 	}
 
