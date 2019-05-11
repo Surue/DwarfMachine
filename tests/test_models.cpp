@@ -37,6 +37,7 @@ SOFTWARE.
 #include <glm/detail/func_trigonometric.inl>
 #include <glm/ext/matrix_transform.inl>
 #include "graphics/model_sphere.h"
+#include "graphics/model_plane.h"
 
 TEST(Models, Cube)
 {
@@ -59,37 +60,45 @@ TEST(Models, Cube)
 
 	auto camera = entity.AddComponent<dm::Camera>(cameraInfo);
 
-	//Cube 0
+	//Cube
 	const auto e1 = entityManager->CreateEntity();
 	auto cube = dm::EntityHandle(e1);
-	auto transform = cube.CreateComponent<dm::Transform>(ComponentType::TRANSFORM);
-	transform->position = glm::vec3(0, 0, 0);
-	transform->scaling = glm::vec3(1, 1, 1);
+	auto t1 = cube.CreateComponent<dm::Transform>(ComponentType::TRANSFORM);
+	t1->position = glm::vec3(0, 0, 0);
+	t1->scaling = glm::vec3(1, 1, 1);
 	dm::Mesh mesh;
 	mesh.componentType = ComponentType::MESH;
 	mesh.model = dm::ModelCube::Create(dm::Vec3f(1.0f, 1.0f, 1.0f));
 	cube.AddComponent<dm::Mesh>(mesh);
-
 	dm::MaterialDefault material;
 	material.componentType = ComponentType::MATERIAL_DEFAULT;
 	material.color = dm::Color(100, 200, 0, 1);
 	cube.AddComponent<dm::MaterialDefault>(material);
 
-	//Sphere 1
+	//Sphere
 	const auto e2 = entityManager->CreateEntity();
-	auto cube2 = dm::EntityHandle(e2);
-	auto transform2 = cube2.CreateComponent<dm::Transform>(ComponentType::TRANSFORM);
-	transform2->position = glm::vec3(2, 0, 0);
-	transform2->scaling = glm::vec3(1, 1, 1);
+	auto sphere = dm::EntityHandle(e2);
+	auto t2 = sphere.CreateComponent<dm::Transform>(ComponentType::TRANSFORM);
+	t2->position = glm::vec3(2, 0, 0);
+	t2->scaling = glm::vec3(1, 1, 1);
 	dm::Mesh mesh2;
 	mesh2.componentType = ComponentType::MESH;
 	mesh2.model = dm::ModelSphere::Create(1.0f);
-	cube2.AddComponent<dm::Mesh>(mesh2);
+	sphere.AddComponent<dm::Mesh>(mesh2);
+	sphere.AddComponent<dm::MaterialDefault>(material);
 
-	dm::MaterialDefault material2;
-	material2.componentType = ComponentType::MATERIAL_DEFAULT;
-	material2.color = dm::Color(100, 200, 0, 1);
-	cube2.AddComponent<dm::MaterialDefault>(material2);
+	//Planes
+	const auto e3 = entityManager->CreateEntity();
+	auto plane = dm::EntityHandle(e3);
+	auto t3 = plane.CreateComponent<dm::Transform>(ComponentType::TRANSFORM);
+	t3->position = glm::vec3(-2, 0, 0);
+	t3->scaling = glm::vec3(1, 1, 1);
+	t3->rotation = glm::vec3(180 * 3.14 / 180, 0, 0);
+	dm::Mesh mesh3;
+	mesh3.componentType = ComponentType::MESH;
+	mesh3.model = dm::ModelPlane::Create();
+	plane.AddComponent<dm::Mesh>(mesh3);
+	plane.AddComponent<dm::MaterialDefault>(material);
 	
 	try
 	{
