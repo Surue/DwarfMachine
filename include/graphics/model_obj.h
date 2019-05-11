@@ -22,52 +22,22 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#ifndef MODEL_VERTEX_H
-#define MODEL_VERTEX_H
-#include <engine/vector.h>
-#include <graphics/shader.h>
-#include <glm/vec3.hpp>
-#include <glm/vec2.hpp>
+#ifndef MODEL_OBJ_H
+#define MODEL_OBJ_H
+#include <graphics/model.h>
 
 namespace dm
 {
-struct VertexModel
-{
-	VertexModel(const Vec3f &pos, const Vec2f &uv, const Vec3f &normal);
+class ModelObj : public Model{
+public:
+	static std::shared_ptr<ModelObj> Create(const std::string& filename);
 
-	VertexModel(const glm::vec3 &pos, const glm::vec2 &uv, const glm::vec3 &normal);
-
-	static Shader::VertexInput GetVertexInput(const uint32_t &binding = 0);
-
-	bool operator==(const VertexModel &other) const
-	{
-		return position == other.position && uv == other.uv && normal == other.normal;
-	}
-
-	bool operator!=(const VertexModel &other) const
-	{
-		return !(*this == other);
-	}
-
-	Vec3f position;
-	Vec2f uv;
-	Vec3f normal;
+	ModelObj(const std::string& filename);
+	~ModelObj() override;
+	void Load() override;
+private:
+	std::string m_Filename;
 };
 }
 
-namespace std
-{
-	template<>
-	struct hash<dm::VertexModel>
-	{
-		size_t operator()(const dm::VertexModel &vertex) const noexcept
-		{
-			size_t seed = 0;
-			HashCombine(seed, vertex.position);
-			HashCombine(seed, vertex.uv);
-			HashCombine(seed, vertex.normal);
-			return seed;
-		}
-	};
-}
-#endif MODEL_VERTEX_H
+#endif

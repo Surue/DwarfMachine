@@ -38,6 +38,7 @@ SOFTWARE.
 #include <glm/ext/matrix_transform.inl>
 #include "graphics/model_sphere.h"
 #include "graphics/model_plane.h"
+#include "graphics/model_obj.h"
 
 TEST(Models, Cube)
 {
@@ -99,7 +100,23 @@ TEST(Models, Cube)
 	mesh3.model = dm::ModelPlane::Create();
 	plane.AddComponent<dm::Mesh>(mesh3);
 	plane.AddComponent<dm::MaterialDefault>(material);
-	
+
+	//Obj
+	const auto e4 = entityManager->CreateEntity();
+	auto obj = dm::EntityHandle(e4);
+	auto t4 = obj.CreateComponent<dm::Transform>(ComponentType::TRANSFORM);
+	t4->position = glm::vec3(0, 0, 4);
+	t4->scaling = glm::vec3(1, 1, 1);
+	dm::Mesh mesh4;
+	mesh4.componentType = ComponentType::MESH;
+	mesh4.model = dm::ModelObj::Create("ressources/models/chalet.obj");
+	obj.AddComponent<dm::Mesh>(mesh4);
+	dm::MaterialDefault material1;
+	material1.componentType = ComponentType::MATERIAL_DEFAULT;
+	material1.color = dm::Color(100, 200, 0, 1);
+	material1.textureDiffuse = dm::Image2d::Create("ressources/textures/chalet.jpg");
+	obj.AddComponent<dm::MaterialDefault>(material1);
+
 	try
 	{
 		engine.Start();
