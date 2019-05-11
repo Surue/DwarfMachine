@@ -41,14 +41,12 @@ Engine::Engine() :
 {
 	m_Instance = this;
 
-	m_Settings = EngineSettings();
-	m_Settings.windowSize = Vec2i(800, 600);
-
 	m_GraphicManager = std::make_unique<GraphicManager>();
 	m_InputManager = std::make_unique<InputManager>();
 	m_EntityManager = std::make_unique<EntityManager>();
 	m_ComponentManager = std::make_unique<ComponentManagerContainer>();
 	m_SystemManager = std::make_unique<SystemManager>();
+	m_ModelManager = std::make_unique<ModelManager>();
 
 	m_PreviousFrameTime = m_Timer.now();
 	m_CurrentFrame = m_Timer.now();
@@ -57,16 +55,8 @@ Engine::Engine() :
 Engine::Engine(const EngineSettings engineSettings) :
 	m_App(nullptr)
 {
+	Engine::Engine();
 	m_Settings = engineSettings;
-
-	m_GraphicManager = std::make_unique<GraphicManager>();
-	m_InputManager = std::make_unique<InputManager>();
-	m_EntityManager = std::make_unique<EntityManager>();
-	m_ComponentManager = std::make_unique<ComponentManagerContainer>();
-	m_SystemManager = std::make_unique<SystemManager>();
-
-	m_PreviousFrameTime = m_Timer.now();
-	m_CurrentFrame = m_Timer.now();
 }
 
 Engine::~Engine() {}
@@ -118,6 +108,11 @@ SystemManager* Engine::GetSystemManager() const
 EngineSettings& Engine::GetSettings()
 {
 	return m_Settings;
+}
+
+ModelManager* Engine::GetModelManager()
+{
+	return m_ModelManager.get();
 }
 
 void Engine::SetApplication(EngineApplication* app)

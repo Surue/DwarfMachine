@@ -27,9 +27,9 @@ SOFTWARE.
 
 namespace dm
 {
-std::shared_ptr<ModelCube> ModelCube::Create(const Vec3f& extents)
+std::unique_ptr<ModelCube> ModelCube::Create(const Vec3f& extents)
 {
-	return std::make_shared<ModelCube>(extents);
+	return std::make_unique<ModelCube>(extents);
 }
 
 ModelCube::ModelCube(const Vec3f& extents, const bool& load) :

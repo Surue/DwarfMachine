@@ -22,34 +22,27 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
+#ifndef MODEL_REGISTER_H
+#define MODEL_REGISTER_H
+#include <map>
+#include <graphics/model.h>
+#include <utility/xxhash.hpp>
+#include <graphics/model_cube.h>
+#include <graphics/model_sphere.h>
+#include <graphics/model_obj.h>
 #include <graphics/model_plane.h>
 
 namespace dm
 {
-std::unique_ptr<ModelPlane> ModelPlane::Create(glm::vec2 extent)
+class ModelManager
 {
-	return std::make_unique<ModelPlane>(extent);
+public:
+	ModelManager();
+
+	Model* GetModel(std::string name);
+private:
+	std::map<std::string, std::unique_ptr<Model>> m_RegisteredModels{};
+};
 }
 
-ModelPlane::ModelPlane(const glm::vec2 extent):
-	m_Extent(extent)
-{
-	ModelPlane::Load();
-}
-
-ModelPlane::~ModelPlane() {}
-
-void ModelPlane::Load()
-{
-	std::vector<VertexModel> vertices = {
-		VertexModel(glm::vec3(-m_Extent.x, -m_Extent.y, 0.0f), glm::vec2(0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f)),
-		VertexModel(glm::vec3(m_Extent.x, -m_Extent.y, 0.0f), glm::vec2(1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f)),
-		VertexModel(glm::vec3(m_Extent.x, m_Extent.y, 0.0f), glm::vec2(1.0f, 1.0f), glm::vec3(0.0f, 0.0f, 0.0f)),
-		VertexModel(glm::vec3(-m_Extent.x, m_Extent.y, 0.0f), glm::vec2(0.0f, 1.0f), glm::vec3(0.0f, 0.0f, 0.0f)),
-	};
-
-	std::vector<uint32_t> indices = { 0, 1, 2, 2, 3, 0 };
-
-	Initialize(vertices, indices);
-}
-}
+#endif MODEL_REGISTER_H

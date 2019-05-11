@@ -22,34 +22,27 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#include <graphics/model_plane.h>
+#include <graphics/model_manager.h>
 
 namespace dm
 {
-std::unique_ptr<ModelPlane> ModelPlane::Create(glm::vec2 extent)
+ModelManager::ModelManager()
 {
-	return std::make_unique<ModelPlane>(extent);
+	m_RegisteredModels["ModelCube"] = ModelCube::Create();
+	m_RegisteredModels["ModelSphere"] = ModelSphere::Create();
+	m_RegisteredModels["ModelPlane"] = ModelPlane::Create();
+	m_RegisteredModels["ressources/models/chalet.obj"] = ModelObj::Create("ressources/models/chalet.obj");
 }
 
-ModelPlane::ModelPlane(const glm::vec2 extent):
-	m_Extent(extent)
+Model* ModelManager::GetModel(const std::string name)
 {
-	ModelPlane::Load();
-}
+	const auto it = m_RegisteredModels.find(name);
 
-ModelPlane::~ModelPlane() {}
+	if (it == m_RegisteredModels.end())
+	{
+		return nullptr;
+	}
 
-void ModelPlane::Load()
-{
-	std::vector<VertexModel> vertices = {
-		VertexModel(glm::vec3(-m_Extent.x, -m_Extent.y, 0.0f), glm::vec2(0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f)),
-		VertexModel(glm::vec3(m_Extent.x, -m_Extent.y, 0.0f), glm::vec2(1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f)),
-		VertexModel(glm::vec3(m_Extent.x, m_Extent.y, 0.0f), glm::vec2(1.0f, 1.0f), glm::vec3(0.0f, 0.0f, 0.0f)),
-		VertexModel(glm::vec3(-m_Extent.x, m_Extent.y, 0.0f), glm::vec2(0.0f, 1.0f), glm::vec3(0.0f, 0.0f, 0.0f)),
-	};
-
-	std::vector<uint32_t> indices = { 0, 1, 2, 2, 3, 0 };
-
-	Initialize(vertices, indices);
+	return it->second.get();
 }
 }

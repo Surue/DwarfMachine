@@ -57,24 +57,6 @@ void Editor::Update(float dt)
 	MoveEditorCamera(dt);
 
 	lastDeltaTime = dt;
-
-	auto* inputManager = Engine::Get()->GetInputManager();
-
-	if (inputManager->IsKeyDown(KeyCode::SPACE)) {
-		log("space");
-	}
-
-	if (inputManager->IsKeyDown(KeyCode::W))
-		log("W");
-
-	if (inputManager->IsKeyDown(KeyCode::A))
-		log("A");
-
-	if (inputManager->IsKeyDown(KeyCode::S))
-		log("S");
-
-	if (inputManager->IsKeyDown(KeyCode::D))
-		log("D");
 }
 
 void Editor::Draw()

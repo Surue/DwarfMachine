@@ -45,7 +45,7 @@ Mesh* MeshManager::CreateComponent(const Entity entity)
 	auto mesh = Mesh();
 	mesh.componentType = ComponentType::TRANSFORM;
 
-	mesh.model = ModelCube::Create();
+	mesh.model = nullptr;
 
 	m_Components[entity - 1] = mesh;
 

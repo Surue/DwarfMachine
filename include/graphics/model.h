@@ -35,8 +35,6 @@ namespace dm
 class Model
 {
 public:
-	static std::shared_ptr<Model> Create(const std::string filename);
-
 	Model();
 
 	virtual ~Model()

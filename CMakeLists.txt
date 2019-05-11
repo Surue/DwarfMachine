@@ -44,6 +44,7 @@ LIST(APPEND DWARF_MACHINE_LIBRARIES Vulkan::Vulkan)
 
 
 include_directories(include ${CMAKE_SOURCE_DIR}/include)
+include_directories(include ${CMAKE_SOURCE_DIR}/externals/utilities/include)
 
 file(GLOB_RECURSE DWARF_MACHINE_AUDIO_SRC src/audio/*.cpp include/audio/*.h)
 file(GLOB_RECURSE DWARF_MACHINE_COMPONENT_SRC src/component/*.cpp include/component/*.h)

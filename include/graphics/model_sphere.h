@@ -31,7 +31,7 @@ namespace dm
 class ModelSphere : public Model
 {
 public:
-	static std::shared_ptr<ModelSphere> Create(float radius = 1.0f);
+	static std::unique_ptr<ModelSphere> Create(float radius = 1.0f);
 
 	ModelSphere(float radius = 1.0f, const bool &load = true);
 

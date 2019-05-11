@@ -30,15 +30,12 @@ SOFTWARE.
 #include <entity/entity_handle.h>
 #include <graphics/graphic_manager.h>
 #include "component/mesh.h"
-#include "graphics/model_cube.h"
 #include <editor/editor.h>
 
 #include <glm/ext/matrix_clip_space.inl>
 #include <glm/detail/func_trigonometric.inl>
 #include <glm/ext/matrix_transform.inl>
-#include "graphics/model_sphere.h"
-#include "graphics/model_plane.h"
-#include "graphics/model_obj.h"
+#include <glm/ext/scalar_constants.hpp>
 
 TEST(Models, Cube)
 {
@@ -69,7 +66,7 @@ TEST(Models, Cube)
 	t1->scaling = glm::vec3(1, 1, 1);
 	dm::Mesh mesh;
 	mesh.componentType = ComponentType::MESH;
-	mesh.model = dm::ModelCube::Create(dm::Vec3f(1.0f, 1.0f, 1.0f));
+	mesh.model = dm::Engine::Get()->GetModelManager()->GetModel("ModelCube");
 	cube.AddComponent<dm::Mesh>(mesh);
 	dm::MaterialDefault material;
 	material.componentType = ComponentType::MATERIAL_DEFAULT;
@@ -84,7 +81,7 @@ TEST(Models, Cube)
 	t2->scaling = glm::vec3(1, 1, 1);
 	dm::Mesh mesh2;
 	mesh2.componentType = ComponentType::MESH;
-	mesh2.model = dm::ModelSphere::Create(1.0f);
+	mesh2.model = dm::Engine::Get()->GetModelManager()->GetModel("ModelPlane");
 	sphere.AddComponent<dm::Mesh>(mesh2);
 	sphere.AddComponent<dm::MaterialDefault>(material);
 
@@ -92,12 +89,12 @@ TEST(Models, Cube)
 	const auto e3 = entityManager->CreateEntity();
 	auto plane = dm::EntityHandle(e3);
 	auto t3 = plane.CreateComponent<dm::Transform>(ComponentType::TRANSFORM);
-	t3->position = glm::vec3(-2, 0, 0);
+	t3->position = glm::vec3(-2, 0, 0); 
 	t3->scaling = glm::vec3(1, 1, 1);
-	t3->rotation = glm::vec3(180 * 3.14 / 180, 0, 0);
+	t3->rotation = glm::vec3(180 * glm::pi<float>() / 180, 0, 0);
 	dm::Mesh mesh3;
 	mesh3.componentType = ComponentType::MESH;
-	mesh3.model = dm::ModelPlane::Create();
+	mesh3.model = dm::Engine::Get()->GetModelManager()->GetModel("ModelSphere");
 	plane.AddComponent<dm::Mesh>(mesh3);
 	plane.AddComponent<dm::MaterialDefault>(material);
 
@@ -109,7 +106,7 @@ TEST(Models, Cube)
 	t4->scaling = glm::vec3(1, 1, 1);
 	dm::Mesh mesh4;
 	mesh4.componentType = ComponentType::MESH;
-	mesh4.model = dm::ModelObj::Create("ressources/models/chalet.obj");
+	mesh4.model = dm::Engine::Get()->GetModelManager()->GetModel("ressources/models/chalet.obj");
 	obj.AddComponent<dm::Mesh>(mesh4);
 	dm::MaterialDefault material1;
 	material1.componentType = ComponentType::MATERIAL_DEFAULT;

@@ -28,6 +28,7 @@ SOFTWARE.
 #include <engine/vector.h>
 #include <memory>
 #include <chrono>
+#include "graphics/model_manager.h"
 
 namespace dm
 {
@@ -41,7 +42,7 @@ class EngineApplication;
 
 struct EngineSettings
 {
-	Vec2i windowSize;
+	Vec2i windowSize = Vec2i(800, 600);
 };
 
 class Engine
@@ -71,6 +72,8 @@ public:
 
 	EngineSettings& GetSettings();
 
+	ModelManager* GetModelManager();
+
 	void SetApplication(EngineApplication* app);
 private:
 	/**
@@ -93,6 +96,7 @@ private:
 	std::unique_ptr<EntityManager> m_EntityManager;
 	std::unique_ptr<ComponentManagerContainer> m_ComponentManager;
 	std::unique_ptr<SystemManager> m_SystemManager;
+	std::unique_ptr<ModelManager> m_ModelManager;
 
 	std::unique_ptr<EngineApplication> m_App;
 

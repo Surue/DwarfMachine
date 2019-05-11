@@ -26,12 +26,6 @@ SOFTWARE.
 
 namespace dm
 {
-std::shared_ptr<Model> Model::Create(const std::string filename)
-{
-	//TODO add modelRegister to store already loaded models
-	return nullptr;
-}
-
 Model::Model() :
 	m_VertexBuffer(nullptr),
 	m_IndexBuffer(nullptr),

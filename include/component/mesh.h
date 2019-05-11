@@ -33,7 +33,7 @@ namespace dm
 {
 struct Mesh final : ComponentBase
 {
-	std::shared_ptr<Model> model;
+	Model* model = nullptr;
 };
 
 class MeshManager : public ComponentBaseManager<Mesh>

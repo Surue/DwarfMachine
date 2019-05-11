@@ -120,7 +120,7 @@ void Shader::ProcessShader()
 		m_DescriptorPools.emplace_back(descriptorPoolSize);
 	}
 
-	// FIXME: This is a AMD workaround that works on Nvidia too...
+	// FIXME: This is a AMD workaround that works on Nvidia too
 	m_DescriptorPools = std::vector<VkDescriptorPoolSize>(6);
 	m_DescriptorPools[0].type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
 	m_DescriptorPools[0].descriptorCount = 4096;

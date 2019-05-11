@@ -80,12 +80,9 @@ std::vector<Shader::Define> MaterialDefaultManager::GetDefines(const MaterialDef
 {
 	std::vector<Shader::Define> defines;
 	//TODO Changer pour mettre correctement les valeur poru les defines
-	defines.emplace_back("DIFFUSE_MAPPING", To<int32_t>(false));
-	defines.emplace_back("MATERIAL_MAPPING", To<int32_t>(false));
-	defines.emplace_back("NORMAL_MAPPING", To<int32_t>(false));
-	defines.emplace_back("ANIMATED", To<int32_t>(false));
-	defines.emplace_back("MAX_JOINTS", To(false));
-	defines.emplace_back("MAX_WEIGHTS", To(false));
+	defines.emplace_back("DIFFUSE_MAPPING", To<int32_t>(component.textureDiffuse != nullptr));
+	defines.emplace_back("MATERIAL_MAPPING", To<int32_t>(component.materialTexture != nullptr));
+	defines.emplace_back("NORMAL_MAPPING", To<int32_t>(component.normalTexture != nullptr));
 	return defines;
 }
 

@@ -30,9 +30,9 @@ SOFTWARE.
 
 namespace dm
 {
-std::shared_ptr<ModelSphere> ModelSphere::Create(const float radius)
+std::unique_ptr<ModelSphere> ModelSphere::Create(const float radius)
 {
-	return std::make_shared<ModelSphere>(radius);
+	return std::make_unique<ModelSphere>(radius);
 }
 
 ModelSphere::ModelSphere(const float radius, const bool& load) :

@@ -31,7 +31,7 @@ namespace dm
 class ModelPlane : public Model
 {
 public:
-	static std::shared_ptr<ModelPlane> Create(glm::vec2 extent = glm::vec2(1.0f, 1.0f));
+	static std::unique_ptr<ModelPlane> Create(glm::vec2 extent = glm::vec2(1.0f, 1.0f));
 
 	ModelPlane(glm::vec2 extent = glm::vec2(1.0f, 1.0f));
 

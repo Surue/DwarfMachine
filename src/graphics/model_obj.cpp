@@ -30,9 +30,9 @@ SOFTWARE.
 
 namespace dm
 {
-std::shared_ptr<ModelObj> ModelObj::Create(const std::string& filename)
+std::unique_ptr<ModelObj> ModelObj::Create(const std::string& filename)
 {
-	return std::make_shared<ModelObj>(filename);
+	return std::make_unique<ModelObj>(filename);
 }
 
 ModelObj::ModelObj(const std::string& filename): 

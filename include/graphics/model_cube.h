@@ -32,7 +32,7 @@ namespace dm
 class ModelCube : public Model
 {
 public:
-	static std::shared_ptr<ModelCube> Create(const Vec3f &extents = Vec3f(1.0f, 1.0f, 1.0f));
+	static std::unique_ptr<ModelCube> Create(const Vec3f &extents = Vec3f(1.0f, 1.0f, 1.0f));
 
 	ModelCube(const Vec3f &extents = Vec3f(1.0f, 1.0f, 1.0f), const bool &load = true);
 

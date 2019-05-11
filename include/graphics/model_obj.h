@@ -30,7 +30,7 @@ namespace dm
 {
 class ModelObj : public Model{
 public:
-	static std::shared_ptr<ModelObj> Create(const std::string& filename);
+	static std::unique_ptr<ModelObj> Create(const std::string& filename);
 
 	ModelObj(const std::string& filename);
 	~ModelObj() override;
