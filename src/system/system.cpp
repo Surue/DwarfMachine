@@ -28,9 +28,9 @@ namespace dm
 {
 System::System() {}
 
-void System::Update(float dt)
+void System::Update()
 {
-	std::cout << "parent update\n";
+	
 }
 
 void System::Destroy()

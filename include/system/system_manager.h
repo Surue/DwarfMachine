@@ -26,7 +26,6 @@ SOFTWARE.
 #define SYSTEM_MANAGER_H
 #include <vector>
 #include <system/system.h>
-#include <iostream>
 
 namespace dm
 {
@@ -38,11 +37,9 @@ public:
 	SystemManager();
 	~SystemManager() = default;
 
-	void Awake();
+	void Init();
 
-	void Start();
-
-	void Update(float dt);
+	void Update();
 
 	void Destroy();
 

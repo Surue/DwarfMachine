@@ -301,7 +301,7 @@ public:
 	InputManager();
 	~InputManager() = default;
 
-	void Init(SDL_Window* window);
+	void Init();
 
 	void Update();
 

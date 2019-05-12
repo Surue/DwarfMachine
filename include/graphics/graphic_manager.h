@@ -94,16 +94,15 @@ public:
 	/**
 	 * \brief Init graphic manager (GLFW and Vulkan)
 	 */
-	void Awake();
-
-	void Start();
+	void Init();
 
 	/**
 	 * \brief Use to cleanup vulkan's allocation
 	 */
 	void Destroy();
 
-	void Update(float dt);
+	void Update();
+
 	void Draw();
 
 	void SetMainCamera(Camera* camera);

@@ -36,37 +36,21 @@ namespace dm
 {
 Engine *Engine::m_Instance = nullptr;
 
-Engine::Engine() :
+Engine::Engine(const EngineSettings engineSettings) :
+	m_Settings(engineSettings),
 	m_App(nullptr)
 {
 	m_Instance = this;
 
-	m_GraphicManager = std::make_unique<GraphicManager>();
-	m_InputManager = std::make_unique<InputManager>();
-	m_EntityManager = std::make_unique<EntityManager>();
-	m_ComponentManager = std::make_unique<ComponentManagerContainer>();
-	m_SystemManager = std::make_unique<SystemManager>();
-	m_ModelManager = std::make_unique<ModelManager>();
-
 	m_PreviousFrameTime = m_Timer.now();
 	m_CurrentFrame = m_Timer.now();
-}
-
-Engine::Engine(const EngineSettings engineSettings) :
-	m_App(nullptr)
-{
-	Engine::Engine();
-	m_Settings = engineSettings;
 }
 
 Engine::~Engine() {}
 
 void Engine::Init()
 {
-	m_GraphicManager->Awake();
-	m_Window = m_GraphicManager->GetWindow();
-
-	m_InputManager->Init(m_Window->GetWindow());
+	m_SystemContainer.Init();
 }
 
 void Engine::Start()
@@ -77,32 +61,34 @@ void Engine::Start()
 
 void Engine::Stop() const
 {
-	m_Window->SetShouldClose();
+	GetGraphicManager()->GetWindow()->SetShouldClose();
 }
+
+float Engine::GetDeltaTime() const { return m_DeltaTime; }
 
 GraphicManager* Engine::GetGraphicManager() const
 {
-	return m_GraphicManager.get();
+	return m_SystemContainer.GetGraphicManager();
 }
 
 InputManager* Engine::GetInputManager() const
 {
-	return m_InputManager.get();
+	return m_SystemContainer.GetInputManager();
 }
 
 EntityManager* Engine::GetEntityManager() const
 {
-	return m_EntityManager.get();
+	return m_SystemContainer.GetEntityManager();
 }
 
 ComponentManagerContainer* Engine::GetComponentManager() const
 {
-	return m_ComponentManager.get();
+	return m_SystemContainer.GetComponentManager();
 }
 
 SystemManager* Engine::GetSystemManager() const
 {
-	return m_SystemManager.get();
+	return m_SystemContainer.GetSystemManager();
 }
 
 EngineSettings& Engine::GetSettings()
@@ -112,7 +98,7 @@ EngineSettings& Engine::GetSettings()
 
 ModelManager* Engine::GetModelManager()
 {
-	return m_ModelManager.get();
+	return m_SystemContainer.GetModelManager();
 }
 
 void Engine::SetApplication(EngineApplication* app)
@@ -122,29 +108,22 @@ void Engine::SetApplication(EngineApplication* app)
 
 void Engine::MainLoop()
 {
-	while (!m_Window->ShouldClose())
+	while (!GetGraphicManager()->GetWindow()->ShouldClose())
 	{
 		CalculateDeltaTime();
 
-		//std::cout << "dt = " << m_DeltaTime << ", FPS = " << m_Fps << "\n";
-
-		m_InputManager->Update();
-
-		//Updates
-		m_SystemManager->Update(m_DeltaTime);
-		m_GraphicManager->Update(m_DeltaTime);
-		m_App->Update(m_DeltaTime);
+		m_SystemContainer.Update();
+		m_App->Update();
 
 		m_App->Draw();
-		m_GraphicManager->Draw();
+		m_SystemContainer.Draw();
 	}
 
 }
 
 void Engine::Destroy()
 {
-	m_GraphicManager->SetManager(nullptr);
-	m_SystemManager->Destroy();
+	
 }
 
 void Engine::CalculateDeltaTime()

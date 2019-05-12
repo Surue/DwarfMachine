@@ -30,13 +30,13 @@ RendererContainer::RendererContainer()
 {
 	
 }
-void RendererContainer::Update(float dt)
+void RendererContainer::Update()
 {
 	for(auto& stages : m_Stages)
 	{
 		for (auto& system : stages.second)
 		{
-			system->Update(dt);
+			system->Update();
 		}
 	}
 }

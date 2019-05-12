@@ -187,12 +187,10 @@ void GraphicManager::FrameBufferResizeCallback(SDL_Window* window, int width, in
 	//app->m_FrameBufferResized = true; 
 }
 
-void GraphicManager::Awake()
+void GraphicManager::Init()
 {
 	
 }
-
-void GraphicManager::Start() {}
 
 void GraphicManager::Destroy()
 {
@@ -217,7 +215,7 @@ GraphicManager::~GraphicManager()
 	}
 }
 
-void GraphicManager::Update(float dt)
+void GraphicManager::Update()
 {
 	if (m_RenderManager == nullptr)
 	{
@@ -230,7 +228,7 @@ void GraphicManager::Update(float dt)
 		m_RenderManager->m_Started = true;
 	}
 
-	m_RenderManager->Update(dt);
+	m_RenderManager->Update();
 }
 
 void GraphicManager::Draw()

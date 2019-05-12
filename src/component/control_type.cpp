@@ -30,9 +30,7 @@ ControllerTypeManager::ControllerTypeManager()
 {
 }
 
-void ControllerTypeManager::Awake() {}
-
-void ControllerTypeManager::Start() {}
+void ControllerTypeManager::Init() {}
 
 void ControllerTypeManager::Update() {}
 

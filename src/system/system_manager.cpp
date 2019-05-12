@@ -34,27 +34,19 @@ SystemManager::SystemManager()
 	m_Systems.push_back(std::make_unique<InputController>());
 }
 
-void SystemManager::Awake()
+void SystemManager::Init()
 {
 	for (auto& system : m_Systems)
 	{
-		system->Awake();
+		system->Init();
 	}
 }
 
-void SystemManager::Start()
+void SystemManager::Update()
 {
 	for (auto& system : m_Systems)
 	{
-		system->Start();
-	}
-}
-
-void SystemManager::Update(float dt)
-{
-	for (auto& system : m_Systems)
-	{
-		system->Update(dt);
+		system->Update();
 	}
 }
 

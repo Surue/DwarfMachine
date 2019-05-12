@@ -28,7 +28,9 @@ SOFTWARE.
 #include <engine/vector.h>
 #include <memory>
 #include <chrono>
-#include "graphics/model_manager.h"
+#include <engine/system_container.h>
+
+#include <graphics/model_manager.h>
 
 namespace dm
 {
@@ -50,8 +52,7 @@ class Engine
 public:
 	static Engine *Get() { return m_Instance; }
 
-	Engine();
-	Engine(EngineSettings engineSettings);
+	Engine(EngineSettings engineSettings = EngineSettings{});
 	~Engine();
 
 	void Init();
@@ -59,6 +60,8 @@ public:
 	void Start();
 
 	void Stop() const;
+
+	float GetDeltaTime() const;
 
 	GraphicManager* GetGraphicManager() const;
 
@@ -89,14 +92,7 @@ private:
 
 	EngineSettings m_Settings;
 
-	Window* m_Window = nullptr;
-
-	std::unique_ptr<GraphicManager> m_GraphicManager;
-	std::unique_ptr<InputManager> m_InputManager;
-	std::unique_ptr<EntityManager> m_EntityManager;
-	std::unique_ptr<ComponentManagerContainer> m_ComponentManager;
-	std::unique_ptr<SystemManager> m_SystemManager;
-	std::unique_ptr<ModelManager> m_ModelManager;
+	SystemContainer m_SystemContainer;
 
 	std::unique_ptr<EngineApplication> m_App;
 

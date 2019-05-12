@@ -41,6 +41,8 @@ public:
 	ComponentManagerContainer();
 	~ComponentManagerContainer() = default;
 
+	void Init(){};
+
 	void Destroy();
 
 	ComponentBase* CreateComponent(Entity entity, ComponentType componentType) const;

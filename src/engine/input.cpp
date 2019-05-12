@@ -38,9 +38,9 @@ InputManager::InputManager() :
 {
 }
 
-void InputManager::Init(SDL_Window* window)
+void InputManager::Init()
 {
-	m_Window = window;
+	m_Window = GraphicManager::Get()->GetWindow()->GetWindow();
 }
 
 void InputManager::Update()

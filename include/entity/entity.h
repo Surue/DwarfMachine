@@ -43,6 +43,8 @@ public:
 
 	~EntityManager() = default;
 
+	void Init() {};
+
 	EntityManager& operator=(const EntityManager&) = delete;
 	EntityManager(EntityManager &&) = default; //move constructor
 	EntityManager(const EntityManager &) = delete; //delete copy constructor

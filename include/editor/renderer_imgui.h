@@ -37,7 +37,7 @@ public:
 
 	~RendererImGui();
 
-	void Update(float dt) override {}
+	void Update() override {}
 
 	void NewFrame();
 

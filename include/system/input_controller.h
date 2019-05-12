@@ -34,7 +34,7 @@ class InputController : public System
 public:
 	InputController();
 
-	void Update(float dt) override;
+	void Update() override;
 private:
 };
 }

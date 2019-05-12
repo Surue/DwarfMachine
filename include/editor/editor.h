@@ -36,7 +36,7 @@ public:
 
 	void Awake() override;
 	void Start() override;
-	void Update(float dt) override;
+	void Update() override;
 	void Draw() override;
 private:
 	void DrawInspector();
@@ -51,7 +51,7 @@ private:
 
 	void DrawConsole();
 
-	void MoveEditorCamera(float dt);
+	void MoveEditorCamera();
 
 	Entity m_CurrentEntitySelected = INVALID_ENTITY;
 

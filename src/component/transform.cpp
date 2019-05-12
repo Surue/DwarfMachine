@@ -37,9 +37,7 @@ TransformManager::TransformManager()
 	
 }
 
-void TransformManager::Awake() {}
-
-void TransformManager::Start() {}
+void TransformManager::Init() {}
 
 void TransformManager::Update() {}
 

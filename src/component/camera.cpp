@@ -39,9 +39,7 @@ CameraManager::CameraManager()
 	m_GraphicManager = GraphicManager::Get();
 }
 
-void CameraManager::Awake() {}
-
-void CameraManager::Start() {}
+void CameraManager::Init() {}
 
 void CameraManager::Update() {}
 

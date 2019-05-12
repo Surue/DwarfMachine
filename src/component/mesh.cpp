@@ -34,9 +34,7 @@ MeshManager::~MeshManager()
 	m_Components.clear();
 }
 
-void MeshManager::Awake() {}
-
-void MeshManager::Start() {}
+void MeshManager::Init() {}
 
 void MeshManager::Update() {}
 

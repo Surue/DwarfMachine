@@ -36,7 +36,7 @@ class RendererMeshes : public RenderPipeline
 public:
 	explicit RendererMeshes(Engine &engine, const Pipeline::Stage &pipelineStage);
 
-	void Update(float dt) override;
+	void Update() override;
 
 	void Draw(const CommandBuffer &commandBuffer) override;
 

@@ -27,7 +27,6 @@ SOFTWARE.
 #include <vector>
 #include <entity/entity.h>
 #include <component/component_mask.h>
-#include <iostream>
 
 namespace dm
 {
@@ -39,11 +38,9 @@ public:
 	System();
 	virtual ~System() = default;
 
-	virtual void Awake(){}
+	virtual void Init(){}
 
-	virtual void Start(){}
-
-	virtual void Update(float dt);
+	virtual void Update();
 
 	void Destroy();
 

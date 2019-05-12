@@ -59,9 +59,7 @@ public:
 
 	~MaterialDefaultManager();
 
-	void Awake() override;
-
-	void Start() override;
+	void Init() override;
 
 	void Update() override;
 

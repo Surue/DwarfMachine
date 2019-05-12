@@ -29,8 +29,9 @@ SOFTWARE.
 #include <component/transform.h>
 #include <entity/entity_handle.h>
 #include <graphics/graphic_manager.h>
-#include "component/mesh.h"
+#include <component/mesh.h>
 #include <editor/editor.h>
+#include <graphics/model_manager.h>
 
 #include <glm/ext/matrix_clip_space.inl>
 #include <glm/detail/func_trigonometric.inl>
@@ -39,7 +40,9 @@ SOFTWARE.
 
 TEST(Models, Cube)
 {
-	dm::Engine engine;
+	dm::EngineSettings settings;
+	settings.windowSize = dm::Vec2i(800, 600);
+	dm::Engine engine = dm::Engine(settings);
 	engine.Init();
 
 	engine.SetApplication(new dm::Editor());

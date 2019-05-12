@@ -34,7 +34,7 @@ class CameraView : public System
 public:
 	CameraView();
 
-	void Update(float dt) override;
+	void Update() override;
 private:
 };
 }

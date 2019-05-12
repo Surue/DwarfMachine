@@ -42,9 +42,7 @@ class ControllerTypeManager final : public ComponentBaseManager<ControllerType>
 public:
 	ControllerTypeManager();
 
-	void Awake() override;
-
-	void Start() override;
+	void Init() override;
 
 	void Update() override;
 

@@ -53,9 +53,7 @@ class TransformManager final : public ComponentBaseManager<Transform>
 public:
 	TransformManager();
 
-	void Awake() override;
-
-	void Start() override;
+	void Init() override;
 
 	void Update() override;
 

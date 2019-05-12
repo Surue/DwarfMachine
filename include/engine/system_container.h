@@ -22,49 +22,50 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#ifndef CAMERA_H
-#define CAMERA_H
+#ifndef SYSTEM_CONTAINER_H
+#define SYSTEM_CONTAINER_H
+#include <memory>
 
-#include <component/component.h>
-
-#include <glm/mat4x4.hpp>
-
-namespace dm {
-struct Camera final : ComponentBase
+namespace dm
 {
-	glm::mat4x4 proj{};
-	glm::mat4x4 viewMatrix{};
-	float yaw = 90;
-	float pitch = 0;
-	glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
-	glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, -10.0f);
-	glm::vec3 cameraUp = glm::vec3(0.0f, -1.0f, 0.0f);
+class GraphicManager;
+class InputManager;
+class EntityManager;
+class ComponentManagerContainer;
+class SystemManager;
+class ModelManager;
+class EngineApplication;
 
-	bool isMainCamera;
-};
-
-struct Transform;
-
-class CameraManager final : public ComponentBaseManager<Camera>
+class SystemContainer
 {
 public:
-	CameraManager();
+	SystemContainer();
 
-	void Init() override;
+	void Init();
 
-	void Update() override;
+	void Update();
 
-	Camera* CreateComponent(Entity entity) override;
+	void Draw();
 
-	Camera* AddComponent(Entity entity, Camera& componentBase) override;
+	GraphicManager* GetGraphicManager() const;
 
-	Transform* GetTransformOfCamera(Camera& component);
+	InputManager* GetInputManager() const;
 
-	void DestroyComponent(Entity entity) override;
+	EntityManager* GetEntityManager() const;
 
-	void OnDrawInspector(Entity entity) override;
+	ComponentManagerContainer* GetComponentManager() const;
+
+	SystemManager* GetSystemManager() const;
+
+	ModelManager* GetModelManager() const;
 private:
-	GraphicManager* m_GraphicManager;
+	std::unique_ptr<GraphicManager> m_GraphicManager;
+	std::unique_ptr<InputManager> m_InputManager;
+	std::unique_ptr<EntityManager> m_EntityManager;
+	std::unique_ptr<ComponentManagerContainer> m_ComponentManager;
+	std::unique_ptr<SystemManager> m_SystemManager;
+	std::unique_ptr<ModelManager> m_ModelManager;
 };
 }
-#endif
+
+#endif SYSTEM_CONTAINER_H

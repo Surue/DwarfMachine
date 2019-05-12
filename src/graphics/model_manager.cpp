@@ -24,6 +24,12 @@ SOFTWARE.
 
 #include <graphics/model_manager.h>
 
+#include <utility/xxhash.hpp>
+#include <graphics/model_cube.h>
+#include <graphics/model_sphere.h>
+#include <graphics/model_obj.h>
+#include <graphics/model_plane.h>
+
 namespace dm
 {
 ModelManager::ModelManager()

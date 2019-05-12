@@ -52,11 +52,11 @@ void Editor::Awake()
 
 void Editor::Start() {}
 
-void Editor::Update(float dt)
+void Editor::Update()
 {
-	MoveEditorCamera(dt);
+	MoveEditorCamera();
 
-	lastDeltaTime = dt;
+	lastDeltaTime = Engine::Get()->GetDeltaTime();
 }
 
 void Editor::Draw()
@@ -192,11 +192,11 @@ void Editor::DrawConsole()
 	ImGui::End();
 }
 
-void Editor::MoveEditorCamera(float dt)
+void Editor::MoveEditorCamera()
 {
 	auto camera = GraphicManager::Get()->GetCamera();
 
-	auto cameraSpeed = 4.5f * dt;
+	auto cameraSpeed = 4.5f * lastDeltaTime;
 	auto* inputManager = Engine::Get()->GetInputManager();
 
 	if (inputManager->IsKeyHeld(KeyCode::SHIFT_LEFT))

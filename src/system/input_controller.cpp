@@ -37,7 +37,7 @@ InputController::InputController()
 	m_Signature.AddComponent(ComponentType::CONTROL_TYPE);
 }
 
-void InputController::Update(float dt)
+void InputController::Update()
 {
 	/*for (auto registeredEntity : m_RegisteredEntities)
 	{

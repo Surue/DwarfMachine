@@ -26,11 +26,6 @@ SOFTWARE.
 #define MODEL_REGISTER_H
 #include <map>
 #include <graphics/model.h>
-#include <utility/xxhash.hpp>
-#include <graphics/model_cube.h>
-#include <graphics/model_sphere.h>
-#include <graphics/model_obj.h>
-#include <graphics/model_plane.h>
 
 namespace dm
 {
@@ -38,6 +33,8 @@ class ModelManager
 {
 public:
 	ModelManager();
+
+	void Init(){};
 
 	Model* GetModel(std::string name);
 private:

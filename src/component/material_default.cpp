@@ -33,8 +33,7 @@ MaterialDefaultManager::~MaterialDefaultManager()
 	m_Components.clear();
 }
 
-void MaterialDefaultManager::Awake() {}
-void MaterialDefaultManager::Start() {}
+void MaterialDefaultManager::Init() {}
 
 void MaterialDefaultManager::Update() {}
 

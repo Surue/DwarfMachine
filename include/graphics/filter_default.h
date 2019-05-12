@@ -34,7 +34,7 @@ class FilterDefault : public PostFilter
 public:
 	explicit FilterDefault(const Pipeline::Stage &pipelineStage, const bool &lastFilter = false);
 
-	void Update(float dt) override {}
+	void Update() override {}
 
 	void Draw(const CommandBuffer &commandBuffer) override;
 private:

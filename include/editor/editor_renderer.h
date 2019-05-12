@@ -37,7 +37,7 @@ public:
 
 	void Start() override;
 
-	void Update(float dt) override;
+	void Update() override;
 };
 }
 
