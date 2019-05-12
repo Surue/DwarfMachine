@@ -22,22 +22,39 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#ifndef MODEL_OBJ_H
-#define MODEL_OBJ_H
-#include <graphics/model.h>
+#ifndef MESH_H
+#define MESH_H
+#include <component/component.h>
+#include "graphics/Mesh.h"
+#include "graphics/shader.h"
+#include "graphics/mesh_vertex.h"
 
 namespace dm
 {
-class ModelObj : public Model{
-public:
-	static std::unique_ptr<ModelObj> Create(const std::string& filename);
+struct Model final : ComponentBase
+{
+	Mesh* model = nullptr;
+};
 
-	ModelObj(const std::string& filename);
-	~ModelObj() override;
-	void Load() override;
-private:
-	std::string m_Filename;
+class ModelComponentManager : public ComponentBaseManager<Model>
+{
+public:
+	explicit ModelComponentManager();
+
+	~ModelComponentManager();
+
+	void Init() override;
+
+	void Update() override;
+
+	Model* CreateComponent(Entity entity) override;
+
+	void DestroyComponent(Entity entity) override;
+
+	static Shader::VertexInput GetVertexInput(const uint32_t &binding = 0) { return VertexMesh::GetVertexInput(binding); }
+	
+	void OnDrawInspector(Entity entity) override;
 };
 }
 
-#endif
+#endif MESH_H

@@ -22,25 +22,42 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#ifndef MODEL_PLANE_H
-#define MODEL_PLANE_H
-#include "model.h"
+#include <graphics/Mesh.h>
 
 namespace dm
 {
-class ModelPlane : public Model
+Mesh::Mesh() :
+	m_VertexBuffer(nullptr),
+	m_IndexBuffer(nullptr),
+	m_VertexCount(0),
+	m_IndexCount(0)
+{}
+
+void Mesh::Load() {}
+
+bool Mesh::CmdRender(const CommandBuffer& commandBuffer, const uint32_t& instance) const
 {
-public:
-	static std::unique_ptr<ModelPlane> Create(glm::vec2 extent = glm::vec2(1.0f, 1.0f));
+	if (m_VertexBuffer != nullptr && m_IndexBuffer != nullptr)
+	{
+		VkBuffer vertexBuffers[] = { m_VertexBuffer->GetBuffer() };
+		VkDeviceSize offsets[] = { 0 };
+		vkCmdBindVertexBuffers(commandBuffer, 0, 1, vertexBuffers, offsets);
+		vkCmdBindIndexBuffer(commandBuffer, m_IndexBuffer->GetBuffer(), 0, GetIndexType());
+		vkCmdDrawIndexed(commandBuffer, m_IndexCount, instance, 0, 0, 0);
+	}
+	else if (m_VertexBuffer != nullptr && m_IndexBuffer == nullptr)
+	{
+		VkBuffer vertexBuffers[] = { m_VertexBuffer->GetBuffer() };
+		VkDeviceSize offsets[] = { 0 };
+		vkCmdBindVertexBuffers(commandBuffer, 0, 1, vertexBuffers, offsets);
+		vkCmdDraw(commandBuffer, m_VertexCount, instance, 0, 0);
+	}
+	else
+	{
+		//throw std::runtime_error("Model with no buffers cannot be rendered");
+		return false;
+	}
 
-	ModelPlane(glm::vec2 extent = glm::vec2(1.0f, 1.0f));
-
-	~ModelPlane() override;
-
-	void Load() override;
-private:
-	glm::vec2 m_Extent;
-};
+	return true;
 }
-
-#endif
+}

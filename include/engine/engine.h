@@ -30,7 +30,7 @@ SOFTWARE.
 #include <chrono>
 #include <engine/system_container.h>
 
-#include <graphics/model_manager.h>
+#include <graphics/mesh_manager.h>
 
 namespace dm
 {
@@ -75,7 +75,7 @@ public:
 
 	EngineSettings& GetSettings();
 
-	ModelManager* GetModelManager();
+	MeshManager* GetModelManager();
 
 	void SetApplication(EngineApplication* app);
 private:

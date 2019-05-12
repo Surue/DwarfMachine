@@ -25,16 +25,16 @@ SOFTWARE.
 #ifndef MODEL_CUBE_H
 #define MODEL_CUBE_H
 
-#include <graphics/model.h>
+#include <graphics/Mesh.h>
 
 namespace dm
 {
-class ModelCube : public Model
+class MeshCube : public Mesh
 {
 public:
-	static std::unique_ptr<ModelCube> Create(const Vec3f &extents = Vec3f(1.0f, 1.0f, 1.0f));
+	static std::unique_ptr<MeshCube> Create(const Vec3f &extents = Vec3f(1.0f, 1.0f, 1.0f));
 
-	ModelCube(const Vec3f &extents = Vec3f(1.0f, 1.0f, 1.0f), const bool &load = true);
+	MeshCube(const Vec3f &extents = Vec3f(1.0f, 1.0f, 1.0f), const bool &load = true);
 
 	void Load() override;
 private:

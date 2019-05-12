@@ -25,7 +25,7 @@ SOFTWARE.
 #include <graphics/renderer_meshes.h>
 #include <graphics/graphic_manager.h>
 #include "entity/entity_handle.h"
-#include "component/mesh.h"
+#include "component/model.h"
 #include <component/material_default.h>
 
 #include <glm/gtx/string_cast.hpp>
@@ -37,7 +37,7 @@ RendererMeshes::RendererMeshes(Engine& engine, const Pipeline::Stage& pipelineSt
 	m_UniformScene(true)
 {
 	m_Signature.AddComponent(ComponentType::MATERIAL_DEFAULT);
-	m_Signature.AddComponent(ComponentType::MESH);
+	m_Signature.AddComponent(ComponentType::MODEL);
 	m_Signature.AddComponent(ComponentType::TRANSFORM);
 }
 
@@ -70,7 +70,7 @@ void RendererMeshes::Draw(const CommandBuffer& commandBuffer)
 
 		auto entity = EntityHandle(meshRender);
 		const auto material = entity.GetComponent<MaterialDefault>(ComponentType::MATERIAL_DEFAULT);
-		const auto mesh = entity.GetComponent<Mesh>(ComponentType::MESH);
+		const auto mesh = entity.GetComponent<Model>(ComponentType::MODEL);
 
 		if (material == nullptr || mesh == nullptr)
 		{
@@ -144,6 +144,6 @@ void RendererMeshes::RegisterEntity(const Entity entity)
 
 	//TODO vérifier si c'est possible de mettre ça lors de la création du component
 	//TODO Il faut lier la stage manuellement, il faut trouver une solution
-	material->pipelineMaterial = PipelineMaterial::Create({ 0, 0 }, PipelineGraphicsCreate({ "../Shaders/shader.vert", "../Shaders/shader.frag" }, { MeshManager::GetVertexInput() }, MaterialDefaultManager::GetDefines(*material), PipelineGraphics::Mode::MRT));
+	material->pipelineMaterial = PipelineMaterial::Create({ 0, 0 }, PipelineGraphicsCreate({ "../Shaders/shader.vert", "../Shaders/shader.frag" }, { ModelComponentManager::GetVertexInput() }, MaterialDefaultManager::GetDefines(*material), PipelineGraphics::Mode::MRT));
 }
 }

@@ -22,33 +22,22 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#include <component/mesh.h>
-#include "graphics/model_cube.h"
+#ifndef MODEL_SPHERE_H
+#define MODEL_SPHERE_H
+#include <graphics/Mesh.h>
 
 namespace dm
 {
-MeshManager::MeshManager() { }
-
-MeshManager::~MeshManager()
+class MeshSphere : public Mesh
 {
-	m_Components.clear();
+public:
+	static std::unique_ptr<MeshSphere> Create(float radius = 1.0f);
+
+	MeshSphere(float radius = 1.0f, const bool &load = true);
+
+	void Load() override;
+private:
+	float m_Radius;
+};
 }
-
-void MeshManager::Init() {}
-
-void MeshManager::Update() {}
-
-Mesh* MeshManager::CreateComponent(const Entity entity)
-{
-	auto mesh = Mesh();
-	mesh.componentType = ComponentType::TRANSFORM;
-
-	mesh.model = nullptr;
-
-	m_Components[entity - 1] = mesh;
-
-	return &m_Components[entity - 1];
-}
-void MeshManager::DestroyComponent(Entity entity) {}
-void MeshManager::OnDrawInspector(Entity entity) {}
-}
+#endif

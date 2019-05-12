@@ -242,7 +242,7 @@ void GraphicManager::Draw()
 
 	if (acquireResult == VK_ERROR_OUT_OF_DATE_KHR)
 	{
-		VkExtent2D displayExtent = { m_Window->GetSize().x, m_Window->GetSize().y };
+		VkExtent2D displayExtent = { static_cast<uint32_t>(m_Window->GetSize().x), static_cast<uint32_t>(m_Window->GetSize().y) };
 		m_Swapchain = std::make_unique<Swapchain>(displayExtent);
 		return;
 	}
@@ -407,7 +407,7 @@ void GraphicManager::RecreatePass(RenderStage& renderStage)
 {
 	auto graphicQueue = m_LogicalDevice->GetGraphicsQueue();
 
-	VkExtent2D displayExtent = { m_Window->GetSize().x, m_Window->GetSize().y };
+	VkExtent2D displayExtent = { static_cast<uint32_t>(m_Window->GetSize().x), static_cast<uint32_t>(m_Window->GetSize().y) };
 
 	CheckVk(vkQueueWaitIdle(graphicQueue));
 

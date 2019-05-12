@@ -33,7 +33,7 @@ class InputManager;
 class EntityManager;
 class ComponentManagerContainer;
 class SystemManager;
-class ModelManager;
+class MeshManager;
 class EngineApplication;
 
 class SystemContainer
@@ -57,14 +57,14 @@ public:
 
 	SystemManager* GetSystemManager() const;
 
-	ModelManager* GetModelManager() const;
+	MeshManager* GetModelManager() const;
 private:
 	std::unique_ptr<GraphicManager> m_GraphicManager;
 	std::unique_ptr<InputManager> m_InputManager;
 	std::unique_ptr<EntityManager> m_EntityManager;
 	std::unique_ptr<ComponentManagerContainer> m_ComponentManager;
 	std::unique_ptr<SystemManager> m_SystemManager;
-	std::unique_ptr<ModelManager> m_ModelManager;
+	std::unique_ptr<MeshManager> m_ModelManager;
 };
 }
 

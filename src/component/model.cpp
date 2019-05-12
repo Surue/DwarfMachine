@@ -22,52 +22,32 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#ifndef MODEL_VERTEX_H
-#define MODEL_VERTEX_H
-#include <engine/vector.h>
-#include <graphics/shader.h>
-#include <glm/vec3.hpp>
-#include <glm/vec2.hpp>
+#include <component/model.h>
 
 namespace dm
 {
-struct VertexModel
+ModelComponentManager::ModelComponentManager() { }
+
+ModelComponentManager::~ModelComponentManager()
 {
-	VertexModel(const Vec3f &pos, const Vec2f &uv, const Vec3f &normal);
-
-	VertexModel(const glm::vec3 &pos, const glm::vec2 &uv, const glm::vec3 &normal);
-
-	static Shader::VertexInput GetVertexInput(const uint32_t &binding = 0);
-
-	bool operator==(const VertexModel &other) const
-	{
-		return position == other.position && uv == other.uv && normal == other.normal;
-	}
-
-	bool operator!=(const VertexModel &other) const
-	{
-		return !(*this == other);
-	}
-
-	Vec3f position;
-	Vec2f uv;
-	Vec3f normal;
-};
+	m_Components.clear();
 }
 
-namespace std
+void ModelComponentManager::Init() {}
+
+void ModelComponentManager::Update() {}
+
+Model* ModelComponentManager::CreateComponent(const Entity entity)
 {
-	template<>
-	struct hash<dm::VertexModel>
-	{
-		size_t operator()(const dm::VertexModel &vertex) const noexcept
-		{
-			size_t seed = 0;
-			HashCombine(seed, vertex.position);
-			HashCombine(seed, vertex.uv);
-			HashCombine(seed, vertex.normal);
-			return seed;
-		}
-	};
+	auto mesh = Model();
+	mesh.componentType = ComponentType::TRANSFORM;
+
+	mesh.model = nullptr;
+
+	m_Components[entity - 1] = mesh;
+
+	return &m_Components[entity - 1];
 }
-#endif MODEL_VERTEX_H
+void ModelComponentManager::DestroyComponent(Entity entity) {}
+void ModelComponentManager::OnDrawInspector(Entity entity) {}
+}

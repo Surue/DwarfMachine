@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#include <graphics/model_sphere.h>
+#include <graphics/mesh_sphere.h>
 #define _USE_MATH_DEFINES 
 #include <cmath>
 #include <glm/vec3.hpp>
@@ -30,21 +30,21 @@ SOFTWARE.
 
 namespace dm
 {
-std::unique_ptr<ModelSphere> ModelSphere::Create(const float radius)
+std::unique_ptr<MeshSphere> MeshSphere::Create(const float radius)
 {
-	return std::make_unique<ModelSphere>(radius);
+	return std::make_unique<MeshSphere>(radius);
 }
 
-ModelSphere::ModelSphere(const float radius, const bool& load) :
+MeshSphere::MeshSphere(const float radius, const bool& load) :
 	m_Radius(radius)
 {
 	if(load)
 	{
-		ModelSphere::Load();
+		MeshSphere::Load();
 	}
 }
 
-void ModelSphere::Load()
+void MeshSphere::Load()
 {
 	if(m_Radius <= 0)
 	{
@@ -54,7 +54,7 @@ void ModelSphere::Load()
 	uint32_t latitudeBands = 20;
 	uint32_t longitudeBands = 20;
 
-	std::vector<VertexModel> vertices;
+	std::vector<VertexMesh> vertices;
 	std::vector<uint32_t> indices;
 
 	for(uint32_t i = 0; i < longitudeBands + 1; i++)
@@ -70,7 +70,7 @@ void ModelSphere::Load()
 			glm::vec3 normal = glm::vec3(std::cos(phi) * std::sin(theta), std::cos(theta), std::sin(phi) * std::sin(theta));
 			glm::vec3 position = m_Radius * normal;
 			glm::vec2 uvs = glm::vec2(1.0f - jDivLat, 1.0f - iDivLong);
-			vertices.emplace_back(VertexModel(position, uvs, normal));
+			vertices.emplace_back(VertexMesh(position, uvs, normal));
 		}
 	}
 

@@ -96,7 +96,7 @@ EngineSettings& Engine::GetSettings()
 	return m_Settings;
 }
 
-ModelManager* Engine::GetModelManager()
+MeshManager* Engine::GetModelManager()
 {
 	return m_SystemContainer.GetModelManager();
 }

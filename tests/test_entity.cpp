@@ -27,7 +27,7 @@ SOFTWARE.
 #include <component/transform.h>
 #include <entity/entity_handle.h>
 #include <graphics/graphic_manager.h>
-#include <component/mesh.h>
+#include <component/model.h>
 
 #include <glm/ext/matrix_clip_space.inl>
 #include <glm/detail/func_trigonometric.inl>

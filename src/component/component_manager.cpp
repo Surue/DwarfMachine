@@ -31,7 +31,7 @@ ComponentManagerContainer::ComponentManagerContainer() :
 	m_TransformManager(std::make_unique<TransformManager>()),
 	m_CameraManager(std::make_unique<CameraManager>()),
 	m_MaterialDefaultManager(std::make_unique<MaterialDefaultManager>()),
-	m_MeshManager(std::make_unique<MeshManager>())
+	m_MeshManager(std::make_unique<ModelComponentManager>())
 { }
 
 void ComponentManagerContainer::Destroy()
@@ -56,7 +56,7 @@ ComponentBase* ComponentManagerContainer::CreateComponent(const Entity entity, c
 		return m_CameraManager->CreateComponent(entity);
 	case ComponentType::MATERIAL_DEFAULT:
 		return m_MaterialDefaultManager->CreateComponent(entity);
-	case ComponentType::MESH:
+	case ComponentType::MODEL:
 		return m_MeshManager->CreateComponent(entity);
 	default:
 		throw std::runtime_error("Fail to bind component to its own component manager");
@@ -75,8 +75,8 @@ ComponentBase* ComponentManagerContainer::AddComponent(const Entity entity, Comp
 		return static_cast<ComponentBase*>(m_CameraManager->AddComponent(entity, static_cast<Camera&>(component)));
 	case ComponentType::MATERIAL_DEFAULT:
 		return static_cast<ComponentBase*>(m_MaterialDefaultManager->AddComponent(entity, static_cast<MaterialDefault&>(component)));
-	case ComponentType::MESH:
-		return static_cast<ComponentBase*>(m_MeshManager->AddComponent(entity, static_cast<Mesh&>(component)));
+	case ComponentType::MODEL:
+		return static_cast<ComponentBase*>(m_MeshManager->AddComponent(entity, static_cast<Model&>(component)));
 	default:
 		throw std::runtime_error("Fail to bind component to its own component manager");
 	}
@@ -92,7 +92,7 @@ ComponentBase* ComponentManagerContainer::GetComponent(const Entity entity, cons
 		return m_CameraManager->GetComponent(entity);
 	case ComponentType::MATERIAL_DEFAULT:
 		return m_MaterialDefaultManager->GetComponent(entity);
-	case ComponentType::MESH:
+	case ComponentType::MODEL:
 		return m_MeshManager->GetComponent(entity);
 	case ComponentType::NONE: break;
 	case ComponentType::LENGTH: break;
@@ -117,7 +117,7 @@ void ComponentManagerContainer::DestroyComponent(const Entity entity, const Comp
 	case ComponentType::MATERIAL_DEFAULT: 
 		m_MaterialDefaultManager->DestroyComponent(entity);
 		break;
-	case ComponentType::MESH: 
+	case ComponentType::MODEL: 
 		m_MeshManager->DestroyComponent(entity);
 		break;
 	case ComponentType::LENGTH: break;

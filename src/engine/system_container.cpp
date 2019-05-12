@@ -28,7 +28,7 @@ SOFTWARE.
 #include <engine/Input.h>
 #include <component/component_manager.h>
 #include <system/system_manager.h>
-#include <graphics/model_manager.h>
+#include <graphics/mesh_manager.h>
 
 namespace dm
 {
@@ -43,7 +43,7 @@ void SystemContainer::Init()
 	m_EntityManager = std::make_unique<EntityManager>();
 	m_ComponentManager = std::make_unique<ComponentManagerContainer>();
 	m_SystemManager = std::make_unique<SystemManager>();
-	m_ModelManager = std::make_unique<ModelManager>();
+	m_ModelManager = std::make_unique<MeshManager>();
 
 	m_GraphicManager->Init();
 	m_InputManager->Init();
@@ -90,7 +90,7 @@ SystemManager* SystemContainer::GetSystemManager() const
 	return m_SystemManager.get();
 }
 
-ModelManager* SystemContainer::GetModelManager() const
+MeshManager* SystemContainer::GetModelManager() const
 {
 	return m_ModelManager.get();
 }

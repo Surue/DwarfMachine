@@ -22,39 +22,24 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#ifndef MESH_H
-#define MESH_H
-#include <component/component.h>
-#include "graphics/model.h"
-#include "graphics/shader.h"
-#include "graphics/model_vertex.h"
+#ifndef MODEL_REGISTER_H
+#define MODEL_REGISTER_H
+#include <map>
+#include <graphics/Mesh.h>
 
 namespace dm
 {
-struct Mesh final : ComponentBase
-{
-	Model* model = nullptr;
-};
-
-class MeshManager : public ComponentBaseManager<Mesh>
+class MeshManager
 {
 public:
-	explicit MeshManager();
+	MeshManager();
 
-	~MeshManager();
+	void Init(){};
 
-	void Init() override;
-
-	void Update() override;
-
-	Mesh* CreateComponent(Entity entity) override;
-
-	void DestroyComponent(Entity entity) override;
-
-	static Shader::VertexInput GetVertexInput(const uint32_t &binding = 0) { return VertexModel::GetVertexInput(binding); }
-	
-	void OnDrawInspector(Entity entity) override;
+	Mesh* GetModel(std::string name);
+private:
+	std::map<std::string, std::unique_ptr<Mesh>> m_RegisteredMeshes{};
 };
 }
 
-#endif MESH_H
+#endif MODEL_REGISTER_H

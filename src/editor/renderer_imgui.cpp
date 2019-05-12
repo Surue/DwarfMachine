@@ -28,7 +28,7 @@ SOFTWARE.
 #include "imgui_impl_sdl.h"
 #include "imgui_impl_vulkan.h"
 #include <graphics/graphic_manager.h>
-#include <graphics/model_vertex.h>
+#include <graphics/mesh_vertex.h>
 #include <graphics/window.h>
 #include <imgui_internal.h>
 

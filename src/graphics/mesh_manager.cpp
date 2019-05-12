@@ -22,29 +22,29 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#include <graphics/model_manager.h>
+#include <graphics/mesh_manager.h>
 
 #include <utility/xxhash.hpp>
-#include <graphics/model_cube.h>
-#include <graphics/model_sphere.h>
-#include <graphics/model_obj.h>
-#include <graphics/model_plane.h>
+#include <graphics/mesh_cube.h>
+#include <graphics/mesh_sphere.h>
+#include <graphics/mesh_obj.h>
+#include <graphics/mesh_plane.h>
 
 namespace dm
 {
-ModelManager::ModelManager()
+MeshManager::MeshManager()
 {
-	m_RegisteredModels["ModelCube"] = ModelCube::Create();
-	m_RegisteredModels["ModelSphere"] = ModelSphere::Create();
-	m_RegisteredModels["ModelPlane"] = ModelPlane::Create();
-	m_RegisteredModels["ressources/models/chalet.obj"] = ModelObj::Create("ressources/models/chalet.obj");
+	m_RegisteredMeshes["ModelCube"] = MeshCube::Create();
+	m_RegisteredMeshes["ModelSphere"] = MeshSphere::Create();
+	m_RegisteredMeshes["ModelPlane"] = MeshPlane::Create();
+	m_RegisteredMeshes["ressources/models/chalet.obj"] = MeshObj::Create("ressources/models/chalet.obj");
 }
 
-Model* ModelManager::GetModel(const std::string name)
+Mesh* MeshManager::GetModel(const std::string name)
 {
-	const auto it = m_RegisteredModels.find(name);
+	const auto it = m_RegisteredMeshes.find(name);
 
-	if (it == m_RegisteredModels.end())
+	if (it == m_RegisteredMeshes.end())
 	{
 		return nullptr;
 	}

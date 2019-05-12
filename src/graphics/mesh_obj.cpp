@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#include <graphics/model_obj.h>
+#include <graphics/mesh_obj.h>
 
 #define TINYOBJLOADER_IMPLEMENTATION
 #include <utility/tiny_obj_loader.h>
@@ -30,19 +30,19 @@ SOFTWARE.
 
 namespace dm
 {
-std::unique_ptr<ModelObj> ModelObj::Create(const std::string& filename)
+std::unique_ptr<MeshObj> MeshObj::Create(const std::string& filename)
 {
-	return std::make_unique<ModelObj>(filename);
+	return std::make_unique<MeshObj>(filename);
 }
 
-ModelObj::ModelObj(const std::string& filename): 
+MeshObj::MeshObj(const std::string& filename): 
 m_Filename(filename) {
-	ModelObj::Load();
+	MeshObj::Load();
 }
 
-ModelObj::~ModelObj() {}
+MeshObj::~MeshObj() {}
 
-void ModelObj::Load()
+void MeshObj::Load()
 {
 	if (m_Filename.empty())
 	{
@@ -59,9 +59,9 @@ void ModelObj::Load()
 		throw std::runtime_error(warn + err);
 	}
 
-	std::vector<VertexModel> vertices;
+	std::vector<VertexMesh> vertices;
 	std::vector<uint32_t> indices;
-	std::unordered_map<VertexModel, size_t> uniqueVertices;
+	std::unordered_map<VertexMesh, size_t> uniqueVertices;
 
 	for (const auto &shape : shapes)
 	{
@@ -87,7 +87,7 @@ void ModelObj::Load()
 					attrib.normals[3 * index.normal_index + 2]);
 			}
 
-			VertexModel vertex = VertexModel(position, uv, normal);
+			VertexMesh vertex = VertexMesh(position, uv, normal);
 
 			if (uniqueVertices.count(vertex) == 0)
 			{

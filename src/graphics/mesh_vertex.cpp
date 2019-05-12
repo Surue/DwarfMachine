@@ -22,30 +22,30 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#include <graphics/model_vertex.h>
+#include <graphics/mesh_vertex.h>
 
 namespace dm
 {
-VertexModel::VertexModel(const Vec3f& pos, const Vec2f& uv, const Vec3f& normal) :
+VertexMesh::VertexMesh(const Vec3f& pos, const Vec2f& uv, const Vec3f& normal) :
 	position(pos),
 	uv(uv),
 	normal(normal)
 { }
 
-VertexModel::VertexModel(const glm::vec3& pos, const glm::vec2& uv, const glm::vec3& normal)
+VertexMesh::VertexMesh(const glm::vec3& pos, const glm::vec2& uv, const glm::vec3& normal)
 {
 	position = Vec3f(pos.x, pos.y, pos.z);
 	this->uv = Vec2f(uv.x, uv.y);
 	this->normal = Vec3f(normal.x, normal.y, normal.z);
 }
 
-Shader::VertexInput VertexModel::GetVertexInput(const uint32_t& binding)
+Shader::VertexInput VertexMesh::GetVertexInput(const uint32_t& binding)
 {
 	std::vector<VkVertexInputBindingDescription> bindingDescriptions(1);
 
 	//vertex input
 	bindingDescriptions[0].binding = binding;
-	bindingDescriptions[0].stride = sizeof(VertexModel);
+	bindingDescriptions[0].stride = sizeof(VertexMesh);
 	bindingDescriptions[0].inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
 
 	std::vector<VkVertexInputAttributeDescription> attributeDescriptions(3);
@@ -54,19 +54,19 @@ Shader::VertexInput VertexModel::GetVertexInput(const uint32_t& binding)
 	attributeDescriptions[0].binding = binding;
 	attributeDescriptions[0].location = 0;
 	attributeDescriptions[0].format = VK_FORMAT_R32G32B32_SFLOAT;
-	attributeDescriptions[0].offset = offsetof(VertexModel, position);
+	attributeDescriptions[0].offset = offsetof(VertexMesh, position);
 
 	//uv
 	attributeDescriptions[1].binding = binding;
 	attributeDescriptions[1].location = 1;
 	attributeDescriptions[1].format = VK_FORMAT_R32G32_SFLOAT;
-	attributeDescriptions[1].offset = offsetof(VertexModel, uv);
+	attributeDescriptions[1].offset = offsetof(VertexMesh, uv);
 
 	//normal
 	attributeDescriptions[2].binding = binding;
 	attributeDescriptions[2].location = 2;
 	attributeDescriptions[2].format = VK_FORMAT_R32G32B32_SFLOAT;
-	attributeDescriptions[2].offset = offsetof(VertexModel, normal);
+	attributeDescriptions[2].offset = offsetof(VertexMesh, normal);
 
 	return Shader::VertexInput(binding, bindingDescriptions, attributeDescriptions);
 }

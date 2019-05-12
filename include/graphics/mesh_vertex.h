@@ -22,22 +22,52 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#ifndef MODEL_SPHERE_H
-#define MODEL_SPHERE_H
-#include <graphics/model.h>
+#ifndef MODEL_VERTEX_H
+#define MODEL_VERTEX_H
+#include <engine/vector.h>
+#include <graphics/shader.h>
+#include <glm/vec3.hpp>
+#include <glm/vec2.hpp>
 
 namespace dm
 {
-class ModelSphere : public Model
+struct VertexMesh
 {
-public:
-	static std::unique_ptr<ModelSphere> Create(float radius = 1.0f);
+	VertexMesh(const Vec3f &pos, const Vec2f &uv, const Vec3f &normal);
 
-	ModelSphere(float radius = 1.0f, const bool &load = true);
+	VertexMesh(const glm::vec3 &pos, const glm::vec2 &uv, const glm::vec3 &normal);
 
-	void Load() override;
-private:
-	float m_Radius;
+	static Shader::VertexInput GetVertexInput(const uint32_t &binding = 0);
+
+	bool operator==(const VertexMesh &other) const
+	{
+		return position == other.position && uv == other.uv && normal == other.normal;
+	}
+
+	bool operator!=(const VertexMesh &other) const
+	{
+		return !(*this == other);
+	}
+
+	Vec3f position;
+	Vec2f uv;
+	Vec3f normal;
 };
 }
-#endif
+
+namespace std
+{
+	template<>
+	struct hash<dm::VertexMesh>
+	{
+		size_t operator()(const dm::VertexMesh &vertex) const noexcept
+		{
+			size_t seed = 0;
+			HashCombine(seed, vertex.position);
+			HashCombine(seed, vertex.uv);
+			HashCombine(seed, vertex.normal);
+			return seed;
+		}
+	};
+}
+#endif MODEL_VERTEX_H

@@ -29,9 +29,9 @@ SOFTWARE.
 #include <component/transform.h>
 #include <entity/entity_handle.h>
 #include <graphics/graphic_manager.h>
-#include <component/mesh.h>
+#include <component/model.h>
 #include <editor/editor.h>
-#include <graphics/model_manager.h>
+#include <graphics/mesh_manager.h>
 
 #include <glm/ext/matrix_clip_space.inl>
 #include <glm/detail/func_trigonometric.inl>
@@ -67,10 +67,10 @@ TEST(Models, Cube)
 	auto t1 = cube.CreateComponent<dm::Transform>(ComponentType::TRANSFORM);
 	t1->position = glm::vec3(0, 0, 0);
 	t1->scaling = glm::vec3(1, 1, 1);
-	dm::Mesh mesh;
-	mesh.componentType = ComponentType::MESH;
+	dm::Model mesh;
+	mesh.componentType = ComponentType::MODEL;
 	mesh.model = dm::Engine::Get()->GetModelManager()->GetModel("ModelCube");
-	cube.AddComponent<dm::Mesh>(mesh);
+	cube.AddComponent<dm::Model>(mesh);
 	dm::MaterialDefault material;
 	material.componentType = ComponentType::MATERIAL_DEFAULT;
 	material.color = dm::Color(100, 200, 0, 1);
@@ -82,10 +82,10 @@ TEST(Models, Cube)
 	auto t2 = sphere.CreateComponent<dm::Transform>(ComponentType::TRANSFORM);
 	t2->position = glm::vec3(2, 0, 0);
 	t2->scaling = glm::vec3(1, 1, 1);
-	dm::Mesh mesh2;
-	mesh2.componentType = ComponentType::MESH;
+	dm::Model mesh2;
+	mesh2.componentType = ComponentType::MODEL;
 	mesh2.model = dm::Engine::Get()->GetModelManager()->GetModel("ModelPlane");
-	sphere.AddComponent<dm::Mesh>(mesh2);
+	sphere.AddComponent<dm::Model>(mesh2);
 	sphere.AddComponent<dm::MaterialDefault>(material);
 
 	//Planes
@@ -95,10 +95,10 @@ TEST(Models, Cube)
 	t3->position = glm::vec3(-2, 0, 0); 
 	t3->scaling = glm::vec3(1, 1, 1);
 	t3->rotation = glm::vec3(180 * glm::pi<float>() / 180, 0, 0);
-	dm::Mesh mesh3;
-	mesh3.componentType = ComponentType::MESH;
+	dm::Model mesh3;
+	mesh3.componentType = ComponentType::MODEL;
 	mesh3.model = dm::Engine::Get()->GetModelManager()->GetModel("ModelSphere");
-	plane.AddComponent<dm::Mesh>(mesh3);
+	plane.AddComponent<dm::Model>(mesh3);
 	plane.AddComponent<dm::MaterialDefault>(material);
 
 	//Obj
@@ -107,10 +107,10 @@ TEST(Models, Cube)
 	auto t4 = obj.CreateComponent<dm::Transform>(ComponentType::TRANSFORM);
 	t4->position = glm::vec3(0, 0, 4);
 	t4->scaling = glm::vec3(1, 1, 1);
-	dm::Mesh mesh4;
-	mesh4.componentType = ComponentType::MESH;
+	dm::Model mesh4;
+	mesh4.componentType = ComponentType::MODEL;
 	mesh4.model = dm::Engine::Get()->GetModelManager()->GetModel("ressources/models/chalet.obj");
-	obj.AddComponent<dm::Mesh>(mesh4);
+	obj.AddComponent<dm::Model>(mesh4);
 	dm::MaterialDefault material1;
 	material1.componentType = ComponentType::MATERIAL_DEFAULT;
 	material1.color = dm::Color(100, 200, 0, 1);

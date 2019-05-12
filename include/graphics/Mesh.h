@@ -28,22 +28,22 @@ SOFTWARE.
 #include <string>
 #include <graphics/command_buffer.h>
 #include <graphics/buffer.h>
-#include "model_vertex.h"
+#include "mesh_vertex.h"
 
 namespace dm
 {
-class Model
+class Mesh
 {
 public:
-	Model();
+	Mesh();
 
-	virtual ~Model()
+	virtual ~Mesh()
 	{
 	}
 
 	template<typename T>
-	explicit Model(const std::vector<T> &vertices, const std::vector<uint32_t> &indices = {}) :
-		Model()
+	explicit Mesh(const std::vector<T> &vertices, const std::vector<uint32_t> &indices = {}) :
+		Mesh()
 	{
 		Initialize(vertices, indices);
 	}
@@ -65,7 +65,7 @@ protected:
 	template<typename T>
 	void Initialize(const std::vector<T> &vertices, const std::vector<uint32_t> &indices = {})
 	{
-		static_assert(std::is_base_of<VertexModel, T>::value, "T must derive from ModelVertex");
+		static_assert(std::is_base_of<VertexMesh, T>::value, "T must derive from ModelVertex");
 
 		m_VertexBuffer = nullptr;
 		m_IndexBuffer = nullptr;

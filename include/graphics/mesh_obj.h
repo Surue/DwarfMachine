@@ -22,42 +22,22 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#include <graphics/model.h>
+#ifndef MODEL_OBJ_H
+#define MODEL_OBJ_H
+#include <graphics/Mesh.h>
 
 namespace dm
 {
-Model::Model() :
-	m_VertexBuffer(nullptr),
-	m_IndexBuffer(nullptr),
-	m_VertexCount(0),
-	m_IndexCount(0)
-{}
+class MeshObj : public Mesh{
+public:
+	static std::unique_ptr<MeshObj> Create(const std::string& filename);
 
-void Model::Load() {}
-
-bool Model::CmdRender(const CommandBuffer& commandBuffer, const uint32_t& instance) const
-{
-	if (m_VertexBuffer != nullptr && m_IndexBuffer != nullptr)
-	{
-		VkBuffer vertexBuffers[] = { m_VertexBuffer->GetBuffer() };
-		VkDeviceSize offsets[] = { 0 };
-		vkCmdBindVertexBuffers(commandBuffer, 0, 1, vertexBuffers, offsets);
-		vkCmdBindIndexBuffer(commandBuffer, m_IndexBuffer->GetBuffer(), 0, GetIndexType());
-		vkCmdDrawIndexed(commandBuffer, m_IndexCount, instance, 0, 0, 0);
-	}
-	else if (m_VertexBuffer != nullptr && m_IndexBuffer == nullptr)
-	{
-		VkBuffer vertexBuffers[] = { m_VertexBuffer->GetBuffer() };
-		VkDeviceSize offsets[] = { 0 };
-		vkCmdBindVertexBuffers(commandBuffer, 0, 1, vertexBuffers, offsets);
-		vkCmdDraw(commandBuffer, m_VertexCount, instance, 0, 0);
-	}
-	else
-	{
-		//throw std::runtime_error("Model with no buffers cannot be rendered");
-		return false;
-	}
-
-	return true;
+	MeshObj(const std::string& filename);
+	~MeshObj() override;
+	void Load() override;
+private:
+	std::string m_Filename;
+};
 }
-}
+
+#endif

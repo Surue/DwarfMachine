@@ -29,7 +29,7 @@ enum class ComponentType : int {
 	TRANSFORM = 1 << 0,
 	CAMERA = 1 << 1,
 	MATERIAL_DEFAULT = 1 << 2,
-	MESH = 1 << 3,
+	MODEL = 1 << 3,
 	LENGTH = 5,
 };
 #endif //COMPONENT_TYPE_H
