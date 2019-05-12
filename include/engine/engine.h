@@ -34,14 +34,6 @@ SOFTWARE.
 
 namespace dm
 {
-class GraphicManager;
-class InputManager;
-class EntityManager;
-class ComponentManagerContainer;
-class SystemManager;
-class Window;
-class EngineApplication;
-
 struct EngineSettings
 {
 	Vec2i windowSize = Vec2i(800, 600);

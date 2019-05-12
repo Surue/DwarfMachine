@@ -29,6 +29,7 @@ SOFTWARE.
 #include <component/component_manager.h>
 #include <system/system_manager.h>
 #include <graphics/mesh_manager.h>
+#include <physic/physic_manager.h>
 
 namespace dm
 {
@@ -36,14 +37,26 @@ SystemContainer::SystemContainer()
 {
 }
 
+SystemContainer::~SystemContainer()
+{
+	delete(m_GraphicManager);
+	delete(m_InputManager);
+	delete(m_EntityManager);
+	delete(m_ComponentManager);
+	delete(m_SystemManager);
+	delete(m_ModelManager);
+	delete(m_PhysicManager);
+}
+
 void SystemContainer::Init()
 {
-	m_GraphicManager = std::make_unique<GraphicManager>();
-	m_InputManager = std::make_unique<InputManager>();
-	m_EntityManager = std::make_unique<EntityManager>();
-	m_ComponentManager = std::make_unique<ComponentManagerContainer>();
-	m_SystemManager = std::make_unique<SystemManager>();
-	m_ModelManager = std::make_unique<MeshManager>();
+	m_GraphicManager = new GraphicManager();
+	m_InputManager = new InputManager();
+	m_EntityManager = new EntityManager();
+	m_ComponentManager = new ComponentManagerContainer();
+	m_SystemManager = new SystemManager();
+	m_ModelManager = new MeshManager();
+	m_PhysicManager = new PhysicManager();
 
 	m_GraphicManager->Init();
 	m_InputManager->Init();
@@ -51,6 +64,7 @@ void SystemContainer::Init()
 	m_ComponentManager->Init();
 	m_SystemManager->Init();
 	m_ModelManager->Init();
+	m_PhysicManager->Init();
 }
 
 void SystemContainer::Update() 
@@ -58,6 +72,7 @@ void SystemContainer::Update()
 	m_GraphicManager->Update();
 	m_InputManager->Update();
 	m_SystemManager->Update();
+	m_PhysicManager->Update();
 }
 
 void SystemContainer::Draw()
@@ -67,31 +82,31 @@ void SystemContainer::Draw()
 
 GraphicManager* SystemContainer::GetGraphicManager() const
 {
-	return m_GraphicManager.get();
+	return m_GraphicManager;
 }
 
 InputManager* SystemContainer::GetInputManager() const
 {
-	return m_InputManager.get();
+	return m_InputManager;
 }
 
 EntityManager* SystemContainer::GetEntityManager() const
 {
-	return m_EntityManager.get();
+	return m_EntityManager;
 }
 
 ComponentManagerContainer* SystemContainer::GetComponentManager() const
 {
-	return m_ComponentManager.get();
+	return m_ComponentManager;
 }
 
 SystemManager* SystemContainer::GetSystemManager() const
 {
-	return m_SystemManager.get();
+	return m_SystemManager;
 }
 
 MeshManager* SystemContainer::GetModelManager() const
 {
-	return m_ModelManager.get();
+	return m_ModelManager;
 }
 }

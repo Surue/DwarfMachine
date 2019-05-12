@@ -35,8 +35,11 @@ void BoundingSphereManager::Update()
 {
 }
 
-BoundingSphere* BoundingSphereManager::CreateComponent(Entity)
+BoundingSphere* BoundingSphereManager::CreateComponent(Entity entity)
 {
+	const auto b = BoundingSphere();
+	m_Components[entity] = b;
+	return &m_Components[entity];
 }
 
 void BoundingSphereManager::DestroyComponent(Entity entity)

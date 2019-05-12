@@ -338,7 +338,7 @@ void GraphicManager::SetManager(RenderManager* managerRender)
 
 void GraphicManager::SetRenderStages(std::vector<std::unique_ptr<RenderStage>> renderStages)
 {
-	VkExtent2D displayExtent = { m_Window->GetSize().x, m_Window->GetSize().y };
+	VkExtent2D displayExtent = { static_cast<uint32_t>(m_Window->GetSize().x), static_cast<uint32_t>(m_Window->GetSize().y) };
 	m_RenderStages = std::move(renderStages);
 	m_Swapchain = std::make_unique<Swapchain>(displayExtent);
 

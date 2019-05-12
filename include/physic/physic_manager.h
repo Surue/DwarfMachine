@@ -22,52 +22,22 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#ifndef SYSTEM_CONTAINER_H
-#define SYSTEM_CONTAINER_H
+#ifndef PHYSIC_MANAGER_H
+#define PHYSIC_MANAGER_H
 
 namespace dm
 {
-class GraphicManager;
-class InputManager;
-class EntityManager;
-class ComponentManagerContainer;
-class SystemManager;
-class MeshManager;
-class EngineApplication;
-class PhysicManager;
-
-class SystemContainer
+class PhysicManager
 {
 public:
-	SystemContainer();
-	~SystemContainer();
+	PhysicManager();
+	~PhysicManager() = default;
 
 	void Init();
 
 	void Update();
-
-	void Draw();
-
-	GraphicManager* GetGraphicManager() const;
-
-	InputManager* GetInputManager() const;
-
-	EntityManager* GetEntityManager() const;
-
-	ComponentManagerContainer* GetComponentManager() const;
-
-	SystemManager* GetSystemManager() const;
-
-	MeshManager* GetModelManager() const;
 private:
-	GraphicManager* m_GraphicManager;
-	InputManager* m_InputManager;
-	EntityManager* m_EntityManager;
-	ComponentManagerContainer* m_ComponentManager;
-	SystemManager* m_SystemManager;
-	MeshManager* m_ModelManager;
-	PhysicManager* m_PhysicManager;
 };
 }
 
-#endif SYSTEM_CONTAINER_H
+#endif
