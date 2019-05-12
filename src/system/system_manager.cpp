@@ -23,15 +23,12 @@ SOFTWARE.
 */
 
 #include <system/system_manager.h>
-#include <system/camera_view.h>
-#include <system/input_controller.h>
 #include <graphics/renderer_meshes.h>
 
 namespace dm {
 SystemManager::SystemManager()
 {
-	m_Systems.push_back(std::make_unique<CameraView>());
-	m_Systems.push_back(std::make_unique<InputController>());
+
 }
 
 void SystemManager::Init()

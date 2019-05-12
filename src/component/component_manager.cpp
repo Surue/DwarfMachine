@@ -30,7 +30,6 @@ namespace dm
 ComponentManagerContainer::ComponentManagerContainer() :
 	m_TransformManager(std::make_unique<TransformManager>()),
 	m_CameraManager(std::make_unique<CameraManager>()),
-	m_ControllerTypeManager(std::make_unique<ControllerTypeManager>()),
 	m_MaterialDefaultManager(std::make_unique<MaterialDefaultManager>()),
 	m_MeshManager(std::make_unique<MeshManager>())
 { }
@@ -39,7 +38,6 @@ void ComponentManagerContainer::Destroy()
 {
 	m_TransformManager.reset(nullptr);
 	m_CameraManager.reset(nullptr);
-	m_ControllerTypeManager.reset(nullptr);
 	m_MaterialDefaultManager.reset(nullptr);
 	m_MaterialDefaultManager.reset(nullptr);
 	m_MaterialDefaultManager.reset(nullptr);
@@ -56,8 +54,6 @@ ComponentBase* ComponentManagerContainer::CreateComponent(const Entity entity, c
 		return m_TransformManager->CreateComponent(entity);
 	case ComponentType::CAMERA:
 		return m_CameraManager->CreateComponent(entity);
-	case ComponentType::CONTROL_TYPE: 
-		return m_ControllerTypeManager->CreateComponent(entity);
 	case ComponentType::MATERIAL_DEFAULT:
 		return m_MaterialDefaultManager->CreateComponent(entity);
 	case ComponentType::MESH:
@@ -77,8 +73,6 @@ ComponentBase* ComponentManagerContainer::AddComponent(const Entity entity, Comp
 		return static_cast<ComponentBase*>(m_TransformManager->AddComponent(entity, static_cast<Transform&>(component)));
 	case ComponentType::CAMERA:
 		return static_cast<ComponentBase*>(m_CameraManager->AddComponent(entity, static_cast<Camera&>(component)));
-	case ComponentType::CONTROL_TYPE:
-		return static_cast<ComponentBase*>(m_ControllerTypeManager->AddComponent(entity, static_cast<ControllerType&>(component)));
 	case ComponentType::MATERIAL_DEFAULT:
 		return static_cast<ComponentBase*>(m_MaterialDefaultManager->AddComponent(entity, static_cast<MaterialDefault&>(component)));
 	case ComponentType::MESH:
@@ -96,8 +90,6 @@ ComponentBase* ComponentManagerContainer::GetComponent(const Entity entity, cons
 		return m_TransformManager->GetComponent(entity);
 	case ComponentType::CAMERA:
 		return m_CameraManager->GetComponent(entity);
-	case ComponentType::CONTROL_TYPE:
-		return m_ControllerTypeManager->GetComponent(entity);
 	case ComponentType::MATERIAL_DEFAULT:
 		return m_MaterialDefaultManager->GetComponent(entity);
 	case ComponentType::MESH:
@@ -121,9 +113,6 @@ void ComponentManagerContainer::DestroyComponent(const Entity entity, const Comp
 		break;
 	case ComponentType::CAMERA: 
 		m_CameraManager->DestroyComponent(entity);
-		break;
-	case ComponentType::CONTROL_TYPE: 
-		m_ControllerTypeManager->DestroyComponent(entity);
 		break;
 	case ComponentType::MATERIAL_DEFAULT: 
 		m_MaterialDefaultManager->DestroyComponent(entity);

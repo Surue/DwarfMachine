@@ -27,14 +27,10 @@ SOFTWARE.
 
 #include <component/transform.h>
 #include <component/camera.h>
-#include <component/control_type.h>
 #include "material_default.h"
 #include "mesh.h"
 
 namespace dm {
-
-class Engine;
-
 class ComponentManagerContainer final
 {
 public:
@@ -62,7 +58,6 @@ public:
 private:
 	std::unique_ptr<TransformManager> m_TransformManager;
 	std::unique_ptr<CameraManager> m_CameraManager;
-	std::unique_ptr<ControllerTypeManager> m_ControllerTypeManager;
 	std::unique_ptr<MaterialDefaultManager> m_MaterialDefaultManager;
 	std::unique_ptr<MeshManager> m_MeshManager;
 };

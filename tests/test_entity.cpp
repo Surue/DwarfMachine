@@ -24,14 +24,13 @@ SOFTWARE.
 
 #include <gtest/gtest.h>
 
-#include <engine/engine.h>
-
 #include <component/transform.h>
 #include <entity/entity_handle.h>
-#include <editor/editor_renderer.h>
 #include <graphics/graphic_manager.h>
-#include <glm/detail/func_trigonometric.inl>
+#include <component/mesh.h>
+
 #include <glm/ext/matrix_clip_space.inl>
+#include <glm/detail/func_trigonometric.inl>
 #include <glm/ext/matrix_transform.inl>
 
 TEST(Entity, CreateEntity)
@@ -188,10 +187,4 @@ TEST(Entity, SystemAddComponent)
 	cameraInfo.proj = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
 
 	auto camera = entity.AddComponent<dm::Camera>(cameraInfo);
-
-	auto controller = entity.CreateComponent<dm::ControllerType>(ComponentType::CONTROL_TYPE);
-	controller->type = dm::ControllerType::ControllerTypeEnum::CAMERA_EDITOR;
-
-	ASSERT_TRUE(entity.HasComponent(ComponentType::CONTROL_TYPE));
-	ASSERT_TRUE(entity.GetComponent<dm::ControllerType>(ComponentType::CONTROL_TYPE)->type == dm::ControllerType::ControllerTypeEnum::CAMERA_EDITOR);
 }
