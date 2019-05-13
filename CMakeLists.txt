@@ -7,16 +7,34 @@ set(CMAKE_CXX_VISIBILITY_PRESET hidden)
 
 set(EXTERNAL_DIR ${CMAKE_SOURCE_DIR}/externals)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
-
+set(CMAKE_INCLUDE_DIR include)
 if(WIN32)
 add_compile_definitions(NOMINMAX)
 endif(WIN32)
 
+#macro for building keeping folder hierarchy into project
+macro(GroupSources curdir)
+	file(GLOB children RELATIVE ${CMAKE_SOURCE_DIR}/${curdir} ${CMAKE_SOURCE_DIR}/${curdir}/*)
+	foreach(child ${children})
+		message(" " ${child})
+			if(IS_DIRECTORY ${CMAKE_SOURCE_DIR}/${curdir}/${child})
+				GroupSources(${curdir}/${child})
+			else()
+				string(REPLACE "/" "\\" groupname ${curdir})
+				string(REPLACE "include" "" groupname ${groupname})
+				string(REPLACE "include" "src" includeFile ${curdir})
+				string(REPLACE ".hpp" ".cpp" includeChild ${child})
+				string(REPLACE ".h" ".cpp" includeChild ${includeChild})
+				
+				source_group(${groupname} FILES ${CMAKE_SOURCE_DIR}/${curdir}/${child})
+				source_group(${groupname} FILES ${CMAKE_SOURCE_DIR}/${includeFile}/${includeChild})
+			endif()
+	endforeach()
+endmacro()
+
 include_directories(include ${CMAKE_SOURCE_DIR}/include)
 
-file(GLOB_RECURSE SRC src/*.cpp include/*.h)
-
-set_property(GLOBAL PROPERTY USE_FOLDERS On)
+set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
 if(MSVC)
     add_compile_options(
@@ -61,16 +79,16 @@ set_property(GLOBAL PROPERTY USE_FOLDERS On)
 SET_SOURCE_FILES_PROPERTIES( ${DWARF_MACHINE_SRC} PROPERTIES
                 FOLDER "${CMAKE_SOURCE_DIR}/src" )
 
-source_group("Audio"               FILES ${DWARF_MACHINE_AUDIO_SRC})
-source_group("Component"           FILES ${DWARF_MACHINE_COMPONENT_SRC})
-source_group("Editor"              FILES ${DWARF_MACHINE_EDITOR_SRC})
-source_group("Engine"              FILES ${DWARF_MACHINE_ENGINE_SRC})
-source_group("Entity"              FILES ${DWARF_MACHINE_ENTITY_SRC})
-source_group("Graphics"            FILES ${DWARF_MACHINE_GRAPHICS_SRC})
-source_group("Input"               FILES ${DWARF_MACHINE_INPUT_SRC})
-source_group("Physic"               FILES ${DWARF_MACHINE_PHYSIC_SRC})
-source_group("System"              FILES ${DWARF_MACHINE_SYSTEM_SRC})
-source_group("Utility"             FILES ${DWARF_MACHINE_UTILITY_SRC})
+GroupSources(include/audio)
+GroupSources(include/component)
+GroupSources(include/editor)
+GroupSources(include/engine)
+GroupSources(include/entity)
+GroupSources(include/graphics)
+GroupSources(include/input)
+GroupSources(include/physic)
+GroupSources(include/system)
+GroupSources(include/utility)
 
 file(GLOB_RECURSE SHADERS_SRC shaders/*.vert shaders/*.frag)
 source_group("Shaders" FILES ${SHADERS_SRC})
@@ -152,25 +170,11 @@ if(UNIX AND NOT APPLE)
 		stdc++fs)
 ENDIF()
 
+# Extension
 include_directories(include/)
 include_directories(extensions/include/)
 
 file(GLOB_RECURSE DWARF_MACHINE_EXTENSIONS_SRC extensions/src/*.cpp extensions/include/*.h)
-
-macro(GroupSources curdir)
-	file(GLOB children RELATIVE ${CMAKE_SOURCE_DIR}/${curdir} ${CMAKE_SOURCE_DIR}/${curdir}/*)
-	foreach(child ${children})
-			if(IS_DIRECTORY ${CMAKE_SOURCE_DIR}/${curdir}/${child})
-				GroupSources(${curdir}/${child})
-			else()
-				string(REPLACE "/" "\\" groupname ${curdir})
-				string(REPLACE "extensions" "Extension" groupname ${groupname})
-				source_group(${groupname} FILES ${CMAKE_SOURCE_DIR}/${curdir}/${child})
-			endif()
-	endforeach()
-endmacro()
-
-# Execute the macro
 GroupSources(extensions)
 add_library(DWARF_MACHINE_COMMON STATIC ${DWARF_MACHINE_SRC} ${DWARF_MACHINE_EXTENSIONS_SRC})
 
