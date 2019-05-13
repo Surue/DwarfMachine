@@ -26,7 +26,7 @@ SOFTWARE.
 #define STORAGE_BUFFER_H
 
 #include <graphics/descriptor.h>
-#include <graphics/buffer.h>
+#include <graphics/buffers/buffer.h>
 
 namespace dm
 {

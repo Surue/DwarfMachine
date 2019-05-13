@@ -27,7 +27,7 @@ SOFTWARE.
 
 #include <component/material.h>
 #include <engine/color.h>
-#include <graphics/uniform_handle.h>
+#include <graphics/buffers/uniform_handle.h>
 #include <graphics/descriptor_handle.h>
 #include <glm/mat4x4.hpp>
 

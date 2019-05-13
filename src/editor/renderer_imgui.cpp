@@ -101,7 +101,7 @@ RendererImGui::RendererImGui(const Pipeline::Stage &pipelineStage) :
 	initInfo.CheckVkResultFn = check_vk_result;
 	ImGui_ImplVulkan_Init(&initInfo, GraphicManager::Get()->GetRenderStage(pipelineStage.first)->GetRenderPass()->GetRenderPass()); //Not sure about that
 
-	io.DisplaySize = ImVec2(window->GetSize().x, window->GetSize().y);
+	io.DisplaySize = ImVec2(static_cast<uint32_t>(window->GetSize().x), static_cast<uint32_t>(window->GetSize().y));
 	io.DisplayFramebufferScale = ImVec2(1.0f, 1.0f);
 
 	// Create font texture

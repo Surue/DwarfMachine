@@ -25,8 +25,8 @@ SOFTWARE.
 #ifndef UNIFORM_HANDLE_H
 #define UNIFORM_HANDLE_H
 
-#include <graphics/uniform_buffer.h>
-#include "shader.h"
+#include <graphics/buffers/uniform_buffer.h>
+#include <graphics/shader.h>
 
 namespace dm
 {

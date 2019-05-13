@@ -26,7 +26,7 @@ SOFTWARE.
 #define RENDERER_MESHES_H
 #include <graphics/render_pipeline.h>
 #include <system/system.h>
-#include <graphics/uniform_handle.h>
+#include <graphics/buffers/uniform_handle.h>
 #include "descriptor_handle.h"
 
 namespace dm

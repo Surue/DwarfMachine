@@ -23,7 +23,7 @@ SOFTWARE.
 */
 
 #include <graphics/image.h>
-#include <graphics/buffer.h>
+#include <graphics/buffers/buffer.h>
 #include <graphics/graphic_manager.h>
 #include <engine/file.h>
 

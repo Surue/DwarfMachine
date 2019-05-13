@@ -23,12 +23,12 @@ SOFTWARE.
 */
 
 #include <graphics/shader.h>
-#include <graphics/uniform_buffer.h>
-#include "graphics/storage_buffer.h"
-#include "graphics/image_2d.h"
+#include <graphics/buffers/uniform_buffer.h>
+#include <graphics/buffers/storage_buffer.h>
+#include <graphics/image_2d.h>
 #include <graphics/image_cube.h>
 #include <iostream>
-#include "engine/file.h"
+#include <engine/file.h>
 #include <graphics/graphic_manager.h>
 #include "../../externals/glslang/SPIRV/GlslangToSpv.h"
 

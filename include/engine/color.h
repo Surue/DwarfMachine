@@ -44,6 +44,8 @@ public:
 	float g;
 	float b;
 	float a;
+
+	static const Color White;
 };
 }
 

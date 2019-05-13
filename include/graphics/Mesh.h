@@ -25,9 +25,8 @@ SOFTWARE.
 #ifndef MODEL_H
 #define MODEL_H
 #include <memory>
-#include <string>
 #include <graphics/command_buffer.h>
-#include <graphics/buffer.h>
+#include <graphics/buffers/buffer.h>
 #include "mesh_vertex.h"
 
 namespace dm

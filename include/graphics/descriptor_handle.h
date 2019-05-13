@@ -29,9 +29,9 @@ SOFTWARE.
 #include <graphics/descriptor_set.h>
 
 #include <iostream>
-#include <graphics/uniform_handle.h>
-#include <graphics/storage_handle.h>
-#include <graphics/push_handle.h>
+#include <graphics/buffers/uniform_handle.h>
+#include <graphics/buffers/storage_handle.h>
+#include <graphics/buffers/push_handle.h>
 
 namespace dm
 {

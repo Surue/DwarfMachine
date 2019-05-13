@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#include <graphics/buffer.h>
+#include <graphics/buffers/buffer.h>
 
 #include <graphics/graphic_manager.h>
 

@@ -24,7 +24,7 @@ SOFTWARE.
 
 #include <graphics/image_cube.h>
 #include <graphics/graphic_manager.h>
-#include <graphics/buffer.h>
+#include <graphics/buffers/buffer.h>
 
 namespace dm
 {

@@ -25,7 +25,7 @@ SOFTWARE.
 #include <graphics/image_2d.h>
 #include <engine/engine.h>
 #include <graphics/graphic_manager.h>
-#include <graphics/buffer.h>
+#include <graphics/buffers/buffer.h>
 
 namespace dm
 {

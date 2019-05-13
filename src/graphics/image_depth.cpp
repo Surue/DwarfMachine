@@ -23,7 +23,6 @@ SOFTWARE.
 */
 
 #include <graphics/image_depth.h>
-#include <engine/engine.h>
 #include <graphics/graphic_manager.h>
 
 namespace dm

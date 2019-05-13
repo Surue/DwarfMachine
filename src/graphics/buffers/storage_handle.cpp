@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#include <graphics/storage_handle.h>
+#include <graphics/buffers/storage_handle.h>
 
 namespace dm
 {

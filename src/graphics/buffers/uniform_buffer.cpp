@@ -22,17 +22,15 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#include <graphics/storage_buffer.h>
+#include<graphics/buffers/uniform_buffer.h>
 
 namespace dm
 {
-StorageBuffer::StorageBuffer(const VkDeviceSize& size, const void* data) :
-	Buffer(size, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, data)
-{
-	
-}
+UniformBuffer::UniformBuffer(const VkDeviceSize& size, const void* data) :
+	Buffer(size, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, data)
+{}
 
-void StorageBuffer::Update(const void* newData) const
+void UniformBuffer::Update(const void* newData) const
 {
 	void *data;
 	Buffer::MapMemory(&data);
@@ -40,7 +38,7 @@ void StorageBuffer::Update(const void* newData) const
 	Buffer::UnmapMemory();
 }
 
-VkDescriptorSetLayoutBinding StorageBuffer::GetDescriptorSetLayout(const uint32_t& binding,
+VkDescriptorSetLayoutBinding UniformBuffer::GetDescriptorSetLayout(const uint32_t& binding,
 	const VkDescriptorType& descriptorType, const VkShaderStageFlags& stage, const uint32_t& count)
 {
 	VkDescriptorSetLayoutBinding descriptorSetLayoutBinding = {};
@@ -52,7 +50,7 @@ VkDescriptorSetLayoutBinding StorageBuffer::GetDescriptorSetLayout(const uint32_
 	return descriptorSetLayoutBinding;
 }
 
-WriteDescriptorSet StorageBuffer::GetWriteDescriptor(const uint32_t& binding, const VkDescriptorType& descriptorType,
+WriteDescriptorSet UniformBuffer::GetWriteDescriptor(const uint32_t& binding, const VkDescriptorType& descriptorType,
 	const std::optional<OffsetSize>& offsetSize) const
 {
 	VkDescriptorBufferInfo bufferInfo = {};
