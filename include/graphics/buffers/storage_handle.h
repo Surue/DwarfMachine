@@ -30,6 +30,9 @@ SOFTWARE.
 
 namespace dm
 {
+/**
+ * \brief Helper to use storage buffer
+ */
 class StorageHandle
 {
 public:

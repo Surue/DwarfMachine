@@ -30,6 +30,9 @@ SOFTWARE.
 
 namespace dm
 {
+/**
+ * \brief Buffer to represent a shader's uniform
+ */
 class UniformBuffer : public Descriptor, public Buffer
 {
 public:

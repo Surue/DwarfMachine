@@ -29,6 +29,9 @@ SOFTWARE.
 
 namespace dm
 {
+/**
+ * \brief Helper to use push buffer
+ */
 class PushHandle
 {
 public:
@@ -67,8 +70,18 @@ public:
 		Push(object, static_cast<std::size_t>(uniform->GetOffset()), realSize);
 	}
 
+	/**
+	 * \brief Update a uniform block using this push buffer
+	 * \param uniformBlock 
+	 * \return 
+	 */
 	bool Update(const std::optional<Shader::UniformBlock> &uniformBlock);
 
+	/**
+	 * \brief Bind push buffer to the command buffer using specified pipeline
+	 * \param commandBuffer 
+	 * \param pipeline 
+	 */
 	void BindPush(const CommandBuffer &commandBuffer, const Pipeline &pipeline);
 private:
 	bool m_MultiPipeline;

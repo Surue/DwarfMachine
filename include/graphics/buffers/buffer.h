@@ -31,6 +31,9 @@ namespace dm
 {
 class LogicalDevice;
 
+/**
+ * \brief Wapper for VkBuffer and VkDeviceMemory
+ */
 class Buffer
 {
 public:
@@ -44,8 +47,15 @@ public:
 	Buffer(const VkDeviceSize &size, const VkBufferUsageFlags &usage, const VkMemoryPropertyFlags &properties, const void *data = nullptr);
 	virtual ~Buffer();
 
+	/**
+	 * \brief Map data into the logical device memory
+	 * \param data 
+	 */
 	void MapMemory(void **data) const;
 
+	/**
+	 * \brief Unmap data from the logical device's memory
+	 */
 	void UnmapMemory() const;
 
 	const VkDeviceSize &GetSize() const { return m_Size; }
@@ -54,6 +64,12 @@ public:
 
 	const VkDeviceMemory &GetBufferMemory() const { return m_BufferMemory; }
 
+	/**
+	 * \brief Check if the needed memory property exist in the physical device
+	 * \param typeFilter 
+	 * \param requiredProperties 
+	 * \return 
+	 */
 	static uint32_t FindMemoryType(const uint32_t &typeFilter, const VkMemoryPropertyFlags &requiredProperties);
 
 protected:
