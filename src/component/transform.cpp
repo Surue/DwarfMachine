@@ -28,6 +28,7 @@ SOFTWARE.
 #include <graphics/graphic_manager.h>
 #include <glm/ext/matrix_transform.inl>
 #include <glm/detail/func_trigonometric.inl>
+#include "engine/engine.h"
 
 namespace dm
 {

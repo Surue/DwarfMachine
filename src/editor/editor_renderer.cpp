@@ -28,6 +28,7 @@ SOFTWARE.
 #include <graphics/renderer_meshes.h>
 #include <graphics/filter_default.h>
 #include <editor/renderer_imgui.h>
+#include <engine/engine.h>
 
 namespace dm
 {

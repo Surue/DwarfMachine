@@ -24,7 +24,6 @@ SOFTWARE.
 
 #include <graphics/renderpass.h>
 #include <graphics/render_stage.h>
-#include <engine/engine.h>
 #include <graphics/graphic_manager.h>
 #include <iostream>
 

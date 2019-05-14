@@ -36,7 +36,7 @@ public:
 
 	void Init(){};
 
-	Mesh* GetModel(std::string name);
+	Mesh* GetModel(const std::string& name);
 private:
 	std::map<std::string, std::unique_ptr<Mesh>> m_RegisteredMeshes{};
 };

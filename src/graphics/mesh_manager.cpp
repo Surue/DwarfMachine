@@ -40,7 +40,7 @@ MeshManager::MeshManager()
 	m_RegisteredMeshes["ressources/models/chalet.obj"] = MeshObj::Create("ressources/models/chalet.obj");
 }
 
-Mesh* MeshManager::GetModel(const std::string name)
+Mesh* MeshManager::GetModel(const std::string& name)
 {
 	const auto it = m_RegisteredMeshes.find(name);
 

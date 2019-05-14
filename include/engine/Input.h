@@ -27,8 +27,6 @@ SOFTWARE.
 
 #include <SDL.h>
 
-#include <engine/engine.h>
-
 #include <engine/vector.h>
 
 #define KEYBOARD_SIZE 282

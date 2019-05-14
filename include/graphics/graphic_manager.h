@@ -25,7 +25,6 @@ SOFTWARE.
 #ifndef GRAPHIC_MANAGER_H
 #define GRAPHIC_MANAGER_H
 
-#include <engine/engine.h>
 #include <component/camera.h>
 #include <graphics/instance.h>
 #include <graphics/surface.h>

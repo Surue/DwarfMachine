@@ -23,7 +23,6 @@ SOFTWARE.
 */
 
 #include <editor/editor.h>
-#include <engine/engine.h>
 #include <graphics/graphic_manager.h>
 #include <editor/editor_renderer.h>
 #include <imgui.h>
@@ -34,6 +33,7 @@ SOFTWARE.
 #include <engine/Input.h>
 #include <glm/detail/func_trigonometric.inl>
 #include <editor/log.h>
+#include <engine/engine.h>
 
 namespace dm
 {

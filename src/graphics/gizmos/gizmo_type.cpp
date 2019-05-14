@@ -45,7 +45,7 @@ GizmoType::GizmoType(Mesh* mesh, const float& lineThickness, const Color& color)
 {
 }
 
-void GizmoType::Update(std::vector<std::unique_ptr<Gizmo>>& gizmos)
+void GizmoType::Update(std::vector<Gizmo>& gizmos)
 {
 	m_MaxInstances = MAX_INSTANCES;
 	m_Instances = 0;
@@ -66,8 +66,8 @@ void GizmoType::Update(std::vector<std::unique_ptr<Gizmo>>& gizmos)
 		}
 
 		auto instance = &instances[m_Instances];
-		instance->m_ModelMatrix = TransformManager::GetWorldMatrix(*gizmo->transform);
-		instance->m_Color = gizmo->color;
+		instance->m_ModelMatrix = TransformManager::GetWorldMatrix(*gizmo.transform);
+		instance->m_Color = gizmo.color;
 		m_Instances++;
 	}
 

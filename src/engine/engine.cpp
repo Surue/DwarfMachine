@@ -23,12 +23,12 @@ SOFTWARE.
 */
 #include <engine/engine.h>
 
-#include <graphics/graphic_manager.h>
 #include <engine/Input.h>
 #include <entity/entity.h>
 #include <component/component_manager.h>
 #include <system/system_manager.h>
 #include <graphics/window.h>
+#include <graphics/graphic_manager.h>
 
 #include <engine/engine_application.h>
 
@@ -96,7 +96,7 @@ EngineSettings& Engine::GetSettings()
 	return m_Settings;
 }
 
-MeshManager* Engine::GetModelManager()
+MeshManager* Engine::GetModelManager() const
 {
 	return m_SystemContainer.GetModelManager();
 }

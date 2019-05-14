@@ -23,15 +23,15 @@ SOFTWARE.
 */
 
 #include <gtest/gtest.h>
+#include <glm/ext/matrix_clip_space.hpp>
+#include <glm/ext/matrix_transform.hpp>
 
 #include <component/transform.h>
 #include <entity/entity_handle.h>
 #include <graphics/graphic_manager.h>
 #include <component/model.h>
+#include <engine/engine.h>
 
-#include <glm/ext/matrix_clip_space.inl>
-#include <glm/detail/func_trigonometric.inl>
-#include <glm/ext/matrix_transform.inl>
 
 TEST(Entity, CreateEntity)
 {

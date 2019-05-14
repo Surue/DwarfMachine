@@ -26,6 +26,7 @@ SOFTWARE.
 #define SYSTEM_MANAGER_H
 #include <vector>
 #include <system/system.h>
+#include <memory>
 
 namespace dm
 {

@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#include <graphics/Gizmos/gizmo_manager.h>
+#include <graphics/gizmos/gizmo_manager.h>
 
 namespace dm
 {
@@ -51,11 +51,11 @@ Gizmo* GizmoManager::AddGizmo(Gizmo* gizmo)
 
 	if(it == m_Gizmos.end())
 	{
-		m_Gizmos.emplace(gizmo->gizmoType, std::vector<std::unique_ptr<Gizmo>>());
+		m_Gizmos.emplace(gizmo->gizmoType, std::vector<Gizmo>());
 		it = m_Gizmos.find(gizmo->gizmoType);
 	}
 
-	(*it).second.emplace_back(gizmo);
+	(*it).second.emplace_back(*gizmo);
 	return gizmo;
 }
 
@@ -65,9 +65,9 @@ void GizmoManager::RemoveGizmo(Gizmo* gizmo)
 
 	if(it != m_Gizmos.end())
 	{
-		it->second.erase(std::remove_if(it->second.begin(), it->second.end(), [&](std::unique_ptr<Gizmo> &g)
+		it->second.erase(std::remove_if(it->second.begin(), it->second.end(), [&](Gizmo g)
 		{
-			return g.get() == gizmo;
+			return g == *gizmo;
 		}), it->second.end());
 	}
 }

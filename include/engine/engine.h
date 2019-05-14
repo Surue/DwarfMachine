@@ -30,8 +30,6 @@ SOFTWARE.
 #include <chrono>
 #include <engine/system_container.h>
 
-#include <graphics/mesh_manager.h>
-
 namespace dm
 {
 struct EngineSettings
@@ -67,7 +65,7 @@ public:
 
 	EngineSettings& GetSettings();
 
-	MeshManager* GetModelManager();
+	MeshManager* GetModelManager() const;
 
 	void SetApplication(EngineApplication* app);
 

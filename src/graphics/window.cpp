@@ -24,6 +24,7 @@ SOFTWARE.
 
 #include <graphics/window.h>
 #include <graphics/graphic_manager.h>
+#include <engine/engine.h>
 
 namespace dm
 {

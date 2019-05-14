@@ -43,9 +43,9 @@ public:
 
 	void Clear();
 
-	const std::map<GizmoType*, std::vector<std::unique_ptr<Gizmo>>> &GetGizmos() const { return m_Gizmos; }
+	const std::map<GizmoType*, std::vector<Gizmo>> &GetGizmos() const { return m_Gizmos; }
 private:
-	std::map<GizmoType*, std::vector<std::unique_ptr<Gizmo>>> m_Gizmos;
+	std::map<GizmoType*, std::vector<Gizmo>> m_Gizmos;
 };
 }
 

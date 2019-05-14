@@ -26,10 +26,9 @@ SOFTWARE.
 #include <component/camera.h>
 #include <graphics/graphic_manager.h>
 #include <component/transform.h>
-#include "entity/entity_handle.h"
-#include <glm/ext/matrix_clip_space.inl>
-#include <glm/detail/func_trigonometric.inl>
-#include <glm/ext/matrix_transform.inl>
+#include <entity/entity_handle.h>
+#include <glm/ext/matrix_clip_space.hpp>
+#include <glm/ext/matrix_transform.hpp>
 #include "imgui.h"
 
 namespace dm

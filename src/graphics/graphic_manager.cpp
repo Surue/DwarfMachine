@@ -34,6 +34,7 @@ SOFTWARE.
 #include <glm/ext/matrix_clip_space.inl>
 #include "editor/log.h"
 #include "imgui.h"
+#include "engine/engine.h"
 
 namespace dm
 {

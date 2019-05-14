@@ -50,10 +50,10 @@ public:
 			};
 
 			std::vector<VkVertexInputAttributeDescription> attributeDescriptions = {
-				VkVertexInputAttributeDescription{0, baseBinding, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof(Instance, m_ModelMatrix) + offsetof(glm::mat4x4, glm::mat4x4::[0]) },
-				VkVertexInputAttributeDescription{0, baseBinding, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof(Instance, m_ModelMatrix) + offsetof(glm::mat4x4, glm::mat4x4::[1]) },
-				VkVertexInputAttributeDescription{0, baseBinding, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof(Instance, m_ModelMatrix) + offsetof(glm::mat4x4, glm::mat4x4::[2]) },
-				VkVertexInputAttributeDescription{0, baseBinding, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof(Instance, m_ModelMatrix) + offsetof(glm::mat4x4, glm::mat4x4::[3]) },
+				VkVertexInputAttributeDescription{0, baseBinding, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof(Instance, m_ModelMatrix) + sizeof(float) * 4 },
+				VkVertexInputAttributeDescription{0, baseBinding, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof(Instance, m_ModelMatrix) + sizeof(float) * 4 },
+				VkVertexInputAttributeDescription{0, baseBinding, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof(Instance, m_ModelMatrix) + sizeof(float) * 4 },
+				VkVertexInputAttributeDescription{0, baseBinding, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof(Instance, m_ModelMatrix) + sizeof(float) * 4 },
 				VkVertexInputAttributeDescription{0, baseBinding, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof(Instance, m_Color) },
 			};
 			return Shader::VertexInput(0, bindingDescription, attributeDescriptions);
@@ -67,7 +67,7 @@ public:
 
 	explicit GizmoType(Mesh* mesh, const float &lineThickness = 1.0f, const Color &color = Color::White);
 
-	void Update(std::vector<std::unique_ptr<Gizmo>> &gizmos);
+	void Update(std::vector<Gizmo> &gizmos);
 
 	bool CmdRender(const CommandBuffer &commandBuffer, const PipelineGraphics &pipeline, UniformHandle &uniformScene);
 

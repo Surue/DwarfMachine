@@ -44,7 +44,7 @@ struct Camera final : ComponentBase
 };
 
 struct Transform;
-
+class GraphicManager;
 class CameraManager final : public ComponentBaseManager<Camera>
 {
 public:
