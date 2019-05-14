@@ -28,7 +28,7 @@ SOFTWARE.
 
 #include <component/component_type.h>
 #include "component/component_mask.h"
-#define INIT_ENTITY_NMB 10
+#define INIT_ENTITY_NMB 100
 
 namespace dm
 {

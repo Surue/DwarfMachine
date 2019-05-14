@@ -24,6 +24,9 @@ SOFTWARE.
 
 #include <entity/entity.h>
 #include <string>
+#include <component/component_manager.h>
+#include <system/system_manager.h>
+#include "engine/engine.h"
 
 namespace dm
 {
@@ -111,6 +114,8 @@ void EntityManager::ResizeEntity(const size_t newSize)
 	m_EntityInfos.resize(newSize, static_cast<int>(ComponentType::NONE));
 
 	//TODO resize les components containers et les systèmes containers
+	Engine::Get()->GetComponentManager()->OnEntityResize(newSize);
+	Engine::Get()->GetSystemManager()->OnEntityResize(newSize);
 }
 
 ComponentMask EntityManager::GetEntityMask(const Entity entity)
@@ -120,6 +125,8 @@ ComponentMask EntityManager::GetEntityMask(const Entity entity)
 
 void EntityManager::ResizeEntity()
 {
+	std::cout << "==================Resize==================\n";
+
 	ComponentMask emptyMask;
 	emptyMask.mask = static_cast<int>(ComponentType::NONE);
 
@@ -127,5 +134,7 @@ void EntityManager::ResizeEntity()
 	m_EntityInfos.resize(m_EntityInfos.size() + INIT_ENTITY_NMB, static_cast<int>(ComponentType::NONE));
 
 	//TODO resize les components containers et les systèmes containers
+	Engine::Get()->GetComponentManager()->OnEntityResize(m_EntityMask.size() + INIT_ENTITY_NMB);
+	Engine::Get()->GetSystemManager()->OnEntityResize(m_EntityMask.size() + INIT_ENTITY_NMB);
 }
 }

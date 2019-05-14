@@ -56,6 +56,8 @@ public:
 
 	void DrawOnInspector(Entity entity);
 
+	void OnEntityResize(int newSize);
+
 private:
 	std::unique_ptr<TransformManager> m_TransformManager;
 	std::unique_ptr<CameraManager> m_CameraManager;

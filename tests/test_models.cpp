@@ -98,6 +98,12 @@ TEST(Models, Cube)
 	sphere.AddComponent<dm::MaterialDefault>(material);
 	sphere.AddComponent<dm::BoundingSphere>(dm::BoundingSphereManager::GetBoundingSphere(*mesh2.model));
 
+	dm::Gizmo gizmo2;
+	gizmo2.transform = t2;
+	gizmo2.color = dm::Color(100, 0, 0, 1);
+	gizmo2.gizmoType = gizmo.gizmoType;
+	editor->GetGizmoManager()->AddGizmo(gizmo2);
+
 	//Planes
 	const auto e3 = entityManager->CreateEntity();
 	auto plane = dm::EntityHandle(e3);
@@ -111,6 +117,12 @@ TEST(Models, Cube)
 	plane.AddComponent<dm::Model>(mesh3);
 	plane.AddComponent<dm::MaterialDefault>(material);
 	plane.AddComponent<dm::BoundingSphere>(dm::BoundingSphereManager::GetBoundingSphere(*mesh3.model));
+
+	dm::Gizmo gizmo3;
+	gizmo3.transform = t3;
+	gizmo3.color = dm::Color(100, 0, 0, 1);
+	gizmo3.gizmoType = gizmo.gizmoType;
+	editor->GetGizmoManager()->AddGizmo(gizmo3);
 
 	////Obj
 	//const auto e4 = entityManager->CreateEntity();
@@ -127,6 +139,86 @@ TEST(Models, Cube)
 	//material1.color = dm::Color(100, 200, 0, 1);
 	//material1.textureDiffuse = dm::Image2d::Create("ressources/textures/chalet.jpg");
 	//obj.AddComponent<dm::MaterialDefault>(material1);
+
+	try
+	{
+		engine.Start();
+	}
+	catch (const std::exception& e)
+	{
+		std::cerr << e.what() << "\n";
+	}
+}
+
+void CreateCube(glm::vec3 pos, dm::EntityManager* entityManager, dm::Editor* editor, std::shared_ptr<dm::GizmoType> gizmoType)
+{
+	const auto entityHandle = entityManager->CreateEntity();
+	auto cube = dm::EntityHandle(entityHandle);
+
+	//Transform
+	auto t1 = cube.CreateComponent<dm::Transform>(ComponentType::TRANSFORM);
+	t1->position = pos;
+	t1->scaling = glm::vec3(1, 1, 1);
+
+	//Mesh
+	dm::Model mesh;
+	mesh.componentType = ComponentType::MODEL;
+	mesh.model = dm::Engine::Get()->GetModelManager()->GetModel("ModelCube");
+	cube.AddComponent<dm::Model>(mesh);
+
+	//Material
+	dm::MaterialDefault material;
+	material.componentType = ComponentType::MATERIAL_DEFAULT;
+	material.color = dm::Color(100, 200, 0, 1);
+	cube.AddComponent<dm::MaterialDefault>(material);
+
+	//Bounding sphere
+	cube.AddComponent<dm::BoundingSphere>(dm::BoundingSphereManager::GetBoundingSphere(*mesh.model));
+
+	//Gizmo
+	dm::Gizmo gizmo;
+	gizmo.transform = t1;
+	gizmo.color = dm::Color(100, 0, 0, 1);
+	gizmo.gizmoType = gizmoType;
+	editor->GetGizmoManager()->AddGizmo(gizmo);
+}
+
+TEST(Models, FrustumCulling)
+{
+	dm::EngineSettings settings;
+	settings.windowSize = dm::Vec2i(800, 600);
+	dm::Engine engine = dm::Engine(settings);
+	engine.Init();
+
+	engine.SetApplication(new dm::Editor());
+
+	auto editor = static_cast<dm::Editor*>(engine.GetApplication());
+
+	auto entityManager = engine.GetEntityManager();
+
+	//Camera
+	const auto e0 = entityManager->CreateEntity();
+	auto entity = dm::EntityHandle(e0);
+
+	dm::Camera cameraInfo;
+	cameraInfo.componentType = ComponentType::CAMERA;
+	cameraInfo.isMainCamera = true;
+	cameraInfo.viewMatrix = glm::lookAt(cameraInfo.cameraPos, cameraInfo.cameraPos + cameraInfo.cameraFront, cameraInfo.cameraUp);
+	cameraInfo.proj = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
+
+	auto camera = entity.AddComponent<dm::Camera>(cameraInfo);
+
+	std::shared_ptr<dm::GizmoType> gizmoType = dm::GizmoType::Create(dm::Engine::Get()->GetModelManager()->GetModel("ModelSphere"), 1, dm::Color::White);
+	
+	//Cube
+	float maxCube = 20;
+	for(int i = 0; i < maxCube; i++)
+	{
+		for(int j = 0; j < maxCube; j++)
+		{
+			CreateCube(glm::vec3(i - maxCube/ 2.0f + 0.5f, 0, j - maxCube / 2.0f + 0.5f), entityManager, editor, gizmoType);		
+		}
+	}
 
 	try
 	{

@@ -40,8 +40,6 @@ void ComponentManagerContainer::Destroy()
 	m_TransformManager.reset(nullptr);
 	m_CameraManager.reset(nullptr);
 	m_MaterialDefaultManager.reset(nullptr);
-	m_MaterialDefaultManager.reset(nullptr);
-	m_MaterialDefaultManager.reset(nullptr);
 	m_MeshManager.reset(nullptr);
 	m_BoundingSphereManager.reset(nullptr);
 }
@@ -160,5 +158,14 @@ void ComponentManagerContainer::DrawOnInspector(Entity entity)
 	{
 		m_BoundingSphereManager->OnDrawInspector(entity);
 	}
+}
+
+void ComponentManagerContainer::OnEntityResize(const int newSize)
+{
+	m_TransformManager.get()->OnEntityResize(newSize);
+	m_CameraManager.get()->OnEntityResize(newSize);
+	m_MaterialDefaultManager.get()->OnEntityResize(newSize);
+	m_MeshManager.get()->OnEntityResize(newSize);
+	m_BoundingSphereManager.get()->OnEntityResize(newSize);
 }
 }

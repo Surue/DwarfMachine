@@ -27,7 +27,7 @@ SOFTWARE.
 #include <entity/entity.h>
 #include <component/component_type.h>
 
-#define INIT_COMPONENT_NMB 10
+#define INIT_COMPONENT_NMB 100
 
 namespace dm
 {
@@ -74,6 +74,11 @@ public:
 	}
 
 	virtual void OnDrawInspector(Entity entity) = 0;
+
+	void OnEntityResize(int newSize)
+	{
+		m_Components.resize(newSize);
+	}
 protected:
 	std::vector<T> m_Components{INIT_COMPONENT_NMB};
 };

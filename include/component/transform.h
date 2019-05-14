@@ -28,7 +28,6 @@ SOFTWARE.
 #include <string>
 
 #include <component/component.h>
-#include <engine/vector.h>
 
 #include <glm/mat4x4.hpp>
 

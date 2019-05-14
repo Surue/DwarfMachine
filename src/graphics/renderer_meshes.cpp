@@ -121,7 +121,6 @@ void RendererMeshes::Draw(const CommandBuffer& commandBuffer)
 
 		if (!updateSuccess)
 		{
-			std::cout << "RendererMeshes: Upadte() -> UpdateSuccess failed\n";
 			return;
 		}
 
