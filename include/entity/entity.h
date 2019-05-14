@@ -52,6 +52,7 @@ public:
 	void DestroyEntity(Entity entity);
 
 	void AddComponent(Entity entity, ComponentType componentType);
+
 	void DestroyComponent(Entity entity, ComponentType componentType);
 
 	bool HasComponent(Entity entity, ComponentType componentType);

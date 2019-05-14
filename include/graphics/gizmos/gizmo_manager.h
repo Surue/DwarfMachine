@@ -44,6 +44,8 @@ public:
 	void Clear();
 
 	const std::map<std::shared_ptr<GizmoType>, std::vector<Gizmo>> &GetGizmos() const { return m_Gizmos; }
+
+	void OnEntityResize();
 private:
 	std::map<std::shared_ptr<GizmoType>, std::vector<Gizmo>> m_Gizmos;
 };

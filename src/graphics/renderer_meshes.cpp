@@ -64,7 +64,6 @@ void RendererMeshes::Draw(const CommandBuffer& commandBuffer)
 	m_UniformScene.Push("view", camera->viewMatrix);
 	m_UniformScene.Push("cameraPos", camera->cameraPos); //TODO la position de la caméra ne passe pas
 
-	auto i = 0;
 	for (const auto &meshRender : m_RegisteredEntities)
 	{
 
@@ -75,8 +74,6 @@ void RendererMeshes::Draw(const CommandBuffer& commandBuffer)
 		if (material == nullptr || mesh == nullptr)
 		{
 			std::cout << "Missing material or mesh => Don't render\n";
-			std::cout << "i == " << i << "\n";
-			i++;
 			continue;
 		}
 
@@ -100,8 +97,6 @@ void RendererMeshes::Draw(const CommandBuffer& commandBuffer)
 			{
 				std::cout << "	- MaterialPipeline->GetStage() != GetStage()\n";
 			}
-			std::cout << "i == " << i << "\n";
-			i++;
 			continue;
 		}
 
@@ -110,7 +105,6 @@ void RendererMeshes::Draw(const CommandBuffer& commandBuffer)
 		if (!bindSuccess)
 		{
 			std::cout << "Bind fail\n";
-			i++;
 			continue;
 		}
 
@@ -126,17 +120,13 @@ void RendererMeshes::Draw(const CommandBuffer& commandBuffer)
 		
 		if (!updateSuccess)
 		{
-			std::cout << "Failed [i] == " << i << "\n";
-			i++;
 			continue;
 		}
 
 		// Draws the object.
 		material->descriptorSet.BindDescriptor(commandBuffer, pipeline);
 		if (meshModel->CmdRender(commandBuffer)) {
-			//std::cout << "Draw success\n";
 		}
-		i++;
 	}
 }
 

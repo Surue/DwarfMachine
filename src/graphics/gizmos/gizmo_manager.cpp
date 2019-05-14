@@ -23,6 +23,8 @@ SOFTWARE.
 */
 
 #include <graphics/gizmos/gizmo_manager.h>
+#include "engine/engine.h"
+#include <component/component_manager.h>
 
 namespace dm
 {
@@ -74,5 +76,17 @@ void GizmoManager::RemoveGizmo(Gizmo* gizmo)
 void GizmoManager::Clear()
 {
 	m_Gizmos.clear();
+}
+
+void GizmoManager::OnEntityResize()
+{
+	auto transformManager = Engine::Get()->GetComponentManager()->GetTransformManager();
+	for (auto& gizmo : m_Gizmos)
+	{
+		for (auto& gizmo1 : gizmo.second)
+		{
+			gizmo1.transform = transformManager->GetComponent(gizmo1.entity);
+		}
+	}
 }
 }

@@ -54,6 +54,8 @@ public:
 
 	MaterialDefaultManager* GetMaterialManager() const { return m_MaterialDefaultManager.get(); }
 
+	TransformManager* GetTransformManager() const { return m_TransformManager.get(); }
+
 	void DrawOnInspector(Entity entity);
 
 	void OnEntityResize(int newSize);

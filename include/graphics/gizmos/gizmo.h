@@ -36,6 +36,8 @@ public:
 	Transform* transform;
 	Color color;
 
+	Entity entity;
+
 	bool operator==(const Gizmo &other) const;
 
 	bool operator!=(const Gizmo &other) const;

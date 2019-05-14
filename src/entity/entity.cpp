@@ -27,9 +27,12 @@ SOFTWARE.
 #include <component/component_manager.h>
 #include <system/system_manager.h>
 #include "engine/engine.h"
+#include <editor/editor.h>
 
 namespace dm
 {
+class Editor;
+
 EntityManager::EntityManager()
 {
 	ComponentMask emptyMask;
@@ -113,8 +116,9 @@ void EntityManager::ResizeEntity(const size_t newSize)
 	m_EntityMask.resize(newSize);
 	m_EntityInfos.resize(newSize, static_cast<int>(ComponentType::NONE));
 
-	//TODO resize les components containers et les systèmes containers
 	Engine::Get()->GetComponentManager()->OnEntityResize(newSize);
+	const auto editor = reinterpret_cast<Editor*>(Engine::Get()->GetApplication());
+	editor->GetGizmoManager()->OnEntityResize();
 }
 
 ComponentMask EntityManager::GetEntityMask(const Entity entity)
@@ -132,7 +136,8 @@ void EntityManager::ResizeEntity()
 	m_EntityMask.resize(m_EntityMask.size() + INIT_ENTITY_NMB, emptyMask);
 	m_EntityInfos.resize(m_EntityInfos.size() + INIT_ENTITY_NMB, static_cast<int>(ComponentType::NONE));
 
-	//TODO resize les components containers et les systèmes containers
-	Engine::Get()->GetComponentManager()->OnEntityResize(m_EntityMask.size() + INIT_ENTITY_NMB);
+	Engine::Get()->GetComponentManager()->OnEntityResize(INIT_ENTITY_NMB + m_EntityMask.size());
+	const auto editor = reinterpret_cast<Editor*>(Engine::Get()->GetApplication());
+	editor->GetGizmoManager()->OnEntityResize();
 }
 }

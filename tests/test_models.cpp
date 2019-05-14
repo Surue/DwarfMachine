@@ -36,6 +36,7 @@ SOFTWARE.
 #include <glm/ext/matrix_clip_space.hpp>
 #include <glm/ext/matrix_transform.hpp>
 #include <glm/ext/scalar_constants.hpp>
+#include <utility>
 #include "physic/bounding_sphere.h"
 
 TEST(Models, Cube)
@@ -150,7 +151,7 @@ TEST(Models, Cube)
 	}
 }
 
-void CreateCube(glm::vec3 pos, dm::EntityManager* entityManager, dm::Editor* editor, std::shared_ptr<dm::GizmoType> gizmoType)
+void CreateCube(glm::vec3 pos, dm::EntityManager* entityManager, dm::Editor* editor, std::shared_ptr<dm::GizmoType> gizmoType, dm::MaterialDefault material)
 {
 	const auto entityHandle = entityManager->CreateEntity();
 	auto cube = dm::EntityHandle(entityHandle);
@@ -167,21 +168,18 @@ void CreateCube(glm::vec3 pos, dm::EntityManager* entityManager, dm::Editor* edi
 	cube.AddComponent<dm::Model>(mesh);
 
 	//Material
-	dm::MaterialDefault material;
-	material.componentType = ComponentType::MATERIAL_DEFAULT;
-	material.color = dm::Color(100, 200, 0, 1);
 	cube.AddComponent<dm::MaterialDefault>(material);
 
 	//Bounding sphere
 	cube.AddComponent<dm::BoundingSphere>(dm::BoundingSphereManager::GetBoundingSphere(*mesh.model));
 
-	//TODO le problème est le * sur le transform, il faudrait plutôt enregistré directement l'entity
 	//Gizmo
-	//dm::Gizmo gizmo;
-	//gizmo.transform = t1;
-	//gizmo.color = dm::Color(100, 0, 0, 1);
-	//gizmo.gizmoType = gizmoType;
-	//editor->GetGizmoManager()->AddGizmo(gizmo);
+	dm::Gizmo gizmo;
+	gizmo.transform = t1;
+	gizmo.color = dm::Color(100, 0, 0, 1);
+	gizmo.gizmoType = std::move(gizmoType);
+	gizmo.entity = entityHandle;
+	editor->GetGizmoManager()->AddGizmo(gizmo);
 }
 
 TEST(Models, FrustumCulling)
@@ -212,12 +210,18 @@ TEST(Models, FrustumCulling)
 	std::shared_ptr<dm::GizmoType> gizmoType = dm::GizmoType::Create(dm::Engine::Get()->GetModelManager()->GetModel("ModelSphere"), 1, dm::Color::White);
 	
 	//Cube
-	float maxCube = 11;
+	float maxCube = 20;
+
+	dm::MaterialDefault material;
+	material.componentType = ComponentType::MATERIAL_DEFAULT;
+	material.color = dm::Color(100, 200, 0, 1);
+
 	for(int i = 0; i < maxCube; i++)
 	{
 		for(int j = 0; j < maxCube; j++)
 		{
-			CreateCube(glm::vec3(i - maxCube/ 2.0f + 0.5f, 0, j - maxCube / 2.0f + 0.5f), entityManager, editor, gizmoType);		
+			glm::vec3 pos = glm::vec3(i - maxCube / 2.0f + i * 1.0f, 0, j - maxCube / 2.0f + j * 1.0f);
+			CreateCube(pos, entityManager, editor, gizmoType, std::move(material));		
 		}
 	}
 
