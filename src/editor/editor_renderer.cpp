@@ -29,6 +29,7 @@ SOFTWARE.
 #include <graphics/filter_default.h>
 #include <editor/renderer_imgui.h>
 #include <engine/engine.h>
+#include <graphics/gizmos/renderer_gizmo.h>
 
 namespace dm
 {
@@ -66,6 +67,7 @@ void EditorRenderManager::Start()
 	rendererContainer.Add<RendererMeshes>(*Engine::Get(), Pipeline::Stage(0, 0));
 	rendererContainer.Add<FilterDefault>(Pipeline::Stage(0, 1), true);//Last filter pass
 	rendererContainer.Add<RendererImGui>(Pipeline::Stage(0, 1));
+	rendererContainer.Add<RendererGizmo>(Pipeline::Stage(0, 1));
 }
 void EditorRenderManager::Update()
 {

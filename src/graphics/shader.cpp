@@ -601,8 +601,8 @@ VkShaderModule Shader::ProcessShader(const std::string& shaderCode, const VkShad
 
 	if (!shader.parse(&resources, defaultVersion, false, messages))
 	{
-		std::cout << "%s\n", shader.getInfoLog();
-		std::cout << "%s\n", shader.getInfoDebugLog();
+		std::cout << shader.getInfoLog() << "\n";
+		std::cout << shader.getInfoDebugLog() << "\n";
 		std::cout << "SPRIV shader compile failed!\n";
 	}
 
