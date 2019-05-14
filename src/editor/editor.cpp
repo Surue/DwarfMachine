@@ -55,9 +55,11 @@ void Editor::Start() {}
 
 void Editor::Update()
 {
+	lastDeltaTime = Engine::Get()->GetDeltaTime();
+
 	MoveEditorCamera();
 
-	lastDeltaTime = Engine::Get()->GetDeltaTime();
+	m_GizmoManager.Update();
 }
 
 void Editor::Draw()

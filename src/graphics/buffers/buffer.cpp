@@ -90,11 +90,12 @@ Buffer::Buffer(const VkDeviceSize& size, const VkBufferUsageFlags& usage, const 
 Buffer::~Buffer()
 {
 	const auto logicalDevice = GraphicManager::Get()->GetLogicalDevice();
+
 	vkDestroyBuffer(*logicalDevice, m_Buffer, nullptr);
 	vkFreeMemory(*logicalDevice, m_BufferMemory, nullptr);
 }
 
-void Buffer::MapMemory(void** data) const
+void Buffer::MapMemory(void** data)
 {
 	const auto logicalDevice = GraphicManager::Get()->GetLogicalDevice();
 	GraphicManager::CheckVk(vkMapMemory(*logicalDevice, GetBufferMemory(), 0, m_Size, 0, data));

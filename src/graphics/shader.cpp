@@ -614,7 +614,6 @@ VkShaderModule Shader::ProcessShader(const std::string& shaderCode, const VkShad
 	}
 
 	program.buildReflection();
-	//program.dumpReflection();
 
 	for (uint32_t dim = 0; dim < 3; ++dim)
 	{

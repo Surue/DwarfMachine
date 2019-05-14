@@ -42,7 +42,7 @@ public:
 	 * \brief Change data inside the buffer
 	 * \param newData 
 	 */
-	void Update(const void *newData) const;
+	void Update(const void *newData);
 
 	/**
 	 * \brief Get a descriptor set layout using all params

@@ -38,7 +38,7 @@ class UniformBuffer : public Descriptor, public Buffer
 public:
 	explicit UniformBuffer(const VkDeviceSize &size, const void *data = nullptr);
 
-	void Update(const void *newData) const;
+	void Update(const void *newData);
 
 	static VkDescriptorSetLayoutBinding GetDescriptorSetLayout(const uint32_t &binding, const VkDescriptorType &descriptorType, const VkShaderStageFlags &stage, const uint32_t &count);
 

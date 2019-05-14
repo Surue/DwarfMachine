@@ -32,7 +32,7 @@ namespace dm
 class Gizmo
 {
 public:
-	GizmoType* gizmoType;
+	std::shared_ptr<GizmoType> gizmoType;
 	Transform* transform;
 	Color color;
 

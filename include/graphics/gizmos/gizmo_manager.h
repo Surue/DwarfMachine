@@ -37,15 +37,15 @@ public:
 
 	void Update();
 
-	void AddGizmo(Gizmo &gizmo);
+	void AddGizmo(Gizmo& gizmo);
 
 	void RemoveGizmo(Gizmo *gizmo);
 
 	void Clear();
 
-	const std::map<GizmoType*, std::vector<Gizmo>> &GetGizmos() const { return m_Gizmos; }
+	const std::map<std::shared_ptr<GizmoType>, std::vector<Gizmo>> &GetGizmos() const { return m_Gizmos; }
 private:
-	std::map<GizmoType*, std::vector<Gizmo>> m_Gizmos;
+	std::map<std::shared_ptr<GizmoType>, std::vector<Gizmo>> m_Gizmos;
 };
 }
 

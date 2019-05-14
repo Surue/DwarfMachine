@@ -32,6 +32,8 @@ SOFTWARE.
 #include <graphics/pipeline_graphic.h>
 #include <graphics/descriptor_handle.h>
 #include <graphics/buffers/instance_buffer.h>
+#include <glm/gtc/matrix_access.hpp>
+#include <iostream>
 
 namespace dm
 {
@@ -49,12 +51,13 @@ public:
 				VkVertexInputBindingDescription{ baseBinding, sizeof(Instance), VK_VERTEX_INPUT_RATE_INSTANCE}
 			};
 
+			
 			std::vector<VkVertexInputAttributeDescription> attributeDescriptions = {
-				VkVertexInputAttributeDescription{0, baseBinding, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof(Instance, m_ModelMatrix) + sizeof(float) * 4 },
-				VkVertexInputAttributeDescription{0, baseBinding, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof(Instance, m_ModelMatrix) + sizeof(float) * 4 },
-				VkVertexInputAttributeDescription{0, baseBinding, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof(Instance, m_ModelMatrix) + sizeof(float) * 4 },
-				VkVertexInputAttributeDescription{0, baseBinding, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof(Instance, m_ModelMatrix) + sizeof(float) * 4 },
-				VkVertexInputAttributeDescription{0, baseBinding, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof(Instance, m_Color) },
+				VkVertexInputAttributeDescription{0, baseBinding, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof(Instance, m_ModelMatrix)},
+				VkVertexInputAttributeDescription{1, baseBinding, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof(Instance, m_ModelMatrix) + 16 },
+				VkVertexInputAttributeDescription{2, baseBinding, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof(Instance, m_ModelMatrix) + 32 },
+				VkVertexInputAttributeDescription{3, baseBinding, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof(Instance, m_ModelMatrix) + 48 },
+				VkVertexInputAttributeDescription{4, baseBinding, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof(Instance, m_Color) },
 			};
 			return Shader::VertexInput(0, bindingDescription, attributeDescriptions);
 		}
@@ -63,7 +66,7 @@ public:
 		Color m_Color;
 	};
 
-	static GizmoType* Create(Mesh* mesh = nullptr, const float &lineThickness = 1.0f, const Color &color = Color::White);
+	static std::shared_ptr<GizmoType> Create(Mesh* mesh = nullptr, const float &lineThickness = 1.0f, const Color &color = Color::White);
 
 	explicit GizmoType(Mesh* mesh, const float &lineThickness = 1.0f, const Color &color = Color::White);
 

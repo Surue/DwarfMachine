@@ -66,8 +66,8 @@ void EditorRenderManager::Start()
 
 	rendererContainer.Add<RendererMeshes>(*Engine::Get(), Pipeline::Stage(0, 0));
 	rendererContainer.Add<FilterDefault>(Pipeline::Stage(0, 1), true);//Last filter pass
-	rendererContainer.Add<RendererImGui>(Pipeline::Stage(0, 1));
 	rendererContainer.Add<RendererGizmo>(Pipeline::Stage(0, 1));
+	rendererContainer.Add<RendererImGui>(Pipeline::Stage(0, 1)); //Must be the last one otherwise draw inside an imgui window
 }
 void EditorRenderManager::Update()
 {

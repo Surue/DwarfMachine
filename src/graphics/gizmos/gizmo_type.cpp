@@ -29,10 +29,9 @@ namespace dm
 {
 static const uint32_t MAX_INSTANCES = 512;
 
-GizmoType* GizmoType::Create(Mesh* mesh, const float& lineThickness, const Color& color)
+std::shared_ptr<GizmoType> GizmoType::Create(Mesh* mesh, const float& lineThickness, const Color& color)
 {
-	auto gizmo = GizmoType(mesh, lineThickness, color);
-	return &gizmo;
+	return std::make_shared<GizmoType>(mesh, lineThickness, color);
 }
 
 GizmoType::GizmoType(Mesh* mesh, const float& lineThickness, const Color& color) :
@@ -83,7 +82,7 @@ bool GizmoType::CmdRender(const CommandBuffer& commandBuffer, const PipelineGrap
 	}
 
 	m_DescriptorSet.Push("UniformScene", uniformScene);
-	bool updateSuccess = m_DescriptorSet.Update(pipeline);
+	const auto updateSuccess = m_DescriptorSet.Update(pipeline);
 
 	if(!updateSuccess)
 	{
@@ -97,7 +96,7 @@ bool GizmoType::CmdRender(const CommandBuffer& commandBuffer, const PipelineGrap
 	VkBuffer vertexBuffers[] = { m_Mesh->GetVertexBuffer()->GetBuffer(), m_InstanceBuffer.GetBuffer() };
 	VkDeviceSize offset[] = { 0, 0 };
 	vkCmdBindVertexBuffers(commandBuffer, 0, 2, vertexBuffers, offset);
-	vkCmdBindIndexBuffer(commandBuffer, m_Mesh->GetIndexBuffer()->GetBuffer(), 0, m_Mesh->GetIndexType());
+	vkCmdBindIndexBuffer(commandBuffer, m_Mesh->GetIndexBuffer()->GetBuffer(), 0, dm::Mesh::GetIndexType());
 	vkCmdDrawIndexed(commandBuffer, m_Mesh->GetIndexCount(), m_Instances, 0, 0, 0);
 	return true;
 }

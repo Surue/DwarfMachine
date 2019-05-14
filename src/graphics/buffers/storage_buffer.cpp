@@ -32,7 +32,7 @@ StorageBuffer::StorageBuffer(const VkDeviceSize& size, const void* data) :
 	
 }
 
-void StorageBuffer::Update(const void* newData) const
+void StorageBuffer::Update(const void* newData)
 {
 	void *data;
 	Buffer::MapMemory(&data);

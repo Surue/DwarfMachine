@@ -25,7 +25,7 @@ SOFTWARE.
 #include <graphics/gizmos/renderer_gizmo.h>
 #include <graphics/graphic_manager.h>
 #include <graphics/gizmos/gizmo_type.h>
-#include "editor/editor.h"
+#include <editor/editor.h>
 #include <engine/engine.h>
 
 namespace dm

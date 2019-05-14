@@ -30,7 +30,7 @@ UniformBuffer::UniformBuffer(const VkDeviceSize& size, const void* data) :
 	Buffer(size, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, data)
 {}
 
-void UniformBuffer::Update(const void* newData) const
+void UniformBuffer::Update(const void* newData)
 {
 	void *data;
 	Buffer::MapMemory(&data);

@@ -51,7 +51,7 @@ public:
 	 * \brief Map data into the logical device memory
 	 * \param data 
 	 */
-	void MapMemory(void **data) const;
+	void MapMemory(void **data);
 
 	/**
 	 * \brief Unmap data from the logical device's memory

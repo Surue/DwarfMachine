@@ -47,6 +47,8 @@ TEST(Models, Cube)
 
 	engine.SetApplication(new dm::Editor());
 
+	auto editor = static_cast<dm::Editor*>(engine.GetApplication());
+
 	auto entityManager = engine.GetEntityManager();
 
 	//Camera
@@ -76,6 +78,12 @@ TEST(Models, Cube)
 	material.color = dm::Color(100, 200, 0, 1);
 	cube.AddComponent<dm::MaterialDefault>(material);
 	cube.AddComponent<dm::BoundingSphere>(dm::BoundingSphereManager::GetBoundingSphere(*mesh.model));
+
+	dm::Gizmo gizmo;
+	gizmo.transform = t1;
+	gizmo.color = dm::Color(100, 0, 0, 1);
+	gizmo.gizmoType = dm::GizmoType::Create(dm::Engine::Get()->GetModelManager()->GetModel("ModelSphere"), 1, dm::Color::White);
+	editor->GetGizmoManager()->AddGizmo(gizmo);
 
 	//Sphere
 	const auto e2 = entityManager->CreateEntity();

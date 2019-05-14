@@ -40,7 +40,7 @@ void GizmoManager::Update()
 			continue;
 		}
 
-		(*it).first->Update((*it).second);
+		it->first->Update((*it).second);
 		++it;
 	}
 }

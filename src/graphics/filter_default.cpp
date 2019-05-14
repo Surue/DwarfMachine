@@ -36,7 +36,7 @@ void FilterDefault::Draw(const CommandBuffer& commandBuffer)
 {
 	//PushConditional("writeColor", "samplerColor", "resolved", "diffuse");
 	PushConditional("writeColor", "samplerColor", "diffuse", "diffuse");
-	const bool updateSucceed = m_DescriptorSet.Update(m_Pipeline); //error #1 (imageLayout invalid) //error #3 command buffer still acit
+	const bool updateSucceed = m_DescriptorSet.Update(m_Pipeline);
 
 	if(!updateSucceed)
 	{
@@ -46,7 +46,7 @@ void FilterDefault::Draw(const CommandBuffer& commandBuffer)
 	m_Pipeline.BindPipeline(commandBuffer); 
 
 	m_DescriptorSet.BindDescriptor(commandBuffer, m_Pipeline);
-	vkCmdDraw(commandBuffer, 3, 1, 0, 0); //error #2 (descriptor 0 not updated)
+	vkCmdDraw(commandBuffer, 3, 1, 0, 0);
 
 	if(m_LastFilter)
 	{
