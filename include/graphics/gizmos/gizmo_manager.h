@@ -37,7 +37,7 @@ public:
 
 	void Update();
 
-	Gizmo *AddGizmo(Gizmo *gizmo);
+	void AddGizmo(Gizmo &gizmo);
 
 	void RemoveGizmo(Gizmo *gizmo);
 

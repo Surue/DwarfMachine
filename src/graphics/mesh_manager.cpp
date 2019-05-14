@@ -37,7 +37,7 @@ MeshManager::MeshManager()
 	m_RegisteredMeshes["ModelCube"] = MeshCube::Create();
 	m_RegisteredMeshes["ModelSphere"] = MeshSphere::Create();
 	m_RegisteredMeshes["ModelPlane"] = MeshPlane::Create();
-	m_RegisteredMeshes["ressources/models/chalet.obj"] = MeshObj::Create("ressources/models/chalet.obj");
+	//m_RegisteredMeshes["ressources/models/chalet.obj"] = MeshObj::Create("ressources/models/chalet.obj");
 }
 
 Mesh* MeshManager::GetModel(const std::string& name)

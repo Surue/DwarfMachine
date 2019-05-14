@@ -31,7 +31,8 @@ ComponentManagerContainer::ComponentManagerContainer() :
 	m_TransformManager(std::make_unique<TransformManager>()),
 	m_CameraManager(std::make_unique<CameraManager>()),
 	m_MaterialDefaultManager(std::make_unique<MaterialDefaultManager>()),
-	m_MeshManager(std::make_unique<ModelComponentManager>())
+	m_MeshManager(std::make_unique<ModelComponentManager>()),
+	m_BoundingSphereManager(std::make_unique<BoundingSphereManager>())
 { }
 
 void ComponentManagerContainer::Destroy()
@@ -42,6 +43,7 @@ void ComponentManagerContainer::Destroy()
 	m_MaterialDefaultManager.reset(nullptr);
 	m_MaterialDefaultManager.reset(nullptr);
 	m_MeshManager.reset(nullptr);
+	m_BoundingSphereManager.reset(nullptr);
 }
 
 ComponentBase* ComponentManagerContainer::CreateComponent(const Entity entity, const ComponentType componentType) const
@@ -58,6 +60,8 @@ ComponentBase* ComponentManagerContainer::CreateComponent(const Entity entity, c
 		return m_MaterialDefaultManager->CreateComponent(entity);
 	case ComponentType::MODEL:
 		return m_MeshManager->CreateComponent(entity);
+	case ComponentType::BOUNDING_SPHERE:
+		return m_BoundingSphereManager->CreateComponent(entity);
 	default:
 		throw std::runtime_error("Fail to bind component to its own component manager");
 	}
@@ -77,6 +81,8 @@ ComponentBase* ComponentManagerContainer::AddComponent(const Entity entity, Comp
 		return static_cast<ComponentBase*>(m_MaterialDefaultManager->AddComponent(entity, static_cast<MaterialDefault&>(component)));
 	case ComponentType::MODEL:
 		return static_cast<ComponentBase*>(m_MeshManager->AddComponent(entity, static_cast<Model&>(component)));
+	case ComponentType::BOUNDING_SPHERE:
+		return static_cast<ComponentBase*>(m_BoundingSphereManager->AddComponent(entity, static_cast<BoundingSphere&>(component)));
 	default:
 		throw std::runtime_error("Fail to bind component to its own component manager");
 	}
@@ -94,6 +100,8 @@ ComponentBase* ComponentManagerContainer::GetComponent(const Entity entity, cons
 		return m_MaterialDefaultManager->GetComponent(entity);
 	case ComponentType::MODEL:
 		return m_MeshManager->GetComponent(entity);
+	case ComponentType::BOUNDING_SPHERE:
+		return m_BoundingSphereManager->GetComponent(entity);
 	case ComponentType::NONE: break;
 	case ComponentType::LENGTH: break;
 	default: ;
@@ -120,6 +128,9 @@ void ComponentManagerContainer::DestroyComponent(const Entity entity, const Comp
 	case ComponentType::MODEL: 
 		m_MeshManager->DestroyComponent(entity);
 		break;
+	case ComponentType::BOUNDING_SPHERE:
+		m_BoundingSphereManager->DestroyComponent(entity);
+		break;
 	case ComponentType::LENGTH: break;
 	default: 
 		throw std::runtime_error("Fail to bind component to its own component manager");
@@ -143,6 +154,11 @@ void ComponentManagerContainer::DrawOnInspector(Entity entity)
 	if (entityHandle.HasComponent(ComponentType::MATERIAL_DEFAULT))
 	{
 		m_MaterialDefaultManager->OnDrawInspector(entity);
+	}
+
+	if (entityHandle.HasComponent(ComponentType::BOUNDING_SPHERE))
+	{
+		m_BoundingSphereManager->OnDrawInspector(entity);
 	}
 }
 }

@@ -30,8 +30,7 @@ SOFTWARE.
 #include <graphics/window.h>
 
 #include <SPIRV/GlslangToSpv.h>
-#include <glm/detail/func_trigonometric.inl>
-#include <glm/ext/matrix_clip_space.inl>
+#include <glm/ext/matrix_clip_space.hpp>
 #include "editor/log.h"
 #include "imgui.h"
 #include "engine/engine.h"

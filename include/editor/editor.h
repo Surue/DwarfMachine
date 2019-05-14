@@ -40,7 +40,7 @@ public:
 	void Update() override;
 	void Draw() override;
 
-	const GizmoManager* GetGizmoManager() const { return &m_GizmoManager; }
+	GizmoManager* GetGizmoManager() { return &m_GizmoManager; }
 private:
 	void DrawInspector();
 

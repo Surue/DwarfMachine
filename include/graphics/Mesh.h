@@ -28,6 +28,7 @@ SOFTWARE.
 #include <graphics/command_buffer.h>
 #include <graphics/buffers/buffer.h>
 #include "mesh_vertex.h"
+#include <glm/glm.hpp>
 
 namespace dm
 {
@@ -36,9 +37,7 @@ class Mesh
 public:
 	Mesh();
 
-	virtual ~Mesh()
-	{
-	}
+	virtual ~Mesh() = default;
 
 	template<typename T>
 	explicit Mesh(const std::vector<T> &vertices, const std::vector<uint32_t> &indices = {}) :
@@ -58,6 +57,8 @@ public:
 	const uint32_t &GetVertexCount() const { return m_VertexCount; }
 
 	const uint32_t &GetIndexCount() const { return m_IndexCount; }
+
+	const float &GetRadius() const { return m_Radius; }
 
 	static VkIndexType GetIndexType() { return VK_INDEX_TYPE_UINT32; }
 protected:
@@ -102,6 +103,19 @@ protected:
 
 			commandBuffer.SubmitIdle();
 		}
+
+		m_MinExtents = glm::vec3(std::numeric_limits<float>::max());
+		m_MaxExtents = glm::vec3(std::numeric_limits<float>::min());
+
+		for (const auto &vertex : vertices)
+		{
+			glm::vec3 position = glm::vec3(vertex.position.x, vertex.position.y, vertex.position.z);
+			m_MinExtents = glm::vec3(std::min(m_MinExtents.x, position.x), std::min(m_MinExtents.y, position.y), std::min(m_MinExtents.z, position.z));
+			m_MaxExtents = glm::vec3(std::max(m_MaxExtents.x, position.x), std::max(m_MaxExtents.y, position.y), std::max(m_MaxExtents.z, position.z));
+			//m_MaxExtents = glm::max(m_MaxExtents, position);
+		}
+		
+		m_Radius = std::max(glm::length(m_MinExtents), glm::length(m_MaxExtents));
 	}
 private:
 	std::unique_ptr<Buffer> m_VertexBuffer;
@@ -109,6 +123,10 @@ private:
 
 	uint32_t m_VertexCount;
 	uint32_t m_IndexCount;
+
+	glm::vec3 m_MinExtents;
+	glm::vec3 m_MaxExtents;
+	float m_Radius;
 };
 }
 

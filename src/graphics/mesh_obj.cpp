@@ -26,7 +26,6 @@ SOFTWARE.
 
 #define TINYOBJLOADER_IMPLEMENTATION
 #include <utility/tiny_obj_loader.h>
-#include <glm/detail/func_geometric.inl>
 
 namespace dm
 {

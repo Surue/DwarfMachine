@@ -45,18 +45,17 @@ void GizmoManager::Update()
 	}
 }
 
-Gizmo* GizmoManager::AddGizmo(Gizmo* gizmo)
+void GizmoManager::AddGizmo(Gizmo& gizmo)
 {
-	auto it = m_Gizmos.find(gizmo->gizmoType);
+	auto it = m_Gizmos.find(gizmo.gizmoType);
 
 	if(it == m_Gizmos.end())
 	{
-		m_Gizmos.emplace(gizmo->gizmoType, std::vector<Gizmo>());
-		it = m_Gizmos.find(gizmo->gizmoType);
+		m_Gizmos.emplace(gizmo.gizmoType, std::vector<Gizmo>());
+		it = m_Gizmos.find(gizmo.gizmoType);
 	}
 
-	(*it).second.emplace_back(*gizmo);
-	return gizmo;
+	(*it).second.emplace_back(gizmo);
 }
 
 void GizmoManager::RemoveGizmo(Gizmo* gizmo)

@@ -33,10 +33,10 @@ SOFTWARE.
 #include <editor/editor.h>
 #include <graphics/mesh_manager.h>
 
-#include <glm/ext/matrix_clip_space.inl>
-#include <glm/detail/func_trigonometric.inl>
-#include <glm/ext/matrix_transform.inl>
+#include <glm/ext/matrix_clip_space.hpp>
+#include <glm/ext/matrix_transform.hpp>
 #include <glm/ext/scalar_constants.hpp>
+#include "physic/bounding_sphere.h"
 
 TEST(Models, Cube)
 {
@@ -75,6 +75,7 @@ TEST(Models, Cube)
 	material.componentType = ComponentType::MATERIAL_DEFAULT;
 	material.color = dm::Color(100, 200, 0, 1);
 	cube.AddComponent<dm::MaterialDefault>(material);
+	cube.AddComponent<dm::BoundingSphere>(dm::BoundingSphereManager::GetBoundingSphere(*mesh.model));
 
 	//Sphere
 	const auto e2 = entityManager->CreateEntity();
@@ -87,6 +88,7 @@ TEST(Models, Cube)
 	mesh2.model = dm::Engine::Get()->GetModelManager()->GetModel("ModelPlane");
 	sphere.AddComponent<dm::Model>(mesh2);
 	sphere.AddComponent<dm::MaterialDefault>(material);
+	sphere.AddComponent<dm::BoundingSphere>(dm::BoundingSphereManager::GetBoundingSphere(*mesh2.model));
 
 	//Planes
 	const auto e3 = entityManager->CreateEntity();
@@ -100,22 +102,23 @@ TEST(Models, Cube)
 	mesh3.model = dm::Engine::Get()->GetModelManager()->GetModel("ModelSphere");
 	plane.AddComponent<dm::Model>(mesh3);
 	plane.AddComponent<dm::MaterialDefault>(material);
+	plane.AddComponent<dm::BoundingSphere>(dm::BoundingSphereManager::GetBoundingSphere(*mesh3.model));
 
-	//Obj
-	const auto e4 = entityManager->CreateEntity();
-	auto obj = dm::EntityHandle(e4);
-	auto t4 = obj.CreateComponent<dm::Transform>(ComponentType::TRANSFORM);
-	t4->position = glm::vec3(0, 0, 4);
-	t4->scaling = glm::vec3(1, 1, 1);
-	dm::Model mesh4;
-	mesh4.componentType = ComponentType::MODEL;
-	mesh4.model = dm::Engine::Get()->GetModelManager()->GetModel("ressources/models/chalet.obj");
-	obj.AddComponent<dm::Model>(mesh4);
-	dm::MaterialDefault material1;
-	material1.componentType = ComponentType::MATERIAL_DEFAULT;
-	material1.color = dm::Color(100, 200, 0, 1);
-	material1.textureDiffuse = dm::Image2d::Create("ressources/textures/chalet.jpg");
-	obj.AddComponent<dm::MaterialDefault>(material1);
+	////Obj
+	//const auto e4 = entityManager->CreateEntity();
+	//auto obj = dm::EntityHandle(e4);
+	//auto t4 = obj.CreateComponent<dm::Transform>(ComponentType::TRANSFORM);
+	//t4->position = glm::vec3(0, 0, 4);
+	//t4->scaling = glm::vec3(1, 1, 1);
+	//dm::Model mesh4;
+	//mesh4.componentType = ComponentType::MODEL;
+	//mesh4.model = dm::Engine::Get()->GetModelManager()->GetModel("ressources/models/chalet.obj");
+	//obj.AddComponent<dm::Model>(mesh4);
+	//dm::MaterialDefault material1;
+	//material1.componentType = ComponentType::MATERIAL_DEFAULT;
+	//material1.color = dm::Color(100, 200, 0, 1);
+	//material1.textureDiffuse = dm::Image2d::Create("ressources/textures/chalet.jpg");
+	//obj.AddComponent<dm::MaterialDefault>(material1);
 
 	try
 	{

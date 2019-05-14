@@ -27,6 +27,7 @@ SOFTWARE.
 #include <cmath>
 #include <glm/vec3.hpp>
 #include <glm/vec2.hpp>
+#include <glm/ext/scalar_constants.inl>
 
 namespace dm
 {
@@ -60,12 +61,12 @@ void MeshSphere::Load()
 	for(uint32_t i = 0; i < longitudeBands + 1; i++)
 	{
 		float iDivLong = static_cast<float>(i) / static_cast<float>(longitudeBands);
-		float theta = (i == 0 || i == longitudeBands) ? 0.0f : iDivLong * 2.0f * 3.14f;
+		float theta = (i == 0 || i == longitudeBands) ? 0.0f : iDivLong * 2.0f * glm::pi<float>();
 
 		for(uint32_t j = 0; j < latitudeBands + 1; j++)
 		{
 			float jDivLat = static_cast<float>(j) / static_cast<float>(latitudeBands);
-			float phi = jDivLat * 2.0f * 3.14f;
+			float phi = jDivLat * 2.0f * glm::pi<float>();
 
 			glm::vec3 normal = glm::vec3(std::cos(phi) * std::sin(theta), std::cos(theta), std::sin(phi) * std::sin(theta));
 			glm::vec3 position = m_Radius * normal;

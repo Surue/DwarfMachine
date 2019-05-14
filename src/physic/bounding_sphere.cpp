@@ -24,9 +24,26 @@ SOFTWARE.
 
 
 #include <physic/bounding_sphere.h>
+#include "imgui.h"
+#include <graphics/Mesh.h>
 
 namespace dm
 {
+BoundingSphere BoundingSphereManager::GetBoundingSphere(Mesh& mesh)
+{
+	BoundingSphere boundingSphere;
+	boundingSphere.componentType = ComponentType::BOUNDING_SPHERE;
+	boundingSphere.m_Radius = mesh.GetRadius();
+	return boundingSphere;
+}
+
+BoundingSphereManager::BoundingSphereManager()
+{
+	
+}
+
+BoundingSphereManager::~BoundingSphereManager() {}
+
 void BoundingSphereManager::Init()
 {
 }
@@ -35,11 +52,20 @@ void BoundingSphereManager::Update()
 {
 }
 
-BoundingSphere* BoundingSphereManager::CreateComponent(Entity entity)
+BoundingSphere* BoundingSphereManager::CreateComponent(const Entity entity)
 {
-	const auto b = BoundingSphere();
-	m_Components[entity] = b;
-	return &m_Components[entity];
+	auto b = BoundingSphere();
+	b.m_Radius = 1;
+	m_Components[entity - 1] = b;
+
+	return &m_Components[entity - 1];
+}
+
+BoundingSphere* BoundingSphereManager::AddComponent(const Entity entity, BoundingSphere& component)
+{
+	m_Components[entity - 1] = component;
+
+	return &m_Components[entity - 1];
 }
 
 void BoundingSphereManager::DestroyComponent(Entity entity)
@@ -48,5 +74,8 @@ void BoundingSphereManager::DestroyComponent(Entity entity)
 
 void BoundingSphereManager::OnDrawInspector(Entity entity)
 {
+	ImGui::Separator();
+	ImGui::TextWrapped("Bounding Sphere");
+	ImGui::TextWrapped("Radius : %f ", m_Components[entity - 1].m_Radius);
 }
 }

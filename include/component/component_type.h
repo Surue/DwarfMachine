@@ -30,6 +30,7 @@ enum class ComponentType : int {
 	CAMERA = 1 << 1,
 	MATERIAL_DEFAULT = 1 << 2,
 	MODEL = 1 << 3,
-	LENGTH = 5,
+	BOUNDING_SPHERE = 1 << 4,
+	LENGTH = 6,
 };
 #endif //COMPONENT_TYPE_H

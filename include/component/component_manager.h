@@ -29,6 +29,7 @@ SOFTWARE.
 #include <component/camera.h>
 #include "material_default.h"
 #include "model.h"
+#include "physic/bounding_sphere.h"
 
 namespace dm {
 class ComponentManagerContainer final
@@ -60,6 +61,7 @@ private:
 	std::unique_ptr<CameraManager> m_CameraManager;
 	std::unique_ptr<MaterialDefaultManager> m_MaterialDefaultManager;
 	std::unique_ptr<ModelComponentManager> m_MeshManager;
+	std::unique_ptr<BoundingSphereManager> m_BoundingSphereManager;
 };
 }
 #endif COMPONENT_MANAGER_H

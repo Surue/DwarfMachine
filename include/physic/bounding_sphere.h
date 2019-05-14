@@ -29,19 +29,31 @@ SOFTWARE.
 
 namespace dm
 {
+class Mesh;
+
 struct BoundingSphere : public ComponentBase
 {
-	float m_Radius = 0;
+	float m_Radius = 1;
 };
 
+class GizmoManager;
 class BoundingSphereManager : public ComponentBaseManager<BoundingSphere>
 {
 public:
+	static BoundingSphere GetBoundingSphere(Mesh& mesh);
+
+	explicit BoundingSphereManager();
+	~BoundingSphereManager() override;
+
 	void Init() override;
 	void Update() override;
+
 	BoundingSphere* CreateComponent(Entity) override;
+	BoundingSphere* AddComponent(const Entity entity, BoundingSphere& component) override;
+
 	void DestroyComponent(Entity entity) override;
 	void OnDrawInspector(Entity entity) override;
+private:
 };
 }
 
