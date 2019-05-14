@@ -115,7 +115,6 @@ void EntityManager::ResizeEntity(const size_t newSize)
 
 	//TODO resize les components containers et les systèmes containers
 	Engine::Get()->GetComponentManager()->OnEntityResize(newSize);
-	Engine::Get()->GetSystemManager()->OnEntityResize(newSize);
 }
 
 ComponentMask EntityManager::GetEntityMask(const Entity entity)
@@ -135,6 +134,5 @@ void EntityManager::ResizeEntity()
 
 	//TODO resize les components containers et les systèmes containers
 	Engine::Get()->GetComponentManager()->OnEntityResize(m_EntityMask.size() + INIT_ENTITY_NMB);
-	Engine::Get()->GetSystemManager()->OnEntityResize(m_EntityMask.size() + INIT_ENTITY_NMB);
 }
 }

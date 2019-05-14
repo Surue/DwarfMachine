@@ -50,8 +50,6 @@ public:
 
 	ComponentMask GetSignature() const;
 
-	void OnEntityResize(int newSize);
-
 protected:
 	std::vector<Entity> m_RegisteredEntities;
 

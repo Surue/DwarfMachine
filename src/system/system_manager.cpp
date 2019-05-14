@@ -78,12 +78,4 @@ void SystemManager::DestroyComponent(const Entity entity, const ComponentMask ol
 		}
 	}
 }
-
-void SystemManager::OnEntityResize(const int newSize)
-{
-	for (auto& system : m_Systems)
-	{
-		system->OnEntityResize(newSize);
-	}
-}
 }

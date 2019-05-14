@@ -211,7 +211,7 @@ TEST(Models, FrustumCulling)
 	std::shared_ptr<dm::GizmoType> gizmoType = dm::GizmoType::Create(dm::Engine::Get()->GetModelManager()->GetModel("ModelSphere"), 1, dm::Color::White);
 	
 	//Cube
-	float maxCube = 20;
+	float maxCube = 11;
 	for(int i = 0; i < maxCube; i++)
 	{
 		for(int j = 0; j < maxCube; j++)

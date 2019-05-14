@@ -75,7 +75,7 @@ public:
 
 	virtual void OnDrawInspector(Entity entity) = 0;
 
-	void OnEntityResize(int newSize)
+	virtual void OnEntityResize(int newSize)
 	{
 		m_Components.resize(newSize);
 	}

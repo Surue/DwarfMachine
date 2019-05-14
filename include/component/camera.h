@@ -58,11 +58,11 @@ public:
 
 	Camera* AddComponent(Entity entity, Camera& componentBase) override;
 
-	Transform* GetTransformOfCamera(Camera& component);
-
 	void DestroyComponent(Entity entity) override;
 
 	void OnDrawInspector(Entity entity) override;
+
+	void OnEntityResize(int newSize) override;
 private:
 	GraphicManager* m_GraphicManager;
 };

@@ -63,9 +63,4 @@ ComponentMask System::GetSignature() const
 {
 	return m_Signature;
 }
-
-void System::OnEntityResize(const int newSize)
-{
-	m_RegisteredEntities.resize(newSize);
-}
 }

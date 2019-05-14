@@ -75,7 +75,9 @@ void RendererMeshes::Draw(const CommandBuffer& commandBuffer)
 		if (material == nullptr || mesh == nullptr)
 		{
 			std::cout << "Missing material or mesh => Don't render\n";
-			return;
+			std::cout << "i == " << i << "\n";
+			i++;
+			continue;
 		}
 
 		auto meshModel = mesh->model;
@@ -98,8 +100,9 @@ void RendererMeshes::Draw(const CommandBuffer& commandBuffer)
 			{
 				std::cout << "	- MaterialPipeline->GetStage() != GetStage()\n";
 			}
-
-			return;
+			std::cout << "i == " << i << "\n";
+			i++;
+			continue;
 		}
 
 		const auto bindSuccess = materialPipeline->BindPipeline(commandBuffer);
@@ -107,7 +110,8 @@ void RendererMeshes::Draw(const CommandBuffer& commandBuffer)
 		if (!bindSuccess)
 		{
 			std::cout << "Bind fail\n";
-			return;
+			i++;
+			continue;
 		}
 
 		auto &pipeline = *materialPipeline->GetPipeline();
@@ -119,9 +123,12 @@ void RendererMeshes::Draw(const CommandBuffer& commandBuffer)
 
 		const auto updateSuccess = material->descriptorSet.Update(pipeline);
 
+		
 		if (!updateSuccess)
 		{
-			return;
+			std::cout << "Failed [i] == " << i << "\n";
+			i++;
+			continue;
 		}
 
 		// Draws the object.
@@ -129,7 +136,6 @@ void RendererMeshes::Draw(const CommandBuffer& commandBuffer)
 		if (meshModel->CmdRender(commandBuffer)) {
 			//std::cout << "Draw success\n";
 		}
-
 		i++;
 	}
 }

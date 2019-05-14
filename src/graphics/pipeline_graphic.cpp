@@ -158,8 +158,6 @@ void PipelineGraphics::CreateShaderProgram()
 	}
 
 	m_Shader->ProcessShader();
-
-	std::cout << m_Shader->ToString() << "\n";
 }
 
 void PipelineGraphics::CreateDescriptorLayout()

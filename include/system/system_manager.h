@@ -48,8 +48,6 @@ public:
 
 	void DestroyComponent(Entity entity, ComponentMask oldMask, ComponentMask newMask);
 
-	void OnEntityResize(int newSize);
-
 private:
 	std::vector<std::unique_ptr<System>> m_Systems;
 

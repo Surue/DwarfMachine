@@ -68,20 +68,6 @@ Camera* CameraManager::AddComponent(const Entity entity, Camera& componentBase)
 	return &m_Components[entity - 1];
 }
 
-Transform* CameraManager::GetTransformOfCamera(Camera& component)
-{
-	for(auto i = 0; i < m_Components.size(); i++)
-	{
-		if(m_Components.at(i).isMainCamera)
-		{
-			auto entity = EntityHandle(i + 1);
-			return entity.GetComponent<Transform>(ComponentType::TRANSFORM);
-		}
-	}
-
-	return nullptr;
-}
-
 void CameraManager::DestroyComponent(Entity entity)
 {
 }
@@ -89,11 +75,26 @@ void CameraManager::DestroyComponent(Entity entity)
 void CameraManager::OnDrawInspector(Entity entity)
 {
 	ImGui::Separator();
-	ImGui::TextWrapped("Transform");
+	ImGui::TextWrapped("Camera");
 	ImGui::DragFloat3("Position", &m_Components[entity - 1].cameraPos[0], 0.1f);
 	ImGui::DragFloat3("Front", &m_Components[entity - 1].cameraFront[0], 0.1f);
 	ImGui::DragFloat3("Up", &m_Components[entity - 1].cameraUp[0], 0.1f);
 	ImGui::DragFloat("Yaw", &m_Components[entity - 1].yaw, 0.1f);
 	ImGui::DragFloat("Pitch", &m_Components[entity - 1].pitch, 0.1f);
+}
+
+void CameraManager::OnEntityResize(int newSize)
+{
+
+	m_Components.resize(newSize);
+
+	for (Camera component : m_Components)
+	{
+		if (component.isMainCamera)
+		{
+			m_GraphicManager->SetMainCamera(&component);
+			return;
+		}
+	}
 }
 }
