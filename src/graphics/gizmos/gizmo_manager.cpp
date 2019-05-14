@@ -26,5 +26,54 @@ SOFTWARE.
 
 namespace dm
 {
+GizmoManager::GizmoManager()
+{
+}
 
+void GizmoManager::Update()
+{
+	for(auto it = m_Gizmos.begin(); it != m_Gizmos.end();)
+	{
+		if(it->second.empty())
+		{
+			it = m_Gizmos.erase(it);
+			continue;
+		}
+
+		(*it).first->Update((*it).second);
+		++it;
+	}
+}
+
+Gizmo* GizmoManager::AddGizmo(Gizmo* gizmo)
+{
+	auto it = m_Gizmos.find(gizmo->gizmoType);
+
+	if(it == m_Gizmos.end())
+	{
+		m_Gizmos.emplace(gizmo->gizmoType, std::vector<std::unique_ptr<Gizmo>>());
+		it = m_Gizmos.find(gizmo->gizmoType);
+	}
+
+	(*it).second.emplace_back(gizmo);
+	return gizmo;
+}
+
+void GizmoManager::RemoveGizmo(Gizmo* gizmo)
+{
+	auto it = m_Gizmos.find(gizmo->gizmoType);
+
+	if(it != m_Gizmos.end())
+	{
+		it->second.erase(std::remove_if(it->second.begin(), it->second.end(), [&](std::unique_ptr<Gizmo> &g)
+		{
+			return g.get() == gizmo;
+		}), it->second.end());
+	}
+}
+
+void GizmoManager::Clear()
+{
+	m_Gizmos.clear();
+}
 }

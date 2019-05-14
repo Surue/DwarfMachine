@@ -50,10 +50,10 @@ public:
 			};
 
 			std::vector<VkVertexInputAttributeDescription> attributeDescriptions = {
-				VkVertexInputAttributeDescription{0, baseBinding, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof(Instance, m_ModelMatrix) + offsetof(glm::mat4x4, 4 * sizeof(float)) },
-				VkVertexInputAttributeDescription{0, baseBinding, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof(Instance, m_ModelMatrix) + offsetof(glm::mat4x4, 4 * sizeof(float)) },
-				VkVertexInputAttributeDescription{0, baseBinding, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof(Instance, m_ModelMatrix) + offsetof(glm::mat4x4, 4 * sizeof(float)) },
-				VkVertexInputAttributeDescription{0, baseBinding, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof(Instance, m_ModelMatrix) + offsetof(glm::mat4x4, 4 * sizeof(float)) },
+				VkVertexInputAttributeDescription{0, baseBinding, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof(Instance, m_ModelMatrix) + offsetof(glm::mat4x4, glm::mat4x4::[0]) },
+				VkVertexInputAttributeDescription{0, baseBinding, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof(Instance, m_ModelMatrix) + offsetof(glm::mat4x4, glm::mat4x4::[1]) },
+				VkVertexInputAttributeDescription{0, baseBinding, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof(Instance, m_ModelMatrix) + offsetof(glm::mat4x4, glm::mat4x4::[2]) },
+				VkVertexInputAttributeDescription{0, baseBinding, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof(Instance, m_ModelMatrix) + offsetof(glm::mat4x4, glm::mat4x4::[3]) },
 				VkVertexInputAttributeDescription{0, baseBinding, VK_FORMAT_R32G32B32A32_SFLOAT, offsetof(Instance, m_Color) },
 			};
 			return Shader::VertexInput(0, bindingDescription, attributeDescriptions);

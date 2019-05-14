@@ -26,6 +26,7 @@ SOFTWARE.
 #define EDITOR_H
 #include <engine/engine_application.h>
 #include "entity/entity.h"
+#include "graphics/Gizmos/gizmo_manager.h"
 
 namespace dm
 {
@@ -38,6 +39,8 @@ public:
 	void Start() override;
 	void Update() override;
 	void Draw() override;
+
+	const GizmoManager* GetGizmoManager() const { return &m_GizmoManager; }
 private:
 	void DrawInspector();
 
@@ -56,6 +59,8 @@ private:
 	Entity m_CurrentEntitySelected = INVALID_ENTITY;
 
 	float lastDeltaTime;
+
+	GizmoManager m_GizmoManager;
 };
 }
 

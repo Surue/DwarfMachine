@@ -33,4 +33,14 @@ Color::Color(const float& red, const float& green, const float& blue, const floa
 	g(green),
 	b(blue),
 	a(alpha) {}
+
+bool Color::operator==(const Color& other) const
+{
+	return r == other.r && g == other.g && b == other.b && a == other.a;
+}
+
+bool Color::operator!=(const Color& other) const
+{
+	return !(*this == other);
+}
 }

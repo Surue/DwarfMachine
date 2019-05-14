@@ -22,9 +22,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#include <graphics/Gizmos/renderer_gizmo.h>
+#include <graphics/gizmos/renderer_gizmo.h>
 #include <graphics/graphic_manager.h>
-#include <graphics/Gizmos/gizmo_type.h>
+#include <graphics/gizmos/gizmo_type.h>
+#include "editor/editor.h"
 
 namespace dm
 {
@@ -45,7 +46,14 @@ void RendererGizmo::Draw(const CommandBuffer& commandBuffer)
 	m_UniformScene.Push("projection", camera->proj);
 	m_UniformScene.Push("view", camera->viewMatrix);
 
-	auto &gizmos = Gizmos::Get()->GetGizmos();
+	const auto editor = dynamic_cast<Editor*>(Engine::Get()->GetApplication());
+
+	if(editor == nullptr)
+	{
+		return;
+	}
+
+	auto gizmos = editor->GetGizmoManager()->GetGizmos();
 
 	m_Pipeline.BindPipeline(commandBuffer);
 

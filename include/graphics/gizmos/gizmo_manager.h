@@ -25,9 +25,28 @@ SOFTWARE.
 #ifndef GIZMO_MANAGER_H
 #define GIZMO_MANAGER_H
 
+#include <graphics/gizmos/gizmo.h>
+#include <graphics/gizmos/gizmo_type.h>
+
 namespace dm
 {
+class GizmoManager
+{
+public:
+	GizmoManager();
 
+	void Update();
+
+	Gizmo *AddGizmo(Gizmo *gizmo);
+
+	void RemoveGizmo(Gizmo *gizmo);
+
+	void Clear();
+
+	const std::map<GizmoType*, std::vector<std::unique_ptr<Gizmo>>> &GetGizmos() const { return m_Gizmos; }
+private:
+	std::map<GizmoType*, std::vector<std::unique_ptr<Gizmo>>> m_Gizmos;
+};
 }
 
 #endif

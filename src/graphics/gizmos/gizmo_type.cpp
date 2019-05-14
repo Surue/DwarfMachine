@@ -23,6 +23,7 @@ SOFTWARE.
 */
 
 #include <graphics/gizmos/gizmo_type.h>
+#include <graphics/gizmos/gizmo.h>
 
 namespace dm
 {
@@ -65,7 +66,7 @@ void GizmoType::Update(std::vector<std::unique_ptr<Gizmo>>& gizmos)
 		}
 
 		auto instance = &instances[m_Instances];
-		instance->m_ModelMatrix = gizmo->transform.GetWorldMatrix();
+		instance->m_ModelMatrix = TransformManager::GetWorldMatrix(*gizmo->transform);
 		instance->m_Color = gizmo->color;
 		m_Instances++;
 	}

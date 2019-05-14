@@ -70,6 +70,8 @@ public:
 	MeshManager* GetModelManager();
 
 	void SetApplication(EngineApplication* app);
+
+	EngineApplication* GetApplication() const { return m_App.get(); }
 private:
 	/**
 	 * \brief Main loop of the game

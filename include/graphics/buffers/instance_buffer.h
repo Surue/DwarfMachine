@@ -36,6 +36,7 @@ class CommandBuffer;
  */
 class InstanceBuffer: public Buffer
 {
+public:
 	explicit InstanceBuffer(const VkDeviceSize &size);
 
 	/**

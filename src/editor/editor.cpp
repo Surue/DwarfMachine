@@ -42,6 +42,8 @@ Editor::Editor()
 	GraphicManager::Get()->SetManager(new EditorRenderManager());
 
 	ImGuizmo::SetOrthographic(false);
+
+	m_GizmoManager = GizmoManager();
 }
 
 void Editor::Awake()

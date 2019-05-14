@@ -45,7 +45,12 @@ public:
 	float b;
 	float a;
 
+	bool operator==(const Color &other) const;
+
+	bool operator!=(const Color &other) const;
+
 	static const Color White;
+
 };
 }
 
