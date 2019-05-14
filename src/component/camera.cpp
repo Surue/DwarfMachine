@@ -88,7 +88,7 @@ void CameraManager::OnEntityResize(int newSize)
 
 	m_Components.resize(newSize);
 
-	for (Camera component : m_Components)
+	for (Camera& component : m_Components)
 	{
 		if (component.isMainCamera)
 		{

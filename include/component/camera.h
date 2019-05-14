@@ -40,7 +40,7 @@ struct Camera final : ComponentBase
 	glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, -10.0f);
 	glm::vec3 cameraUp = glm::vec3(0.0f, -1.0f, 0.0f);
 
-	bool isMainCamera;
+	bool isMainCamera = false;
 };
 
 struct Transform;

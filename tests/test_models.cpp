@@ -175,12 +175,13 @@ void CreateCube(glm::vec3 pos, dm::EntityManager* entityManager, dm::Editor* edi
 	//Bounding sphere
 	cube.AddComponent<dm::BoundingSphere>(dm::BoundingSphereManager::GetBoundingSphere(*mesh.model));
 
+	//TODO le problème est le * sur le transform, il faudrait plutôt enregistré directement l'entity
 	//Gizmo
-	dm::Gizmo gizmo;
-	gizmo.transform = t1;
-	gizmo.color = dm::Color(100, 0, 0, 1);
-	gizmo.gizmoType = gizmoType;
-	editor->GetGizmoManager()->AddGizmo(gizmo);
+	//dm::Gizmo gizmo;
+	//gizmo.transform = t1;
+	//gizmo.color = dm::Color(100, 0, 0, 1);
+	//gizmo.gizmoType = gizmoType;
+	//editor->GetGizmoManager()->AddGizmo(gizmo);
 }
 
 TEST(Models, FrustumCulling)
