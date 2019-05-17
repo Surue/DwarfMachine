@@ -41,6 +41,11 @@ struct Camera final : ComponentBase
 	glm::vec3 up = glm::vec3(0.0f, -1.0f, 0.0f);
 	glm::vec3 right = glm::vec3(1.0f, 0.0f, 0.0f);
 
+	float fov = 45.0f;
+	float aspect = 800.0f / 600.0f;
+	float frustumNear = 0.1f;
+	float frustumFar = 100;
+
 	bool isMainCamera = false;
 	bool isCullingCamera = false;
 };
@@ -65,6 +70,8 @@ public:
 	void OnDrawInspector(Entity entity) override;
 
 	void OnEntityResize(int newSize) override;
+
+	void UpdateAspect(const float newAspect);
 private:
 	GraphicManager* m_GraphicManager;
 };

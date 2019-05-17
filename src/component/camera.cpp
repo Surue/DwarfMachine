@@ -88,18 +88,27 @@ void CameraManager::OnDrawInspector(const Entity entity)
 	ImGui::DragFloat("Pitch", &m_Components[entity - 1].pitch, 0.1f);
 }
 
-void CameraManager::OnEntityResize(int newSize)
+void CameraManager::OnEntityResize(const int newSize)
 {
 
 	m_Components.resize(newSize);
 
-	for (Camera& component : m_Components)
+	for (auto& component : m_Components)
 	{
 		if (component.isMainCamera)
 		{
 			m_GraphicManager->SetMainCamera(&component);
 			return;
 		}
+	}
+}
+
+void CameraManager::UpdateAspect(const float newAspect)
+{
+	for (auto& component : m_Components)
+	{
+		component.aspect = newAspect;
+		component.proj = glm::perspective(glm::radians(component.fov), component.aspect, component.frustumNear, component.frustumFar);
 	}
 }
 }

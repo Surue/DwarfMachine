@@ -32,8 +32,6 @@ SOFTWARE.
 #include <graphics/pipeline_graphic.h>
 #include <graphics/descriptor_handle.h>
 #include <graphics/buffers/instance_buffer.h>
-#include <glm/gtc/matrix_access.hpp>
-#include <iostream>
 
 namespace dm
 {

@@ -32,8 +32,8 @@ SOFTWARE.
 #include <SPIRV/GlslangToSpv.h>
 #include <glm/ext/matrix_clip_space.hpp>
 #include "editor/log.h"
-#include "imgui.h"
 #include "engine/engine.h"
+#include <component/component_manager.h>
 
 namespace dm
 {
@@ -409,6 +409,7 @@ void GraphicManager::RecreatePass(RenderStage& renderStage)
 
 	VkExtent2D displayExtent = { static_cast<uint32_t>(m_Window->GetSize().x), static_cast<uint32_t>(m_Window->GetSize().y) };
 
+	Engine::Get()->GetComponentManager()->GetCameraManager()->UpdateAspect(m_Window->GetSize().x / m_Window->GetSize().y);
 	CheckVk(vkQueueWaitIdle(graphicQueue));
 
 	if(renderStage.HasSwapchain() && !m_Swapchain->IsSameExtent(displayExtent))

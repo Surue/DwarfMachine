@@ -43,7 +43,7 @@ void RendererGizmo::Update()
 
 void RendererGizmo::Draw(const CommandBuffer& commandBuffer)
 {
-	auto camera = GraphicManager::Get()->GetCamera();
+	const auto camera = GraphicManager::Get()->GetCamera();
 	m_UniformScene.Push("projection", camera->proj);
 	m_UniformScene.Push("view", camera->viewMatrix);
 

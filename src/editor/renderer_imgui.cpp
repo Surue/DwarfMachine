@@ -55,7 +55,7 @@ RendererImGui::RendererImGui(const Pipeline::Stage &pipelineStage) :
 	ImGuiIO& io = ImGui::GetIO();
 	(void)io;
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
-	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+	//io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 	ImGui::StyleColorsDark();
 
 	VkDescriptorPoolSize pool_sizes[] =

@@ -209,7 +209,11 @@ TEST(Models, FrustumCulling)
 	cameraInfo.isMainCamera = true;
 	cameraInfo.isCullingCamera = true;
 	cameraInfo.viewMatrix = glm::lookAt(cameraInfo.pos, cameraInfo.pos + cameraInfo.front, cameraInfo.up);
-	cameraInfo.proj = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
+	cameraInfo.fov = 45;
+	cameraInfo.frustumFar = 100;
+	cameraInfo.frustumNear = 0.1f;
+	cameraInfo.aspect = 800.0f / 600.0f;
+	cameraInfo.proj = glm::perspective(glm::radians(cameraInfo.fov), cameraInfo.aspect, cameraInfo.frustumNear, cameraInfo.frustumFar);
 
 	auto camera = entity.AddComponent<dm::Camera>(cameraInfo);
 
@@ -230,8 +234,6 @@ TEST(Models, FrustumCulling)
 			CreateCube(pos, entityManager, editor, gizmoType, std::move(material));		
 		}
 	}
-
-	/*CreateCube(glm::vec3(0, 0, 0), entityManager, editor, gizmoType, std::move(material));*/
 
 	try
 	{

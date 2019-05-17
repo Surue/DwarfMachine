@@ -24,6 +24,7 @@ SOFTWARE.
 
 #include <graphics/gizmos/gizmo_type.h>
 #include <graphics/gizmos/gizmo.h>
+#include "entity/entity_handle.h"
 
 namespace dm
 {
@@ -62,6 +63,11 @@ void GizmoType::Update(std::vector<Gizmo>& gizmos)
 		if(m_Instances >= m_MaxInstances)
 		{
 			break;
+		}
+
+		if(!EntityHandle(gizmo.entity).GetComponent<Drawable>(ComponentType::DRAWABLE)->isDrawable)
+		{
+			continue;
 		}
 
 		auto instance = &instances[m_Instances];

@@ -44,17 +44,13 @@ RendererMeshes::RendererMeshes(Engine& engine, const Pipeline::Stage& pipelineSt
 
 void RendererMeshes::Update()
 {
-	int i = 0;
 	for (const auto &meshRender : m_RegisteredEntities)
 	{
 		auto entity = EntityHandle(meshRender);
 		const auto material = entity.GetComponent<MaterialDefault>(ComponentType::MATERIAL_DEFAULT);
 		const auto transform = entity.GetComponent<Transform>(ComponentType::TRANSFORM);
 
-		transform->position.y *= 1;
 		MaterialDefaultManager::PushUniform(*material, TransformManager::GetWorldMatrix(*transform));
-		transform->position.y *= 1;
-		i++;
 	}
 }
 
@@ -67,7 +63,6 @@ void RendererMeshes::Draw(const CommandBuffer& commandBuffer)
 
 	for (const auto &entity : m_RegisteredEntities)
 	{
-
 		auto entityHandle = EntityHandle(entity);
 		const auto drawable = entityHandle.GetComponent<Drawable>(ComponentType::DRAWABLE);
 		if(!drawable->isDrawable)

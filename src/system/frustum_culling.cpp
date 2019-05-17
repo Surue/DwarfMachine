@@ -57,18 +57,20 @@ void FrustumCulling::Update()
 	}
 
 	//Compute camera planes
-	const auto aspect = static_cast<float>(800) / static_cast<float>(600);
+	const auto aspect = m_CameraForCulling->aspect;
 
-	const auto leftDir = glm::normalize(glm::rotate(m_CameraForCulling->front, glm::radians(45.0f) / 2.0f * aspect, m_CameraForCulling->up));
+	float angle = glm::radians(45.0f) / 2.0f;
+
+	const auto leftDir = glm::normalize(glm::rotate(m_CameraForCulling->front, angle * aspect, m_CameraForCulling->up));
 	const auto leftNormal = glm::normalize(glm::cross(leftDir, m_CameraForCulling->up));
 
-	const auto rightDir = glm::normalize(glm::rotate(m_CameraForCulling->front, -glm::radians(45.0f) / 2.0f * aspect, m_CameraForCulling->up));
+	const auto rightDir = glm::normalize(glm::rotate(m_CameraForCulling->front, -angle * aspect, m_CameraForCulling->up));
 	const auto rightNormal = glm::normalize(-glm::cross(rightDir, m_CameraForCulling->up));
 
-	const auto upDir = glm::normalize(glm::rotate(m_CameraForCulling->front, -glm::radians(45.0f) / 2.0f, m_CameraForCulling->right));
+	const auto upDir = glm::normalize(glm::rotate(m_CameraForCulling->front, -angle, m_CameraForCulling->right));
 	const auto upNormal = glm::normalize(glm::cross(upDir, m_CameraForCulling->right));
 
-	const auto downDir = glm::normalize(glm::rotate(m_CameraForCulling->front, glm::radians(45.0f) / 2.0f, m_CameraForCulling->right));
+	const auto downDir = glm::normalize(glm::rotate(m_CameraForCulling->front, angle, m_CameraForCulling->right));
 	const auto downNormal = glm::normalize(-glm::cross(downDir, m_CameraForCulling->right));
 
 	for (auto entity : m_RegisteredEntities)
@@ -82,13 +84,13 @@ void FrustumCulling::Update()
 		const auto cameraToSphere = transform->position - m_CameraForCulling->pos;
 
 		//near culling
-		if (glm::dot(cameraToSphere, m_CameraForCulling->front) < 0.1f + boundingSphere->m_Radius)
+		if (glm::dot(cameraToSphere, m_CameraForCulling->front) < m_CameraForCulling->frustumNear + boundingSphere->m_Radius)
 		{
 			continue;
 		}
 
 		//far culling
-		if (glm::dot(cameraToSphere, m_CameraForCulling->front) > 100 - boundingSphere->m_Radius)
+		if (glm::dot(cameraToSphere, m_CameraForCulling->front) > m_CameraForCulling->frustumFar - boundingSphere->m_Radius)
 		{
 			continue;
 		}
