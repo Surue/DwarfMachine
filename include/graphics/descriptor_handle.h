@@ -45,6 +45,11 @@ public:
 
 	explicit DescriptorHandle(const Pipeline &pipeline);
 
+	/*~DescriptorHandle()
+	{
+		std::cout << "~DescriptorHandle\n";
+	};*/
+
 	template<typename T>
 	static T *AsPtr(T &obj) { return &obj; }
 

@@ -31,7 +31,7 @@ namespace dm
 {
 struct Material : ComponentBase
 {
-	PipelineMaterial* pipelineMaterial;
+	PipelineMaterial* pipelineMaterial = nullptr;
 };
 }
 

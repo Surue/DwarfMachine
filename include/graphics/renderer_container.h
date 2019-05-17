@@ -40,7 +40,10 @@ public:
 
 	RendererContainer &operator=(const RendererContainer &) = delete;
 
-	~RendererContainer() = default;
+	~RendererContainer()
+	{
+		std::cout << "~RendererContainer\n";
+	};
 
 	void Update();
 

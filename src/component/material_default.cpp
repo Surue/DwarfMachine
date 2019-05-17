@@ -23,6 +23,7 @@ SOFTWARE.
 */
 
 #include <component/material_default.h>
+#include "imgui.h"
 
 namespace dm
 {
@@ -105,5 +106,10 @@ MaterialDefault& MaterialDefaultManager::Get(const Entity entity)
 	return m_Components[entity - 1];
 }
 
-void MaterialDefaultManager::OnDrawInspector(Entity entity) {}
+void MaterialDefaultManager::OnDrawInspector(const Entity entity)
+{
+	ImGui::Separator();
+	ImGui::TextWrapped("DefaultMaterial");
+	ImGui::Text(m_Components[entity - 1].pipelineMaterial->GetPipeline()->GetShader()->ToString().c_str());
+}
 }

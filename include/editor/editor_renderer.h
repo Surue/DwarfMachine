@@ -33,7 +33,11 @@ class EditorRenderManager : public RenderManager
 public:
 	EditorRenderManager();
 
-	~EditorRenderManager() = default;
+	~EditorRenderManager()
+	{
+		std::cout << "~EditorRenderManager\n";
+		GetRendererContainer().Clear();
+	};
 
 	void Start() override;
 

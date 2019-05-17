@@ -46,7 +46,10 @@ Engine::Engine(const EngineSettings engineSettings) :
 	m_CurrentFrame = m_Timer.now();
 }
 
-Engine::~Engine() {}
+Engine::~Engine()
+{
+	m_App.release();
+}
 
 void Engine::Init()
 {

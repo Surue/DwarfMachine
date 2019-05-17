@@ -36,6 +36,12 @@ PostFilter::PostFilter(const Pipeline::Stage& pipelineStage, const std::vector<s
 {
 }
 
+PostFilter::~PostFilter()
+{
+	//TODO this is an ugly fix as hell, find a better solution
+	m_DescriptorSet = DescriptorHandle();
+}
+
 const Descriptor* PostFilter::GetAttachment(const std::string& descriptorName, const Descriptor* descriptor) const
 {
 	const auto it = m_Attachments.find(descriptorName);

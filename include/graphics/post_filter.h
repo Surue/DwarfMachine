@@ -36,7 +36,7 @@ class PostFilter : public RenderPipeline
 public:
 	PostFilter(const Pipeline::Stage &pipelineStage, const std::vector<std::string> &shaderStage, const std::vector<Shader::Define> &defines = {});
 
-	virtual ~PostFilter() = default;
+	virtual ~PostFilter();
 
 	const DescriptorHandle &GetDescriptorSet() const { return m_DescriptorSet; }
 
