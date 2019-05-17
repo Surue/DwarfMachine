@@ -101,6 +101,11 @@ MeshManager* Engine::GetModelManager() const
 	return m_SystemContainer.GetModelManager();
 }
 
+PipelineMaterialManager* Engine::GetPipelineMaterialManager() const
+{
+	return m_SystemContainer.GetPipelineMaterialManager();
+}
+
 void Engine::SetApplication(EngineApplication* app)
 {
 	m_App.reset(app);

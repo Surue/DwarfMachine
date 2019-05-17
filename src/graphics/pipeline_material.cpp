@@ -25,13 +25,21 @@ SOFTWARE.
 #include <graphics/pipeline_material.h>
 
 #include <graphics/graphic_manager.h>
+#include "engine/engine.h"
+#include <graphics/pipeline_material_manager.h>
 
 namespace dm
 {
-std::shared_ptr<PipelineMaterial> PipelineMaterial::Create(const Pipeline::Stage& pipelineStage,
+PipelineMaterial* PipelineMaterial::Create(const Pipeline::Stage& pipelineStage,
 	const PipelineGraphicsCreate& pipelineCreate)
 {
-	return std::make_shared<PipelineMaterial>(pipelineStage, pipelineCreate);
+	auto* tmp = Engine::Get()->GetPipelineMaterialManager()->GetMaterial(pipelineStage, pipelineCreate);
+	if(tmp != nullptr)
+	{
+		return tmp;
+	}
+
+	return Engine::Get()->GetPipelineMaterialManager()->AddMaterial(pipelineStage, pipelineCreate);
 }
 
 PipelineMaterial::PipelineMaterial(Pipeline::Stage pipelineStage, PipelineGraphicsCreate pipelineCreate) :

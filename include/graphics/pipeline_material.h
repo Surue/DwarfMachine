@@ -33,7 +33,7 @@ namespace dm
 class PipelineMaterial
 {
 public:
-	static std::shared_ptr<PipelineMaterial> Create(const Pipeline::Stage &pipelineStage, const PipelineGraphicsCreate &pipelineCreate);
+	static PipelineMaterial* Create(const Pipeline::Stage &pipelineStage, const PipelineGraphicsCreate &pipelineCreate);
 
 	PipelineMaterial(Pipeline::Stage pipelineStage, PipelineGraphicsCreate pipelineCreate);
 

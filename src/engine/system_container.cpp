@@ -30,6 +30,7 @@ SOFTWARE.
 #include <system/system_manager.h>
 #include <graphics/mesh_manager.h>
 #include <physic/physic_manager.h>
+#include <graphics/pipeline_material_manager.h>
 
 namespace dm
 {
@@ -46,6 +47,7 @@ SystemContainer::~SystemContainer()
 	delete(m_SystemManager);
 	delete(m_ModelManager);
 	delete(m_PhysicManager);
+	delete(m_PipelineMaterialManager);
 }
 
 void SystemContainer::Init()
@@ -57,6 +59,7 @@ void SystemContainer::Init()
 	m_SystemManager = new SystemManager();
 	m_ModelManager = new MeshManager();
 	m_PhysicManager = new PhysicManager();
+	m_PipelineMaterialManager = new PipelineMaterialManager();
 
 	m_GraphicManager->Init();
 	m_InputManager->Init();
@@ -108,5 +111,10 @@ SystemManager* SystemContainer::GetSystemManager() const
 MeshManager* SystemContainer::GetModelManager() const
 {
 	return m_ModelManager;
+}
+
+PipelineMaterialManager* SystemContainer::GetPipelineMaterialManager() const
+{
+	return m_PipelineMaterialManager;
 }
 }

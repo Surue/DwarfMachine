@@ -67,6 +67,8 @@ public:
 
 	MeshManager* GetModelManager() const;
 
+	PipelineMaterialManager* GetPipelineMaterialManager() const;
+
 	void SetApplication(EngineApplication* app);
 
 	EngineApplication* GetApplication() const { return m_App.get(); }

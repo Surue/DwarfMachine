@@ -39,7 +39,9 @@ DescriptorHandle::DescriptorHandle(const Pipeline& pipeline) :
 	m_PushDescriptor(pipeline.IsPushDescriptor()),
 	m_DescriptorSet(std::make_unique<DescriptorSet>(pipeline)),
 	m_Changed(true)
-{}
+{
+	
+}
 
 void DescriptorHandle::Push(const std::string& descriptorName, UniformHandle& uniformHandle,
 	const std::optional<OffsetSize>& offsetSize)

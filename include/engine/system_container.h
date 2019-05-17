@@ -35,6 +35,7 @@ class SystemManager;
 class MeshManager;
 class EngineApplication;
 class PhysicManager;
+class PipelineMaterialManager;
 
 class SystemContainer
 {
@@ -59,6 +60,8 @@ public:
 	SystemManager* GetSystemManager() const;
 
 	MeshManager* GetModelManager() const;
+
+	PipelineMaterialManager* GetPipelineMaterialManager() const;
 private:
 	GraphicManager* m_GraphicManager;
 	InputManager* m_InputManager;
@@ -67,6 +70,7 @@ private:
 	SystemManager* m_SystemManager;
 	MeshManager* m_ModelManager;
 	PhysicManager* m_PhysicManager;
+	PipelineMaterialManager* m_PipelineMaterialManager;
 };
 }
 

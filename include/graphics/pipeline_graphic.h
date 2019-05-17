@@ -199,6 +199,26 @@ public:
 	const VkFrontFace &GetFrontFace() const { return m_FrontFace; }
 
 	const bool &IsPushDescriptor() const { return m_PushDescriptor; }
+
+	bool operator==(const PipelineGraphicsCreate &other) const
+	{
+		return m_ShaderStages == other.m_ShaderStages &&
+			/*m_VertexInputs == other.m_VertexInputs &&*/
+			/*m_Defines == other.m_Defines &&*/
+			m_Mode == other.m_Mode &&
+			m_Depth == other.m_Depth &&
+			m_Topology == other.m_Topology &&
+			m_PolygonMode == other.m_PolygonMode &&
+			m_CullMode == other.m_CullMode &&
+			m_FrontFace == other.m_FrontFace &&
+			m_PushDescriptor == other.m_PushDescriptor;
+	}
+
+	bool operator!=(const PipelineGraphicsCreate &other) const
+	{
+		return !(*this == other);
+	}
+
 private:
 	std::vector<std::string> m_ShaderStages;
 	std::vector<Shader::VertexInput> m_VertexInputs;
