@@ -28,7 +28,10 @@ SOFTWARE.
 namespace dm
 {
 void DrawableManager::Init() {}
-void DrawableManager::Update() {}
+void DrawableManager::Update()
+{
+	
+}
 
 Drawable* DrawableManager::CreateComponent(const Entity entity)
 {

@@ -39,6 +39,7 @@ RendererMeshes::RendererMeshes(Engine& engine, const Pipeline::Stage& pipelineSt
 	m_Signature.AddComponent(ComponentType::MATERIAL_DEFAULT);
 	m_Signature.AddComponent(ComponentType::MODEL);
 	m_Signature.AddComponent(ComponentType::TRANSFORM);
+	m_Signature.AddComponent(ComponentType::DRAWABLE);
 }
 
 void RendererMeshes::Update()
@@ -64,12 +65,18 @@ void RendererMeshes::Draw(const CommandBuffer& commandBuffer)
 	m_UniformScene.Push("view", camera->viewMatrix);
 	m_UniformScene.Push("cameraPos", camera->pos); //TODO la position de la caméra ne passe pas
 
-	for (const auto &meshRender : m_RegisteredEntities)
+	for (const auto &entity : m_RegisteredEntities)
 	{
 
-		auto entity = EntityHandle(meshRender);
-		const auto material = entity.GetComponent<MaterialDefault>(ComponentType::MATERIAL_DEFAULT);
-		const auto mesh = entity.GetComponent<Model>(ComponentType::MODEL);
+		auto entityHandle = EntityHandle(entity);
+		const auto drawable = entityHandle.GetComponent<Drawable>(ComponentType::DRAWABLE);
+		if(!drawable->isDrawable)
+		{
+			continue;
+		}
+
+		const auto material = entityHandle.GetComponent<MaterialDefault>(ComponentType::MATERIAL_DEFAULT);
+		const auto mesh = entityHandle.GetComponent<Model>(ComponentType::MODEL);
 
 		if (material == nullptr || mesh == nullptr)
 		{

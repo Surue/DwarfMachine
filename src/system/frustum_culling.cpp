@@ -29,8 +29,7 @@ SOFTWARE.
 #include <component/camera.h>
 #include <engine/engine.h>
 #include <component/component_manager.h>
-#include "entity/entity_handle.h"
-#include <editor/log.h>
+#include <entity/entity_handle.h>
 
 namespace dm
 {
@@ -39,6 +38,7 @@ FrustumCulling::FrustumCulling() :
 {
 	m_Signature.AddComponent(ComponentType::BOUNDING_SPHERE);
 	m_Signature.AddComponent(ComponentType::TRANSFORM);
+	m_Signature.AddComponent(ComponentType::DRAWABLE);
 }
 
 void FrustumCulling::Update()
@@ -76,6 +76,8 @@ void FrustumCulling::Update()
 		auto entityHandle = EntityHandle(entity);
 		auto boundingSphere = entityHandle.GetComponent<BoundingSphere>(ComponentType::BOUNDING_SPHERE);
 		auto transform = entityHandle.GetComponent<Transform>(ComponentType::TRANSFORM);
+		auto drawable = entityHandle.GetComponent<Drawable>(ComponentType::DRAWABLE);
+		drawable->isDrawable = false;
 
 		const auto cameraToSphere = transform->position - m_CameraForCulling->pos;
 
@@ -114,6 +116,8 @@ void FrustumCulling::Update()
 		{
 			continue;
 		}
+
+		drawable->isDrawable = true;
 	}
 }
 }
