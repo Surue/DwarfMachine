@@ -22,51 +22,23 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#ifndef CAMERA_H
-#define CAMERA_H
+#ifndef FRUSTUM_CULLING_H
+#define FRUSTUM_CULLING_H
+#include "system.h"
 
-#include <component/component.h>
-
-#include <glm/mat4x4.hpp>
-
-namespace dm {
-struct Camera final : ComponentBase
+namespace dm
 {
-	glm::mat4x4 proj{};
-	glm::mat4x4 viewMatrix{};
-	float yaw = 90;
-	float pitch = 0;
-	glm::vec3 front = glm::vec3(0.0f, 0.0f, -1.0f);
-	glm::vec3 pos = glm::vec3(0.0f, 0.0f, -10.0f);
-	glm::vec3 up = glm::vec3(0.0f, -1.0f, 0.0f);
-	glm::vec3 right = glm::vec3(1.0f, 0.0f, 0.0f);
+struct Camera;
 
-	bool isMainCamera = false;
-	bool isCullingCamera = false;
-};
-
-struct Transform;
-class GraphicManager;
-class CameraManager final : public ComponentBaseManager<Camera>
+class FrustumCulling : public System
 {
 public:
-	CameraManager();
-
-	void Init() override;
+	FrustumCulling();
 
 	void Update() override;
-
-	Camera* CreateComponent(Entity entity) override;
-
-	Camera* AddComponent(Entity entity, Camera& componentBase) override;
-
-	void DestroyComponent(Entity entity) override;
-
-	void OnDrawInspector(Entity entity) override;
-
-	void OnEntityResize(int newSize) override;
 private:
-	GraphicManager* m_GraphicManager;
+	Camera* m_CameraForCulling;
 };
 }
+
 #endif

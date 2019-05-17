@@ -39,6 +39,8 @@ SOFTWARE.
 #include <utility>
 #include "physic/bounding_sphere.h"
 
+#include <thread>
+
 TEST(Models, Cube)
 {
 	dm::EngineSettings settings;
@@ -59,7 +61,7 @@ TEST(Models, Cube)
 	dm::Camera cameraInfo;
 	cameraInfo.componentType = ComponentType::CAMERA;
 	cameraInfo.isMainCamera = true;
-	cameraInfo.viewMatrix = glm::lookAt(cameraInfo.cameraPos, cameraInfo.cameraPos + cameraInfo.cameraFront, cameraInfo.cameraUp);
+	cameraInfo.viewMatrix = glm::lookAt(cameraInfo.pos, cameraInfo.pos + cameraInfo.front, cameraInfo.up);
 	cameraInfo.proj = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
 
 	auto camera = entity.AddComponent<dm::Camera>(cameraInfo);
@@ -202,7 +204,8 @@ TEST(Models, FrustumCulling)
 	dm::Camera cameraInfo;
 	cameraInfo.componentType = ComponentType::CAMERA;
 	cameraInfo.isMainCamera = true;
-	cameraInfo.viewMatrix = glm::lookAt(cameraInfo.cameraPos, cameraInfo.cameraPos + cameraInfo.cameraFront, cameraInfo.cameraUp);
+	cameraInfo.isCullingCamera = true;
+	cameraInfo.viewMatrix = glm::lookAt(cameraInfo.pos, cameraInfo.pos + cameraInfo.front, cameraInfo.up);
 	cameraInfo.proj = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
 
 	auto camera = entity.AddComponent<dm::Camera>(cameraInfo);
@@ -210,15 +213,15 @@ TEST(Models, FrustumCulling)
 	std::shared_ptr<dm::GizmoType> gizmoType = dm::GizmoType::Create(dm::Engine::Get()->GetModelManager()->GetModel("ModelSphere"), 1, dm::Color::White);
 	
 	//Cube
-	float maxCube = 20;
+	float maxCube = 5;
 
 	dm::MaterialDefault material;
 	material.componentType = ComponentType::MATERIAL_DEFAULT;
 	material.color = dm::Color(100, 200, 0, 1);
 
-	for(int i = 0; i < maxCube; i++)
+	for(size_t i = 0; i < maxCube; i++)
 	{
-		for(int j = 0; j < maxCube; j++)
+		for(size_t j = 0; j < maxCube; j++)
 		{
 			glm::vec3 pos = glm::vec3(i - maxCube / 2.0f + i * 1.0f, 0, j - maxCube / 2.0f + j * 1.0f);
 			CreateCube(pos, entityManager, editor, gizmoType, std::move(material));		
@@ -233,4 +236,50 @@ TEST(Models, FrustumCulling)
 	{
 		std::cerr << e.what() << "\n";
 	}
+}
+
+void Test()
+{
+	//long long time = 0;
+
+	//int a = 0;
+	//for (int i = 0; i < 100000; i++) {
+
+	//	std::chrono::high_resolution_clock::time_point before = std::chrono::high_resolution_clock::now();
+	//	a += sqrt(i);
+	//	std::chrono::high_resolution_clock::time_point after = std::chrono::high_resolution_clock::now();
+
+	//	time += std::chrono::duration_cast<std::chrono::duration<long long, std::chrono::nanoseconds>>(after - before).count();
+	//}
+
+	//time /= 100000;
+
+	//std::cout << time << "\n";
+}
+
+void Start()
+{
+	/*float time = 0;
+	for (int i = 0; i < 100000; i++) {
+		std::thread myThread(Test);
+
+		std::chrono::high_resolution_clock::time_point before = std::chrono::high_resolution_clock::now();
+		myThread.join();
+		std::chrono::high_resolution_clock::time_point after = std::chrono::high_resolution_clock::now();
+
+		time += std::chrono::duration_cast<std::chrono::duration<float, std::milli>>(after - before).count() / 1000.0f;
+	}
+
+	time /= 100000;
+
+	std::cout << time << "\n";*/
+
+	Test();
+}
+
+TEST(Models, thread)
+{
+	Start();
+
+	system("pause");
 }

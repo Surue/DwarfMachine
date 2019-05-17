@@ -206,27 +206,27 @@ void Editor::MoveEditorCamera()
 		cameraSpeed *= 2;
 
 	if (inputManager->IsKeyHeld(KeyCode::LEFT) || inputManager->IsKeyHeld(KeyCode::A))
-		camera->cameraPos -= glm::normalize(glm::cross(camera->cameraFront, camera->cameraUp)) * cameraSpeed;
+		camera->pos -= camera->right * cameraSpeed;
 
 	if (inputManager->IsKeyHeld(KeyCode::RIGHT) || inputManager->IsKeyHeld(KeyCode::D))
-		camera->cameraPos += glm::normalize(glm::cross(camera->cameraFront, camera->cameraUp)) * cameraSpeed;
+		camera->pos += camera->right * cameraSpeed;
 
 	if (inputManager->IsKeyHeld(KeyCode::DOWN) || inputManager->IsKeyHeld(KeyCode::S))
-		camera->cameraPos -= cameraSpeed * camera->cameraFront;
+		camera->pos -= cameraSpeed * camera->front;
 
 	if (inputManager->IsKeyHeld(KeyCode::UP) || inputManager->IsKeyHeld(KeyCode::W))
-		camera->cameraPos += cameraSpeed * camera->cameraFront;
+		camera->pos += cameraSpeed * camera->front;
 
 	if (inputManager->scrollY > 0.1f)
 	{
-		camera->cameraPos += 10 * cameraSpeed * camera->cameraFront;
+		camera->pos += 10 * cameraSpeed * camera->front;
 	}
 	else if (inputManager->scrollY < -0.1f)
 	{
-		camera->cameraPos -= 10 * cameraSpeed * camera->cameraFront;
+		camera->pos -= 10 * cameraSpeed * camera->front;
 	}
 
-	Vec2i mousePos = inputManager->GetMousePosition();
+	const auto mousePos = inputManager->GetMousePosition();
 	static Vec2i lastPos;
 
 	if (inputManager->IsButtonDown(ButtonCode::MIDDLE))
@@ -241,8 +241,8 @@ void Editor::MoveEditorCamera()
 
 	if (inputManager->IsButtonHeld(ButtonCode::MIDDLE))
 	{
-		camera->cameraPos.x += offset.x;
-		camera->cameraPos.y -= offset.y;
+		camera->pos.x += offset.x;
+		camera->pos.y -= offset.y;
 	}
 
 	if (inputManager->IsButtonHeld(ButtonCode::RIGHT)) {
@@ -260,7 +260,11 @@ void Editor::MoveEditorCamera()
 	front.x = cos(glm::radians(camera->yaw)) * cos(glm::radians(camera->pitch));
 	front.y = sin(glm::radians(camera->pitch));
 	front.z = sin(glm::radians(camera->yaw)) * cos(glm::radians(camera->pitch));
-	camera->cameraFront = glm::normalize(front);
-	camera->viewMatrix = glm::lookAt(camera->cameraPos, camera->cameraPos + camera->cameraFront, camera->cameraUp);
+	camera->front = glm::normalize(front);
+	camera->viewMatrix = glm::lookAt(camera->pos, camera->pos + camera->front, camera->up);
+
+	camera->right = glm::normalize(glm::cross(camera->front, glm::vec3(0, -1, 0)));
+	
+	camera->up = glm::normalize(glm::cross(camera->right, camera->front));
 }
 }

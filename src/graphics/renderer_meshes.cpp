@@ -62,7 +62,7 @@ void RendererMeshes::Draw(const CommandBuffer& commandBuffer)
 	auto camera = GraphicManager::Get()->GetCamera();
 	m_UniformScene.Push("projection", camera->proj);
 	m_UniformScene.Push("view", camera->viewMatrix);
-	m_UniformScene.Push("cameraPos", camera->cameraPos); //TODO la position de la caméra ne passe pas
+	m_UniformScene.Push("cameraPos", camera->pos); //TODO la position de la caméra ne passe pas
 
 	for (const auto &meshRender : m_RegisteredEntities)
 	{

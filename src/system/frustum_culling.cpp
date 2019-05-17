@@ -1,0 +1,118 @@
+/*
+MIT License
+
+Copyright (c) 2019 Nicolas Schneider
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
+
+#include <system/frustum_culling.h>
+#include <glm/vec3.hpp>
+#include <glm/glm.hpp>
+#include <glm/gtx/rotate_vector.hpp>
+#include <component/camera.h>
+#include <engine/engine.h>
+#include <component/component_manager.h>
+#include "entity/entity_handle.h"
+
+namespace dm
+{
+FrustumCulling::FrustumCulling() :
+	m_CameraForCulling(nullptr)
+{
+	m_Signature.AddComponent(ComponentType::BOUNDING_SPHERE);
+	m_Signature.AddComponent(ComponentType::TRANSFORM);
+}
+
+void FrustumCulling::Update()
+{
+	if(m_CameraForCulling == nullptr){
+		auto cameras = Engine::Get()->GetComponentManager()->GetCameraManager()->GetComponents();
+
+		for (Camera& camera : cameras)
+		{
+			if(camera.isCullingCamera)
+			{
+				m_CameraForCulling = &camera;
+				break;
+			}
+		}
+
+		return;
+	}
+
+	//Compute camera planes
+	const auto aspect = static_cast<float>(800) / static_cast<float>(600);
+
+	const auto leftDir = glm::normalize(glm::rotate(m_CameraForCulling->front, glm::radians(45.0f) / 2.0f * aspect, m_CameraForCulling->up));
+	const auto leftNormal = glm::normalize(glm::cross(leftDir, m_CameraForCulling->up));
+
+	const auto rightDir = glm::normalize(glm::rotate(m_CameraForCulling->front, -glm::radians(45.0f) / 2.0f * aspect, m_CameraForCulling->up));
+	const auto rightNormal = glm::normalize(-glm::cross(rightDir, m_CameraForCulling->up));
+
+	const auto upDir = glm::normalize(glm::rotate(m_CameraForCulling->front, -glm::radians(45.0f) / 2.0f, m_CameraForCulling->right));
+	const auto upNormal = glm::normalize(glm::cross(upDir, m_CameraForCulling->right));
+
+	const auto downDir = glm::normalize(glm::rotate(m_CameraForCulling->front, glm::radians(45.0f) / 2.0f, m_CameraForCulling->right));
+	const auto downNormal = glm::normalize(-glm::cross(downDir, m_CameraForCulling->right));
+
+	for (auto entity : m_RegisteredEntities)
+	{
+		auto entityHandle = EntityHandle(entity);
+		auto boundingSphere = entityHandle.GetComponent<BoundingSphere>(ComponentType::BOUNDING_SPHERE);
+		auto transform = entityHandle.GetComponent<Transform>(ComponentType::TRANSFORM);
+
+		const auto cameraToSphere = transform->position - m_CameraForCulling->pos;
+
+		//near culling
+		if (glm::dot(cameraToSphere, m_CameraForCulling->front) < 0.1f + boundingSphere->m_Radius)
+		{
+			continue;
+		}
+		//far culling
+		if (glm::dot(cameraToSphere, m_CameraForCulling->front) > 100 - boundingSphere->m_Radius)
+		{
+			continue;
+		}
+		//left culling
+		if (glm::dot(cameraToSphere, leftNormal) < boundingSphere->m_Radius)
+		{
+			continue;
+		}
+
+		//right culling
+		if (glm::dot(cameraToSphere, rightNormal) < boundingSphere->m_Radius)
+		{
+			continue;
+		}
+
+		//up culling
+		if (glm::dot(cameraToSphere, upNormal) > -boundingSphere->m_Radius)
+		{
+			continue;
+		}
+
+		//down culling
+		if (glm::dot(cameraToSphere, downNormal) > -boundingSphere->m_Radius)
+		{
+			continue;
+		}
+	}
+}
+}

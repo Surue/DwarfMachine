@@ -46,9 +46,13 @@ Camera* CameraManager::CreateComponent(const Entity entity)
 {
 	auto c = Camera();
 	c.componentType = ComponentType::CAMERA;
-	c.viewMatrix = glm::lookAt(c.cameraPos, c.cameraPos + c.cameraFront, c.cameraUp);
+	c.viewMatrix = glm::lookAt(c.pos, c.pos + c.front, c.up);
 	c.proj = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
 	c.isMainCamera = false;
+
+	c.right = glm::normalize(glm::cross(c.front, glm::vec3(0, -1, 0)));
+
+	c.up = glm::normalize(glm::cross(c.right, c.front));
 	//TODO mettre les valeurs depuis l'exterieur
 
 	m_Components[entity - 1] = c;
@@ -72,13 +76,14 @@ void CameraManager::DestroyComponent(Entity entity)
 {
 }
 
-void CameraManager::OnDrawInspector(Entity entity)
+void CameraManager::OnDrawInspector(const Entity entity)
 {
 	ImGui::Separator();
 	ImGui::TextWrapped("Camera");
-	ImGui::DragFloat3("Position", &m_Components[entity - 1].cameraPos[0], 0.1f);
-	ImGui::DragFloat3("Front", &m_Components[entity - 1].cameraFront[0], 0.1f);
-	ImGui::DragFloat3("Up", &m_Components[entity - 1].cameraUp[0], 0.1f);
+	ImGui::DragFloat3("Position", &m_Components[entity - 1].pos[0], 0.1f);
+	ImGui::DragFloat3("Front", &m_Components[entity - 1].front[0], 0.1f);
+	ImGui::DragFloat3("Up", &m_Components[entity - 1].up[0], 0.1f);
+	ImGui::DragFloat3("Right", &m_Components[entity - 1].right[0], 0.1f);
 	ImGui::DragFloat("Yaw", &m_Components[entity - 1].yaw, 0.1f);
 	ImGui::DragFloat("Pitch", &m_Components[entity - 1].pitch, 0.1f);
 }

@@ -24,11 +24,12 @@ SOFTWARE.
 
 #include <system/system_manager.h>
 #include <graphics/renderer_meshes.h>
+#include <system/frustum_culling.h>
 
 namespace dm {
 SystemManager::SystemManager()
 {
-
+	m_Systems.push_back(std::make_unique<FrustumCulling>());
 }
 
 void SystemManager::Init()
