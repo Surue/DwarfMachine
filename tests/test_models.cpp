@@ -182,6 +182,9 @@ void CreateCube(glm::vec3 pos, dm::EntityManager* entityManager, dm::Editor* edi
 	gizmo.gizmoType = std::move(gizmoType);
 	gizmo.entity = entityHandle;
 	editor->GetGizmoManager()->AddGizmo(gizmo);
+
+	//Drawable
+	cube.CreateComponent<dm::Drawable>(ComponentType::DRAWABLE);
 }
 
 TEST(Models, FrustumCulling)

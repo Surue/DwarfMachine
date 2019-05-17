@@ -84,11 +84,13 @@ void FrustumCulling::Update()
 		{
 			continue;
 		}
+
 		//far culling
 		if (glm::dot(cameraToSphere, m_CameraForCulling->front) > 100 - boundingSphere->m_Radius)
 		{
 			continue;
 		}
+
 		//left culling
 		if (glm::dot(cameraToSphere, leftNormal) < -boundingSphere->m_Radius)
 		{

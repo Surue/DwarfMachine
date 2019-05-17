@@ -22,16 +22,29 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#ifndef COMPONENT_TYPE_H
-#define COMPONENT_TYPE_H
-enum class ComponentType : int {
-	NONE = 0,
-	TRANSFORM = 1 << 0,
-	CAMERA = 1 << 1,
-	MATERIAL_DEFAULT = 1 << 2,
-	MODEL = 1 << 3,
-	BOUNDING_SPHERE = 1 << 4,
-	DRAWABLE = 1 << 5,
-	LENGTH = 7,
-};
-#endif //COMPONENT_TYPE_H
+#include <component/drawable.h>
+#include "imgui.h"
+
+namespace dm
+{
+void DrawableManager::Init() {}
+void DrawableManager::Update() {}
+
+Drawable* DrawableManager::CreateComponent(const Entity entity)
+{
+	Drawable d;
+	d.isDrawable = false;
+
+	m_Components[entity - 1] = d;
+
+	return &m_Components[entity - 1];
+}
+
+void DrawableManager::DestroyComponent(Entity entity) {}
+void DrawableManager::OnDrawInspector(Entity entity)
+{
+	ImGui::Separator();
+	ImGui::TextWrapped("Drawable");
+	ImGui::Text("Is drawable : %d", m_Components[entity - 1].isDrawable);
+}
+}

@@ -22,16 +22,28 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#ifndef COMPONENT_TYPE_H
-#define COMPONENT_TYPE_H
-enum class ComponentType : int {
-	NONE = 0,
-	TRANSFORM = 1 << 0,
-	CAMERA = 1 << 1,
-	MATERIAL_DEFAULT = 1 << 2,
-	MODEL = 1 << 3,
-	BOUNDING_SPHERE = 1 << 4,
-	DRAWABLE = 1 << 5,
-	LENGTH = 7,
+#ifndef DRAWABLE_H
+#define DRAWABLE_H
+
+#include <component/component.h>
+
+namespace dm
+{
+struct Drawable : public ComponentBase
+{
+	bool isDrawable = false;
 };
-#endif //COMPONENT_TYPE_H
+
+class DrawableManager : public ComponentBaseManager<Drawable>
+{
+public:
+	void Init() override;
+	void Update() override;
+	Drawable* CreateComponent(Entity) override;
+	void DestroyComponent(Entity entity) override;
+	void OnDrawInspector(Entity entity) override;
+private:
+};
+}
+
+#endif
