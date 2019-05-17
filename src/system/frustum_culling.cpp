@@ -30,6 +30,7 @@ SOFTWARE.
 #include <engine/engine.h>
 #include <component/component_manager.h>
 #include "entity/entity_handle.h"
+#include <editor/log.h>
 
 namespace dm
 {
@@ -42,19 +43,17 @@ FrustumCulling::FrustumCulling() :
 
 void FrustumCulling::Update()
 {
-	if(m_CameraForCulling == nullptr){
-		auto cameras = Engine::Get()->GetComponentManager()->GetCameraManager()->GetComponents();
+	//Get the rendering camera
+	//TODO optimiser cette partie pour setter une seule fois la caméra
+	auto cameras = Engine::Get()->GetComponentManager()->GetCameraManager()->GetComponents();
 
-		for (Camera& camera : cameras)
+	for (Camera& camera : cameras)
+	{
+		if(camera.isCullingCamera)
 		{
-			if(camera.isCullingCamera)
-			{
-				m_CameraForCulling = &camera;
-				break;
-			}
+			m_CameraForCulling = &camera;
+			break;
 		}
-
-		return;
 	}
 
 	//Compute camera planes
@@ -91,25 +90,25 @@ void FrustumCulling::Update()
 			continue;
 		}
 		//left culling
-		if (glm::dot(cameraToSphere, leftNormal) < boundingSphere->m_Radius)
+		if (glm::dot(cameraToSphere, leftNormal) < -boundingSphere->m_Radius)
 		{
 			continue;
 		}
 
 		//right culling
-		if (glm::dot(cameraToSphere, rightNormal) < boundingSphere->m_Radius)
+		if (glm::dot(cameraToSphere, rightNormal) < -boundingSphere->m_Radius)
 		{
 			continue;
 		}
 
 		//up culling
-		if (glm::dot(cameraToSphere, upNormal) > -boundingSphere->m_Radius)
+		if (glm::dot(cameraToSphere, upNormal) > boundingSphere->m_Radius)
 		{
 			continue;
 		}
 
 		//down culling
-		if (glm::dot(cameraToSphere, downNormal) > -boundingSphere->m_Radius)
+		if (glm::dot(cameraToSphere, downNormal) > boundingSphere->m_Radius)
 		{
 			continue;
 		}

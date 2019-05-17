@@ -213,7 +213,7 @@ TEST(Models, FrustumCulling)
 	std::shared_ptr<dm::GizmoType> gizmoType = dm::GizmoType::Create(dm::Engine::Get()->GetModelManager()->GetModel("ModelSphere"), 1, dm::Color::White);
 	
 	//Cube
-	float maxCube = 5;
+	float maxCube = 0;
 
 	dm::MaterialDefault material;
 	material.componentType = ComponentType::MATERIAL_DEFAULT;
@@ -227,6 +227,8 @@ TEST(Models, FrustumCulling)
 			CreateCube(pos, entityManager, editor, gizmoType, std::move(material));		
 		}
 	}
+
+	CreateCube(glm::vec3(0, 0, 0), entityManager, editor, gizmoType, std::move(material));
 
 	try
 	{
