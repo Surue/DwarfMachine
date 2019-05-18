@@ -26,7 +26,7 @@ SOFTWARE.
 #include <graphics/graphic_manager.h>
 #include "entity/entity_handle.h"
 #include "component/model.h"
-#include <component/material_default.h>
+#include <component/materials/material_default.h>
 
 #include <glm/gtx/string_cast.hpp>
 
@@ -135,12 +135,6 @@ void RendererMeshes::Draw(const CommandBuffer& commandBuffer)
 void RendererMeshes::RegisterEntity(const Entity entity)
 {
 	m_RegisteredEntities.push_back(entity);
-
-	auto entityHandle = EntityHandle(entity);
-	auto material = entityHandle.GetComponent<MaterialDefault>(ComponentType::MATERIAL_DEFAULT);
-
-	//TODO vérifier si c'est possible de mettre ça lors de la création du component
-	//TODO Il faut lier la stage manuellement, il faut trouver une solution
-	material->pipelineMaterial = PipelineMaterial::Create({ 0, 0 }, PipelineGraphicsCreate({ "../Shaders/shader.vert", "../Shaders/shader.frag" }, { ModelComponentManager::GetVertexInput() }, MaterialDefaultManager::GetDefines(*material), PipelineGraphics::Mode::MRT));
+	
 }
 }

@@ -27,7 +27,7 @@ SOFTWARE.
 
 #include <component/transform.h>
 #include <component/camera.h>
-#include "material_default.h"
+#include <component/materials/material_default.h>
 #include "model.h"
 #include "physic/bounding_sphere.h"
 #include "drawable.h"

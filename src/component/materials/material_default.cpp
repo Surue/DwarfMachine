@@ -22,8 +22,9 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#include <component/material_default.h>
+#include <component/materials/material_default.h>
 #include "imgui.h"
+#include "component/model.h"
 
 namespace dm
 {
@@ -40,14 +41,23 @@ void MaterialDefaultManager::Update() {}
 
 MaterialDefault* MaterialDefaultManager::CreateComponent(const Entity entity)
 {
-	auto t = MaterialDefault();
-	t.componentType = ComponentType::MATERIAL_DEFAULT;
+	auto material = MaterialDefault();
+	material.componentType = ComponentType::MATERIAL_DEFAULT;
 
-	t.color = Color(25, 25, 25, 1);
+	material.color = Color(25, 25, 25, 1);
 
-	t.textureDiffuse = nullptr;
+	material.textureDiffuse = nullptr;
 
-	m_Components[entity - 1] = std::move(t);
+	material.pipelineMaterial = PipelineMaterial::Create({ 0, 0 }, 
+		PipelineGraphicsCreate(
+			{ "../Shaders/shader.vert", "../Shaders/shader.frag" }, 
+			{ ModelComponentManager::GetVertexInput() }, 
+			MaterialDefaultManager::GetDefines(material), 
+			PipelineGraphics::Mode::MRT)
+	);
+
+	m_Components[entity - 1] = std::move(material);
+
 
 	return &m_Components[entity - 1];
 }
@@ -111,5 +121,18 @@ void MaterialDefaultManager::OnDrawInspector(const Entity entity)
 	ImGui::Separator();
 	ImGui::TextWrapped("DefaultMaterial");
 	ImGui::Text(m_Components[entity - 1].pipelineMaterial->GetPipeline()->GetShader()->ToString().c_str());
+}
+
+MaterialDefault* MaterialDefaultManager::AddComponent(const Entity entity, MaterialDefault& component)
+{
+	component.pipelineMaterial = PipelineMaterial::Create({ 0, 0 }, //TODO trouver une manière de setter ça de manière automatique
+		PipelineGraphicsCreate(
+			{ "../Shaders/shader.vert", "../Shaders/shader.frag" },
+			{ ModelComponentManager::GetVertexInput() },
+			MaterialDefaultManager::GetDefines(component),
+			PipelineGraphics::Mode::MRT)
+	);
+	m_Components[entity - 1] = std::move(component);
+	return &m_Components[entity - 1];
 }
 }

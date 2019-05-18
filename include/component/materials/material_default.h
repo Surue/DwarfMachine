@@ -25,7 +25,7 @@ SOFTWARE.
 #ifndef MATERIAL_DEFAULT_H
 #define MATERIAL_DEFAULT_H
 
-#include <component/material.h>
+#include <component/materials/material.h>
 #include <engine/color.h>
 #include <graphics/buffers/uniform_handle.h>
 #include <graphics/descriptor_handle.h>
@@ -76,6 +76,8 @@ public:
 	MaterialDefault& Get(const Entity entity);
 
 	void OnDrawInspector(Entity entity) override;
+
+	MaterialDefault* AddComponent(const Entity entity, MaterialDefault& component) override;
 private:
 };
 }

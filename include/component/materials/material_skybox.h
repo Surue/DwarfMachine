@@ -22,17 +22,45 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#ifndef MATERIAL_H
-#define MATERIAL_H
-#include "component.h"
-#include "graphics/pipeline_material.h"
+#ifndef MATERIAL_SKYBOX_H
+#define MATERIAL_SKYBOX_H
+
+#include <component/materials/material.h>
+#include <graphics/image_cube.h>
+#include <engine/color.h>
+#include <glm/vec2.hpp>
+#include <glm/detail/type_mat4x4.hpp>
+#include <graphics/buffers/uniform_handle.h>
+#include<graphics/descriptor_handle.h>
 
 namespace dm
 {
-struct Material : ComponentBase
+struct MaterialSkybox : public Material
 {
-	PipelineMaterial* pipelineMaterial = nullptr;
+	std::shared_ptr<ImageCube> image;
+	Color color;
+	float blend = 1;
+	Color fogColor = Color(0.1f, 0.1f, 0.1f, 1.0f);
+	glm::vec2 fogLimit = glm::vec2(-10000.0f, 10000.0f);
+
+	DescriptorHandle descriptorSet;
+	UniformHandle uniformObject;
+};
+
+class MaterialSkyboxManager final : public ComponentBaseManager<MaterialSkybox>
+{
+public:
+	void Init() override;
+	void Update() override;
+	MaterialSkybox* CreateComponent(Entity entity) override;
+	void DestroyComponent(Entity entity) override;
+	void OnDrawInspector(Entity entity) override;
+
+	static void PushDescriptor(MaterialSkybox& material);
+
+	static void PushUniform(MaterialSkybox& material, const glm::mat4x4 worldPos);
+private:
 };
 }
 
-#endif MATERIAL_H
+#endif
