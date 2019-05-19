@@ -81,7 +81,7 @@ void MaterialSkyboxManager::PushUniform(MaterialSkybox& material, const glm::mat
 	material.uniformObject.Push("transform", worldPos);
 	material.uniformObject.Push("baseColor", material.color);
 	material.uniformObject.Push("fogColor", material.fogColor);
-	material.uniformObject.Push("figLimits", material.fogLimit); //TODO prendre en compte le scale du transform
-	material.uniformObject.Push("blendColor", material.blend);
+	material.uniformObject.Push("fogLimits", glm::vec2(material.fogLimit.x * 1024, material.fogLimit.y * 1024)); //TODO prendre en compte le scale du transform
+	material.uniformObject.Push("blendFactor", material.blend);
 }
 }

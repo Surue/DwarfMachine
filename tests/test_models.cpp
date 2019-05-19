@@ -40,6 +40,8 @@ SOFTWARE.
 #include "physic/bounding_sphere.h"
 
 #include <thread>
+#include "graphics/image_cube.h"
+#include "component/materials/material_skybox.h"
 
 TEST(Models, Cube)
 {
@@ -187,6 +189,35 @@ void CreateCube(glm::vec3 pos, dm::EntityManager* entityManager, dm::Editor* edi
 	cube.CreateComponent<dm::Drawable>(ComponentType::DRAWABLE);
 }
 
+void CreateSkybox(dm::EntityManager* entityManager)
+{
+	const auto entityHandle = entityManager->CreateEntity();
+	auto skybox = dm::EntityHandle(entityHandle);
+
+	//Transform
+	auto t1 = skybox.CreateComponent<dm::Transform>(ComponentType::TRANSFORM);
+	t1->position = glm::vec3(0.0f);
+	t1->scaling = glm::vec3(1024.0f);
+
+	//Mesh
+	dm::Model mesh;
+	mesh.componentType = ComponentType::MODEL;
+	mesh.model = dm::Engine::Get()->GetModelManager()->GetModel("ModelSphere");
+	skybox.AddComponent<dm::Model>(mesh);
+
+	//Skybox material
+	auto image = dm::ImageCube::Create("ressources/textures/skybox", ".png", VK_FILTER_LINEAR, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE, true, true);
+	auto material = dm::MaterialSkybox();
+	material.image = image;
+	material.componentType = ComponentType::MATERIAL_SKYBOX;
+
+	//Material
+	skybox.AddComponent<dm::MaterialSkybox>(material);
+
+	//Drawable
+	skybox.CreateComponent<dm::Drawable>(ComponentType::DRAWABLE);
+}
+
 TEST(Models, FrustumCulling)
 {
 	dm::EngineSettings settings;
@@ -218,7 +249,10 @@ TEST(Models, FrustumCulling)
 	auto camera = entity.AddComponent<dm::Camera>(cameraInfo);
 
 	std::shared_ptr<dm::GizmoType> gizmoType = dm::GizmoType::Create(dm::Engine::Get()->GetModelManager()->GetModel("ModelSphere"), 1, dm::Color::White);
-	
+
+	//Skybox
+	CreateSkybox(entityManager);
+
 	//Cube
 	float maxCube = 10;
 

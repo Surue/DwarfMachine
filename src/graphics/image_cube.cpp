@@ -157,14 +157,14 @@ void ImageCube::Load()
 	{
 		VkDeviceSize imageSize = m_Width * m_Height * m_Components;
 
-		auto stagingBuffer = Buffer(imageSize, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+		auto stagingBuffer = Buffer(imageSize * 6, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
 
 		void *data;
 		stagingBuffer.MapMemory(&data);
 		std::memcpy(data, m_LoadPixels.get(), stagingBuffer.GetSize());
 		stagingBuffer.UnmapMemory();
 
-		Image::CopyBufferToImage(stagingBuffer.GetBuffer(), m_Image, { m_Width, m_Height, 1 }, 6, 0);
+		Image::CopyBufferToImage(stagingBuffer.GetBuffer(), m_Image, { m_Width, m_Height, 1 }, 6, 0); //ici
 	}
 
 	if (m_Mipmap)
