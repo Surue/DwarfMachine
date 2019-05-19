@@ -22,19 +22,29 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#ifndef COMPONENT_TYPE_H
-#define COMPONENT_TYPE_H
-enum class ComponentType : int {
-	NONE = 0,
-	TRANSFORM = 1 << 0,
-	CAMERA = 1 << 1,
-	MATERIAL_DEFAULT = 1 << 2,
-	MODEL = 1 << 3,
-	BOUNDING_SPHERE = 1 << 4,
-	DRAWABLE = 1 << 5,
-	MATERIAL_SKYBOX = 1 << 6,
-	MESH_RENDERER = 1 << 7,
-	LIGHT = 1 << 8,
-	LENGTH = 10,
+#ifndef LIGHT_H
+#define LIGHT_H
+
+#include <component/component.h>
+#include <engine/color.h>
+
+namespace dm
+{
+struct Light : public ComponentBase
+{
+	Color color;
+	float radius;
 };
-#endif //COMPONENT_TYPE_H
+
+class LightManager : public ComponentBaseManager<Light>
+{
+public:
+	void Init() override;
+	void Update() override;
+	Light* CreateComponent(Entity) override;
+	void DestroyComponent(Entity entity) override;
+	void OnDrawInspector(Entity entity) override;
+};
+}
+
+#endif
