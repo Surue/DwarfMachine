@@ -219,16 +219,16 @@ void CreateSkybox(dm::EntityManager* entityManager)
 	skybox.AddComponent<dm::MaterialSkybox>(material);
 
 	//Drawable
-	skybox.CreateComponent<dm::Drawable>(ComponentType::DRAWABLE);
+	dm::Drawable drawable;
+	drawable.componentType = ComponentType::DRAWABLE;
+	drawable.isDrawable = true;
+	skybox.AddComponent<dm::Drawable>(drawable);
 
 	//MeshRenderer
 	dm::MeshRenderer meshRenderer;
 	meshRenderer.materialType = dm::MeshRenderer::MaterialType::SKYBOX;
 	meshRenderer.componentType = ComponentType::MESH_RENDERER;
 	skybox.AddComponent<dm::MeshRenderer>(meshRenderer);
-
-	//Bounding sphere
-	skybox.AddComponent<dm::BoundingSphere>(dm::BoundingSphereManager::GetBoundingSphere(*mesh.model));
 }
 
 TEST(Models, FrustumCulling)
