@@ -23,6 +23,7 @@ SOFTWARE.
 */
 
 #include <engine/color.h>
+#include <stdexcept>
 
 namespace dm
 {
@@ -42,5 +43,22 @@ bool Color::operator==(const Color& other) const
 bool Color::operator!=(const Color& other) const
 {
 	return !(*this == other);
+}
+
+float &Color::operator[](const uint32_t index)
+{
+	switch(index)
+	{
+	case 0:
+		return r;
+	case 1:
+		return g;
+	case 2:
+		return b;
+	case 3:
+		return a;
+	default:
+		throw std::runtime_error("Color is out of bound");
+	}
 }
 }

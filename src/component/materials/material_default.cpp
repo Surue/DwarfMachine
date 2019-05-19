@@ -119,8 +119,9 @@ MaterialDefault& MaterialDefaultManager::Get(const Entity entity)
 void MaterialDefaultManager::OnDrawInspector(const Entity entity)
 {
 	ImGui::Separator();
-	ImGui::TextWrapped("DefaultMaterial");
-	ImGui::Text(m_Components[entity - 1].pipelineMaterial->GetPipeline()->GetShader()->ToString().c_str());
+	ImGui::TextWrapped("Default Material");
+	ImGui::ColorPicker4("diffuseColor", &m_Components[entity - 1].color[0]);
+	//ImGui::Text(m_Components[entity - 1].pipelineMaterial->GetPipeline()->GetShader()->ToString().c_str());
 }
 
 MaterialDefault* MaterialDefaultManager::AddComponent(const Entity entity, MaterialDefault& component)

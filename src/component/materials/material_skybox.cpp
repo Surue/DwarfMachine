@@ -24,6 +24,7 @@ SOFTWARE.
 
 #include <component/materials/material_skybox.h>
 #include "component/model.h"
+#include "imgui.h"
 
 namespace dm
 {
@@ -88,6 +89,10 @@ void MaterialSkyboxManager::DestroyComponent(Entity entity)
 
 void MaterialSkyboxManager::OnDrawInspector(Entity entity)
 {
+	ImGui::Separator();
+	ImGui::TextWrapped("Skybox Material");
+	//ImGui::ColorPicker4("diffuseColor", &m_Components[entity - 1].color[0]);
+	/*ImGui::Text(m_Components[entity - 1].pipelineMaterial->GetPipeline()->GetShader()->ToString().c_str());*/
 }
 
 void MaterialSkyboxManager::PushDescriptor(MaterialSkybox& material, DescriptorHandle &descriptorSet)

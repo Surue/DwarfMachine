@@ -24,6 +24,7 @@ SOFTWARE.
 
 #ifndef COLOR_H
 #define COLOR_H
+#include <cstdint>
 
 namespace dm
 {
@@ -48,6 +49,8 @@ public:
 	bool operator==(const Color &other) const;
 
 	bool operator!=(const Color &other) const;
+
+	float &operator[](const uint32_t index);
 
 	static const Color White;
 

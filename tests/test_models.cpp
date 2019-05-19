@@ -213,6 +213,7 @@ void CreateSkybox(dm::EntityManager* entityManager)
 	auto image = dm::ImageCube::Create("ressources/textures/skybox", ".png", VK_FILTER_LINEAR, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE, true, true);
 	auto material = dm::MaterialSkybox();
 	material.image = image;
+	material.color = dm::Color::White;
 	material.componentType = ComponentType::MATERIAL_SKYBOX;
 
 	//Material
