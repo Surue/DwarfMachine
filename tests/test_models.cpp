@@ -226,6 +226,9 @@ void CreateSkybox(dm::EntityManager* entityManager)
 	meshRenderer.materialType = dm::MeshRenderer::MaterialType::SKYBOX;
 	meshRenderer.componentType = ComponentType::MESH_RENDERER;
 	skybox.AddComponent<dm::MeshRenderer>(meshRenderer);
+
+	//Bounding sphere
+	skybox.AddComponent<dm::BoundingSphere>(dm::BoundingSphereManager::GetBoundingSphere(*mesh.model));
 }
 
 TEST(Models, FrustumCulling)

@@ -81,7 +81,7 @@ void RendererMeshes::Draw(const CommandBuffer& commandBuffer)
 		const auto drawable = entityHandle.GetComponent<Drawable>(ComponentType::DRAWABLE);
 		if(!drawable->isDrawable)
 		{
-			//continue;
+			continue;
 		}
 
 		const auto meshRenderer = entityHandle.GetComponent<MeshRenderer>(ComponentType::MESH_RENDERER);
