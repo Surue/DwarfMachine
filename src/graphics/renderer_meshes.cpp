@@ -29,6 +29,7 @@ SOFTWARE.
 #include <component/materials/material_default.h>
 
 #include <glm/gtx/string_cast.hpp>
+#include "component/mesh_renderer.h"
 
 namespace dm
 {
@@ -36,7 +37,7 @@ RendererMeshes::RendererMeshes(Engine& engine, const Pipeline::Stage& pipelineSt
 	RenderPipeline(pipelineStage),
 	m_UniformScene(true)
 {
-	m_Signature.AddComponent(ComponentType::MATERIAL_DEFAULT);
+	m_Signature.AddComponent(ComponentType::MESH_RENDERER);
 	m_Signature.AddComponent(ComponentType::MODEL);
 	m_Signature.AddComponent(ComponentType::TRANSFORM);
 	m_Signature.AddComponent(ComponentType::DRAWABLE);
@@ -47,16 +48,29 @@ void RendererMeshes::Update()
 	for (const auto &meshRender : m_RegisteredEntities)
 	{
 		auto entity = EntityHandle(meshRender);
-		const auto material = entity.GetComponent<MaterialDefault>(ComponentType::MATERIAL_DEFAULT);
 		const auto transform = entity.GetComponent<Transform>(ComponentType::TRANSFORM);
+		const auto meshRenderer = entity.GetComponent<MeshRenderer>(ComponentType::MESH_RENDERER);
 
-		MaterialDefaultManager::PushUniform(*material, TransformManager::GetWorldMatrix(*transform));
+		switch(meshRenderer->materialType)
+		{
+		case MeshRenderer::MaterialType::DEFAULT: {
+			const auto material = entity.GetComponent<MaterialDefault>(ComponentType::MATERIAL_DEFAULT);
+			MaterialDefaultManager::PushUniform(*material, TransformManager::GetWorldMatrix(*transform), meshRenderer->uniformObject);
+			}
+			break;
+		case MeshRenderer::MaterialType::SKYBOX: {
+			const auto material = entity.GetComponent<MaterialSkybox>(ComponentType::MATERIAL_SKYBOX);
+			MaterialSkyboxManager::PushUniform(*material, TransformManager::GetWorldMatrix(*transform), meshRenderer->uniformObject);
+			}
+			break;
+		default: ;
+		}
 	}
 }
 
 void RendererMeshes::Draw(const CommandBuffer& commandBuffer)
 {
-	auto camera = GraphicManager::Get()->GetCamera();
+	const auto camera = GraphicManager::Get()->GetCamera();
 	m_UniformScene.Push("projection", camera->proj);
 	m_UniformScene.Push("view", camera->viewMatrix);
 	m_UniformScene.Push("cameraPos", camera->pos); //TODO la position de la caméra ne passe pas
@@ -70,8 +84,24 @@ void RendererMeshes::Draw(const CommandBuffer& commandBuffer)
 			continue;
 		}
 
-		const auto material = entityHandle.GetComponent<MaterialDefault>(ComponentType::MATERIAL_DEFAULT);
+		const auto meshRenderer = entityHandle.GetComponent<MeshRenderer>(ComponentType::MESH_RENDERER);
 		const auto mesh = entityHandle.GetComponent<Model>(ComponentType::MODEL);
+
+		Material* material = nullptr;
+
+		switch (meshRenderer->materialType)
+		{
+		case MeshRenderer::MaterialType::DEFAULT: 
+			material = static_cast<Material*>(entityHandle.GetComponent<MaterialDefault>(ComponentType::MATERIAL_DEFAULT));
+		
+			 break;
+		case MeshRenderer::MaterialType::SKYBOX: 
+			material = static_cast<Material*>(entityHandle.GetComponent<MaterialSkybox>(ComponentType::MATERIAL_SKYBOX));
+		
+			break;
+		default:;
+		}
+
 
 		if (material == nullptr || mesh == nullptr)
 		{
@@ -79,13 +109,13 @@ void RendererMeshes::Draw(const CommandBuffer& commandBuffer)
 			continue;
 		}
 
-		auto meshModel = mesh->model;
+		const auto meshModel = mesh->model;
 		auto materialPipeline = material->pipelineMaterial;
 
 		if (meshModel == nullptr || materialPipeline == nullptr || materialPipeline->GetStage() != GetStage())
 		{
 			std::cout << "Missing model or material pipeline or stage is not the same : \n";
-			if(meshModel == nullptr)
+			/*if(meshModel == nullptr)
 			{
 				std::cout << "	- Missing model\n";
 			}
@@ -98,7 +128,7 @@ void RendererMeshes::Draw(const CommandBuffer& commandBuffer)
 			if (materialPipeline->GetStage() != GetStage())
 			{
 				std::cout << "	- MaterialPipeline->GetStage() != GetStage()\n";
-			}
+			}*/
 			continue;
 		}
 
@@ -112,12 +142,21 @@ void RendererMeshes::Draw(const CommandBuffer& commandBuffer)
 
 		auto &pipeline = *materialPipeline->GetPipeline();
 
-		material->descriptorSet.Push("UboScene", m_UniformScene);
-		material->descriptorSet.Push("UboObject", material->uniformObject);
+		meshRenderer->descriptorSet.Push("UboScene", m_UniformScene);
+		meshRenderer->descriptorSet.Push("UboObject", meshRenderer->uniformObject);
 
-		MaterialDefaultManager::PushDescriptor(*material);
+		switch (meshRenderer->materialType)
+		{
+		case MeshRenderer::MaterialType::DEFAULT:
+			MaterialDefaultManager::PushDescriptor(*entityHandle.GetComponent<MaterialDefault>(ComponentType::MATERIAL_DEFAULT), meshRenderer->descriptorSet);
+			break;
+		case MeshRenderer::MaterialType::SKYBOX:
+			MaterialSkyboxManager::PushDescriptor(*entityHandle.GetComponent<MaterialSkybox>(ComponentType::MATERIAL_SKYBOX), meshRenderer->descriptorSet);
+			break;
+		default:;
+		}
 
-		const auto updateSuccess = material->descriptorSet.Update(pipeline);
+		const auto updateSuccess = meshRenderer->descriptorSet.Update(pipeline);
 
 		
 		if (!updateSuccess)
@@ -126,7 +165,7 @@ void RendererMeshes::Draw(const CommandBuffer& commandBuffer)
 		}
 
 		// Draws the object.
-		material->descriptorSet.BindDescriptor(commandBuffer, pipeline);
+		meshRenderer->descriptorSet.BindDescriptor(commandBuffer, pipeline);
 		if (meshModel->CmdRender(commandBuffer)) {
 		}
 	}

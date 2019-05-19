@@ -96,19 +96,19 @@ std::vector<Shader::Define> MaterialDefaultManager::GetDefines(const MaterialDef
 	return defines;
 }
 
-void MaterialDefaultManager::PushDescriptor(MaterialDefault& material)
+void MaterialDefaultManager::PushDescriptor(MaterialDefault& material, DescriptorHandle &descriptorSet)
 {
-	material.descriptorSet.Push("samplerDiffuse", material.textureDiffuse);
+	descriptorSet.Push("samplerDiffuse", material.textureDiffuse);
 }
 
-void MaterialDefaultManager::PushUniform(MaterialDefault& material, const glm::mat4x4 worldPos)
+void MaterialDefaultManager::PushUniform(MaterialDefault& material, const glm::mat4x4 worldPos, UniformHandle& uniformObject)
 {
-	material.uniformObject.Push("transform", worldPos);
-	material.uniformObject.Push("baseDiffuse", material.color);
-	material.uniformObject.Push("metallic", static_cast<float>(material.metallic));
-	material.uniformObject.Push("roughness", static_cast<float>(material.roughness));
-	material.uniformObject.Push("ignoreFog", material.ignoreFog);
-	material.uniformObject.Push("ignoreLighting", material.ignoreLighting);
+	uniformObject.Push("transform", worldPos);
+	uniformObject.Push("baseDiffuse", material.color);
+	uniformObject.Push("metallic", static_cast<float>(material.metallic));
+	uniformObject.Push("roughness", static_cast<float>(material.roughness));
+	uniformObject.Push("ignoreFog", material.ignoreFog);
+	uniformObject.Push("ignoreLighting", material.ignoreLighting);
 }
 
 MaterialDefault& MaterialDefaultManager::Get(const Entity entity)

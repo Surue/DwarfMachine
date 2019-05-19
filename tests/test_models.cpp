@@ -42,6 +42,7 @@ SOFTWARE.
 #include <thread>
 #include "graphics/image_cube.h"
 #include "component/materials/material_skybox.h"
+#include "component/mesh_renderer.h"
 
 TEST(Models, Cube)
 {
@@ -187,6 +188,9 @@ void CreateCube(glm::vec3 pos, dm::EntityManager* entityManager, dm::Editor* edi
 
 	//Drawable
 	cube.CreateComponent<dm::Drawable>(ComponentType::DRAWABLE);
+
+	//MeshRenderer
+	cube.CreateComponent<dm::MeshRenderer>(ComponentType::MESH_RENDERER);
 }
 
 void CreateSkybox(dm::EntityManager* entityManager)
@@ -216,6 +220,9 @@ void CreateSkybox(dm::EntityManager* entityManager)
 
 	//Drawable
 	skybox.CreateComponent<dm::Drawable>(ComponentType::DRAWABLE);
+
+	//MeshRenderer
+	skybox.CreateComponent<dm::MeshRenderer>(ComponentType::MESH_RENDERER);
 }
 
 TEST(Models, FrustumCulling)
@@ -251,21 +258,21 @@ TEST(Models, FrustumCulling)
 	std::shared_ptr<dm::GizmoType> gizmoType = dm::GizmoType::Create(dm::Engine::Get()->GetModelManager()->GetModel("ModelSphere"), 1, dm::Color::White);
 
 	//Skybox
-	CreateSkybox(entityManager);
+	//CreateSkybox(entityManager);
 
 	//Cube
 	float maxCube = 10;
 
 	dm::MaterialDefault material;
 	material.componentType = ComponentType::MATERIAL_DEFAULT;
-	material.color = dm::Color(100, 200, 0, 1);
+	material.color = dm::Color(0.85, 0.85, 0.85, 1);
 
 	for(size_t i = 0; i < maxCube; i++)
 	{
 		for(size_t j = 0; j < maxCube; j++)
 		{
 			glm::vec3 pos = glm::vec3(i - maxCube / 2.0f + i * 1.0f, 0, j - maxCube / 2.0f + j * 1.0f);
-			CreateCube(pos, entityManager, editor, gizmoType, std::move(material));		
+			CreateCube(pos, entityManager, editor, gizmoType, material);		
 		}
 	}
 

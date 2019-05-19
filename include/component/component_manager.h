@@ -32,6 +32,7 @@ SOFTWARE.
 #include "physic/bounding_sphere.h"
 #include "drawable.h"
 #include "materials/material_skybox.h"
+#include "mesh_renderer.h"
 
 namespace dm {
 class ComponentManagerContainer final
@@ -70,6 +71,7 @@ private:
 	std::unique_ptr<ModelComponentManager> m_MeshManager;
 	std::unique_ptr<BoundingSphereManager> m_BoundingSphereManager;
 	std::unique_ptr<DrawableManager> m_DrawableManager;
+	std::unique_ptr<MeshRendererManager> m_MeshRenderer;
 };
 }
 #endif COMPONENT_MANAGER_H

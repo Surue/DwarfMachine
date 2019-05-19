@@ -71,17 +71,17 @@ void MaterialSkyboxManager::OnDrawInspector(Entity entity)
 {
 }
 
-void MaterialSkyboxManager::PushDescriptor(MaterialSkybox& material)
+void MaterialSkyboxManager::PushDescriptor(MaterialSkybox& material, DescriptorHandle &descriptorSet)
 {
-	material.descriptorSet.Push("samplerColor", material.image);
+	descriptorSet.Push("samplerColor", material.image);
 }
 
-void MaterialSkyboxManager::PushUniform(MaterialSkybox& material, const glm::mat4x4 worldPos)
+void MaterialSkyboxManager::PushUniform(MaterialSkybox& material, const glm::mat4x4 worldPos, UniformHandle& uniformObject)
 {
-	material.uniformObject.Push("transform", worldPos);
-	material.uniformObject.Push("baseColor", material.color);
-	material.uniformObject.Push("fogColor", material.fogColor);
-	material.uniformObject.Push("fogLimits", glm::vec2(material.fogLimit.x * 1024, material.fogLimit.y * 1024)); //TODO prendre en compte le scale du transform
-	material.uniformObject.Push("blendFactor", material.blend);
+	uniformObject.Push("transform", worldPos);
+	uniformObject.Push("baseColor", material.color);
+	uniformObject.Push("fogColor", material.fogColor);
+	uniformObject.Push("fogLimits", glm::vec2(material.fogLimit.x * 1024, material.fogLimit.y * 1024)); //TODO prendre en compte le scale du transform
+	uniformObject.Push("blendFactor", material.blend);
 }
 }

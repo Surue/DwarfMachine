@@ -47,9 +47,6 @@ struct MaterialDefault : public Material
 	bool castsShadows = false;
 	bool ignoreLighting = false;
 	bool ignoreFog = false;
-
-	DescriptorHandle descriptorSet;
-	UniformHandle uniformObject;
 };
 
 class MaterialDefaultManager final : public ComponentBaseManager<MaterialDefault>
@@ -69,9 +66,9 @@ public:
 
 	static std::vector<Shader::Define> GetDefines(const MaterialDefault &component);
 
-	static void PushDescriptor(MaterialDefault& material);
+	static void PushDescriptor(MaterialDefault& material, DescriptorHandle &descriptorSet);
 
-	static void PushUniform(MaterialDefault& material, const glm::mat4x4 worldPos);
+	static void PushUniform(MaterialDefault& material, const glm::mat4x4 worldPos, UniformHandle& uniformObject);
 
 	MaterialDefault& Get(const Entity entity);
 

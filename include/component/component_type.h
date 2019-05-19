@@ -33,6 +33,7 @@ enum class ComponentType : int {
 	BOUNDING_SPHERE = 1 << 4,
 	DRAWABLE = 1 << 5,
 	MATERIAL_SKYBOX = 1 << 6,
+	MESH_RENDERER = 1 << 7,
 	LENGTH = 9,
 };
 #endif //COMPONENT_TYPE_H
