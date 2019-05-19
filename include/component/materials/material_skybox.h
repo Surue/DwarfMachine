@@ -48,9 +48,15 @@ class MaterialSkyboxManager final : public ComponentBaseManager<MaterialSkybox>
 {
 public:
 	void Init() override;
+
 	void Update() override;
+
+	MaterialSkybox* AddComponent(const Entity entity, MaterialSkybox& component) override;
+
 	MaterialSkybox* CreateComponent(Entity entity) override;
+
 	void DestroyComponent(Entity entity) override;
+
 	void OnDrawInspector(Entity entity) override;
 
 	static void PushDescriptor(MaterialSkybox& material, DescriptorHandle &descriptorSet);

@@ -238,7 +238,7 @@ std::optional<Shader::Uniform> Shader::GetUniform(const std::string& name) const
 }
 
 std::optional<Shader::UniformBlock> Shader::GetUniformBlock(const std::string& name) const
-{
+ {
 	auto it = m_UniformBlocks.find(name);
 
 	if (it == m_UniformBlocks.end())

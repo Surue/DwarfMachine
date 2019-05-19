@@ -81,7 +81,7 @@ void RendererMeshes::Draw(const CommandBuffer& commandBuffer)
 		const auto drawable = entityHandle.GetComponent<Drawable>(ComponentType::DRAWABLE);
 		if(!drawable->isDrawable)
 		{
-			continue;
+			//continue;
 		}
 
 		const auto meshRenderer = entityHandle.GetComponent<MeshRenderer>(ComponentType::MESH_RENDERER);
@@ -115,20 +115,16 @@ void RendererMeshes::Draw(const CommandBuffer& commandBuffer)
 		if (meshModel == nullptr || materialPipeline == nullptr || materialPipeline->GetStage() != GetStage())
 		{
 			std::cout << "Missing model or material pipeline or stage is not the same : \n";
-			/*if(meshModel == nullptr)
+			if(meshModel == nullptr)
 			{
 				std::cout << "	- Missing model\n";
-			}
-
-			if (materialPipeline == nullptr)
+			}else if (materialPipeline == nullptr)
 			{
 				std::cout << "	- Missing materialPipeline\n";
-			}
-
-			if (materialPipeline->GetStage() != GetStage())
+			}else 
 			{
 				std::cout << "	- MaterialPipeline->GetStage() != GetStage()\n";
-			}*/
+			}
 			continue;
 		}
 

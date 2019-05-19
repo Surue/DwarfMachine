@@ -35,6 +35,25 @@ void MaterialSkyboxManager::Update()
 {
 }
 
+MaterialSkybox* MaterialSkyboxManager::AddComponent(const Entity entity, MaterialSkybox& component)
+{
+	component.pipelineMaterial = PipelineMaterial::Create({ 0, 0 }, //TODO trouver une manière de setter ça de manière automatique
+		PipelineGraphicsCreate(
+			{ "../Shaders/skybox.vert", "../Shaders/skybox.frag" },
+			{ ModelComponentManager::GetVertexInput() },
+			{},
+			PipelineGraphics::Mode::MRT,
+			PipelineGraphics::Depth::NONE,
+			VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST,
+			VK_POLYGON_MODE_FILL,
+			VK_CULL_MODE_FRONT_BIT)
+	);
+
+	m_Components[entity - 1] = component;
+
+	return &m_Components[entity - 1];
+} 
+
 MaterialSkybox* MaterialSkyboxManager::CreateComponent(Entity entity)
 {
 	auto material = MaterialSkybox();

@@ -132,7 +132,7 @@ MaterialDefault* MaterialDefaultManager::AddComponent(const Entity entity, Mater
 			MaterialDefaultManager::GetDefines(component),
 			PipelineGraphics::Mode::MRT)
 	);
-	m_Components[entity - 1] = std::move(component);
+	m_Components[entity - 1] = component;
 	return &m_Components[entity - 1];
 }
 }

@@ -201,7 +201,7 @@ void CreateSkybox(dm::EntityManager* entityManager)
 	//Transform
 	auto t1 = skybox.CreateComponent<dm::Transform>(ComponentType::TRANSFORM);
 	t1->position = glm::vec3(0.0f);
-	t1->scaling = glm::vec3(1024.0f);
+	t1->scaling = glm::vec3(1000.0f);
 
 	//Mesh
 	dm::Model mesh;
@@ -222,7 +222,10 @@ void CreateSkybox(dm::EntityManager* entityManager)
 	skybox.CreateComponent<dm::Drawable>(ComponentType::DRAWABLE);
 
 	//MeshRenderer
-	skybox.CreateComponent<dm::MeshRenderer>(ComponentType::MESH_RENDERER);
+	dm::MeshRenderer meshRenderer;
+	meshRenderer.materialType = dm::MeshRenderer::MaterialType::SKYBOX;
+	meshRenderer.componentType = ComponentType::MESH_RENDERER;
+	skybox.AddComponent<dm::MeshRenderer>(meshRenderer);
 }
 
 TEST(Models, FrustumCulling)
@@ -248,7 +251,7 @@ TEST(Models, FrustumCulling)
 	cameraInfo.isCullingCamera = true;
 	cameraInfo.viewMatrix = glm::lookAt(cameraInfo.pos, cameraInfo.pos + cameraInfo.front, cameraInfo.up);
 	cameraInfo.fov = 45;
-	cameraInfo.frustumFar = 100;
+	cameraInfo.frustumFar = 1024.0f;
 	cameraInfo.frustumNear = 0.1f;
 	cameraInfo.aspect = 800.0f / 600.0f;
 	cameraInfo.proj = glm::perspective(glm::radians(cameraInfo.fov), cameraInfo.aspect, cameraInfo.frustumNear, cameraInfo.frustumFar);
@@ -258,10 +261,10 @@ TEST(Models, FrustumCulling)
 	std::shared_ptr<dm::GizmoType> gizmoType = dm::GizmoType::Create(dm::Engine::Get()->GetModelManager()->GetModel("ModelSphere"), 1, dm::Color::White);
 
 	//Skybox
-	//CreateSkybox(entityManager);
+	CreateSkybox(entityManager);
 
 	//Cube
-	float maxCube = 10;
+	float maxCube = 1;
 
 	dm::MaterialDefault material;
 	material.componentType = ComponentType::MATERIAL_DEFAULT;
