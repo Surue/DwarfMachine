@@ -27,7 +27,7 @@ SOFTWARE.
 
 #include <graphics/render_pipeline.h>
 #include <graphics/descriptor_handle.h>
-#include <graphics/pipeline_graphic.h>
+#include <graphics/pipelines/pipeline_graphic.h>
 
 namespace dm
 {

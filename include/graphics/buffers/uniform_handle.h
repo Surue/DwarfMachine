@@ -26,7 +26,7 @@ SOFTWARE.
 #define UNIFORM_HANDLE_H
 
 #include <graphics/buffers/uniform_buffer.h>
-#include <graphics/shader.h>
+#include <graphics/pipelines/shader.h>
 
 namespace dm
 {

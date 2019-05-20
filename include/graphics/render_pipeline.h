@@ -26,7 +26,7 @@ SOFTWARE.
 #define RENDER_PIPELINE_H
 
 #include <graphics/command_buffer.h>
-#include <graphics/pipeline.h>
+#include <graphics/pipelines/pipeline.h>
 #include <entity/entity.h>
 
 namespace dm

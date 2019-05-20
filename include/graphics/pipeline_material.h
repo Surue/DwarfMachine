@@ -25,7 +25,7 @@ SOFTWARE.
 #ifndef PIPELINE_MATERIAL_H
 #define PIPELINE_MATERIAL_H
 
-#include <graphics/pipeline_graphic.h>
+#include <graphics/pipelines/pipeline_graphic.h>
 #include <graphics/render_stage.h>
 
 namespace dm

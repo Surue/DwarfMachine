@@ -26,8 +26,8 @@ SOFTWARE.
 #define PIPELINE_H
 #include <utility>
 #include <cstdint>
-#include "command_buffer.h"
-#include "shader.h"
+#include <graphics/command_buffer.h>
+#include <graphics/pipelines/shader.h>
 
 namespace dm
 {

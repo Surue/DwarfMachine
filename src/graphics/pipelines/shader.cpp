@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#include <graphics/shader.h>
+#include <graphics/pipelines/shader.h>
 #include <graphics/buffers/uniform_buffer.h>
 #include <graphics/buffers/storage_buffer.h>
 #include <graphics/image_2d.h>

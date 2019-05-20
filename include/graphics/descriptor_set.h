@@ -26,7 +26,7 @@ SOFTWARE.
 #define DESCRIPTOR_SET_H
 
 #include <graphics/command_buffer.h>
-#include <graphics/pipeline.h>
+#include <graphics/pipelines/pipeline.h>
 
 namespace dm
 {

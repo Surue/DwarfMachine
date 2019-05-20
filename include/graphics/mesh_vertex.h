@@ -25,7 +25,7 @@ SOFTWARE.
 #ifndef MODEL_VERTEX_H
 #define MODEL_VERTEX_H
 #include <engine/vector.h>
-#include <graphics/shader.h>
+#include <graphics/pipelines/shader.h>
 #include <glm/vec3.hpp>
 #include <glm/vec2.hpp>
 

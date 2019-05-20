@@ -25,7 +25,7 @@ SOFTWARE.
 #ifndef DESCRIPTOR_HANDLE_H
 #define DESCRIPTOR_HANDLE_H
 #include <graphics/descriptor.h>
-#include <graphics/shader.h>
+#include <graphics/pipelines/shader.h>
 #include <graphics/descriptor_set.h>
 
 #include <iostream>

@@ -26,7 +26,7 @@ SOFTWARE.
 #define EDITOR_IMGUI_H
 
 #include <graphics/render_pipeline.h>
-#include <graphics/pipeline_graphic.h>
+#include <graphics/pipelines/pipeline_graphic.h>
 
 namespace dm
 {

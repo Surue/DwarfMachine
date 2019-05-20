@@ -26,7 +26,7 @@ SOFTWARE.
 #define MESH_H
 #include <component/component.h>
 #include "graphics/Mesh.h"
-#include "graphics/shader.h"
+#include <graphics/pipelines/shader.h>
 #include "graphics/mesh_vertex.h"
 
 namespace dm

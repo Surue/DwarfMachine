@@ -25,7 +25,7 @@ SOFTWARE.
 #ifndef RENDERER_GIZMO_H
 #define RENDERER_GIZMO_H
 #include <graphics/render_pipeline.h>
-#include <graphics/pipeline_graphic.h>
+#include <graphics/pipelines/pipeline_graphic.h>
 #include <graphics/buffers/uniform_handle.h>
 
 namespace dm

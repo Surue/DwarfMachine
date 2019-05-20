@@ -26,7 +26,7 @@ SOFTWARE.
 #define STORAGE_HANDLE_H
 
 #include <graphics/buffers/storage_buffer.h>
-#include <graphics/shader.h>
+#include <graphics/pipelines/shader.h>
 
 namespace dm
 {

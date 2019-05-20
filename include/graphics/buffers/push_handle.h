@@ -25,7 +25,7 @@ SOFTWARE.
 #ifndef PUSH_HANDLE_H
 #define PUSH_HANDLE_H
 
-#include <graphics/pipeline.h>
+#include <graphics/pipelines/pipeline.h>
 
 namespace dm
 {

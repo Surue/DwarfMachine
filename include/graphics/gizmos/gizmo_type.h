@@ -24,12 +24,12 @@ SOFTWARE.
 
 #ifndef GIZMO_TYPE
 #define GIZMO_TYPE
-#include "graphics/shader.h"
+#include <graphics/pipelines/shader.h>
 #include <glm/detail/type_mat4x4.hpp>
 #include "engine/color.h"
 #include <graphics/Mesh.h>
 #include <graphics/buffers/uniform_handle.h>
-#include <graphics/pipeline_graphic.h>
+#include <graphics/pipelines/pipeline_graphic.h>
 #include <graphics/descriptor_handle.h>
 #include <graphics/buffers/instance_buffer.h>
 
