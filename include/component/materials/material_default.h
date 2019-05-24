@@ -36,7 +36,7 @@ namespace dm
 
 struct MaterialDefault : public Material
 {
-	Color color;
+	Color color = Color::White;
 	std::shared_ptr<Image2d> textureDiffuse;
 
 	float metallic = 0;

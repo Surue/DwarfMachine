@@ -38,7 +38,7 @@ namespace dm
 struct MaterialSkybox : public Material
 {
 	std::shared_ptr<ImageCube> image;
-	Color color;
+	Color color = Color::White;
 	float blend = 1;
 	Color fogColor = Color(0.1f, 0.1f, 0.1f, 1.0f);
 	glm::vec2 fogLimit = glm::vec2(-10000.0f, 10000.0f);

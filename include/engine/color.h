@@ -31,6 +31,12 @@ namespace dm
 class Color
 {
 public:
+	explicit Color() :
+		Color(1, 1, 1, 1)
+	{
+		
+	}
+
 	/**
 	 * \brief 
 	 * \param red 

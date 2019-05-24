@@ -34,7 +34,7 @@ class Gizmo
 public:
 	std::shared_ptr<GizmoType> gizmoType;
 	Transform* transform;
-	Color color;
+	Color color = Color::White;
 
 	Entity entity;
 
