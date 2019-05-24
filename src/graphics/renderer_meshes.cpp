@@ -33,7 +33,7 @@ SOFTWARE.
 
 namespace dm
 {
-RendererMeshes::RendererMeshes(Engine& engine, const Pipeline::Stage& pipelineStage) : 
+RendererMeshes::RendererMeshes(const Pipeline::Stage& pipelineStage) : 
 	RenderPipeline(pipelineStage),
 	m_UniformScene(true)
 {

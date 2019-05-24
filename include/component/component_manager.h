@@ -60,6 +60,8 @@ public:
 
 	TransformManager* GetTransformManager() const { return m_TransformManager.get(); }
 
+	LightManager* GetLightManager() const { return m_LightManager.get(); }
+
 	void DrawOnInspector(Entity entity);
 
 	void OnEntityResize(int newSize);

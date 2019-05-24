@@ -39,8 +39,6 @@ public:
 		m_Enabled(true)
 	{}
 
-	virtual ~RenderPipeline() = default;
-
 	virtual void Update() = 0;
 
 	virtual void Draw(const CommandBuffer &commandBuffer) = 0;

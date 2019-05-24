@@ -34,7 +34,9 @@ namespace dm
 class RendererMeshes : public RenderPipeline
 {
 public:
-	explicit RendererMeshes(Engine &engine, const Pipeline::Stage &pipelineStage);
+	explicit RendererMeshes(const Pipeline::Stage &pipelineStage);
+
+	~RendererMeshes() = default;
 
 	void Update() override;
 
