@@ -90,7 +90,7 @@ GroupSources(include/physic)
 GroupSources(include/system)
 GroupSources(include/utility)
 
-file(GLOB_RECURSE SHADERS_SRC shaders/*.vert shaders/*.frag)
+file(GLOB_RECURSE SHADERS_SRC shaders/*.vert shaders/*.frag shaders/*.comp)
 source_group("Shaders" FILES ${SHADERS_SRC})
 
 List(APPEND DWARF_MACHINE_SRC  ${DWARF_MACHINE_AUDIO_SRC} ${DWARF_MACHINE_COMPONENT_SRC} ${DWARF_MACHINE_EDITOR_SRC} ${DWARF_MACHINE_ENGINE_SRC} ${DWARF_MACHINE_ENTITY_SRC} 
