@@ -74,12 +74,12 @@ private:
 	std::shared_ptr<ImageCube> m_Skybox;
 
 	//Irradiance
-	std::future<std::unique_ptr<Image2d>> m_FutureIrradiance;
-	std::optional<std::unique_ptr<Image2d>> m_CurrentIrradiance;
+	std::future<std::unique_ptr<ImageCube>> m_FutureIrradiance;
+	std::optional<std::unique_ptr<ImageCube>> m_CurrentIrradiance;
 
 	//Prefiltered
-	std::future<std::unique_ptr<Image2d>> m_FuturePrefiltered;
-	std::optional<std::unique_ptr<Image2d>> m_CurrentPrefiltered;
+	std::future<std::unique_ptr<ImageCube>> m_FuturePrefiltered;
+	std::optional<std::unique_ptr<ImageCube>> m_CurrentPrefiltered;
 };
 }
 

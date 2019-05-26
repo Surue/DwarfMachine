@@ -24,6 +24,7 @@ SOFTWARE.
 
 #include <component/component_manager.h>
 #include "entity/entity_handle.h"
+#include <engine/engine.h>
 
 namespace dm
 {
@@ -184,6 +185,8 @@ void ComponentManagerContainer::DestroyComponent(const Entity entity, const Comp
 void ComponentManagerContainer::DrawOnInspector(Entity entity)
 {
 	auto entityHandle = EntityHandle(entity);
+/*
+	std::cout << Engine::Get()->GetEntityManager()->GetEntityMask(entity).mask << "\n";*/
 
 	if(entityHandle.HasComponent(ComponentType::TRANSFORM))
 	{

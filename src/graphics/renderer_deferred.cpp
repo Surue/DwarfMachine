@@ -28,6 +28,7 @@ SOFTWARE.
 #include "engine/engine.h"
 #include <component/component_manager.h>
 #include "graphics/pipelines/pipeline_compute.h"
+#include "entity/entity_handle.h"
 
 namespace dm
 {
@@ -38,7 +39,30 @@ RendererDeferred::RendererDeferred(const Pipeline::Stage &pipelineStage) :
 	m_Pipeline(pipelineStage, { "Shaders/deferred.vert", "Shaders/deferred.frag" }, {}, GetDefines(), PipelineGraphics::Mode::POLYGON, PipelineGraphics::Depth::NONE)
 {
 	
-	//TODO créer un worker pour le brdf
+	//TODO créer un worker pour le brdf et tout ce qui suit
+	m_CurrentBRDF = ComputeBRDF(512);
+
+	auto entities = Engine::Get()->GetEntityManager()->GetEntities();
+
+	for (auto entity : entities)
+	{
+		if (entity == INVALID_ENTITY)
+		{
+			break;
+		}
+
+		auto entityHandle = EntityHandle(entity);
+
+		if(entityHandle.HasComponent(ComponentType::MATERIAL_SKYBOX))
+		{
+			m_Skybox = entityHandle.GetComponent<MaterialSkybox>(ComponentType::MATERIAL_SKYBOX)->image;
+
+			m_CurrentIrradiance = ComputeIrradiance(m_Skybox, 64);
+			m_CurrentPrefiltered = ComputePrefiltered(m_Skybox, 64);
+
+			break;
+		}
+	}
 }
 void RendererDeferred::Update() {}
 
@@ -46,33 +70,35 @@ void RendererDeferred::Draw(const CommandBuffer& commandBuffer)
 {
 	auto camera = GraphicManager::Get()->GetCamera();
 
-	MaterialSkybox* materialSkybox = nullptr;
-
-	auto skybox = (materialSkybox == nullptr) ? nullptr : materialSkybox->image;
-
-	if(m_Skybox != skybox)
-	{
-		m_Skybox = skybox;
-		//TODO m_FutureIrradiance
-		//TODO m_FuturePrefiltered
-	}
-
 	std::vector<DeferredLight> deferredLights(MAX_LIGHTS);
 	uint32_t lightCount = 0;
 
-	auto sceneLights = Engine::Get()->GetComponentManager()->GetLightManager()->GetComponents();
-
-	for(const auto &light : sceneLights)
+	for(auto entity : Engine::Get()->GetEntityManager()->GetEntities())
 	{
-		//TODO enregistré les lights dans le système pour un gain d'optimisation et les trier dans l'update pour ne pas afficher celle qui sont les plus loins
-		DeferredLight deferredLight = {};
-		deferredLight.color = light.color;
-		deferredLight.radius = light.radius;
-		lightCount++;
+		auto entityHandle = EntityHandle(entity);
 
-		if(lightCount >= MAX_LIGHTS)
+		if (entity == INVALID_ENTITY)
 		{
 			break;
+		}
+
+		if (entityHandle.HasComponent(ComponentType::LIGHT))
+		{
+			auto light = entityHandle.GetComponent<Light>(ComponentType::LIGHT);
+			auto transform = entityHandle.GetComponent<Transform>(ComponentType::TRANSFORM);
+
+			DeferredLight deferredLight = {};
+			deferredLight.color = light->color;
+			deferredLight.radius = light->radius;
+			deferredLight.position = transform->position;
+
+			deferredLights[lightCount] = deferredLight;
+			lightCount++;
+
+			if (lightCount >= MAX_LIGHTS)
+			{
+				break;
+			}
 		}
 	}
 
@@ -112,7 +138,7 @@ void RendererDeferred::Draw(const CommandBuffer& commandBuffer)
 	}
 	m_DescriptorSet.Push("samplerPrefiltered", *m_CurrentPrefiltered);
 
-	bool updateSuccess = m_DescriptorSet.Update(m_Pipeline);
+	const auto updateSuccess = m_DescriptorSet.Update(m_Pipeline);
 
 	if(!updateSuccess)
 	{

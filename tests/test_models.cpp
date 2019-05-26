@@ -283,6 +283,13 @@ TEST(Models, FrustumCulling)
 		}
 	}
 
+	//Light
+
+	const auto e1 = entityManager->CreateEntity();
+	auto light = dm::EntityHandle(e1);
+	light.CreateComponent<dm::Transform>(ComponentType::TRANSFORM);
+	light.CreateComponent<dm::Light>(ComponentType::LIGHT);
+
 	try
 	{
 		engine.Start();

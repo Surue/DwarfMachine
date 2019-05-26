@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#include <graphics/pipeline_graphic.h>
+#include <graphics/pipelines/pipeline_graphic.h>
 
 #include <graphics/graphic_manager.h>
 #include "engine/file.h"
