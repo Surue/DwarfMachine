@@ -36,39 +36,43 @@ static const uint32_t MAX_LIGHTS = 32;
 
 RendererDeferred::RendererDeferred(const Pipeline::Stage &pipelineStage) :
 	RenderPipeline(pipelineStage),
-	m_Pipeline(pipelineStage, { "Shaders/deferred.vert", "Shaders/deferred.frag" }, {}, GetDefines(), PipelineGraphics::Mode::POLYGON, PipelineGraphics::Depth::NONE)
+	m_Pipeline(pipelineStage, { "Shaders/deferred.vert", "Shaders/deferred.frag" }, {}, GetDefines(), PipelineGraphics::Mode::POLYGON, PipelineGraphics::Depth::NONE),
+	m_Skybox(nullptr)
 {
 	
 	//TODO créer un worker pour le brdf et tout ce qui suit
 	m_CurrentBRDF = ComputeBRDF(512);
-
-	auto entities = Engine::Get()->GetEntityManager()->GetEntities();
-
-	for (auto entity : entities)
-	{
-		if (entity == INVALID_ENTITY)
-		{
-			break;
-		}
-
-		auto entityHandle = EntityHandle(entity);
-
-		if(entityHandle.HasComponent(ComponentType::MATERIAL_SKYBOX))
-		{
-			m_Skybox = entityHandle.GetComponent<MaterialSkybox>(ComponentType::MATERIAL_SKYBOX)->image;
-
-			m_CurrentIrradiance = ComputeIrradiance(m_Skybox, 64);
-			m_CurrentPrefiltered = ComputePrefiltered(m_Skybox, 64);
-
-			break;
-		}
-	}
 }
 void RendererDeferred::Update() {}
 
 void RendererDeferred::Draw(const CommandBuffer& commandBuffer)
 {
 	auto camera = GraphicManager::Get()->GetCamera();
+
+	if(m_Skybox == nullptr)
+	{
+		auto entities = Engine::Get()->GetEntityManager()->GetEntities();
+
+		for (auto entity : entities)
+		{
+			if (entity == INVALID_ENTITY)
+			{
+				break;
+			}
+
+			auto entityHandle = EntityHandle(entity);
+
+			if (entityHandle.HasComponent(ComponentType::MATERIAL_SKYBOX))
+			{
+				m_Skybox = entityHandle.GetComponent<MaterialSkybox>(ComponentType::MATERIAL_SKYBOX)->image;
+
+				m_CurrentIrradiance = ComputeIrradiance(m_Skybox, 64);
+				m_CurrentPrefiltered = ComputePrefiltered(m_Skybox, 64);
+
+				break;
+			}
+		}
+	}
 
 	std::vector<DeferredLight> deferredLights(MAX_LIGHTS);
 	uint32_t lightCount = 0;

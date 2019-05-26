@@ -30,6 +30,7 @@ SOFTWARE.
 #include <editor/renderer_imgui.h>
 #include <engine/engine.h>
 #include <graphics/gizmos/renderer_gizmo.h>
+#include "graphics/renderer_deferred.h"
 
 namespace dm
 {
@@ -49,13 +50,14 @@ void EditorRenderManager::Start()
 		Attachment(2, "position", Attachment::Type::IMAGE, false, VK_FORMAT_R16G16B16A16_SFLOAT),
 		Attachment(3, "diffuse", Attachment::Type::IMAGE, false, VK_FORMAT_R8G8B8A8_UNORM),
 		Attachment(4, "normal", Attachment::Type::IMAGE, false, VK_FORMAT_R16G16B16A16_SFLOAT),
-		Attachment(5, "material", Attachment::Type::IMAGE, false, VK_FORMAT_R8G8B8A8_UNORM)/*, 
-		Attachment(6, "resolved", Attachment::Type::IMAGE, false, VK_FORMAT_R8G8B8A8_UNORM)*/
+		Attachment(5, "material", Attachment::Type::IMAGE, false, VK_FORMAT_R8G8B8A8_UNORM), 
+		Attachment(6, "resolved", Attachment::Type::IMAGE, false, VK_FORMAT_R8G8B8A8_UNORM)
 	};
 
 	std::vector<SubpassType> renderpassSubpasses0 = { 
 		SubpassType(0, { 0, 2, 3, 4 ,5}),
-		SubpassType(1, { 0, 1})
+		SubpassType(1, { 0, 6}),
+		SubpassType(2, { 0, 1})
 	};
 
 	renderStages.emplace_back(std::make_unique<RenderStage>(renderpassAttachment0, renderpassSubpasses0));
@@ -65,9 +67,12 @@ void EditorRenderManager::Start()
 	rendererContainer.Clear();
 
 	rendererContainer.Add<RendererMeshes>(Pipeline::Stage(0, 0));
-	rendererContainer.Add<FilterDefault>(Pipeline::Stage(0, 1), true);//Last filter pass
-	rendererContainer.Add<RendererGizmo>(Pipeline::Stage(0, 1));
-	rendererContainer.Add<RendererImGui>(Pipeline::Stage(0, 1)); //Must be the last one otherwise draw inside an imgui window
+
+	rendererContainer.Add<RendererDeferred>(Pipeline::Stage(0, 1));
+
+	rendererContainer.Add<FilterDefault>(Pipeline::Stage(0, 2), true);//Last filter pass
+	rendererContainer.Add<RendererGizmo>(Pipeline::Stage(0, 2));
+	rendererContainer.Add<RendererImGui>(Pipeline::Stage(0, 2)); //Must be the last one otherwise draw inside an imgui window
 }
 void EditorRenderManager::Update()
 {

@@ -23,6 +23,7 @@ SOFTWARE.
 */
 
 #include <component/light.h>
+#include "imgui.h"
 
 namespace dm
 {
@@ -50,5 +51,10 @@ void LightManager::DestroyComponent(Entity entity)
 
 void LightManager::OnDrawInspector(Entity entity)
 {
+	ImGui::Separator();
+	ImGui::TextWrapped("Light");
+	ImGui::ColorPicker4("lightColor", &m_Components[entity - 1].color[0]);
+	ImGui::DragFloat("radius", &m_Components[entity - 1].radius, 1, 0);
+
 }
 }

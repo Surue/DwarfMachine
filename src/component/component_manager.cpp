@@ -217,6 +217,11 @@ void ComponentManagerContainer::DrawOnInspector(Entity entity)
 	{
 		m_DrawableManager->OnDrawInspector(entity);
 	}
+
+	if (entityHandle.HasComponent(ComponentType::LIGHT))
+	{
+		m_LightManager->OnDrawInspector(entity);
+	}
 }
 
 void ComponentManagerContainer::OnEntityResize(const int newSize)

@@ -34,8 +34,8 @@ FilterDefault::FilterDefault(const Pipeline::Stage& pipelineStage, const bool& l
 
 void FilterDefault::Draw(const CommandBuffer& commandBuffer)
 {
-	//PushConditional("writeColor", "samplerColor", "resolved", "diffuse");
-	PushConditional("writeColor", "samplerColor", "diffuse", "diffuse");
+	PushConditional("writeColor", "samplerColor", "resolved", "diffuse");
+	//PushConditional("writeColor", "samplerColor", "diffuse", "diffuse");
 	const bool updateSucceed = m_DescriptorSet.Update(m_Pipeline);
 
 	if(!updateSucceed)
