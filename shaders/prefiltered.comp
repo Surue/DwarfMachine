@@ -9,7 +9,7 @@ layout(push_constant) uniform PushObject
 	float roughness;
 } object;
 
-layout(binding = 0, rgb32f) uniform writeonly imageCube outColor;
+layout(binding = 0, rg32f) uniform writeonly imageCube outColor;
 
 layout(binding = 1) uniform samplerCube samplerColor;
 
@@ -38,7 +38,7 @@ float random(vec2 co)
 	return fract(sin(sn) * c);
 }
 
-vec2 hammersley2d(uint i, unit N)
+vec2 hammersley2d(uint i, uint N)
 {
 	uint bits = (i << 16u) | (i >> 16u);
 	bits = ((bits & 0x55555555u) << 1u) | ((bits & 0xAAAAAAAAu) >> 1u);
@@ -112,7 +112,7 @@ vec3 prefilterEnvMap(samplerCube envMap, vec3 R, float roughness)
 
 void main()
 {
-	vec2 uv = (gl_GlobalInvocationID.xy + vec2(0.5f)) / vec3(imageSize(outColor).xy);
+	vec2 uv = (gl_GlobalInvocationID.xy + vec2(0.5f)) / vec2(imageSize(outColor).xy);
 	
 	for(uint i = 0; i != 6; i++)
 	{

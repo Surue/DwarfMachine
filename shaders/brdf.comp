@@ -4,7 +4,7 @@
 
 layout(local_size_x = 16, local_size_y = 16) in;
 
-layout(binding = 0, rgb32f) uniform writeonly image2D outColor;
+layout(binding = 0, rg16f) uniform writeonly image2D outColor;
 
 layout(binding = 1) uniform samplerCube samplerColor;
 
@@ -21,7 +21,7 @@ float random(vec2 co)
 	return fract(sin(sn) * c);
 }
 
-vec2 hammersley2d(uint i, unit N)
+vec2 hammersley2d(uint i, uint N)
 {
 	uint bits = (i << 16u) | (i >> 16u);
 	bits = ((bits & 0x55555555u) << 1u) | ((bits & 0xAAAAAAAAu) >> 1u);

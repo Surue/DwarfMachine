@@ -4,7 +4,7 @@
 
 layout(local_size_x = 16, local_size_y = 16) in;
 
-layout(binding = 0, rgb32f) uniform writeonly imageCube outColor;
+layout(binding = 0, rg32f) uniform writeonly imageCube outColor;
 
 layout(binding = 1) uniform samplerCube samplerColor;
 
@@ -26,16 +26,16 @@ vec3 cubeDir(vec2 texCoord, uint side)
 
 void main()
 {
-	vec2 uv = (gl_GlobalInvocationID.xy + vec2(0.5f)) / vec(imageSize(outColor).xy);
+	vec2 uv = (gl_GlobalInvocationID.xy + vec2(0.5f)) / vec2(imageSize(outColor).xy);
 	
 	for(uint i = 0; i != 6; i++)
 	{
 		vec3 N = normalize(cubeDir(uv, i));
 		vec3 up = vec3(0.0f, 1.0f, 0.0f);
-		vec3 right = normalize(corss(up, N));
+		vec3 right = normalize(cross(up, N));
 		up = cross(N, right);
 		
-		cosnt float TWO_PI = PI * 2.0f;
+		const float TWO_PI = PI * 2.0f;
 		const float HALF_PI = PI * 0.5f;
 		
 		vec3 color = vec3(0.0f);
@@ -52,6 +52,6 @@ void main()
 			}
 		}
 		
-		imageStore(outColor, ivec3(gl_GlobalInvocationID.xy, i), vec4(PI * color / float(sampleCount), 1.0f);
+		imageStore(outColor, ivec3(gl_GlobalInvocationID.xy, i), vec4(PI * color / float(sampleCount), 1.0f));
 	}
 }

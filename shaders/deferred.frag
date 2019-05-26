@@ -28,13 +28,21 @@ layout(binding = 1) buffer BufferLights
 } bufferLights;
 
 //layout(binding = 2) uniform sampler2D samplerShadow;
-layout(binding = 3) uniform sampler2D samplerPosition;
-layout(binding = 4) uniform sampler2D samplerDiffuse;
-layout(binding = 5) uniform sampler2D samplerNormal;
-layout(binding = 6) uniform sampler2D samplerMaterial;
-layout(binding = 7) uniform sampler2D samplerBRDF;
-layout(binding = 8) uniform samplerCube samplerIrradiance;
-layout(binding = 9) uniform samplerCube samplerPrefiltered;
+//layout(binding = 3) uniform sampler2D samplerPosition;
+//layout(binding = 4) uniform sampler2D samplerDiffuse;
+//layout(binding = 5) uniform sampler2D samplerNormal;
+//layout(binding = 6) uniform sampler2D samplerMaterial;
+//layout(binding = 7) uniform sampler2D samplerBRDF;
+//layout(binding = 8) uniform samplerCube samplerIrradiance;
+//layout(binding = 9) uniform samplerCube samplerPrefiltered;
+
+layout(binding = 2) uniform sampler2D samplerPosition;
+layout(binding = 3) uniform sampler2D samplerDiffuse;
+layout(binding = 4) uniform sampler2D samplerNormal;
+layout(binding = 5) uniform sampler2D samplerMaterial;
+layout(binding = 6) uniform sampler2D samplerBRDF;
+layout(binding = 7) uniform samplerCube samplerIrradiance;
+layout(binding = 8) uniform samplerCube samplerPrefiltered;
 
 layout(location = 0) in vec2 inUV;
 
@@ -44,7 +52,7 @@ const float PI = 3.1415926535897932384626433832795f;
 
 float sqr(float x)
 {
-	x * x;
+	return x * x;
 }
 
 float attenuation(float Dl, float radius)
@@ -95,7 +103,7 @@ vec3 prefilteredReflection(vec3 R, float roughness)
 	return mix(a, b, lod - lodf);
 }
 
-vec3 specularContribution(vec3 diffuse, vec3 L, vec3 V, vec3 N, vec3 F0, flaot metallic, float roughness)
+vec3 specularContribution(vec3 diffuse, vec3 L, vec3 V, vec3 N, vec3 F0, float metallic, float roughness)
 {
 	vec3 H = normalize(V + L);
 	float dotNH = clamp(dot(N, H), 0.0f, 1.0f);
@@ -111,7 +119,7 @@ vec3 specularContribution(vec3 diffuse, vec3 L, vec3 V, vec3 N, vec3 F0, flaot m
 		float G = G_SchlocksmithGGX(dotNL, dotNV, roughness);
 		
 		vec3 F = F_Schlick(dotNV, F0);
-		vec3 spec = D * F * G / 4.0f * dotNL * dotNV  + 0.001f);
+		vec3 spec = D * F * G / (4.0f * dotNL * dotNV  + 0.001f);
 		vec3 kD = (vec3(1.0f) - F) * (1.0f - metallic);
 		color += (kD * diffuse / PI + spec) * dotNL;
 	}
@@ -119,24 +127,24 @@ vec3 specularContribution(vec3 diffuse, vec3 L, vec3 V, vec3 N, vec3 F0, flaot m
 	return color;
 }
 
-float shadowFactor(vec4 shadowCoords)
-{
-	vec3 ndc = shadowCoords.xyz /= shadowCoords.w;
-	
-	if(abs(ndc.x) > 1.0f || abs(ndc.y) > 1.0f || abs(ndc.z) > 1.0f)
-	{
-		return 0.0f;
-	}
-	
-	float shadowValue = texture(samplerShadow, shadowCoords.xy).r;
-	
-	if(ndc.z > shadowValue)
-	{
-		return 0.0f;
-	}
-	
-	return 1.0f;
-}
+//float shadowFactor(vec4 shadowCoords)
+//{
+//	vec3 ndc = shadowCoords.xyz /= shadowCoords.w;
+//	
+//	if(abs(ndc.x) > 1.0f || abs(ndc.y) > 1.0f || abs(ndc.z) > 1.0f)
+//	{
+//		return 0.0f;
+//	}
+//	
+//	float shadowValue = texture(samplerShadow, shadowCoords.xy).r;
+//	
+//	if(ndc.z > shadowValue)
+//	{
+//		return 0.0f;
+//	}
+//	
+//	return 1.0f;
+//}
 
 void main()
 {
@@ -164,14 +172,14 @@ void main()
 		
 		for(int i = 0; i < scene.lightCount; i++)
 		{
-			Light light = bufferLights.light[i];
+			Light light = bufferLights.lights[i];
 			vec3 L = light.position - worldPosition;
-			float Dl = length(l);
+			float Dl = length(L);
 			L /= Dl;
 			Lo += attenuation(Dl, light.radius) * light.color.rgb * specularContribution(diffuse.rgb, L, V, N, F0, metallic, roughness);
 		}
 		
-		vec2 brdf = texture(samplerBRDF, vec2(max(dot(N, V) 0.0f), roughness)).rg;
+		vec2 brdf = texture(samplerBRDF, vec2(max(dot(N, V), 0.0f), roughness)).rg;
 		vec3 reflection = prefilteredReflection(R, roughness).rgb;
 		vec3 irradiance = texture(samplerIrradiance, N).rgb;
 		
@@ -179,7 +187,7 @@ void main()
 		
 		vec3 F = F_SchlickR(max(dot(N, V), 0.0f), F0, roughness);
 		
-		vec3 specular = reflect * (F * brdf.r + brdf.g);
+		vec3 specular = reflection * (F * brdf.r + brdf.g);
 		
 		vec3 kD = 1.0f - F;
 		kD *= 1.0f - metallic;
@@ -197,7 +205,7 @@ void main()
 	
 	if(!ignoreFog && normal != vec3(0.0f))
 	{
-		float fogFactor = exp(-pow(length(screenPosition.xyz) * scene.fogDensity, scene.fogGradient);
+		float fogFactor = exp(-pow(length(screenPosition.xyz) * scene.fogDensity, scene.fogGradient));
 		fogFactor = clamp(fogFactor, 0.0f, 1.0f);
 		outColor = mix(scene.fogColor, outColor, fogFactor);
 	}
