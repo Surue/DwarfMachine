@@ -85,4 +85,26 @@ void RendererContainer::Remove(RenderPipeline* renderer)
 		}
 	}
 }
+
+void RendererContainer::RenderStage(const Pipeline::Stage& stage, const CommandBuffer& commandBuffer)
+{
+	
+	/*for (const auto &typeId : m_stages)
+	{
+		if (typeId.first.first != stage)
+		{
+			continue;
+		}
+
+		auto &subrender = m_subrenders[typeId.second];
+
+		if (subrender != nullptr)
+		{
+			if (subrender->IsEnabled())
+			{
+				subrender->Render(commandBuffer);
+			}
+		}
+	}*/
+}
 }

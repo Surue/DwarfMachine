@@ -141,7 +141,10 @@ public:
 			}
 		}
 	}
+
+	void RenderStage(const Pipeline::Stage &stage, const CommandBuffer &commandBuffer);
 private:
+
 	std::map<Pipeline::Stage, std::vector<std::unique_ptr<RenderPipeline>>> m_Stages;
 };
 }

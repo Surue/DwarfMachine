@@ -9,7 +9,7 @@ layout(push_constant) uniform PushObject
 	float roughness;
 } object;
 
-layout(binding = 0, rg32f) uniform writeonly imageCube outColor;
+layout(binding = 0, rgba32f) uniform writeonly imageCube outColor;
 
 layout(binding = 1) uniform samplerCube samplerColor;
 

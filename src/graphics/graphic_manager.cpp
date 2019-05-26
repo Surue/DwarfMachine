@@ -252,6 +252,30 @@ void GraphicManager::Draw()
 		return;
 	}
 
+	//Pipeline::Stage stage;
+
+	//for(const auto &renderStage : m_RenderStages)
+	//{
+	//	renderStage->Update();
+
+	//	if(!StartRenderpass(*renderStage))
+	//	{
+	//		return;
+	//	}
+
+	//	for(const auto &subpass : renderStage->GetSubpasses())
+	//	{
+	//		stage.second = subpass.GetBinding();
+
+	//		m_RenderManager->GetRendererContainer().RenderStage(stage, *m_CommandBuffers[m_Swapchain->GetActiveImageIndex()]);
+
+	//		if(subpass.GetBinding() != renderStage->GetSubpasses().back().GetBinding())
+	//		{
+	//			vkCmdNextSubpass(*m_CommandBuffers[m_Swapchain->GetActiveImageIndex()], VK_SUBPASS_CONTENTS_INLINE);
+	//		}
+	//	}
+	//}
+
 	for (auto &[key, renderPipelines] : stages)
 	{
 		if (renderpass != key.first)

@@ -99,6 +99,8 @@ std::vector<Shader::Define> MaterialDefaultManager::GetDefines(const MaterialDef
 void MaterialDefaultManager::PushDescriptor(MaterialDefault& material, DescriptorHandle &descriptorSet)
 {
 	descriptorSet.Push("samplerDiffuse", material.textureDiffuse);
+	descriptorSet.Push("samplerMaterial", material.materialTexture);
+	descriptorSet.Push("samplerNormal", material.normalTexture);
 }
 
 void MaterialDefaultManager::PushUniform(MaterialDefault& material, const glm::mat4x4 worldPos, UniformHandle& uniformObject)
@@ -121,6 +123,8 @@ void MaterialDefaultManager::OnDrawInspector(const Entity entity)
 	ImGui::Separator();
 	ImGui::TextWrapped("Default Material");
 	ImGui::ColorPicker4("diffuseColor", &m_Components[entity - 1].color[0]);
+	ImGui::DragFloat("Roughness", &m_Components[entity - 1].roughness, 0.01f, 0.0f, 1.0f);
+	ImGui::DragFloat("Metallic", &m_Components[entity - 1].metallic, 0.01f, 0.0f, 1.0f);
 	//ImGui::Text(m_Components[entity - 1].pipelineMaterial->GetPipeline()->GetShader()->ToString().c_str());
 }
 

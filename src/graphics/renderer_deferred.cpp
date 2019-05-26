@@ -67,7 +67,7 @@ void RendererDeferred::Draw(const CommandBuffer& commandBuffer)
 				m_Skybox = entityHandle.GetComponent<MaterialSkybox>(ComponentType::MATERIAL_SKYBOX)->image;
 
 				m_CurrentIrradiance = ComputeIrradiance(m_Skybox, 64);
-				m_CurrentPrefiltered = ComputePrefiltered(m_Skybox, 64);
+				m_CurrentPrefiltered = ComputePrefiltered(m_Skybox, 512);
 
 				break;
 			}
@@ -112,8 +112,8 @@ void RendererDeferred::Draw(const CommandBuffer& commandBuffer)
 	m_UniformScene.Push("lightCount", lightCount);
 	//TODO créer un objet fog
 	m_UniformScene.Push("fogColor", Color::White);
-	m_UniformScene.Push("fogDensity", 1);
-	m_UniformScene.Push("fogGradient", 1);
+	m_UniformScene.Push("fogDensity", 0.001f);
+	m_UniformScene.Push("fogGradient", 2.0f);
 
 	m_StorageLight.Push(deferredLights.data(), sizeof(DeferredLight) * MAX_LIGHTS);
 
