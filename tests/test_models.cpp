@@ -334,7 +334,7 @@ TEST(Models, FrustumCulling)
 TEST(Models, PBR)
 {
 	dm::EngineSettings settings;
-	settings.windowSize = dm::Vec2i(800, 600);
+	settings.windowSize = dm::Vec2i(1024, 720);
 	dm::Engine engine = dm::Engine(settings);
 	engine.Init();
 

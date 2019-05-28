@@ -36,7 +36,7 @@ static const uint32_t MAX_LIGHTS = 32;
 
 RendererDeferred::RendererDeferred(const Pipeline::Stage &pipelineStage) :
 	RenderPipeline(pipelineStage),
-	m_Pipeline(pipelineStage, { "Shaders/deferred.vert", "Shaders/deferred.frag" }, {}, GetDefines(), PipelineGraphics::Mode::POLYGON, PipelineGraphics::Depth::NONE),
+	m_Pipeline(pipelineStage, { "Shaders/deferred.vert", "Shaders/deferred.frag" }, {}, GetDefines(), PipelineGraphics::Mode::POLYGON, PipelineGraphics::Depth::NONE) ,
 	m_Skybox(nullptr)
 {
 	
@@ -66,8 +66,8 @@ void RendererDeferred::Draw(const CommandBuffer& commandBuffer)
 			{
 				m_Skybox = entityHandle.GetComponent<MaterialSkybox>(ComponentType::MATERIAL_SKYBOX)->image;
 
-				m_CurrentIrradiance = ComputeIrradiance(m_Skybox, 64);
 				m_CurrentPrefiltered = ComputePrefiltered(m_Skybox, 512);
+				m_CurrentIrradiance = ComputeIrradiance(m_Skybox, 64);
 
 				break;
 			}
