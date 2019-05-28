@@ -92,7 +92,7 @@ void RendererDeferred::Draw(const CommandBuffer& commandBuffer)
 			auto transform = entityHandle.GetComponent<Transform>(ComponentType::TRANSFORM);
 
 			DeferredLight deferredLight = {};
-			deferredLight.color = light->color;
+			deferredLight.color = light->color * light->intensity;
 			deferredLight.radius = light->radius;
 			deferredLight.position = transform->position;
 

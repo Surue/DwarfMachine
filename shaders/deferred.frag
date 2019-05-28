@@ -50,6 +50,17 @@ layout(location = 0) out vec4 outColor;
 
 const float PI = 3.1415926535897932384626433832795f;
 
+vec3 Uncharted2Tonemap(vec3 x)
+{
+	float A = 0.15;
+	float B = 0.50;
+	float C = 0.10;
+	float D = 0.20;
+	float E = 0.02;
+	float F = 0.30;
+	return ((x*(A*x+C*B)+D*E)/(x*(A*x+B)+D*F))-E/F;
+}
+
 float sqr(float x)
 {
 	return x * x;
@@ -61,9 +72,13 @@ float attenuation(float Dl, float radius)
 	{
 		return 1.0f;
 	}
-	
-	float x = min(Dl, radius);
-	return sqr(1.0f - sqr(sqr(x / radius))) / (sqr(x) + 1.0f);
+
+	float lightInvRadius = 1 / radius;
+
+	float distanceSquare = dot(Dl, Dl);
+    float factor = distanceSquare * lightInvRadius * lightInvRadius;
+    float smoothFactor = max(1.0 - factor * factor, 0.0);
+    return (smoothFactor * smoothFactor) / max(distanceSquare, 1e-4);
 }
 
 float D_GGX(float dotNH, float roughness)
@@ -192,8 +207,16 @@ void main()
 		vec3 kD = 1.0f - F;
 		kD *= 1.0f - metallic;
 		vec3 ambient = (kD * albedo + specular);
+
+		vec3 color = ambient + Lo;
 		
-		outColor = vec4(ambient + Lo, 1.0f);
+		// Tone mapping
+//		color = Uncharted2Tonemap(color * 4.5f);
+//		color = color * (1.0f / Uncharted2Tonemap(vec3(11.2f)));	
+//		// Gamma correction
+//		color = pow(color, vec3(1.0f / 2.2f));
+
+		outColor = vec4(color, 1.0f);
 		
 		//vec4 shadowCoords = scene.shadowSpace * vec4(worldPosition, 1.0f);
 		//outColor 3= shadowFactor(shadowCoords);

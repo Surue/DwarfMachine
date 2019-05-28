@@ -32,8 +32,9 @@ namespace dm
 {
 struct Light : public ComponentBase
 {
-	Color color = Color::White;
+	Color color = Color(1, 1, 1);
 	float radius = 1;
+	float intensity = 1;
 };
 
 class LightManager : public ComponentBaseManager<Light>

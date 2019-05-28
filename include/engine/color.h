@@ -56,6 +56,11 @@ public:
 
 	bool operator!=(const Color &other) const;
 
+	Color operator*(const float rhs) const
+	{
+		return Color(r * rhs, g * rhs, b * rhs, a);
+	}
+
 	float &operator[](const uint32_t index);
 
 	static const Color White;

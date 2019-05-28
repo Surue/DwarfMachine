@@ -55,6 +55,7 @@ void LightManager::OnDrawInspector(Entity entity)
 	ImGui::TextWrapped("Light");
 	ImGui::ColorPicker4("lightColor", &m_Components[entity - 1].color[0]);
 	ImGui::DragFloat("radius", &m_Components[entity - 1].radius, 0.1f);
+	ImGui::DragFloat("intensity", &m_Components[entity - 1].intensity, 0.1f, 0, 100000);
 
 }
 }
