@@ -367,11 +367,11 @@ TEST(Models, PBR)
 	CreateSkybox(entityManager);
 
 	//Sphere
-	float maxSphere = 10;
+	float maxSphere = 9;
 
-	for (size_t i = 0; i < maxSphere; i++)
+	for (size_t i = 0; i <= maxSphere; i++)
 	{
-		for (size_t j = 0; j < maxSphere; j++)
+		for (size_t j = 0; j <= maxSphere; j++)
 		{
 			dm::MaterialDefault material;
 			material.componentType = ComponentType::MATERIAL_DEFAULT;
