@@ -193,6 +193,35 @@ void CreateCube(glm::vec3 pos, dm::EntityManager* entityManager, dm::Editor* edi
 	cube.CreateComponent<dm::MeshRenderer>(ComponentType::MESH_RENDERER);
 }
 
+void CreateSphere(glm::vec3 pos, dm::EntityManager* entityManager, dm::MaterialDefault material)
+{
+	const auto entityHandle = entityManager->CreateEntity();
+	auto cube = dm::EntityHandle(entityHandle);
+
+	//Transform
+	auto t1 = cube.CreateComponent<dm::Transform>(ComponentType::TRANSFORM);
+	t1->position = pos;
+	t1->scaling = glm::vec3(1, 1, 1);
+
+	//Mesh
+	dm::Model mesh;
+	mesh.componentType = ComponentType::MODEL;
+	mesh.model = dm::Engine::Get()->GetModelManager()->GetModel("ModelSphere");
+	cube.AddComponent<dm::Model>(mesh);
+
+	//Material
+	cube.AddComponent<dm::MaterialDefault>(material);
+
+	//Bounding sphere
+	cube.AddComponent<dm::BoundingSphere>(dm::BoundingSphereManager::GetBoundingSphere(*mesh.model));
+
+	//Drawable
+	cube.CreateComponent<dm::Drawable>(ComponentType::DRAWABLE);
+
+	//MeshRenderer
+	cube.CreateComponent<dm::MeshRenderer>(ComponentType::MESH_RENDERER);
+}
+
 void CreateSkybox(dm::EntityManager* entityManager)
 {
 	const auto entityHandle = entityManager->CreateEntity();
@@ -280,6 +309,80 @@ TEST(Models, FrustumCulling)
 		{
 			glm::vec3 pos = glm::vec3(i - maxCube / 2.0f + i * 1.0f, 0, j - maxCube / 2.0f + j * 1.0f);
 			CreateCube(pos, entityManager, editor, gizmoType, material);		
+		}
+	}
+
+	//Light
+
+	const auto e1 = entityManager->CreateEntity();
+	auto light = dm::EntityHandle(e1);
+	light.CreateComponent<dm::Transform>(ComponentType::TRANSFORM);
+	dm::Light lightComponent;
+	lightComponent.componentType = ComponentType::LIGHT;
+	light.AddComponent(lightComponent);
+
+	try
+	{
+		engine.Start();
+	}
+	catch (const std::exception& e)
+	{
+		std::cerr << e.what() << "\n";
+	}
+}
+
+TEST(Models, PBR)
+{
+	dm::EngineSettings settings;
+	settings.windowSize = dm::Vec2i(800, 600);
+	dm::Engine engine = dm::Engine(settings);
+	engine.Init();
+
+	engine.SetApplication(new dm::Editor());
+
+	auto editor = static_cast<dm::Editor*>(engine.GetApplication());
+
+	auto entityManager = engine.GetEntityManager();
+
+	//Camera
+	const auto e0 = entityManager->CreateEntity();
+	auto entity = dm::EntityHandle(e0);
+
+	dm::Camera cameraInfo;
+	cameraInfo.componentType = ComponentType::CAMERA;
+	cameraInfo.isMainCamera = true;
+	cameraInfo.isCullingCamera = true;
+	cameraInfo.viewMatrix = glm::lookAt(cameraInfo.pos, cameraInfo.pos + cameraInfo.front, cameraInfo.up);
+	cameraInfo.fov = 45;
+	cameraInfo.frustumFar = 1024.0f;
+	cameraInfo.frustumNear = 0.1f;
+	cameraInfo.aspect = 800.0f / 600.0f;
+	cameraInfo.proj = glm::perspective(glm::radians(cameraInfo.fov), cameraInfo.aspect, cameraInfo.frustumNear, cameraInfo.frustumFar);
+
+	auto camera = entity.AddComponent<dm::Camera>(cameraInfo);
+
+	std::shared_ptr<dm::GizmoType> gizmoType = dm::GizmoType::Create(dm::Engine::Get()->GetModelManager()->GetModel("ModelSphere"), 1, dm::Color::White);
+
+	//Skybox
+	CreateSkybox(entityManager);
+
+	//Sphere
+	float maxSphere = 10;
+
+	for (size_t i = 0; i < maxSphere; i++)
+	{
+		for (size_t j = 0; j < maxSphere; j++)
+		{
+			dm::MaterialDefault material;
+			material.componentType = ComponentType::MATERIAL_DEFAULT;
+			material.color = dm::Color(1, 1, 1, 1);
+			material.roughness = i / maxSphere;
+			material.metallic = j / maxSphere;
+			material.ignoreLighting = false;
+			material.ignoreFog = false;
+
+			glm::vec3 pos = glm::vec3(i - maxSphere / 2.0f + i * 1.0f, 0, j - maxSphere / 2.0f + j * 1.0f);
+			CreateSphere(pos, entityManager, material);
 		}
 	}
 
