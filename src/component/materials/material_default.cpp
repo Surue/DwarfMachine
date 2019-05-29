@@ -106,7 +106,7 @@ void MaterialDefaultManager::PushDescriptor(MaterialDefault& material, Descripto
 void MaterialDefaultManager::PushUniform(MaterialDefault& material, const glm::mat4x4 worldPos, UniformHandle& uniformObject)
 {
 	uniformObject.Push("transform", worldPos);
-	uniformObject.Push("baseDiffuse", material.color);
+	uniformObject.Push("baseDiffuse", material.color * 255);
 	uniformObject.Push("metallic", static_cast<float>(material.metallic));
 	uniformObject.Push("roughness", static_cast<float>(material.roughness));
 	uniformObject.Push("ignoreFog", material.ignoreFog);

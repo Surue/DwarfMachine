@@ -356,7 +356,7 @@ TEST(Models, PBR)
 	cameraInfo.fov = 45;
 	cameraInfo.frustumFar = 1024.0f;
 	cameraInfo.frustumNear = 0.1f;
-	cameraInfo.aspect = 800.0f / 600.0f;
+	cameraInfo.aspect = 1024.0f / 720.0f;
 	cameraInfo.proj = glm::perspective(glm::radians(cameraInfo.fov), cameraInfo.aspect, cameraInfo.frustumNear, cameraInfo.frustumFar);
 
 	auto camera = entity.AddComponent<dm::Camera>(cameraInfo);

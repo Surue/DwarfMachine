@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#include <graphics/filter_default.h>
+#include <graphics/filters/filter_default.h>
 
 namespace dm
 {
@@ -35,8 +35,7 @@ FilterDefault::FilterDefault(const Pipeline::Stage& pipelineStage, const bool& l
 void FilterDefault::Draw(const CommandBuffer& commandBuffer)
 {
 	PushConditional("writeColor", "samplerColor", "resolved", "diffuse");
-	//PushConditional("writeColor", "samplerColor", "diffuse", "diffuse");
-	const bool updateSucceed = m_DescriptorSet.Update(m_Pipeline);
+	const auto updateSucceed = m_DescriptorSet.Update(m_Pipeline);
 
 	if(!updateSucceed)
 	{

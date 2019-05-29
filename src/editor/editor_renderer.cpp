@@ -26,11 +26,12 @@ SOFTWARE.
 #include <graphics/render_stage.h>
 #include <graphics/graphic_manager.h>
 #include <graphics/renderer_meshes.h>
-#include <graphics/filter_default.h>
 #include <editor/renderer_imgui.h>
 #include <engine/engine.h>
 #include <graphics/gizmos/renderer_gizmo.h>
 #include "graphics/renderer_deferred.h"
+#include "graphics/filters/filter_default.h"
+#include "graphics/filters/filter_fxaa.h"
 
 namespace dm
 {
@@ -70,7 +71,8 @@ void EditorRenderManager::Start()
 
 	rendererContainer.Add<RendererDeferred>(Pipeline::Stage(0, 1));
 
-	rendererContainer.Add<FilterDefault>(Pipeline::Stage(0, 2), true);//Last filter pass
+	rendererContainer.Add<FilterFxaa>(Pipeline::Stage(0, 2));
+	rendererContainer.Add<FilterDefault>(Pipeline::Stage(0, 2), true);
 	rendererContainer.Add<RendererGizmo>(Pipeline::Stage(0, 2));
 	rendererContainer.Add<RendererImGui>(Pipeline::Stage(0, 2)); //Must be the last one otherwise draw inside an imgui window
 }
