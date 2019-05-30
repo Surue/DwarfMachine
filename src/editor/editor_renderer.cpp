@@ -32,6 +32,7 @@ SOFTWARE.
 #include "graphics/renderer_deferred.h"
 #include "graphics/filters/filter_default.h"
 #include "graphics/filters/filter_fxaa.h"
+#include "graphics/filters/filter_ssao.h"
 
 namespace dm
 {
@@ -72,6 +73,7 @@ void EditorRenderManager::Start()
 	rendererContainer.Add<RendererDeferred>(Pipeline::Stage(0, 1));
 
 	rendererContainer.Add<FilterFxaa>(Pipeline::Stage(0, 2));
+	rendererContainer.Add<FilterSsao>(Pipeline::Stage(0, 2));
 	rendererContainer.Add<FilterDefault>(Pipeline::Stage(0, 2), true);
 	rendererContainer.Add<RendererGizmo>(Pipeline::Stage(0, 2));
 	rendererContainer.Add<RendererImGui>(Pipeline::Stage(0, 2)); //Must be the last one otherwise draw inside an imgui window
