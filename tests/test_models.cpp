@@ -349,6 +349,7 @@ TEST(Models, PBR)
 	auto entity = dm::EntityHandle(e0);
 
 	dm::Camera cameraInfo;
+	cameraInfo.up = glm::vec3(0.0f, 1.0f, 0.0f);
 	cameraInfo.componentType = ComponentType::CAMERA;
 	cameraInfo.isMainCamera = true;
 	cameraInfo.isCullingCamera = true;

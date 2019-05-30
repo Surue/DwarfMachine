@@ -9,7 +9,7 @@ layout(push_constant) uniform PushObject
 	float roughness;
 } object;
 
-layout(binding = 0, rgba32f) uniform writeonly imageCube outColor;
+layout(binding = 0, rgba32f) uniform writeonly imageCube outPrefiltered;
 
 layout(binding = 1) uniform samplerCube samplerColor;
 
@@ -112,11 +112,11 @@ vec3 prefilterEnvMap(samplerCube envMap, vec3 R, float roughness)
 
 void main()
 {
-	vec2 uv = (gl_GlobalInvocationID.xy + vec2(0.5f)) / vec2(imageSize(outColor).xy);
+	vec2 uv = (gl_GlobalInvocationID.xy + vec2(0.5f)) / vec2(imageSize(outPrefiltered).xy);
 	
 	for(uint i = 0; i != 6; i++)
 	{
 		vec3 R = normalize(cubeDir(uv, i));
-		imageStore(outColor, ivec3(gl_GlobalInvocationID.xy,i), vec4(prefilterEnvMap(samplerColor, R, object.roughness), 1.0f));
+		imageStore(outPrefiltered, ivec3(gl_GlobalInvocationID.xy,i), vec4(prefilterEnvMap(samplerColor, R, object.roughness), 1.0f));
 	}
 }

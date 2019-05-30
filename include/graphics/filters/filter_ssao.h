@@ -41,7 +41,11 @@ private:
 	UniformHandle m_UniformScene;
 
 	std::shared_ptr<Image2d> m_Noise;
-	std::vector<glm::vec3> m_Kernel;
+	struct Kernel
+	{
+		float value[3];
+	};
+	std::vector<Kernel> m_Kernel;
 };
 }
 

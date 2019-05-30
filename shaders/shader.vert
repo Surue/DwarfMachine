@@ -38,11 +38,14 @@ void main()
 	vec4 normal = vec4(inNormal, 0.0f);
 
 	vec4 worldPosition = object.transform * position;
-    mat3 normalMatrix = transpose(inverse(mat3(object.transform)));
 
 	gl_Position = scene.projection * scene.view * worldPosition;
 
-	outPosition = worldPosition.xyz;
+//	outPosition = vec3(worldPosition);
+	outPosition = vec3(scene.view * worldPosition);
 	outUV = inUV;
-	outNormal = normalMatrix * normalize(normal.xyz);
+	// Normal in view space
+	mat3 normalMatrix = transpose(inverse(mat3(scene.view * object.transform)));
+//	mat3 normalMatrix = transpose(inverse(mat3(object.transform)));
+	outNormal = normalMatrix * inNormal;
 }

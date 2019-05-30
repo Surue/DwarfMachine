@@ -39,6 +39,6 @@ void main()
 	
 	gl_Position = scene.projection * viewStatic * worldPosition;
 
-	outPosition = worldPosition.xyz;
+	outPosition = vec3(viewStatic * worldPosition);
 	outUVW = inPosition;
 }

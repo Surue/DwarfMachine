@@ -124,6 +124,7 @@ void RendererDeferred::Draw(const CommandBuffer& commandBuffer)
 	m_DescriptorSet.Push("samplerDiffuse", GraphicManager::Get()->GetAttachment("diffuse"));
 	m_DescriptorSet.Push("samplerNormal", GraphicManager::Get()->GetAttachment("normal"));
 	m_DescriptorSet.Push("samplerMaterial", GraphicManager::Get()->GetAttachment("material"));
+	m_DescriptorSet.Push("samplerSsao", GraphicManager::Get()->GetAttachment("ssao"));
 	if(m_FutureBRDF.valid())
 	{
 		m_CurrentBRDF = m_FutureBRDF.get();
@@ -238,7 +239,7 @@ std::unique_ptr<ImageCube> RendererDeferred::ComputePrefiltered(const std::share
 		VkWriteDescriptorSet descriptorWrite = {};
 		descriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
 		descriptorWrite.dstSet = VK_NULL_HANDLE;
-		descriptorWrite.dstBinding = *computePipeline.GetShader()->GetDescriptorLocation("outColor");
+		descriptorWrite.dstBinding = *computePipeline.GetShader()->GetDescriptorLocation("outPrefiltered");
 		descriptorWrite.dstArrayElement = 0;
 		descriptorWrite.descriptorCount = 1;
 		descriptorWrite.descriptorType = *computePipeline.GetShader()->GetDescriptorType(descriptorWrite.dstBinding);

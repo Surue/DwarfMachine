@@ -43,6 +43,7 @@ layout(binding = 5) uniform sampler2D samplerMaterial;
 layout(binding = 6) uniform sampler2D samplerBRDF;
 layout(binding = 7) uniform samplerCube samplerIrradiance;
 layout(binding = 8) uniform samplerCube samplerPrefiltered;
+layout(binding = 9) uniform sampler2D samplerSsao;
 
 layout(location = 0) in vec2 inUV;
 
@@ -163,12 +164,23 @@ vec3 specularContribution(vec3 diffuse, vec3 L, vec3 V, vec3 N, vec3 F0, float m
 
 void main()
 {
-	vec3 worldPosition = texture(samplerPosition, inUV).rgb;
-	vec4 screenPosition = scene.view * vec4(worldPosition, 1.0f);
+//	vec3 worldPosition = texture(samplerPosition, inUV).rgb;
+//	vec4 screenPosition = scene.view * vec4(worldPosition, 1.0f);
+
+	mat4 Inv = scene.view;
+	Inv = inverse(Inv);
+
+	vec3 screenPosition = texture(samplerPosition, inUV).rgb;
+	vec3 worldPosition = vec3(Inv * vec4(screenPosition, 1.0));
 	
 	vec4 diffuse = texture(samplerDiffuse, inUV);
 	vec3 normal = texture(samplerNormal, inUV).rgb;
+	mat3 normalMatrix = transpose(inverse(mat3(scene.view)));
+	normal = normal * normalMatrix;
+
 	vec3 material = texture(samplerMaterial, inUV).rgb;
+	float ssao = texture(samplerSsao, inUV).r;
+	diffuse *= ssao;
 	
 	float metallic = material.r;
 	float roughness = material.g;
@@ -216,6 +228,9 @@ void main()
 //		// Gamma correction
 		color = color / (color + vec3(1.0));
 		color = pow(color, vec3(1.0f / 2.2f));
+
+		//ssao
+//		color *= ssao;
 
 		outColor = vec4(color, 1.0f);
 		

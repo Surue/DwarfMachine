@@ -53,13 +53,15 @@ void EditorRenderManager::Start()
 		Attachment(3, "diffuse", Attachment::Type::IMAGE, false, VK_FORMAT_R8G8B8A8_UNORM),
 		Attachment(4, "normal", Attachment::Type::IMAGE, false, VK_FORMAT_R16G16B16A16_SFLOAT),
 		Attachment(5, "material", Attachment::Type::IMAGE, false, VK_FORMAT_R8G8B8A8_UNORM), 
-		Attachment(6, "resolved", Attachment::Type::IMAGE, false, VK_FORMAT_R8G8B8A8_UNORM)
+		Attachment(6, "resolved", Attachment::Type::IMAGE, false, VK_FORMAT_R8G8B8A8_UNORM),
+		Attachment(7, "ssao", Attachment::Type::IMAGE, false, VK_FORMAT_R8G8B8A8_UNORM)
 	};
 
 	std::vector<SubpassType> renderpassSubpasses0 = { 
-		SubpassType(0, { 0, 2, 3, 4 ,5}),
-		SubpassType(1, { 0, 6}),
-		SubpassType(2, { 0, 1})
+		SubpassType(0, { 0, 2, 3, 4 ,5}), //Geometry pass
+		SubpassType(1, { 0, 7}), //ssao
+		SubpassType(2, { 0, 6}), //light pass
+		SubpassType(3, { 0, 1}) //post pass
 	};
 
 	renderStages.emplace_back(std::make_unique<RenderStage>(renderpassAttachment0, renderpassSubpasses0));
@@ -70,13 +72,14 @@ void EditorRenderManager::Start()
 
 	rendererContainer.Add<RendererMeshes>(Pipeline::Stage(0, 0));
 
-	rendererContainer.Add<RendererDeferred>(Pipeline::Stage(0, 1));
+	rendererContainer.Add<FilterSsao>(Pipeline::Stage(0, 1));
 
-	rendererContainer.Add<FilterFxaa>(Pipeline::Stage(0, 2));
-	rendererContainer.Add<FilterSsao>(Pipeline::Stage(0, 2));
-	rendererContainer.Add<FilterDefault>(Pipeline::Stage(0, 2), true);
-	rendererContainer.Add<RendererGizmo>(Pipeline::Stage(0, 2));
-	rendererContainer.Add<RendererImGui>(Pipeline::Stage(0, 2)); //Must be the last one otherwise draw inside an imgui window
+	rendererContainer.Add<RendererDeferred>(Pipeline::Stage(0, 2));
+
+	rendererContainer.Add<FilterFxaa>(Pipeline::Stage(0, 3));
+	rendererContainer.Add<FilterDefault>(Pipeline::Stage(0, 3), true);
+	rendererContainer.Add<RendererGizmo>(Pipeline::Stage(0, 3));
+	rendererContainer.Add<RendererImGui>(Pipeline::Stage(0, 3)); //Must be the last one otherwise draw inside an imgui window
 }
 void EditorRenderManager::Update()
 {

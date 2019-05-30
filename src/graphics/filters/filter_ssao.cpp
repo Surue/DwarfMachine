@@ -25,6 +25,8 @@ SOFTWARE.
 #include <graphics/filters/filter_ssao.h>
 #include <graphics/graphic_manager.h>
 
+#define GLM_FORCE_DEPTH_ZERO_TO_ONE
+
 namespace dm
 {
 float RandomFloat(float a, float b) {
@@ -46,7 +48,11 @@ FilterSsao::FilterSsao(const Pipeline::Stage& pipelineStage) :
 		sample *= RandomFloat(0.0f, 1.0f);
 		float scale = static_cast<float>(i) / static_cast<float>(64);
 		scale = glm::mix(0.1f, 1.0f, scale * scale);
-		m_Kernel[i] = sample * scale;
+		Kernel kernel;
+		kernel.value[0] = sample.x;
+		kernel.value[1] = sample.y;
+		kernel.value[2] = sample.z;
+		m_Kernel[i] = kernel;
 	}
 }
 
@@ -55,16 +61,18 @@ void FilterSsao::Update() {}
 void FilterSsao::Draw(const CommandBuffer& commandBuffer)
 {
 	auto camera = GraphicManager::Get()->GetCamera();
-	m_UniformScene.Push("kernel", *m_Kernel.data(), sizeof(glm::vec3) * 64);
+	m_UniformScene.Push("kernel", *m_Kernel.data(), sizeof(Kernel) * 64);
 	m_UniformScene.Push("projection", camera->proj);
 	m_UniformScene.Push("view", camera->viewMatrix);
 	m_UniformScene.Push("cameraPosition", camera->pos);
+	m_UniformScene.Push("aspectRatio", camera->aspect);
+	m_UniformScene.Push("tanHalfFov", std::tanf(camera->fov / 2.0f));
 
 	m_DescriptorSet.Push("UniformScene", m_UniformScene);
-	m_DescriptorSet.Push("writeColor", GetAttachment("writeColor", "resolved"));
-	m_DescriptorSet.Push("samplerPosition", GetAttachment("samplerPosition", "position"));
-	m_DescriptorSet.Push("samplerNormal", GetAttachment("samplerNormal", "normals"));
+	m_DescriptorSet.Push("samplerPosition", GraphicManager::Get()->GetAttachment("position"));
+	m_DescriptorSet.Push("samplerNormal", GraphicManager::Get()->GetAttachment("normal"));
 	m_DescriptorSet.Push("samplerNoise", m_Noise);
+	m_DescriptorSet.Push("samplerDepth", GraphicManager::Get()->GetAttachment("depth"));
 
 	bool updateSuccess = m_DescriptorSet.Update(m_Pipeline);
 
@@ -81,7 +89,7 @@ void FilterSsao::Draw(const CommandBuffer& commandBuffer)
 
 std::shared_ptr<Image2d> FilterSsao::ComputeNoise(const uint32_t &size)
 {
-/*	std::vector<glm::vec3> ssaoNoise(size * size);
+	std::vector<glm::vec3> ssaoNoise(size * size);
 
 	for(uint32_t i = 0; i < size * size; i++)
 	{
@@ -90,10 +98,8 @@ std::shared_ptr<Image2d> FilterSsao::ComputeNoise(const uint32_t &size)
 		ssaoNoise[i] = noise;
 	}
 
-	std::unique_ptr<uint8_t[]> pixels = std::unique_ptr<uint8_t[]>(reinterpret_cast<uint8_t *>(ssaoNoise.data()));
+	auto noiseImage = std::make_shared<Image2d>("ressources/textures/noise4x4.png");
 
-	auto noiseImage = std::make_shared<Image2d>(size, size, std::unique_ptr<uint8_t[]>(reinterpret_cast<uint8_t *>(ssaoNoise.data())), VK_FORMAT_R32G32B32_SFLOAT,
-		VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL, VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_STORAGE_BIT, VK_FILTER_NEAREST);
-	*/return nullptr;
+	return noiseImage;
 }
 }

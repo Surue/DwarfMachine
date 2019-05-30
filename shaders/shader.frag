@@ -32,6 +32,15 @@ layout(location = 1) out vec4 outDiffuse;
 layout(location = 2) out vec4 outNormal;
 layout(location = 3) out vec4 outMaterial;
 
+const float NEAR_PLANE = 0.1f; //todo: specialization const
+const float FAR_PLANE = 1024.0f; //todo: specialization const 
+
+float linearDepth(float depth)
+{
+	float z = depth * 2.0f - 1.0f; 
+	return (2.0f * NEAR_PLANE * FAR_PLANE) / (FAR_PLANE + NEAR_PLANE - z * (FAR_PLANE - NEAR_PLANE));	
+}
+
 void main()
 {
 	vec4 diffuse = object.baseDiffuse;
@@ -71,9 +80,10 @@ void main()
 #endif
 
 	material.z = (1.0f / 3.0f) * (object.ignoreFog + (2.0f * min(object.ignoreLighting + glowing, 1.0f)));
-
-	outPosition = vec4(inPosition, 1.0f);
+	 
+	outPosition = vec4(inPosition, 1.0);
 	outDiffuse = diffuse;
 	outNormal = vec4(normalize(normal), 1.0f);
-	outMaterial = vec4(material, 1.0f);
+//	outNormal = vec4(normalize(normal) * 0.5 + 0.5, 1.0f);
+	outMaterial = vec4(material * 2.0f, 1.0f);
 }
