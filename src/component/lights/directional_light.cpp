@@ -22,20 +22,34 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#ifndef COMPONENT_TYPE_H
-#define COMPONENT_TYPE_H
-enum class ComponentType : int {
-	NONE = 0,
-	TRANSFORM = 1,
-	CAMERA = 2,
-	MATERIAL_DEFAULT = 3,
-	MODEL = 4,
-	BOUNDING_SPHERE = 5,
-	DRAWABLE = 6,
-	MATERIAL_SKYBOX = 7,
-	MESH_RENDERER = 8,
-	POINT_LIGHT = 9, 
-	DIRECTIONAL_LIGHT = 10, 
-	LENGTH = 11,
-};
-#endif //COMPONENT_TYPE_H
+#include <component/lights/directional_light.h>
+#include "imgui_impl_vulkan.h"
+
+namespace dm
+{
+void DirectionalLightManager::Init() {}
+
+void DirectionalLightManager::Update() {}
+
+DirectionalLight* DirectionalLightManager::CreateComponent(Entity entity)
+{
+	DirectionalLight light;
+	light.color = Color::White;
+	light.direction = glm::vec3(0, -1.0, 0);
+	light.intensity = 1;
+
+	m_Components[entity - 1] = light;
+	return &m_Components[entity - 1];
+}
+
+void DirectionalLightManager::DestroyComponent(Entity entity) {}
+
+void DirectionalLightManager::OnDrawInspector(Entity entity)
+{
+	ImGui::Separator();
+	ImGui::TextWrapped("Directional Light");
+	ImGui::ColorPicker4("lightColor", &m_Components[entity - 1].color[0]);
+	ImGui::DragFloat("intensity", &m_Components[entity - 1].intensity, 0.1f, 0, 100000);
+	ImGui::DragFloat3("direction", &m_Components[entity - 1].direction[0], 0.1f);
+}
+}

@@ -35,6 +35,7 @@ SOFTWARE.
 #include "mesh_renderer.h"
 #include <component/lights/light.h>
 #include "lights/point_light.h"
+#include "lights/directional_light.h"
 
 namespace dm {
 class ComponentManagerContainer final
@@ -63,6 +64,8 @@ public:
 
 	PointLightManager* GetPointLightManager() const { return m_PointLightManager.get(); }
 
+	DirectionalLightManager* GetDirectionalLightManager() const { return m_DirectionalLightManager.get(); }
+
 	void DrawOnInspector(Entity entity);
 
 	void OnEntityResize(int newSize);
@@ -77,6 +80,7 @@ private:
 	std::unique_ptr<DrawableManager> m_DrawableManager;
 	std::unique_ptr<MeshRendererManager> m_MeshRendererManager;
 	std::unique_ptr<PointLightManager> m_PointLightManager;
+	std::unique_ptr<DirectionalLightManager> m_DirectionalLightManager;
 };
 }
 #endif COMPONENT_MANAGER_H

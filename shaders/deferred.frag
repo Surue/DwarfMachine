@@ -5,7 +5,6 @@
 layout(binding = 0) uniform UniformScene
 {
 	mat4 view;
-	mat4 shadowSpace;
 	vec3 cameraPosition;
 	
 	int lightCount;
@@ -13,9 +12,11 @@ layout(binding = 0) uniform UniformScene
 	vec4 fogColor;
 	float fogDensity;
 	float fogGradient;
+	vec4 directionLightDirection;
+	vec4 directionLightColor;
 } scene;
 
-struct Light
+struct PointLight
 {
 	vec4 color;
 	vec3 position;
@@ -24,17 +25,8 @@ struct Light
 
 layout(binding = 1) buffer BufferLights
 {
-	Light lights[];
+	PointLight pointLights[];
 } bufferLights;
-
-//layout(binding = 2) uniform sampler2D samplerShadow;
-//layout(binding = 3) uniform sampler2D samplerPosition;
-//layout(binding = 4) uniform sampler2D samplerDiffuse;
-//layout(binding = 5) uniform sampler2D samplerNormal;
-//layout(binding = 6) uniform sampler2D samplerMaterial;
-//layout(binding = 7) uniform sampler2D samplerBRDF;
-//layout(binding = 8) uniform samplerCube samplerIrradiance;
-//layout(binding = 9) uniform samplerCube samplerPrefiltered;
 
 layout(binding = 2) uniform sampler2D samplerPosition;
 layout(binding = 3) uniform sampler2D samplerDiffuse;
@@ -143,29 +135,9 @@ vec3 specularContribution(vec3 diffuse, vec3 L, vec3 V, vec3 N, vec3 F0, float m
 	return color;
 }
 
-//float shadowFactor(vec4 shadowCoords)
-//{
-//	vec3 ndc = shadowCoords.xyz /= shadowCoords.w;
-//	
-//	if(abs(ndc.x) > 1.0f || abs(ndc.y) > 1.0f || abs(ndc.z) > 1.0f)
-//	{
-//		return 0.0f;
-//	}
-//	
-//	float shadowValue = texture(samplerShadow, shadowCoords.xy).r;
-//	
-//	if(ndc.z > shadowValue)
-//	{
-//		return 0.0f;
-//	}
-//	
-//	return 1.0f;
-//}
-
 void main()
 {
-//	vec3 worldPosition = texture(samplerPosition, inUV).rgb;
-//	vec4 screenPosition = scene.view * vec4(worldPosition, 1.0f);
+	outColor = scene.directionLightDirection;
 
 	mat4 Inv = scene.view;
 	Inv = inverse(Inv);
@@ -199,13 +171,13 @@ void main()
 		
 		for(int i = 0; i < scene.lightCount; i++)
 		{
-			Light light = bufferLights.lights[i];
+			PointLight light = bufferLights.pointLights[i];
 			vec3 L = light.position - worldPosition;
 			float Dl = length(L);
 			L /= Dl;
 			Lo += attenuation(Dl, light.radius) * light.color.rgb * specularContribution(diffuse.rgb, L, V, N, F0, metallic, roughness);
 		}
-		
+				
 		vec2 brdf = texture(samplerBRDF, vec2(max(dot(N, V), 0.0f), roughness)).rg;
 		vec3 reflection = prefilteredReflection(R, roughness).rgb;
 		vec3 irradiance = texture(samplerIrradiance, N).rgb;
@@ -220,22 +192,22 @@ void main()
 		kD *= 1.0f - metallic;
 		vec3 ambient = (kD * albedo + specular);
 
-		vec3 color = ambient + Lo;
+		// Directional light
+		vec3 L = normalize(vec3(-scene.directionLightDirection));
+		vec3 H = normalize(L + scene.cameraPosition);
+		vec3 directionalDiffuse = vec3(scene.directionLightColor) * max(dot(N, L), 0.01) * specularContribution(diffuse.rgb, L, V, N, F0, metallic, roughness);
+
+		vec3 color = ambient + directionalDiffuse + Lo;
 		
 		// Tone mapping
 		color = Uncharted2Tonemap(color * 4.5f);
 		color = color * (1.0f / Uncharted2Tonemap(vec3(11.2f)));	
-//		// Gamma correction
+
+		// Gamma correction
 		color = color / (color + vec3(1.0));
 		color = pow(color, vec3(1.0f / 2.2f));
 
-		//ssao
-//		color *= ssao;
-
 		outColor = vec4(color, 1.0f);
-		
-		//vec4 shadowCoords = scene.shadowSpace * vec4(worldPosition, 1.0f);
-		//outColor 3= shadowFactor(shadowCoords);
 	}
 	else
 	{

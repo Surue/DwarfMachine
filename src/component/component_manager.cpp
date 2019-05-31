@@ -37,7 +37,8 @@ ComponentManagerContainer::ComponentManagerContainer() :
 	m_DrawableManager(std::make_unique<DrawableManager>()),
 	m_MaterialSkyboxManager(std::make_unique<MaterialSkyboxManager>()),
 	m_MeshRendererManager(std::make_unique<MeshRendererManager>()),
-	m_PointLightManager(std::make_unique<PointLightManager>())
+	m_PointLightManager(std::make_unique<PointLightManager>()),
+	m_DirectionalLightManager(std::make_unique<DirectionalLightManager>())
 { }
 
 void ComponentManagerContainer::Destroy()
@@ -51,6 +52,7 @@ void ComponentManagerContainer::Destroy()
 	m_MaterialSkyboxManager.reset(nullptr);
 	m_MeshRendererManager.reset(nullptr);
 	m_PointLightManager.reset(nullptr);
+	m_DirectionalLightManager.reset(nullptr);
 }
 
 ComponentBase* ComponentManagerContainer::CreateComponent(const Entity entity, const ComponentType componentType) const
@@ -75,8 +77,10 @@ ComponentBase* ComponentManagerContainer::CreateComponent(const Entity entity, c
 		return m_MaterialSkyboxManager->CreateComponent(entity);
 	case ComponentType::MESH_RENDERER:
 		return m_MeshRendererManager->CreateComponent(entity);
-	case ComponentType::POINTLIGHT:
+	case ComponentType::POINT_LIGHT:
 		return m_PointLightManager->CreateComponent(entity);
+	case ComponentType::DIRECTIONAL_LIGHT:
+		return m_DirectionalLightManager->CreateComponent(entity);
 	case ComponentType::LENGTH: break;
 	default:
 		throw std::runtime_error("Fail to bind component to its own component manager");
@@ -105,8 +109,10 @@ ComponentBase* ComponentManagerContainer::AddComponent(const Entity entity, Comp
 		return static_cast<ComponentBase*>(m_MaterialSkyboxManager->AddComponent(entity, static_cast<MaterialSkybox&>(component)));
 	case ComponentType::MESH_RENDERER:
 		return static_cast<ComponentBase*>(m_MeshRendererManager->AddComponent(entity, static_cast<MeshRenderer&>(component)));
-	case ComponentType::POINTLIGHT:
+	case ComponentType::POINT_LIGHT:
 		return static_cast<ComponentBase*>(m_PointLightManager->AddComponent(entity, static_cast<PointLight&>(component)));
+	case ComponentType::DIRECTIONAL_LIGHT:
+		return static_cast<ComponentBase*>(m_DirectionalLightManager->AddComponent(entity, static_cast<DirectionalLight&>(component)));
 	case ComponentType::LENGTH: break;
 	default:
 		throw std::runtime_error("Fail to bind component to its own component manager");
@@ -133,8 +139,10 @@ ComponentBase* ComponentManagerContainer::GetComponent(const Entity entity, cons
 		return m_MaterialSkyboxManager->GetComponent(entity);
 	case ComponentType::MESH_RENDERER:
 		return m_MeshRendererManager->GetComponent(entity);
-	case ComponentType::POINTLIGHT:
+	case ComponentType::POINT_LIGHT:
 		return m_PointLightManager->GetComponent(entity);
+	case ComponentType::DIRECTIONAL_LIGHT:
+		return m_DirectionalLightManager->GetComponent(entity);
 	case ComponentType::NONE: break;
 	case ComponentType::LENGTH: break;
 	default: ;
@@ -173,8 +181,11 @@ void ComponentManagerContainer::DestroyComponent(const Entity entity, const Comp
 	case ComponentType::MESH_RENDERER: 
 		m_MeshRendererManager->DestroyComponent(entity);
 		break;
-	case ComponentType::POINTLIGHT: 
+	case ComponentType::POINT_LIGHT: 
 		m_PointLightManager->DestroyComponent(entity);
+		break;
+	case ComponentType::DIRECTIONAL_LIGHT:
+		m_DirectionalLightManager->DestroyComponent(entity);
 		break;
 	case ComponentType::LENGTH: break;
 	default: 
@@ -218,9 +229,14 @@ void ComponentManagerContainer::DrawOnInspector(Entity entity)
 		m_DrawableManager->OnDrawInspector(entity);
 	}
 
-	if (entityHandle.HasComponent(ComponentType::POINTLIGHT))
+	if (entityHandle.HasComponent(ComponentType::POINT_LIGHT))
 	{
 		m_PointLightManager->OnDrawInspector(entity);
+	}
+
+	if (entityHandle.HasComponent(ComponentType::DIRECTIONAL_LIGHT))
+	{
+		m_DirectionalLightManager->OnDrawInspector(entity);
 	}
 }
 
@@ -235,5 +251,6 @@ void ComponentManagerContainer::OnEntityResize(const int newSize)
 	m_MaterialSkyboxManager->OnEntityResize(newSize);
 	m_MeshRendererManager->OnEntityResize(newSize);
 	m_PointLightManager->OnEntityResize(newSize);
+	m_DirectionalLightManager->OnEntityResize(newSize);
 }
 }

@@ -21,21 +21,28 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
+#ifndef DIRECTIONAL_LIGHT_H
+#define DIRECTIONAL_LIGHT_H
 
-#ifndef COMPONENT_TYPE_H
-#define COMPONENT_TYPE_H
-enum class ComponentType : int {
-	NONE = 0,
-	TRANSFORM = 1,
-	CAMERA = 2,
-	MATERIAL_DEFAULT = 3,
-	MODEL = 4,
-	BOUNDING_SPHERE = 5,
-	DRAWABLE = 6,
-	MATERIAL_SKYBOX = 7,
-	MESH_RENDERER = 8,
-	POINT_LIGHT = 9, 
-	DIRECTIONAL_LIGHT = 10, 
-	LENGTH = 11,
+#include <component/lights/light.h>
+#include <glm/vec3.hpp>
+
+namespace dm
+{
+struct DirectionalLight : Light
+{
+	glm::vec3 direction = glm::vec3(0, -1.0, 0);
 };
-#endif //COMPONENT_TYPE_H
+
+class DirectionalLightManager : public ComponentBaseManager<DirectionalLight>
+{
+public:
+	void Init() override;
+	void Update() override;
+	DirectionalLight* CreateComponent(Entity) override;
+	void DestroyComponent(Entity entity) override;
+	void OnDrawInspector(Entity entity) override;
+};
+}
+
+#endif

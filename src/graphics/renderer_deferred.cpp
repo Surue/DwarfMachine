@@ -74,8 +74,11 @@ void RendererDeferred::Draw(const CommandBuffer& commandBuffer)
 		}
 	}
 
-	std::vector<DeferredLight> deferredLights(MAX_LIGHTS);
-	uint32_t lightCount = 0;
+	std::vector<DeferredPointLight> deferredPointLights(MAX_LIGHTS);
+	uint32_t pointLightCount = 0;
+
+	glm::vec3 directionalDirection;
+	glm::vec4 directionalColor;
 
 	for(auto entity : Engine::Get()->GetEntityManager()->GetEntities())
 	{
@@ -86,45 +89,54 @@ void RendererDeferred::Draw(const CommandBuffer& commandBuffer)
 			break;
 		}
 
-		if (entityHandle.HasComponent(ComponentType::POINTLIGHT))
+		if (entityHandle.HasComponent(ComponentType::POINT_LIGHT))
 		{
-			auto light = entityHandle.GetComponent<PointLight>(ComponentType::POINTLIGHT);
-			auto transform = entityHandle.GetComponent<Transform>(ComponentType::TRANSFORM);
+			const auto light = entityHandle.GetComponent<PointLight>(ComponentType::POINT_LIGHT);
+			const auto transform = entityHandle.GetComponent<Transform>(ComponentType::TRANSFORM);
 
-			DeferredLight deferredLight = {};
+			DeferredPointLight deferredLight = {};
 			deferredLight.color = light->color * light->intensity;
 			deferredLight.radius = light->radius;
 			deferredLight.position = transform->position;
 
-			deferredLights[lightCount] = deferredLight;
-			lightCount++;
+			deferredPointLights[pointLightCount] = deferredLight;
+			pointLightCount++;
 
-			if (lightCount >= MAX_LIGHTS)
+			if (pointLightCount >= MAX_LIGHTS)
 			{
 				break;
 			}
 		}
+
+		if (entityHandle.HasComponent(ComponentType::DIRECTIONAL_LIGHT))
+		{
+			const auto light = entityHandle.GetComponent<DirectionalLight>(ComponentType::DIRECTIONAL_LIGHT);
+
+			directionalDirection = light->direction;
+			directionalColor = glm::vec4(light->color.r, light->color.g, light->color.b, light->color.a) * light->intensity;
+		}
 	}
 
 	m_UniformScene.Push("view", camera->viewMatrix);
-	//TODO m_UniformScene.Push("shadowSpace", )
 	m_UniformScene.Push("cameraPosition", camera->pos);
-	m_UniformScene.Push("lightCount", lightCount);
+	m_UniformScene.Push("lightCount", pointLightCount);
 	//TODO créer un objet fog
 	m_UniformScene.Push("fogColor", Color::White);
 	m_UniformScene.Push("fogDensity", 0.001f);
 	m_UniformScene.Push("fogGradient", 2.0f);
+	m_UniformScene.Push("directionLightDirection", directionalDirection);
+	m_UniformScene.Push("directionLightColor", directionalColor);
 
-	m_StorageLight.Push(deferredLights.data(), sizeof(DeferredLight) * MAX_LIGHTS);
+	m_StoragePointLight.Push(deferredPointLights.data(), sizeof(DeferredPointLight) * MAX_LIGHTS);
 
 	m_DescriptorSet.Push("UniformScene", m_UniformScene);
-	m_DescriptorSet.Push("BufferLights", m_StorageLight);
-	//TODO m_DescriptorSet.Push("samplerShadow", GraphicManager::Get()->GetAttachment("shadow"));
+	m_DescriptorSet.Push("BufferLights", m_StoragePointLight);
 	m_DescriptorSet.Push("samplerPosition", GraphicManager::Get()->GetAttachment("position"));
 	m_DescriptorSet.Push("samplerDiffuse", GraphicManager::Get()->GetAttachment("diffuse"));
 	m_DescriptorSet.Push("samplerNormal", GraphicManager::Get()->GetAttachment("normal"));
 	m_DescriptorSet.Push("samplerMaterial", GraphicManager::Get()->GetAttachment("material"));
 	m_DescriptorSet.Push("samplerSsao", GraphicManager::Get()->GetAttachment("ssao"));
+
 	if(m_FutureBRDF.valid())
 	{
 		m_CurrentBRDF = m_FutureBRDF.get();

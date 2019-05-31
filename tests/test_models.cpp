@@ -319,7 +319,7 @@ TEST(Models, FrustumCulling)
 	auto light = dm::EntityHandle(e1);
 	light.CreateComponent<dm::Transform>(ComponentType::TRANSFORM);
 	dm::PointLight lightComponent;
-	lightComponent.componentType = ComponentType::POINTLIGHT;
+	lightComponent.componentType = ComponentType::POINT_LIGHT;
 	light.AddComponent(lightComponent);
 
 	try
@@ -389,13 +389,95 @@ TEST(Models, PBR)
 	}
 
 	//PointLight
-
 	const auto e1 = entityManager->CreateEntity();
 	auto light = dm::EntityHandle(e1);
 	light.CreateComponent<dm::Transform>(ComponentType::TRANSFORM);
 	dm::PointLight lightComponent;
-	lightComponent.componentType = ComponentType::POINTLIGHT;
+	lightComponent.componentType = ComponentType::POINT_LIGHT;
 	light.AddComponent(lightComponent);
+
+	try
+	{
+		engine.Start();
+	}
+	catch (const std::exception& e)
+	{
+		std::cerr << e.what() << "\n";
+	}
+}
+
+TEST(Models, Lights)
+{
+	dm::EngineSettings settings;
+	settings.windowSize = dm::Vec2i(1024, 720);
+	dm::Engine engine = dm::Engine(settings);
+	engine.Init();
+
+	engine.SetApplication(new dm::Editor());
+
+	auto editor = static_cast<dm::Editor*>(engine.GetApplication());
+
+	auto entityManager = engine.GetEntityManager();
+
+	//Camera
+	const auto e0 = entityManager->CreateEntity();
+	auto entity = dm::EntityHandle(e0);
+
+	dm::Camera cameraInfo;
+	cameraInfo.up = glm::vec3(0.0f, 1.0f, 0.0f);
+	cameraInfo.componentType = ComponentType::CAMERA;
+	cameraInfo.isMainCamera = true;
+	cameraInfo.isCullingCamera = true;
+	cameraInfo.viewMatrix = glm::lookAt(cameraInfo.pos, cameraInfo.pos + cameraInfo.front, cameraInfo.up);
+	cameraInfo.fov = 45;
+	cameraInfo.frustumFar = 1024.0f;
+	cameraInfo.frustumNear = 0.1f;
+	cameraInfo.aspect = 1024.0f / 720.0f;
+	cameraInfo.proj = glm::perspective(glm::radians(cameraInfo.fov), cameraInfo.aspect, cameraInfo.frustumNear, cameraInfo.frustumFar);
+
+	auto camera = entity.AddComponent<dm::Camera>(cameraInfo);
+
+	std::shared_ptr<dm::GizmoType> gizmoType = dm::GizmoType::Create(dm::Engine::Get()->GetModelManager()->GetModel("ModelSphere"), 1, dm::Color::White);
+
+	//Skybox
+	CreateSkybox(entityManager);
+
+	//Sphere
+	float maxSphere = 9;
+
+	for (size_t i = 0; i <= maxSphere; i++)
+	{
+		for (size_t j = 0; j <= maxSphere; j++)
+		{
+			dm::MaterialDefault material;
+			material.componentType = ComponentType::MATERIAL_DEFAULT;
+			material.color = dm::Color(1, 1, 1, 1);
+			material.roughness = i / maxSphere;
+			material.metallic = j / maxSphere;
+			material.ignoreLighting = false;
+			material.ignoreFog = false;
+
+			glm::vec3 pos = glm::vec3(i - maxSphere / 2.0f + i * 1.0f, 0, j - maxSphere / 2.0f + j * 1.0f);
+			CreateSphere(pos, entityManager, material);
+		}
+	}
+
+	//PointLight
+	const auto e1 = entityManager->CreateEntity();
+	auto light = dm::EntityHandle(e1);
+	light.CreateComponent<dm::Transform>(ComponentType::TRANSFORM);
+	dm::PointLight lightComponent;
+	lightComponent.componentType = ComponentType::POINT_LIGHT;
+	light.AddComponent(lightComponent);
+
+	//DirectionalLight
+	const auto e2 = entityManager->CreateEntity();
+	auto sun = dm::EntityHandle(e2);
+	auto sunPos = sun.CreateComponent<dm::Transform>(ComponentType::TRANSFORM);
+	sunPos->position = glm::vec3(0, 10, 0);
+	dm::DirectionalLight sunLightComponent;
+	sunLightComponent.componentType = ComponentType::DIRECTIONAL_LIGHT;
+	sun.AddComponent(sunLightComponent);
 
 	try
 	{

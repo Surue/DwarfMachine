@@ -52,7 +52,7 @@ public:
 
 	static std::unique_ptr<ImageCube> ComputePrefiltered(const std::shared_ptr<ImageCube> &source, const uint32_t &size);
 private:
-	struct DeferredLight
+	struct DeferredPointLight
 	{
 		Color color = Color::White;
 		glm::vec3 position;
@@ -63,7 +63,7 @@ private:
 
 	DescriptorHandle m_DescriptorSet;
 	UniformHandle m_UniformScene;
-	StorageHandle m_StorageLight;
+	StorageHandle m_StoragePointLight;
 
 	PipelineGraphics m_Pipeline;
 
