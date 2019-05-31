@@ -22,30 +22,9 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#ifndef LIGHT_H
-#define LIGHT_H
-
-#include <component/component.h>
-#include <engine/color.h>
+#include <component/lights/light.h>
 
 namespace dm
 {
-struct Light : public ComponentBase
-{
-	Color color = Color(1, 1, 1);
-	float radius = 1;
-	float intensity = 1;
-};
 
-class LightManager : public ComponentBaseManager<Light>
-{
-public:
-	void Init() override;
-	void Update() override;
-	Light* CreateComponent(Entity) override;
-	void DestroyComponent(Entity entity) override;
-	void OnDrawInspector(Entity entity) override;
-};
 }
-
-#endif

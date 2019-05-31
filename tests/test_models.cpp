@@ -43,6 +43,7 @@ SOFTWARE.
 #include "graphics/image_cube.h"
 #include "component/materials/material_skybox.h"
 #include "component/mesh_renderer.h"
+#include "component/lights/point_light.h"
 
 TEST(Models, Cube)
 {
@@ -312,13 +313,13 @@ TEST(Models, FrustumCulling)
 		}
 	}
 
-	//Light
+	//PointLight
 
 	const auto e1 = entityManager->CreateEntity();
 	auto light = dm::EntityHandle(e1);
 	light.CreateComponent<dm::Transform>(ComponentType::TRANSFORM);
-	dm::Light lightComponent;
-	lightComponent.componentType = ComponentType::LIGHT;
+	dm::PointLight lightComponent;
+	lightComponent.componentType = ComponentType::POINTLIGHT;
 	light.AddComponent(lightComponent);
 
 	try
@@ -387,13 +388,13 @@ TEST(Models, PBR)
 		}
 	}
 
-	//Light
+	//PointLight
 
 	const auto e1 = entityManager->CreateEntity();
 	auto light = dm::EntityHandle(e1);
 	light.CreateComponent<dm::Transform>(ComponentType::TRANSFORM);
-	dm::Light lightComponent;
-	lightComponent.componentType = ComponentType::LIGHT;
+	dm::PointLight lightComponent;
+	lightComponent.componentType = ComponentType::POINTLIGHT;
 	light.AddComponent(lightComponent);
 
 	try

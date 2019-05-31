@@ -37,7 +37,7 @@ ComponentManagerContainer::ComponentManagerContainer() :
 	m_DrawableManager(std::make_unique<DrawableManager>()),
 	m_MaterialSkyboxManager(std::make_unique<MaterialSkyboxManager>()),
 	m_MeshRendererManager(std::make_unique<MeshRendererManager>()),
-	m_LightManager(std::make_unique<LightManager>())
+	m_PointLightManager(std::make_unique<PointLightManager>())
 { }
 
 void ComponentManagerContainer::Destroy()
@@ -50,7 +50,7 @@ void ComponentManagerContainer::Destroy()
 	m_DrawableManager.reset(nullptr);
 	m_MaterialSkyboxManager.reset(nullptr);
 	m_MeshRendererManager.reset(nullptr);
-	m_LightManager.reset(nullptr);
+	m_PointLightManager.reset(nullptr);
 }
 
 ComponentBase* ComponentManagerContainer::CreateComponent(const Entity entity, const ComponentType componentType) const
@@ -75,8 +75,8 @@ ComponentBase* ComponentManagerContainer::CreateComponent(const Entity entity, c
 		return m_MaterialSkyboxManager->CreateComponent(entity);
 	case ComponentType::MESH_RENDERER:
 		return m_MeshRendererManager->CreateComponent(entity);
-	case ComponentType::LIGHT:
-		return m_LightManager->CreateComponent(entity);
+	case ComponentType::POINTLIGHT:
+		return m_PointLightManager->CreateComponent(entity);
 	case ComponentType::LENGTH: break;
 	default:
 		throw std::runtime_error("Fail to bind component to its own component manager");
@@ -105,8 +105,8 @@ ComponentBase* ComponentManagerContainer::AddComponent(const Entity entity, Comp
 		return static_cast<ComponentBase*>(m_MaterialSkyboxManager->AddComponent(entity, static_cast<MaterialSkybox&>(component)));
 	case ComponentType::MESH_RENDERER:
 		return static_cast<ComponentBase*>(m_MeshRendererManager->AddComponent(entity, static_cast<MeshRenderer&>(component)));
-	case ComponentType::LIGHT:
-		return static_cast<ComponentBase*>(m_LightManager->AddComponent(entity, static_cast<Light&>(component)));
+	case ComponentType::POINTLIGHT:
+		return static_cast<ComponentBase*>(m_PointLightManager->AddComponent(entity, static_cast<PointLight&>(component)));
 	case ComponentType::LENGTH: break;
 	default:
 		throw std::runtime_error("Fail to bind component to its own component manager");
@@ -133,8 +133,8 @@ ComponentBase* ComponentManagerContainer::GetComponent(const Entity entity, cons
 		return m_MaterialSkyboxManager->GetComponent(entity);
 	case ComponentType::MESH_RENDERER:
 		return m_MeshRendererManager->GetComponent(entity);
-	case ComponentType::LIGHT:
-		return m_LightManager->GetComponent(entity);
+	case ComponentType::POINTLIGHT:
+		return m_PointLightManager->GetComponent(entity);
 	case ComponentType::NONE: break;
 	case ComponentType::LENGTH: break;
 	default: ;
@@ -173,8 +173,8 @@ void ComponentManagerContainer::DestroyComponent(const Entity entity, const Comp
 	case ComponentType::MESH_RENDERER: 
 		m_MeshRendererManager->DestroyComponent(entity);
 		break;
-	case ComponentType::LIGHT: 
-		m_LightManager->DestroyComponent(entity);
+	case ComponentType::POINTLIGHT: 
+		m_PointLightManager->DestroyComponent(entity);
 		break;
 	case ComponentType::LENGTH: break;
 	default: 
@@ -218,9 +218,9 @@ void ComponentManagerContainer::DrawOnInspector(Entity entity)
 		m_DrawableManager->OnDrawInspector(entity);
 	}
 
-	if (entityHandle.HasComponent(ComponentType::LIGHT))
+	if (entityHandle.HasComponent(ComponentType::POINTLIGHT))
 	{
-		m_LightManager->OnDrawInspector(entity);
+		m_PointLightManager->OnDrawInspector(entity);
 	}
 }
 
@@ -234,6 +234,6 @@ void ComponentManagerContainer::OnEntityResize(const int newSize)
 	m_DrawableManager->OnEntityResize(newSize);
 	m_MaterialSkyboxManager->OnEntityResize(newSize);
 	m_MeshRendererManager->OnEntityResize(newSize);
-	m_LightManager->OnEntityResize(newSize);
+	m_PointLightManager->OnEntityResize(newSize);
 }
 }

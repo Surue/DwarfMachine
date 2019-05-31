@@ -22,40 +22,28 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#include <component/light.h>
-#include "imgui.h"
+#ifndef POINT_LIGHT_H
+#define POINT_LIGHT_H
+#include <component/lights/light.h>
 
 namespace dm
 {
-void LightManager::Init()
+struct PointLight : public Light
 {
-}
+	Color color = Color(1, 1, 1);
+	float radius = 1;
+	float intensity = 1;
+};
 
-void LightManager::Update()
+class PointLightManager : public ComponentBaseManager<PointLight>
 {
+public:
+	void Init() override;
+	void Update() override;
+	PointLight* CreateComponent(Entity) override;
+	void DestroyComponent(Entity entity) override;
+	void OnDrawInspector(Entity entity) override;
+};
 }
 
-Light* LightManager::CreateComponent(const Entity entity)
-{
-	Light light;
-	light.color = Color::White;
-	light.radius = 10;
-
-	m_Components[entity - 1] = light;
-	return &m_Components[entity - 1];
-}
-
-void LightManager::DestroyComponent(Entity entity)
-{
-}
-
-void LightManager::OnDrawInspector(Entity entity)
-{
-	ImGui::Separator();
-	ImGui::TextWrapped("Light");
-	ImGui::ColorPicker4("lightColor", &m_Components[entity - 1].color[0]);
-	ImGui::DragFloat("radius", &m_Components[entity - 1].radius, 0.1f);
-	ImGui::DragFloat("intensity", &m_Components[entity - 1].intensity, 0.1f, 0, 100000);
-
-}
-}
+#endif

@@ -22,19 +22,34 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#ifndef COMPONENT_TYPE_H
-#define COMPONENT_TYPE_H
-enum class ComponentType : int {
-	NONE = 0,
-	TRANSFORM = 1,
-	CAMERA = 2,
-	MATERIAL_DEFAULT = 3,
-	MODEL = 4,
-	BOUNDING_SPHERE = 5,
-	DRAWABLE = 6,
-	MATERIAL_SKYBOX = 7,
-	MESH_RENDERER = 8,
-	POINTLIGHT = 9, 
-	LENGTH = 10,
-};
-#endif //COMPONENT_TYPE_H
+#include <component/lights/point_light.h>
+#include "imgui_impl_vulkan.h"
+
+namespace dm
+{
+void PointLightManager::Init() {}
+
+void PointLightManager::Update() {}
+
+PointLight* PointLightManager::CreateComponent(Entity entity)
+{
+	PointLight light;
+	light.color = Color::White;
+	light.radius = 10;
+	light.intensity = 1;
+
+	m_Components[entity - 1] = light;
+	return &m_Components[entity - 1];
+}
+
+void PointLightManager::DestroyComponent(Entity entity) {}
+
+void PointLightManager::OnDrawInspector(Entity entity)
+{
+	ImGui::Separator();
+	ImGui::TextWrapped("Point Light");
+	ImGui::ColorPicker4("lightColor", &m_Components[entity - 1].color[0]);
+	ImGui::DragFloat("radius", &m_Components[entity - 1].radius, 0.1f);
+	ImGui::DragFloat("intensity", &m_Components[entity - 1].intensity, 0.1f, 0, 100000);
+}
+}

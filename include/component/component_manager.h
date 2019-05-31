@@ -33,7 +33,8 @@ SOFTWARE.
 #include "drawable.h"
 #include "materials/material_skybox.h"
 #include "mesh_renderer.h"
-#include "light.h"
+#include <component/lights/light.h>
+#include "lights/point_light.h"
 
 namespace dm {
 class ComponentManagerContainer final
@@ -60,7 +61,7 @@ public:
 
 	TransformManager* GetTransformManager() const { return m_TransformManager.get(); }
 
-	LightManager* GetLightManager() const { return m_LightManager.get(); }
+	PointLightManager* GetPointLightManager() const { return m_PointLightManager.get(); }
 
 	void DrawOnInspector(Entity entity);
 
@@ -75,7 +76,7 @@ private:
 	std::unique_ptr<BoundingSphereManager> m_BoundingSphereManager;
 	std::unique_ptr<DrawableManager> m_DrawableManager;
 	std::unique_ptr<MeshRendererManager> m_MeshRendererManager;
-	std::unique_ptr<LightManager> m_LightManager;
+	std::unique_ptr<PointLightManager> m_PointLightManager;
 };
 }
 #endif COMPONENT_MANAGER_H

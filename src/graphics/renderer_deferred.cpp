@@ -86,9 +86,9 @@ void RendererDeferred::Draw(const CommandBuffer& commandBuffer)
 			break;
 		}
 
-		if (entityHandle.HasComponent(ComponentType::LIGHT))
+		if (entityHandle.HasComponent(ComponentType::POINTLIGHT))
 		{
-			auto light = entityHandle.GetComponent<Light>(ComponentType::LIGHT);
+			auto light = entityHandle.GetComponent<PointLight>(ComponentType::POINTLIGHT);
 			auto transform = entityHandle.GetComponent<Transform>(ComponentType::TRANSFORM);
 
 			DeferredLight deferredLight = {};
