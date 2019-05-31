@@ -29,10 +29,11 @@ SOFTWARE.
 #include <editor/renderer_imgui.h>
 #include <engine/engine.h>
 #include <graphics/gizmos/renderer_gizmo.h>
-#include "graphics/renderer_deferred.h"
-#include "graphics/filters/filter_default.h"
-#include "graphics/filters/filter_fxaa.h"
-#include "graphics/filters/filter_ssao.h"
+#include <graphics/renderer_deferred.h>
+#include <graphics/filters/filter_default.h>
+#include <graphics/filters/filter_fxaa.h>
+#include <graphics/filters/filter_ssao.h>
+#include <graphics/filters/filter_ssao_blur.h>
 
 namespace dm
 {
@@ -59,9 +60,9 @@ void EditorRenderManager::Start()
 
 	std::vector<SubpassType> renderpassSubpasses0 = { 
 		SubpassType(0, { 0, 2, 3, 4 ,5}), //Geometry pass
-		SubpassType(1, { 0, 7}), //ssao
-		SubpassType(2, { 0, 6}), //light pass
-		SubpassType(3, { 0, 1}) //post pass
+		SubpassType(1, { 0, 7}), //SSAO
+		SubpassType(2, { 0, 6}), //Light pass
+		SubpassType(3, { 0, 1}) //Post process pass
 	};
 
 	renderStages.emplace_back(std::make_unique<RenderStage>(renderpassAttachment0, renderpassSubpasses0));
@@ -73,6 +74,7 @@ void EditorRenderManager::Start()
 	rendererContainer.Add<RendererMeshes>(Pipeline::Stage(0, 0));
 
 	rendererContainer.Add<FilterSsao>(Pipeline::Stage(0, 1));
+	rendererContainer.Add<FilterSsaoBlur>(Pipeline::Stage(0, 1));
 
 	rendererContainer.Add<RendererDeferred>(Pipeline::Stage(0, 2));
 
