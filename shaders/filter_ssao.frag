@@ -7,34 +7,30 @@ const float SSAO_RADIUS = 0.5f;
 
 layout(binding = 0) uniform UniformScene
 {
-	vec3 kernel[64];
 	mat4 projection;
-	mat4 view;
 	vec3 cameraPosition;
 } scene;
 
 layout(binding = 1) uniform sampler2D samplerPosition;
 layout(binding = 2) uniform sampler2D samplerNormal;
 layout(binding = 3) uniform sampler2D samplerNoise;
-layout(binding = 4) uniform sampler2D samplerDepth;
+
+layout(binding = 4, std140) uniform UniformKernel
+{
+	vec4 kernel[64]; 
+} ssaoKernel;
 
 layout(location = 0) in vec2 inUV;
-layout(location = 1) in vec2 ViewRay;
-
 
 layout(location = 0) out vec4 outSsao;
 
 void main()
 {
+	//View space
 	vec3 worldPosition = texture(samplerPosition, inUV).rgb;
-//	worldPosition = (scene.view * vec4(worldPosition, 1.0f)).rgb;
-
 	vec3 normal = texture(samplerNormal, inUV).rgb;
 
-//	mat3 normalMatrix = transpose(inverse(mat3(scene.view)));
-//	normal = normalMatrix * normal;
-//	normal = normalize(normal) * 0.5 + 0.5;
-
+	//random pos
 	ivec2 texDim = textureSize(samplerPosition, 0);
 	ivec2 noiseDim = textureSize(samplerNoise, 0);
 	vec2 noiseUv = vec2(float(texDim.x) / float(noiseDim.x), float(texDim.y) / (noiseDim.y)) * inUV;
@@ -47,9 +43,9 @@ void main()
 
 	float occlusion = 0.0f;
 
-	for(int i = 0; i < 32; i++)
+	for(int i = 0; i < SSAO_KERNEL_SIZE; i++)
 	{
-		vec3 samplePos = TBN * scene.kernel[i];
+		vec3 samplePos = TBN * ssaoKernel.kernel[i].rgb;
 		samplePos = samplePos * SSAO_RADIUS + worldPosition;
 
 		vec4 offset = vec4(samplePos, 1.0f);
@@ -63,9 +59,7 @@ void main()
 		occlusion += (sampleDepth >= samplePos.z ? 1.0f : 0.0f);
 	}
 
-	occlusion = 1.0f - (occlusion / float(32));
+	occlusion = 1.0f - (occlusion / float(SSAO_KERNEL_SIZE));
 
 	outSsao = vec4(occlusion, occlusion, occlusion, 1.0f);
-
-//	outSsao = vec4(normal, 1.0);
 }

@@ -26,6 +26,7 @@ SOFTWARE.
 #define FILTER_SSAO_H
 #include <graphics/post_filter.h>
 #include <glm/vec3.hpp>
+#include <glm/vec4.hpp>
 
 namespace dm
 {
@@ -39,13 +40,11 @@ private:
 	static std::shared_ptr<Image2d> ComputeNoise(const uint32_t &size);
 
 	UniformHandle m_UniformScene;
+	UniformHandle m_UniformKernel;
 
 	std::shared_ptr<Image2d> m_Noise;
-	struct Kernel
-	{
-		float value[3];
-	};
-	std::vector<Kernel> m_Kernel;
+
+	std::vector<glm::vec4> m_Kernel;
 };
 }
 

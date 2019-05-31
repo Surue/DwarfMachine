@@ -48,11 +48,7 @@ FilterSsao::FilterSsao(const Pipeline::Stage& pipelineStage) :
 		sample *= RandomFloat(0.0f, 1.0f);
 		float scale = static_cast<float>(i) / static_cast<float>(64);
 		scale = glm::mix(0.1f, 1.0f, scale * scale);
-		Kernel kernel;
-		kernel.value[0] = sample.x;
-		kernel.value[1] = sample.y;
-		kernel.value[2] = sample.z;
-		m_Kernel[i] = kernel;
+		m_Kernel[i] = glm::vec4(sample, 1.0f);
 	}
 }
 
@@ -61,18 +57,17 @@ void FilterSsao::Update() {}
 void FilterSsao::Draw(const CommandBuffer& commandBuffer)
 {
 	auto camera = GraphicManager::Get()->GetCamera();
-	m_UniformScene.Push("kernel", *m_Kernel.data(), sizeof(Kernel) * 64);
+
 	m_UniformScene.Push("projection", camera->proj);
-	m_UniformScene.Push("view", camera->viewMatrix);
 	m_UniformScene.Push("cameraPosition", camera->pos);
-	m_UniformScene.Push("aspectRatio", camera->aspect);
-	m_UniformScene.Push("tanHalfFov", std::tanf(camera->fov / 2.0f));
+
+	m_UniformKernel.Push("kernel", *m_Kernel.data(), sizeof(glm::vec4) * m_Kernel.size());
 
 	m_DescriptorSet.Push("UniformScene", m_UniformScene);
+	m_DescriptorSet.Push("UniformKernel", m_UniformKernel);
 	m_DescriptorSet.Push("samplerPosition", GraphicManager::Get()->GetAttachment("position"));
 	m_DescriptorSet.Push("samplerNormal", GraphicManager::Get()->GetAttachment("normal"));
 	m_DescriptorSet.Push("samplerNoise", m_Noise);
-	m_DescriptorSet.Push("samplerDepth", GraphicManager::Get()->GetAttachment("depth"));
 
 	bool updateSuccess = m_DescriptorSet.Update(m_Pipeline);
 
