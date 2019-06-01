@@ -32,13 +32,14 @@ ComponentManagerContainer::ComponentManagerContainer() :
 	m_TransformManager(std::make_unique<TransformManager>()),
 	m_CameraManager(std::make_unique<CameraManager>()),
 	m_MaterialDefaultManager(std::make_unique<MaterialDefaultManager>()),
+	m_MaterialSkyboxManager(std::make_unique<MaterialSkyboxManager>()),
 	m_MeshManager(std::make_unique<ModelComponentManager>()),
 	m_BoundingSphereManager(std::make_unique<BoundingSphereManager>()),
 	m_DrawableManager(std::make_unique<DrawableManager>()),
-	m_MaterialSkyboxManager(std::make_unique<MaterialSkyboxManager>()),
 	m_MeshRendererManager(std::make_unique<MeshRendererManager>()),
 	m_PointLightManager(std::make_unique<PointLightManager>()),
-	m_DirectionalLightManager(std::make_unique<DirectionalLightManager>())
+	m_DirectionalLightManager(std::make_unique<DirectionalLightManager>()),
+	m_SpotLightManager(std::make_unique<SpotLightManager>())
 { }
 
 void ComponentManagerContainer::Destroy()
@@ -53,6 +54,7 @@ void ComponentManagerContainer::Destroy()
 	m_MeshRendererManager.reset(nullptr);
 	m_PointLightManager.reset(nullptr);
 	m_DirectionalLightManager.reset(nullptr);
+	m_SpotLightManager.reset(nullptr);
 }
 
 ComponentBase* ComponentManagerContainer::CreateComponent(const Entity entity, const ComponentType componentType) const
@@ -81,10 +83,13 @@ ComponentBase* ComponentManagerContainer::CreateComponent(const Entity entity, c
 		return m_PointLightManager->CreateComponent(entity);
 	case ComponentType::DIRECTIONAL_LIGHT:
 		return m_DirectionalLightManager->CreateComponent(entity);
+	case ComponentType::SPOT_LIGHT:
+		return m_SpotLightManager->CreateComponent(entity);
 	case ComponentType::LENGTH: break;
 	default:
 		throw std::runtime_error("Fail to bind component to its own component manager");
 	}
+	return nullptr;
 }
 
 ComponentBase* ComponentManagerContainer::AddComponent(const Entity entity, ComponentBase& component) const
@@ -113,10 +118,13 @@ ComponentBase* ComponentManagerContainer::AddComponent(const Entity entity, Comp
 		return static_cast<ComponentBase*>(m_PointLightManager->AddComponent(entity, static_cast<PointLight&>(component)));
 	case ComponentType::DIRECTIONAL_LIGHT:
 		return static_cast<ComponentBase*>(m_DirectionalLightManager->AddComponent(entity, static_cast<DirectionalLight&>(component)));
+	case ComponentType::SPOT_LIGHT:
+		return static_cast<ComponentBase*>(m_SpotLightManager->AddComponent(entity, static_cast<SpotLight&>(component)));
 	case ComponentType::LENGTH: break;
 	default:
 		throw std::runtime_error("Fail to bind component to its own component manager");
 	}
+	return nullptr;
 }
 
 ComponentBase* ComponentManagerContainer::GetComponent(const Entity entity, const ComponentType componentType) const
@@ -143,6 +151,8 @@ ComponentBase* ComponentManagerContainer::GetComponent(const Entity entity, cons
 		return m_PointLightManager->GetComponent(entity);
 	case ComponentType::DIRECTIONAL_LIGHT:
 		return m_DirectionalLightManager->GetComponent(entity);
+	case ComponentType::SPOT_LIGHT:
+		return m_SpotLightManager->GetComponent(entity);
 	case ComponentType::NONE: break;
 	case ComponentType::LENGTH: break;
 	default: ;
@@ -187,17 +197,18 @@ void ComponentManagerContainer::DestroyComponent(const Entity entity, const Comp
 	case ComponentType::DIRECTIONAL_LIGHT:
 		m_DirectionalLightManager->DestroyComponent(entity);
 		break;
+	case ComponentType::SPOT_LIGHT:
+		m_SpotLightManager->DestroyComponent(entity);
+		break;
 	case ComponentType::LENGTH: break;
 	default: 
 		throw std::runtime_error("Fail to bind component to its own component manager");
 	}
 }
 
-void ComponentManagerContainer::DrawOnInspector(Entity entity)
+void ComponentManagerContainer::DrawOnInspector(Entity entity) const
 {
-	auto entityHandle = EntityHandle(entity);
-/*
-	std::cout << Engine::Get()->GetEntityManager()->GetEntityMask(entity).mask << "\n";*/
+	const auto entityHandle = EntityHandle(entity);
 
 	if(entityHandle.HasComponent(ComponentType::TRANSFORM))
 	{
@@ -238,9 +249,14 @@ void ComponentManagerContainer::DrawOnInspector(Entity entity)
 	{
 		m_DirectionalLightManager->OnDrawInspector(entity);
 	}
+
+	if (entityHandle.HasComponent(ComponentType::SPOT_LIGHT))
+	{
+		m_SpotLightManager->OnDrawInspector(entity);
+	}
 }
 
-void ComponentManagerContainer::OnEntityResize(const int newSize)
+void ComponentManagerContainer::OnEntityResize(const int newSize) const
 {
 	m_TransformManager->OnEntityResize(newSize);
 	m_CameraManager->OnEntityResize(newSize);
@@ -252,5 +268,6 @@ void ComponentManagerContainer::OnEntityResize(const int newSize)
 	m_MeshRendererManager->OnEntityResize(newSize);
 	m_PointLightManager->OnEntityResize(newSize);
 	m_DirectionalLightManager->OnEntityResize(newSize);
+	m_SpotLightManager->OnEntityResize(newSize);
 }
 }

@@ -36,6 +36,7 @@ SOFTWARE.
 #include <component/lights/light.h>
 #include "lights/point_light.h"
 #include "lights/directional_light.h"
+#include "lights/spot_light.h"
 
 namespace dm {
 class ComponentManagerContainer final
@@ -66,9 +67,11 @@ public:
 
 	DirectionalLightManager* GetDirectionalLightManager() const { return m_DirectionalLightManager.get(); }
 
-	void DrawOnInspector(Entity entity);
+	SpotLightManager* GetSpotLightManager() const { return m_SpotLightManager.get(); }
 
-	void OnEntityResize(int newSize);
+	void DrawOnInspector(Entity entity) const;
+
+	void OnEntityResize(int newSize) const;
 
 private:
 	std::unique_ptr<TransformManager> m_TransformManager;
@@ -81,6 +84,7 @@ private:
 	std::unique_ptr<MeshRendererManager> m_MeshRendererManager;
 	std::unique_ptr<PointLightManager> m_PointLightManager;
 	std::unique_ptr<DirectionalLightManager> m_DirectionalLightManager;
+	std::unique_ptr<SpotLightManager> m_SpotLightManager;
 };
 }
 #endif COMPONENT_MANAGER_H

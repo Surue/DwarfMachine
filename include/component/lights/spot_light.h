@@ -32,7 +32,8 @@ namespace dm
 struct SpotLight : public Light
 {
 	glm::vec3 target;
-	float angle;
+	float angle = 30;
+	float range = 10;
 };
 
 class SpotLightManager : public ComponentBaseManager<SpotLight>

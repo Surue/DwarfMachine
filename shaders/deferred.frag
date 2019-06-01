@@ -7,13 +7,14 @@ layout(binding = 0) uniform UniformScene
 	mat4 view;
 	vec3 cameraPosition;
 	
-	int lightCount;
+	int pointLightCount; 
+	int spotLightCount;
 	
 	vec4 fogColor;
 	float fogDensity;
 	float fogGradient;
-	vec4 directionLightDirection;
-	vec4 directionLightColor;
+	vec4 directionalLightDirection;
+	vec4 directionalLightColor;
 } scene;
 
 struct PointLight
@@ -26,7 +27,8 @@ struct PointLight
 struct SpotLight
 {
 	vec4 color;
-	vec4 position;
+	vec3 position;
+	float range;
 	vec3 target;
 	float angle;
 };
@@ -150,8 +152,6 @@ vec3 specularContribution(vec3 diffuse, vec3 L, vec3 V, vec3 N, vec3 F0, float m
 
 void main()
 {
-	outColor = scene.directionLightDirection;
-
 	mat4 Inv = scene.view;
 	Inv = inverse(Inv);
 
@@ -182,13 +182,34 @@ void main()
 		F0 = mix(F0, diffuse.rgb, metallic);
 		vec3 Lo = vec3(0.0f);
 		
-		for(int i = 0; i < scene.lightCount; i++)
+		for(int i = 0; i < scene.pointLightCount; i++)
 		{
 			PointLight light = bufferPointLights.pointLights[i];
 			vec3 L = light.position - worldPosition;
 			float Dl = length(L);
 			L /= Dl;
 			Lo += attenuation(Dl, light.radius) * light.color.rgb * specularContribution(diffuse.rgb, L, V, N, F0, metallic, roughness);
+		}
+
+		for(int i = 0; i < scene.spotLightCount; i++)
+		{
+			SpotLight light = bufferSpotLights.spotLights[i];
+			vec3 L = light.position.xyz - worldPosition;
+			float Dl = length(L);
+			L /= Dl;
+			
+			float lightCosInnerAngle = cos(radians(light.angle * 0.5));
+			float lightCosOuterAngle = cos(radians(light.angle));
+
+			// Direction vector from source to target
+			vec3 dir = normalize(light.position.xyz - light.target.xyz);
+
+			// Dual cone spot light with smooth transition between inner and outer angle
+			float cosDir = dot(L, dir);
+			float spotEffect = smoothstep(lightCosOuterAngle, lightCosInnerAngle, cosDir);
+			float heightAttenuation = smoothstep(light.range, 0.0f, Dl);
+
+			Lo += spotEffect * heightAttenuation * light.color.rgb * specularContribution(diffuse.rgb, L, V, N, F0, metallic, roughness);
 		}
 				
 		vec2 brdf = texture(samplerBRDF, vec2(max(dot(N, V), 0.0f), roughness)).rg;
@@ -206,9 +227,9 @@ void main()
 		vec3 ambient = (kD * albedo + specular);
 
 		// Directional light
-		vec3 L = normalize(vec3(-scene.directionLightDirection));
+		vec3 L = normalize(vec3(-scene.directionalLightDirection));
 		vec3 H = normalize(L + scene.cameraPosition);
-		vec3 directionalDiffuse = vec3(scene.directionLightColor) * max(dot(N, L), 0.01) * specularContribution(diffuse.rgb, L, V, N, F0, metallic, roughness);
+		vec3 directionalDiffuse = vec3(scene.directionalLightColor) * max(dot(N, L), 0.01) * specularContribution(diffuse.rgb, L, V, N, F0, metallic, roughness);
 
 		vec3 color = ambient + directionalDiffuse + Lo;
 		

@@ -44,6 +44,7 @@ SOFTWARE.
 #include "component/materials/material_skybox.h"
 #include "component/mesh_renderer.h"
 #include "component/lights/point_light.h"
+#include "component/lights/spot_light.h"
 
 TEST(Models, Cube)
 {
@@ -473,11 +474,19 @@ TEST(Models, Lights)
 	//DirectionalLight
 	const auto e2 = entityManager->CreateEntity();
 	auto sun = dm::EntityHandle(e2);
-	auto sunPos = sun.CreateComponent<dm::Transform>(ComponentType::TRANSFORM);
-	sunPos->position = glm::vec3(0, 10, 0);
 	dm::DirectionalLight sunLightComponent;
 	sunLightComponent.componentType = ComponentType::DIRECTIONAL_LIGHT;
 	sun.AddComponent(sunLightComponent);
+
+	//SpotLight
+	const auto e3 = entityManager->CreateEntity();
+	auto spot = dm::EntityHandle(e3);
+	auto spotPos = spot.CreateComponent<dm::Transform>(ComponentType::TRANSFORM);
+	spotPos->position = glm::vec3(0, 10, 0);
+	dm::SpotLight spotLightComponent;
+	spotLightComponent.target = glm::vec3(0, 0, 0);
+	spotLightComponent.componentType = ComponentType::SPOT_LIGHT;
+	spot.AddComponent(spotLightComponent);
 
 	try
 	{

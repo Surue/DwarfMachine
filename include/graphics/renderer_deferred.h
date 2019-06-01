@@ -59,11 +59,13 @@ private:
 		float radius;
 	};
 
-	struct DeferredSportLight
+	struct DeferredSpotLight
 	{
 		Color color = Color::White;
 		glm::vec3 position;
+		float range;
 		glm::vec3 target;
+		float angle;
 	};
 
 	std::vector<Shader::Define> GetDefines();

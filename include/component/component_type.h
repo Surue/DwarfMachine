@@ -35,7 +35,8 @@ enum class ComponentType : int {
 	MATERIAL_SKYBOX = 7,
 	MESH_RENDERER = 8,
 	POINT_LIGHT = 9, 
-	DIRECTIONAL_LIGHT = 10, 
-	LENGTH = 11,
+	DIRECTIONAL_LIGHT = 10,
+	SPOT_LIGHT = 11,
+	LENGTH = 12,
 };
 #endif //COMPONENT_TYPE_H

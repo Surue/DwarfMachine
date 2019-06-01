@@ -29,6 +29,7 @@ SOFTWARE.
 #include <component/component_manager.h>
 #include "graphics/pipelines/pipeline_compute.h"
 #include "entity/entity_handle.h"
+#include "component/lights/spot_light.h"
 
 namespace dm
 {
@@ -75,7 +76,9 @@ void RendererDeferred::Draw(const CommandBuffer& commandBuffer)
 	}
 
 	std::vector<DeferredPointLight> deferredPointLights(MAX_LIGHTS);
+	std::vector<DeferredSpotLight> deferredSpotLights(MAX_LIGHTS);
 	uint32_t pointLightCount = 0;
+	uint32_t spotLightCount = 0;
 
 	glm::vec3 directionalDirection;
 	glm::vec4 directionalColor;
@@ -89,6 +92,7 @@ void RendererDeferred::Draw(const CommandBuffer& commandBuffer)
 			break;
 		}
 
+		//Point lights
 		if (entityHandle.HasComponent(ComponentType::POINT_LIGHT))
 		{
 			const auto light = entityHandle.GetComponent<PointLight>(ComponentType::POINT_LIGHT);
@@ -102,12 +106,13 @@ void RendererDeferred::Draw(const CommandBuffer& commandBuffer)
 			deferredPointLights[pointLightCount] = deferredLight;
 			pointLightCount++;
 
-			if (pointLightCount >= MAX_LIGHTS)
+			if (pointLightCount + spotLightCount >= MAX_LIGHTS)
 			{
 				break;
 			}
 		}
 
+		//Directional
 		if (entityHandle.HasComponent(ComponentType::DIRECTIONAL_LIGHT))
 		{
 			const auto light = entityHandle.GetComponent<DirectionalLight>(ComponentType::DIRECTIONAL_LIGHT);
@@ -115,22 +120,61 @@ void RendererDeferred::Draw(const CommandBuffer& commandBuffer)
 			directionalDirection = light->direction;
 			directionalColor = glm::vec4(light->color.r, light->color.g, light->color.b, light->color.a) * light->intensity;
 		}
+
+		//Spot lights
+		if (entityHandle.HasComponent(ComponentType::SPOT_LIGHT))
+		{
+			const auto light = entityHandle.GetComponent<SpotLight>(ComponentType::SPOT_LIGHT);
+			const auto transform = entityHandle.GetComponent<Transform>(ComponentType::TRANSFORM);
+
+			DeferredSpotLight deferredLight = {};
+			deferredLight.color = light->color * light->intensity;
+			deferredLight.target = light->target;
+			deferredLight.range = light->range;
+			deferredLight.position = transform->position;
+			deferredLight.angle = light->angle;
+
+			deferredSpotLights[spotLightCount] = deferredLight;
+			spotLightCount++;
+
+			if (pointLightCount + spotLightCount >= MAX_LIGHTS)
+			{
+				break;
+			}
+		}
 	}
 
 	m_UniformScene.Push("view", camera->viewMatrix);
 	m_UniformScene.Push("cameraPosition", camera->pos);
-	m_UniformScene.Push("lightCount", pointLightCount);
+	m_UniformScene.Push("pointLightCount", pointLightCount);
+	m_UniformScene.Push("spotLightCount", spotLightCount);
 	//TODO créer un objet fog
 	m_UniformScene.Push("fogColor", Color::White);
 	m_UniformScene.Push("fogDensity", 0.001f);
 	m_UniformScene.Push("fogGradient", 2.0f);
-	m_UniformScene.Push("directionLightDirection", directionalDirection);
-	m_UniformScene.Push("directionLightColor", directionalColor);
+	m_UniformScene.Push("directionalLightDirection", directionalDirection);
+	m_UniformScene.Push("directionalLightColor", directionalColor);
 
-	m_StoragePointLight.Push(deferredPointLights.data(), sizeof(DeferredPointLight) * MAX_LIGHTS);
+	//Update storage buffer
+	if (pointLightCount > 0)
+	{
+		m_StoragePointLight.Push(deferredPointLights.data(), sizeof(DeferredPointLight) * MAX_LIGHTS);
+	}
 
+	if (spotLightCount > 0)
+	{
+		m_StorageSpotLight.Push(deferredSpotLights.data(), sizeof(DeferredSpotLight) * MAX_LIGHTS);
+	}
+
+	//Update descriptor set
 	m_DescriptorSet.Push("UniformScene", m_UniformScene);
-	m_DescriptorSet.Push("BufferPointLights", m_StoragePointLight);
+	if (pointLightCount > 0)
+	{
+		m_DescriptorSet.Push("BufferPointLights", m_StoragePointLight);
+	}
+	if (spotLightCount > 0) {
+		m_DescriptorSet.Push("BufferSpotLights", m_StorageSpotLight);
+	}
 	m_DescriptorSet.Push("samplerPosition", GraphicManager::Get()->GetAttachment("position"));
 	m_DescriptorSet.Push("samplerDiffuse", GraphicManager::Get()->GetAttachment("diffuse"));
 	m_DescriptorSet.Push("samplerNormal", GraphicManager::Get()->GetAttachment("normal"));

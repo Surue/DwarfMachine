@@ -41,13 +41,14 @@ SpotLight* SpotLightManager::CreateComponent(Entity entity)
 	return &m_Components[entity - 1];
 }
 void SpotLightManager::DestroyComponent(Entity entity) {}
-void SpotLightManager::OnDrawInspector(Entity entity)
+void SpotLightManager::OnDrawInspector(const Entity entity)
 {
 	ImGui::Separator();
-	ImGui::TextWrapped("PSpot Light");
+	ImGui::TextWrapped("Spot Light");
 	ImGui::ColorPicker4("lightColor", &m_Components[entity - 1].color[0]);
 	ImGui::DragFloat("intensity", &m_Components[entity - 1].intensity, 0.1f, 0, 100000);
-	ImGui::DragFloat3("target", &m_Components[entity - 1].intensity, 0.1f);
-	ImGui::DragFloat3("angle", &m_Components[entity - 1].angle, 0.1f, 0, 360);
+	ImGui::DragFloat3("target", &m_Components[entity - 1].target[0], 0.1f);
+	ImGui::DragFloat("angle", &m_Components[entity - 1].angle, 0.1f, 0, 360);
+	ImGui::DragFloat("range", &m_Components[entity - 1].range, 0.1f, 0, 360);
 }
 }
