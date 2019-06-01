@@ -130,7 +130,7 @@ void RendererDeferred::Draw(const CommandBuffer& commandBuffer)
 	m_StoragePointLight.Push(deferredPointLights.data(), sizeof(DeferredPointLight) * MAX_LIGHTS);
 
 	m_DescriptorSet.Push("UniformScene", m_UniformScene);
-	m_DescriptorSet.Push("BufferLights", m_StoragePointLight);
+	m_DescriptorSet.Push("BufferPointLights", m_StoragePointLight);
 	m_DescriptorSet.Push("samplerPosition", GraphicManager::Get()->GetAttachment("position"));
 	m_DescriptorSet.Push("samplerDiffuse", GraphicManager::Get()->GetAttachment("diffuse"));
 	m_DescriptorSet.Push("samplerNormal", GraphicManager::Get()->GetAttachment("normal"));

@@ -30,9 +30,7 @@ namespace dm
 {
 struct PointLight : public Light
 {
-	Color color = Color(1, 1, 1);
 	float radius = 1;
-	float intensity = 1;
 };
 
 class PointLightManager : public ComponentBaseManager<PointLight>

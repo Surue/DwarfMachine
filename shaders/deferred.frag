@@ -23,19 +23,32 @@ struct PointLight
 	float radius;
 };
 
-layout(binding = 1) buffer BufferLights
+struct SpotLight
+{
+	vec4 color;
+	vec4 position;
+	vec3 target;
+	float angle;
+};
+
+layout(binding = 1) buffer BufferPointLights
 {
 	PointLight pointLights[];
-} bufferLights;
+} bufferPointLights;
 
-layout(binding = 2) uniform sampler2D samplerPosition;
-layout(binding = 3) uniform sampler2D samplerDiffuse;
-layout(binding = 4) uniform sampler2D samplerNormal;
-layout(binding = 5) uniform sampler2D samplerMaterial;
-layout(binding = 6) uniform sampler2D samplerBRDF;
-layout(binding = 7) uniform samplerCube samplerIrradiance;
-layout(binding = 8) uniform samplerCube samplerPrefiltered;
-layout(binding = 9) uniform sampler2D samplerSsao;
+layout(binding = 2) buffer BufferSpotLights
+{
+	SpotLight spotLights[];
+} bufferSpotLights;
+
+layout(binding = 3) uniform sampler2D samplerPosition;
+layout(binding = 4) uniform sampler2D samplerDiffuse;
+layout(binding = 5) uniform sampler2D samplerNormal;
+layout(binding = 6) uniform sampler2D samplerMaterial;
+layout(binding = 7) uniform sampler2D samplerBRDF;
+layout(binding = 8) uniform samplerCube samplerIrradiance;
+layout(binding = 9) uniform samplerCube samplerPrefiltered;
+layout(binding = 10) uniform sampler2D samplerSsao;
 
 layout(location = 0) in vec2 inUV;
 
@@ -171,7 +184,7 @@ void main()
 		
 		for(int i = 0; i < scene.lightCount; i++)
 		{
-			PointLight light = bufferLights.pointLights[i];
+			PointLight light = bufferPointLights.pointLights[i];
 			vec3 L = light.position - worldPosition;
 			float Dl = length(L);
 			L /= Dl;

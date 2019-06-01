@@ -59,11 +59,19 @@ private:
 		float radius;
 	};
 
+	struct DeferredSportLight
+	{
+		Color color = Color::White;
+		glm::vec3 position;
+		glm::vec3 target;
+	};
+
 	std::vector<Shader::Define> GetDefines();
 
 	DescriptorHandle m_DescriptorSet;
 	UniformHandle m_UniformScene;
 	StorageHandle m_StoragePointLight;
+	StorageHandle m_StorageSpotLight;
 
 	PipelineGraphics m_Pipeline;
 
