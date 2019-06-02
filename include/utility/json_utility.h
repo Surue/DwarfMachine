@@ -40,24 +40,40 @@ using json = nlohmann::json;
 
 namespace dm
 {
-	bool IsJsonValueNumeric(const json::value_type& jsonValue);
+//Checker
 
-	bool CheckJsonExists(const json& jsonObject, const std::string& parameterName);
+bool IsJsonValueNumeric(const json::value_type& jsonValue);
 
-	bool CheckJsonParameter(const json& jsonObject, const std::string& parameterName, json::value_t expectedType);
+bool CheckJsonExists(const json& jsonObject, const std::string& parameterName);
 
-	bool CheckJsonNumber(const json& jsonObject, const std::string& parameterName);
+bool CheckJsonParameter(const json& jsonObject, const std::string& parameterName, json::value_t expectedType);
 
-	bool GetBoolFromJson(const json& jsonObject, const std::string& parameterName);
+bool CheckJsonNumber(const json& jsonObject, const std::string& parameterName);
 
-	glm::vec2 GetVector2FromJson(const json& jsonObject, const std::string& parameterName);
+//Getters
 
-	glm::vec3 GetVector3FromJson(const json& jsonObject, const std::string& parameterName);
+bool GetBoolFromJson(const json& jsonObject, const std::string& parameterName);
 
-	glm::vec4 GetVector4FromJson(const json& jsonObject, const std::string& parameterName);
+glm::vec2 GetVector2FromJson(const json& jsonObject, const std::string& parameterName);
 
-	Color GetColorFromJson(const json& jsonObject, const std::string& parameterName);
+glm::vec3 GetVector3FromJson(const json& jsonObject, const std::string& parameterName);
 
-	std::unique_ptr<json> LoadJson(std::string jsonPath);
+glm::vec4 GetVector4FromJson(const json& jsonObject, const std::string& parameterName);
+
+Color GetColorFromJson(const json& jsonObject, const std::string& parameterName);
+
+//Writters
+
+void SetBoolToJson(json& jsonObject, const std::string& parameterName, bool value);
+
+void SetVector2ToJson(json& jsonObject, const std::string& parameterName, glm::vec2 value);
+
+void SetVector3ToJson(json& jsonObject, const std::string& parameterName, glm::vec3 value);
+
+void SetVector4ToJson(json& jsonObject, const std::string& parameterName, glm::vec4 value);
+
+void SetColorToJson(json& jsonObject, const std::string& parameterName, Color value);
+
+std::unique_ptr<json> LoadJson(std::string jsonPath);
 }
 #endif

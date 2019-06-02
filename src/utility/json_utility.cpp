@@ -236,6 +236,46 @@ Color GetColorFromJson(const json& jsonObject, const std::string& parameterName)
 	return vector;
 }
 
+void SetBoolToJson(json& jsonObject, const std::string& parameterName, bool value)
+{
+	if(value)
+	{
+		jsonObject[parameterName] = 1;
+	}else
+	{
+		jsonObject[parameterName] = 0;
+	}
+}
+
+void SetVector2ToJson(json& jsonObject, const std::string& parameterName, glm::vec2 value)
+{
+	jsonObject[parameterName]["x"] = value.x;
+	jsonObject[parameterName]["y"] = value.y;
+}
+
+void SetVector3ToJson(json& jsonObject, const std::string& parameterName, glm::vec3 value)
+{
+	jsonObject[parameterName]["x"] = value.x;
+	jsonObject[parameterName]["y"] = value.y;
+	jsonObject[parameterName]["z"] = value.z;
+}
+
+void SetVector4ToJson(json& jsonObject, const std::string& parameterName, glm::vec4 value)
+{
+	jsonObject[parameterName]["x"] = value.x;
+	jsonObject[parameterName]["y"] = value.y;
+	jsonObject[parameterName]["z"] = value.z;
+	jsonObject[parameterName]["w"] = value.w;
+}
+
+void SetColorToJson(json& jsonObject, const std::string& parameterName, const Color value)
+{
+	jsonObject[parameterName]["r"] = value.r;
+	jsonObject[parameterName]["g"] = value.g;
+	jsonObject[parameterName]["b"] = value.b;
+	jsonObject[parameterName]["a"] = value.a;
+}
+
 std::unique_ptr<json> LoadJson(std::string jsonPath)
 {
 	std::ifstream jsonFile(jsonPath.c_str());
