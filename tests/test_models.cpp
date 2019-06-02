@@ -270,7 +270,7 @@ void CreateSkybox(dm::EntityManager* entityManager)
 	//Transform
 	auto t1 = skybox.CreateComponent<dm::Transform>(ComponentType::TRANSFORM);
 	t1->position = glm::vec3(0.0f);
-	t1->scaling = glm::vec3(1000.0f);
+	t1->scaling = glm::vec3(90.0f);
 
 	//Mesh
 	dm::Model mesh;
@@ -469,7 +469,7 @@ TEST(Models, Lights)
 	cameraInfo.isCullingCamera = true;
 	cameraInfo.viewMatrix = glm::lookAt(cameraInfo.pos, cameraInfo.pos + cameraInfo.front, cameraInfo.up);
 	cameraInfo.fov = 45;
-	cameraInfo.frustumFar = 1024.0f;
+	cameraInfo.frustumFar = 100.0f;
 	cameraInfo.frustumNear = 0.1f;
 	cameraInfo.aspect = 1024.0f / 720.0f;
 	cameraInfo.proj = glm::perspective(glm::radians(cameraInfo.fov), cameraInfo.aspect, cameraInfo.frustumNear, cameraInfo.frustumFar);

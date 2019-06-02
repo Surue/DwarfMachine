@@ -117,20 +117,17 @@ void RendererDirectionalShadow::Draw(const CommandBuffer& commandBuffer)
 	glm::vec3 minExtents = -maxExtents;
 
 	glm::vec3 lightDir = lightDirection;
-	glm::mat4 lightViewMatrix = glm::lookAt(frustumCenter - lightDir * -minExtents.z, frustumCenter, glm::vec3(0.0f, 1.0f, 0.0f));
-	glm::mat4 lightOrthoMatrix =  glm::ortho(minExtents.x, maxExtents.x, minExtents.y, maxExtents.y, 0.0f, maxExtents.z - minExtents.z);
-
+	
 	glm::mat4 lightView;
 	if(lightDirection == camera->up)
 	{
 		lightView = glm::mat4(glm::vec4(1.0f), glm::vec4(0), glm::vec4(0), glm::vec4(0));
 	}else
 	{
-		lightView = glm::lookAt(camera->pos + camera->front * (camera->frustumFar - camera->frustumNear) - lightDirection, camera->pos + camera->front * (camera->frustumFar - camera->frustumNear), glm::vec3(0.0f, 1.0f, 0.0f));
+		lightView = glm::lookAt(glm::normalize(lightDirection) * -minExtents.z, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f));
 	}
 
-	float near_plane = -10.0f, far_plane = 20.0f;
-	glm::mat4 lightProjection = glm::ortho<float>(-10, 10, -10, 10, near_plane, far_plane);
+	glm::mat4 lightProjection = glm::ortho<float>(minExtents.x, maxExtents.x, minExtents.y, maxExtents.y, 0.0f, maxExtents.z - minExtents.z);
 
 	for (const auto &entity : m_RegisteredEntities)
 	{
