@@ -30,6 +30,8 @@ SOFTWARE.
 #include "graphics/pipelines/pipeline_compute.h"
 #include "entity/entity_handle.h"
 #include "component/lights/spot_light.h"
+#include <glm/ext/matrix_transform.hpp>
+#include <glm/ext/matrix_clip_space.hpp>
 
 namespace dm
 {
@@ -144,6 +146,63 @@ void RendererDeferred::Draw(const CommandBuffer& commandBuffer)
 		}
 	}
 
+
+	//Compute lightSpaceMatrix
+	glm::vec3 frustumCorners[8] = {
+	glm::vec3(-1.0f,  1.0f, -1.0f),
+	glm::vec3(1.0f,  1.0f, -1.0f),
+	glm::vec3(1.0f, -1.0f, -1.0f),
+	glm::vec3(-1.0f, -1.0f, -1.0f),
+	glm::vec3(-1.0f,  1.0f,  1.0f),
+	glm::vec3(1.0f,  1.0f,  1.0f),
+	glm::vec3(1.0f, -1.0f,  1.0f),
+	glm::vec3(-1.0f, -1.0f,  1.0f),
+	};
+
+	// Project frustum corners into world space
+	glm::mat4 invCam = glm::inverse(camera->proj * camera->viewMatrix);
+	for (uint32_t i = 0; i < 8; i++) {
+		glm::vec4 invCorner = invCam * glm::vec4(frustumCorners[i], 1.0f);
+		frustumCorners[i] = invCorner / invCorner.w;
+	}
+
+	for (uint32_t i = 0; i < 4; i++) {
+		glm::vec3 dist = frustumCorners[i + 4] - frustumCorners[i];
+		frustumCorners[i + 4] = frustumCorners[i] + (dist);
+		frustumCorners[i] = frustumCorners[i] + (dist);
+	}
+
+	// Get frustum center
+	glm::vec3 frustumCenter = glm::vec3(0.0f);
+	for (uint32_t i = 0; i < 8; i++) {
+		frustumCenter += frustumCorners[i];
+	}
+	frustumCenter /= 8.0f;
+
+	float radius = 0.0f;
+	for (uint32_t i = 0; i < 8; i++) {
+		float distance = glm::length(frustumCorners[i] - frustumCenter);
+		radius = glm::max(radius, distance);
+	}
+	radius = std::ceil(radius * 16.0f) / 16.0f;
+
+	glm::vec3 maxExtents = glm::vec3(radius);
+	glm::vec3 minExtents = -maxExtents;
+
+	glm::vec3 lightDir = directionalDirection;
+
+	glm::mat4 lightView;
+	if (directionalDirection == camera->up)
+	{
+		lightView = glm::mat4(glm::vec4(1.0f), glm::vec4(0), glm::vec4(0), glm::vec4(0));
+	}
+	else
+	{
+		lightView = glm::lookAt(glm::normalize(-directionalDirection) * -minExtents.z, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f));
+	}
+
+	glm::mat4 lightProjection = glm::ortho<float>(minExtents.x, maxExtents.x, minExtents.y, maxExtents.y, -(maxExtents.z - minExtents.z), maxExtents.z - minExtents.z);
+
 	m_UniformScene.Push("view", camera->viewMatrix);
 	m_UniformScene.Push("cameraPosition", camera->pos);
 	m_UniformScene.Push("pointLightCount", pointLightCount);
@@ -154,6 +213,7 @@ void RendererDeferred::Draw(const CommandBuffer& commandBuffer)
 	m_UniformScene.Push("fogGradient", 2.0f);
 	m_UniformScene.Push("directionalLightDirection", directionalDirection);
 	m_UniformScene.Push("directionalLightColor", directionalColor);
+	m_UniformScene.Push("directionalLightViewMatrix", lightProjection * lightView);
 
 	//Update storage buffer
 	if (pointLightCount > 0)
@@ -180,6 +240,7 @@ void RendererDeferred::Draw(const CommandBuffer& commandBuffer)
 	m_DescriptorSet.Push("samplerNormal", GraphicManager::Get()->GetAttachment("normal"));
 	m_DescriptorSet.Push("samplerMaterial", GraphicManager::Get()->GetAttachment("material"));
 	m_DescriptorSet.Push("samplerSsao", GraphicManager::Get()->GetAttachment("ssao"));
+	m_DescriptorSet.Push("shadowMap", GraphicManager::Get()->GetAttachment("shadow"));
 
 	if(m_FutureBRDF.valid())
 	{

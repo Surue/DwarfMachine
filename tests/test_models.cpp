@@ -481,6 +481,14 @@ TEST(Models, Lights)
 	//Skybox
 	CreateSkybox(entityManager);
 
+	//Cube
+	dm::MaterialDefault materialS;
+	materialS.componentType = ComponentType::MATERIAL_DEFAULT;
+	materialS.color = dm::Color(1, 1, 1, 1);
+	materialS.ignoreLighting = false;
+	materialS.ignoreFog = false;
+	CreateSphere(camera->pos, entityManager, materialS);
+
 	//Sphere
 	float maxSphere = 9;
 

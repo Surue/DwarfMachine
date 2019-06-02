@@ -15,6 +15,8 @@ layout(binding = 0) uniform UniformScene
 	float fogGradient;
 	vec4 directionalLightDirection;
 	vec4 directionalLightColor;
+
+	mat4 directionalLightViewMatrix;
 } scene;
 
 struct PointLight
@@ -51,6 +53,7 @@ layout(binding = 7) uniform sampler2D samplerBRDF;
 layout(binding = 8) uniform samplerCube samplerIrradiance;
 layout(binding = 9) uniform samplerCube samplerPrefiltered;
 layout(binding = 10) uniform sampler2D samplerSsao;
+layout(binding = 11) uniform sampler2D shadowMap;
 
 layout(location = 0) in vec2 inUV;
 
@@ -150,6 +153,62 @@ vec3 specularContribution(vec3 diffuse, vec3 L, vec3 V, vec3 N, vec3 F0, float m
 	return color;
 }
 
+float ShadowCalculation(vec4 fragPosLightSpace)
+{
+    // perform perspective divide
+    vec3 projCoords = fragPosLightSpace.xyz / fragPosLightSpace.w;
+    // transform to [0,1] range
+    projCoords = projCoords * 0.5 + 0.5;
+    // get closest depth value from light's perspective (using [0,1] range fragPosLight as coords)
+    float closestDepth = texture(shadowMap, projCoords.xy).r; 
+    // get depth of current fragment from light's perspective
+    float currentDepth = projCoords.z;
+    // check whether current frag pos is in shadow
+    float shadow = currentDepth > closestDepth  ? 1.0 : 0.0;
+
+    return shadow;
+}
+
+float textureProj(vec4 P, vec2 offset)
+{
+	float shadow = 1.0;
+	vec4 shadowCoord = P / P.w;
+	shadowCoord.st = shadowCoord.st * 0.5 + 0.5;
+	
+	if (shadowCoord.z > -1.0 && shadowCoord.z < 1.0) 
+	{
+		float dist = texture(shadowMap, vec2(shadowCoord.st + offset)).r;
+		if (shadowCoord.w > 0.0 && dist < shadowCoord.z) 
+		{
+			shadow = 0.25;
+		}
+	}
+	return shadow;
+}
+
+float filterPCF(vec4 sc)
+{
+	ivec2 texDim = textureSize(shadowMap, 0).xy;
+	float scale = 1.5;
+	float dx = scale * 1.0 / float(texDim.x);
+	float dy = scale * 1.0 / float(texDim.y);
+
+	float shadowFactor = 0.0;
+	int count = 0;
+	int range = 1;
+	
+	for (int x = -range; x <= range; x++)
+	{
+		for (int y = -range; y <= range; y++)
+		{
+			shadowFactor += textureProj(sc, vec2(dx*x, dy*y));
+			count++;
+		}
+	
+	}
+	return shadowFactor / count;
+}
+
 void main()
 {
 	mat4 Inv = scene.view;
@@ -231,8 +290,11 @@ void main()
 		vec3 H = normalize(L + scene.cameraPosition);
 		vec3 directionalDiffuse = vec3(scene.directionalLightColor) * max(dot(N, L), 0.01) * specularContribution(diffuse.rgb, L, V, N, F0, metallic, roughness);
 
-		vec3 color = ambient + directionalDiffuse + Lo;
+		vec3 color = ambient + (directionalDiffuse + Lo);
 		
+		//shadow
+		color *= filterPCF(scene.directionalLightViewMatrix * vec4(worldPosition, 1.0));
+
 		// Tone mapping
 		color = Uncharted2Tonemap(color * 4.5f);
 		color = color * (1.0f / Uncharted2Tonemap(vec3(11.2f)));	

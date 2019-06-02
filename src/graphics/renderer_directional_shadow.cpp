@@ -35,7 +35,7 @@ namespace dm
 {
 RendererDirectionalShadow::RendererDirectionalShadow(const Pipeline::Stage& stage): 
 	RenderPipeline(stage),
-	m_Pipeline(stage, { "Shaders/shadow_directional.vert", "Shaders/shadow_directional.frag" }, { VertexMesh::GetVertexInput() }, {}, PipelineGraphics::Mode::MRT, PipelineGraphics::Depth::READ_WRITE, VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST, VK_POLYGON_MODE_FILL, VK_CULL_MODE_FRONT_BIT)
+	m_Pipeline(stage, { "Shaders/shadow_directional.vert", "Shaders/shadow_directional.frag" }, { VertexMesh::GetVertexInput() }, {}, PipelineGraphics::Mode::MRT, PipelineGraphics::Depth::READ_WRITE, VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST, VK_POLYGON_MODE_FILL, VK_CULL_MODE_BACK_BIT)
 {
 	m_Signature.AddComponent(ComponentType::MESH_RENDERER);
 	m_Signature.AddComponent(ComponentType::SHADOW_RENDERER);
@@ -124,10 +124,10 @@ void RendererDirectionalShadow::Draw(const CommandBuffer& commandBuffer)
 		lightView = glm::mat4(glm::vec4(1.0f), glm::vec4(0), glm::vec4(0), glm::vec4(0));
 	}else
 	{
-		lightView = glm::lookAt(glm::normalize(lightDirection) * -minExtents.z, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f));
+		lightView = glm::lookAt(glm::normalize(-lightDirection) * -minExtents.z, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f));
 	}
 
-	glm::mat4 lightProjection = glm::ortho<float>(minExtents.x, maxExtents.x, minExtents.y, maxExtents.y, 0.0f, maxExtents.z - minExtents.z);
+	glm::mat4 lightProjection = glm::ortho<float>(minExtents.x, maxExtents.x, minExtents.y, maxExtents.y, -(maxExtents.z - minExtents.z), maxExtents.z - minExtents.z);
 
 	for (const auto &entity : m_RegisteredEntities)
 	{
