@@ -52,8 +52,8 @@ void MeshSphere::Load()
 		return;
 	}
 
-	uint32_t latitudeBands = 20;
-	uint32_t longitudeBands = 20;
+	uint32_t latitudeBands = 40;
+	uint32_t longitudeBands = 40;
 
 	std::vector<VertexMesh> vertices;
 	std::vector<uint32_t> indices;

@@ -61,6 +61,32 @@ layout(location = 0) out vec4 outColor;
 
 const float PI = 3.1415926535897932384626433832795f;
 
+const mat4 biasMat = mat4( 
+	0.5, 0.0, 0.0, 0.0,
+	0.0, 0.5, 0.0, 0.0,
+	0.0, 0.0, 1.0, 0.0,
+	0.5, 0.5, 0.0, 1.0 
+);
+
+vec2 poissonDisk[16] = vec2[]( 
+   vec2( -0.94201624, -0.39906216 ), 
+   vec2( 0.94558609, -0.76890725 ), 
+   vec2( -0.094184101, -0.92938870 ), 
+   vec2( 0.34495938, 0.29387760 ), 
+   vec2( -0.91588581, 0.45771432 ), 
+   vec2( -0.81544232, -0.87912464 ), 
+   vec2( -0.38277543, 0.27676845 ), 
+   vec2( 0.97484398, 0.75648379 ), 
+   vec2( 0.44323325, -0.97511554 ), 
+   vec2( 0.53742981, -0.47373420 ), 
+   vec2( -0.26496911, -0.41893023 ), 
+   vec2( 0.79197514, 0.19090188 ), 
+   vec2( -0.24188840, 0.99706507 ), 
+   vec2( -0.81409955, 0.91437590 ), 
+   vec2( 0.19984126, 0.78641367 ), 
+   vec2( 0.14383161, -0.14100790 ) 
+);
+
 vec3 Uncharted2Tonemap(vec3 x)
 {
 	float A = 0.15;
@@ -169,39 +195,53 @@ float ShadowCalculation(vec4 fragPosLightSpace)
     return shadow;
 }
 
-float textureProj(vec4 P, vec2 offset)
+float random(vec3 seed, int i){
+	vec4 seed4 = vec4(seed,i);
+	float dot_product = dot(seed4, vec4(12.9898,78.233,45.164,94.673));
+	return fract(sin(dot_product) * 43758.5453);
+}
+
+
+float textureProj(vec4 shadowCoord, vec2 offset, int i)
 {
 	float shadow = 1.0;
-	vec4 shadowCoord = P / P.w;
-	shadowCoord.st = shadowCoord.st * 0.5 + 0.5;
+	float bias = 0.005;
 	
 	if (shadowCoord.z > -1.0 && shadowCoord.z < 1.0) 
-	{
-		float dist = texture(shadowMap, vec2(shadowCoord.st + offset)).r;
-		if (shadowCoord.w > 0.0 && dist < shadowCoord.z) 
+	{	
+	mat4 Inv = scene.view;
+	Inv = inverse(Inv);
+
+	vec3 screenPosition = texture(samplerPosition, inUV).rgb;
+	vec3 worldPosition = vec3(Inv * vec4(screenPosition, 1.0));
+
+		int index = int(16.0*random(floor(worldPosition.xyz*1000.0), i))%16;
+
+		float dist = texture(shadowMap, vec2(shadowCoord.st + poissonDisk[index]/3500.0 + offset)).r;
+		if (shadowCoord.w > 0.0 && dist < shadowCoord.z - bias) 
 		{
-			shadow = 0.25;
+			shadow = 0.2;
 		}
-	}
+	} 
 	return shadow;
 }
 
 float filterPCF(vec4 sc)
 {
 	ivec2 texDim = textureSize(shadowMap, 0).xy;
-	float scale = 1.5;
+	float scale = 0.75;
 	float dx = scale * 1.0 / float(texDim.x);
 	float dy = scale * 1.0 / float(texDim.y);
 
 	float shadowFactor = 0.0;
 	int count = 0;
-	int range = 1;
+	int range = 2;
 	
 	for (int x = -range; x <= range; x++)
 	{
 		for (int y = -range; y <= range; y++)
 		{
-			shadowFactor += textureProj(sc, vec2(dx*x, dy*y));
+			shadowFactor += textureProj(sc, vec2(dx*x, dy*y), count);
 			count++;
 		}
 	
@@ -289,11 +329,14 @@ void main()
 		vec3 L = normalize(vec3(-scene.directionalLightDirection));
 		vec3 H = normalize(L + scene.cameraPosition);
 		vec3 directionalDiffuse = vec3(scene.directionalLightColor) * max(dot(N, L), 0.01) * specularContribution(diffuse.rgb, L, V, N, F0, metallic, roughness);
-
-		vec3 color = ambient + (directionalDiffuse + Lo);
 		
 		//shadow
-		color *= filterPCF(scene.directionalLightViewMatrix * vec4(worldPosition, 1.0));
+		vec4 shadowCoord = (biasMat * scene.directionalLightViewMatrix) * vec4(worldPosition, 1.0);	
+		float shadow = filterPCF(shadowCoord / shadowCoord.w);
+
+		vec3 color = ambient + (directionalDiffuse + Lo);
+
+		color *= shadow;
 
 		// Tone mapping
 		color = Uncharted2Tonemap(color * 4.5f);

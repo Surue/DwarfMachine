@@ -75,6 +75,7 @@ public:
 
 	void Destroy();
 
+	const Entity GetEntity() const { return m_Entity; }
 
 private:
 	Entity m_Entity;

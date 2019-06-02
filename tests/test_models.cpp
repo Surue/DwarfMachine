@@ -198,7 +198,7 @@ void CreateCube(glm::vec3 pos, dm::EntityManager* entityManager, dm::Editor* edi
 	cube.CreateComponent<dm::ShadowRenderer>(ComponentType::SHADOW_RENDERER);
 }
 
-void CreateSphere(glm::vec3 pos, dm::EntityManager* entityManager, dm::MaterialDefault material)
+dm::EntityHandle CreateSphere(glm::vec3 pos, dm::EntityManager* entityManager, dm::MaterialDefault material)
 {
 	const auto entityHandle = entityManager->CreateEntity();
 	auto sphere = dm::EntityHandle(entityHandle);
@@ -228,6 +228,8 @@ void CreateSphere(glm::vec3 pos, dm::EntityManager* entityManager, dm::MaterialD
 
 	//Shadow Renderer
 	sphere.CreateComponent<dm::ShadowRenderer>(ComponentType::SHADOW_RENDERER);
+
+	return entityHandle;
 }
 
 void CreatePlane(glm::vec3 pos, dm::EntityManager* entityManager, dm::MaterialDefault material)
@@ -505,7 +507,14 @@ TEST(Models, Lights)
 			material.ignoreFog = false;
 
 			glm::vec3 pos = glm::vec3(i - maxSphere / 2.0f + i * 1.0f, 0, j - maxSphere / 2.0f + j * 1.0f);
-			CreateSphere(pos, entityManager, material);
+			auto sphere = CreateSphere(pos, entityManager, material);
+
+			//dm::Gizmo gizmo;
+			//gizmo.transform = sphere.GetComponent<dm::Transform>(ComponentType::TRANSFORM);
+			//gizmo.color = dm::Color(100, 0, 0, 1);
+			//gizmo.gizmoType = gizmoType;
+			//gizmo.entity = sphere.GetEntity();
+			//editor->GetGizmoManager()->AddGizmo(gizmo);
 		}
 	}
 
