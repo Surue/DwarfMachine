@@ -87,7 +87,7 @@ void RendererDirectionalShadow::Draw(const CommandBuffer& commandBuffer)
 	};
 
 	// Project frustum corners into world space
-	glm::mat4 invCam = glm::inverse(camera->proj * camera->viewMatrix);
+	glm::mat4 invCam = glm::inverse(camera->projectionMatrix * camera->viewMatrix);
 	for (uint32_t i = 0; i < 8; i++) {
 		glm::vec4 invCorner = invCam * glm::vec4(frustumCorners[i], 1.0f);
 		frustumCorners[i] = invCorner / invCorner.w;

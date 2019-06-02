@@ -41,7 +41,7 @@ struct MaterialSkybox : public Material
 	Color color = Color::White;
 	float blend = 1;
 	Color fogColor = Color(0.1f, 0.1f, 0.1f, 1.0f);
-	glm::vec2 fogLimit = glm::vec2(-10000.0f, 10000.0f);
+	glm::vec2 fogLimit = glm::vec2(-100.0f, 100.0f);
 };
 
 class MaterialSkyboxManager final : public ComponentBaseManager<MaterialSkybox>
@@ -62,6 +62,8 @@ public:
 	static void PushDescriptor(MaterialSkybox& material, DescriptorHandle &descriptorSet);
 
 	static void PushUniform(MaterialSkybox& material, const glm::mat4x4 worldPos, UniformHandle& uniformObject);
+
+	void CreateComponent(json& componentJson, const Entity entity) override;
 private:
 };
 }

@@ -140,4 +140,47 @@ MaterialDefault* MaterialDefaultManager::AddComponent(const Entity entity, Mater
 	m_Components[entity - 1] = component;
 	return &m_Components[entity - 1];
 }
+
+void MaterialDefaultManager::CreateComponent(json& componentJson, const Entity entity)
+{
+	auto material = MaterialDefault();
+	material.componentType = ComponentType::MATERIAL_DEFAULT;
+
+	if (CheckJsonExists(componentJson, "color"))
+		material.color = GetColorFromJson(componentJson, "color");
+
+	if (CheckJsonExists(componentJson, "metallic") && CheckJsonNumber(componentJson, "metallic"))
+		material.metallic = componentJson["metallic"];
+
+	if (CheckJsonExists(componentJson, "roughness") && CheckJsonNumber(componentJson, "roughness"))
+		material.metallic = componentJson["roughness"];
+
+	if (CheckJsonExists(componentJson, "castShadow"))
+		material.castsShadows = GetBoolFromJson(componentJson, "castShadow");
+
+	if (CheckJsonExists(componentJson, "ignoreLighting"))
+		material.ignoreLighting = GetBoolFromJson(componentJson, "ignoreLighting");
+
+	if (CheckJsonExists(componentJson, "ignoreFog"))
+		material.ignoreFog = GetBoolFromJson(componentJson, "ignoreFog");
+
+	if(CheckJsonExists(componentJson, "texture"))
+		material.textureDiffuse = Image2d::Create(componentJson["texture"]);
+
+	if (CheckJsonExists(componentJson, "normal"))
+		material.normalTexture = Image2d::Create(componentJson["normal"]);
+
+	if (CheckJsonExists(componentJson, "material"))
+		material.materialTexture = Image2d::Create(componentJson["material"]);
+
+	material.pipelineMaterial = PipelineMaterial::Create({ 1, 0 },
+		PipelineGraphicsCreate(
+			{ "../Shaders/shader.vert", "../Shaders/shader.frag" },
+			{ ModelComponentManager::GetVertexInput() },
+			MaterialDefaultManager::GetDefines(material),
+			PipelineGraphics::Mode::MRT)
+	);
+
+	m_Components[entity - 1] = std::move(material);
+}
 }

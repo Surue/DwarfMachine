@@ -46,9 +46,9 @@ Camera* CameraManager::CreateComponent(const Entity entity)
 {
 	auto c = Camera();
 	c.componentType = ComponentType::CAMERA;
-	c.viewMatrix = glm::lookAt(c.pos, c.pos + c.front, c.up);
-	c.proj = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
-	c.isMainCamera = false;
+	c.viewMatrix = glm::lookAt(c.position, c.position + c.front, c.up);
+	c.projectionMatrix = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
+	c.isMain = false;
 
 	c.right = glm::normalize(glm::cross(c.front, glm::vec3(0, -1, 0)));
 
@@ -64,7 +64,7 @@ Camera* CameraManager::AddComponent(const Entity entity, Camera& componentBase)
 {
 	m_Components[entity - 1] = componentBase;
 
-	if(componentBase.isMainCamera)
+	if(componentBase.isMain)
 	{
 		m_GraphicManager->SetMainCamera(&m_Components[entity - 1]);
 	}
@@ -80,12 +80,10 @@ void CameraManager::OnDrawInspector(const Entity entity)
 {
 	ImGui::Separator();
 	ImGui::TextWrapped("Camera");
-	ImGui::DragFloat3("Position", &m_Components[entity - 1].pos[0], 0.1f);
-	ImGui::DragFloat3("Front", &m_Components[entity - 1].front[0], 0.1f);
-	ImGui::DragFloat3("Up", &m_Components[entity - 1].up[0], 0.1f);
-	ImGui::DragFloat3("Right", &m_Components[entity - 1].right[0], 0.1f);
-	ImGui::DragFloat("Yaw", &m_Components[entity - 1].yaw, 0.1f);
-	ImGui::DragFloat("Pitch", &m_Components[entity - 1].pitch, 0.1f);
+	//ImGui::Text("Position ( " + std::to_string(m_Components[entity - 1].position.x) + ", " + std::to_string(m_Components[entity - 1].position.y) + ", " + std::to_string(m_Components[entity - 1].position.z) + " )");
+
+	ImGui::InputFloat("Near", &m_Components[entity - 1].nearFrustum);
+	ImGui::InputFloat("Far", &m_Components[entity - 1].farFrustum);
 }
 
 void CameraManager::OnEntityResize(const int newSize)
@@ -95,7 +93,7 @@ void CameraManager::OnEntityResize(const int newSize)
 
 	for (auto& component : m_Components)
 	{
-		if (component.isMainCamera)
+		if (component.isMain)
 		{
 			m_GraphicManager->SetMainCamera(&component);
 			return;
@@ -108,7 +106,71 @@ void CameraManager::UpdateAspect(const float newAspect)
 	for (auto& component : m_Components)
 	{
 		component.aspect = newAspect;
-		component.proj = glm::perspective(glm::radians(component.fov), component.aspect, component.frustumNear, component.frustumFar);
+		component.projectionMatrix = glm::perspective(glm::radians(component.fov), component.aspect, component.nearFrustum, component.farFrustum);
 	}
+}
+
+void CameraManager::CreateComponent(json& componentJson, const Entity entity)
+{
+	Camera camera;
+
+	if (CheckJsonExists(componentJson, "position"))
+		camera.position = GetVector3FromJson(componentJson, "position");
+
+	if (CheckJsonExists(componentJson, "up"))
+		camera.up = GetVector3FromJson(componentJson, "up");
+
+	if (CheckJsonExists(componentJson, "right"))
+		camera.right = GetVector3FromJson(componentJson, "right");
+
+	if (CheckJsonExists(componentJson, "front"))
+		camera.front = GetVector3FromJson(componentJson, "front");
+
+	if (CheckJsonExists(componentJson, "aspect") && CheckJsonNumber(componentJson, "aspect"))
+		camera.aspect = componentJson["aspect"];
+
+	if (CheckJsonExists(componentJson, "fov") && CheckJsonNumber(componentJson, "fov"))
+		camera.fov = componentJson["fov"];
+
+	if (CheckJsonExists(componentJson, "near") && CheckJsonNumber(componentJson, "near"))
+		camera.nearFrustum = componentJson["near"];
+
+	if (CheckJsonExists(componentJson, "far") && CheckJsonNumber(componentJson, "far"))
+		camera.farFrustum = componentJson["far"];
+
+	if (CheckJsonExists(componentJson, "yaw") && CheckJsonNumber(componentJson, "yaw"))
+		camera.yaw = componentJson["yaw"];
+
+	if (CheckJsonExists(componentJson, "pitch") && CheckJsonNumber(componentJson, "pitch"))
+		camera.pitch = componentJson["pitch"];
+
+	if (CheckJsonExists(componentJson, "isMain") && CheckJsonNumber(componentJson, "isMain"))
+	{
+		if (componentJson["isMain"] == 1)
+		{
+			camera.isMain = true;
+		}
+		else
+		{
+			camera.isMain = false;
+		}
+	}
+
+	if (CheckJsonExists(componentJson, "isCulling") && CheckJsonNumber(componentJson, "isCulling"))
+	{
+		if (componentJson["isCulling"] == 1)
+		{
+			camera.isCulling = true;
+		}
+		else
+		{
+			camera.isCulling = false;
+		}
+	}
+
+	camera.viewMatrix = glm::lookAt(camera.position, camera.position + camera.front, camera.up);
+	camera.projectionMatrix = glm::perspective(glm::radians(camera.fov), camera.aspect, camera.nearFrustum, camera.farFrustum);
+
+	m_Components[entity - 1] = camera;
 }
 }

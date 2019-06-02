@@ -39,10 +39,16 @@ class ShadowRendererManager : public ComponentBaseManager<ShadowRenderer>
 {
 public:
 	void Init() override;
+
 	void Update() override;
+
 	ShadowRenderer* CreateComponent(Entity entity) override;
+
 	void DestroyComponent(Entity entity) override;
+
 	void OnDrawInspector(Entity entity) override;
+
+	void CreateComponent(json& componentJson, const Entity entity) override;
 };
 }
 

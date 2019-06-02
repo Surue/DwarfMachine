@@ -48,4 +48,17 @@ void MeshRendererManager::DestroyComponent(Entity entity)
 void MeshRendererManager::OnDrawInspector(Entity entity)
 {
 }
+
+void MeshRendererManager::CreateComponent(json& componentJson, const Entity entity)
+{
+	MeshRenderer meshRenderer;
+
+	if(CheckJsonExists(componentJson, "materialType") && CheckJsonNumber(componentJson, "materialType"))
+		meshRenderer.materialType = componentJson["materialType"];
+
+	if (CheckJsonExists(componentJson, "castShadow"))
+		meshRenderer.castsShadows = GetBoolFromJson(componentJson, "castShadow");
+
+	m_Components[entity - 1] = std::move(meshRenderer);
+}
 }

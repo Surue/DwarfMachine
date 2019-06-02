@@ -58,8 +58,8 @@ void FilterSsao::Draw(const CommandBuffer& commandBuffer)
 {
 	auto camera = GraphicManager::Get()->GetCamera();
 
-	m_UniformScene.Push("projection", camera->proj);
-	m_UniformScene.Push("cameraPosition", camera->pos);
+	m_UniformScene.Push("projection", camera->projectionMatrix);
+	m_UniformScene.Push("cameraPosition", camera->position);
 
 	m_UniformKernel.Push("kernel", *m_Kernel.data(), sizeof(glm::vec4) * m_Kernel.size());
 

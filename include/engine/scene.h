@@ -22,49 +22,54 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#include <component/model.h>
-#include "engine/engine.h"
-#include <graphics/mesh_manager.h>
+#ifndef SCENE_H
+#define SCENE_H
+#include <string>
+
+#include <utility/json_utility.h>
+#include <entity/entity.h>
+#include <component/component_manager.h>
 
 namespace dm
 {
-ModelComponentManager::ModelComponentManager() { }
-
-ModelComponentManager::~ModelComponentManager()
+struct SceneInfo
 {
-	m_Components.clear();
-}
+	std::string name  = "";
+	std::string path  = "";
+};
 
-void ModelComponentManager::Init() {}
-
-void ModelComponentManager::Update() {}
-
-Model* ModelComponentManager::CreateComponent(const Entity entity)
+class SceneManager
 {
-	auto mesh = Model();
-	mesh.componentType = ComponentType::MODEL;
+public:
+	SceneManager();
+	~SceneManager();
 
-	mesh.model = nullptr;
+	void Init();
 
-	m_Components[entity - 1] = mesh;
+	void Update();
 
-	return &m_Components[entity - 1];
+	void Draw();
+
+	/**
+	* \brief Load a Scene and create all its GameObject
+	* \param scenePath the scene path given by the configuration
+	*/
+	void LoadSceneFromPath(const std::string& scenePath);
+
+	void LoadSceneFromJson(json& sceneJson);
+
+private:
+	void InitScenePySystems();
+
+	EntityManager* m_EntityManager;
+	ComponentManagerContainer* m_ComponentManager;
+
+	bool m_IsInited = false;
+
+	std::string m_CurrentScenePath;
+
+	SceneInfo m_SceneInfo;
+};
 }
-void ModelComponentManager::DestroyComponent(Entity entity) {}
-void ModelComponentManager::OnDrawInspector(Entity entity) {}
 
-void ModelComponentManager::CreateComponent(json& componentJson, const Entity entity)
-{
-	auto mesh = Model();
-
-	if (CheckJsonExists(componentJson, "modelName"))
-	{
-		mesh.model = Engine::Get()->GetModelManager()->GetModel(componentJson["modelName"]);
-	}else
-	{
-		mesh.model = nullptr;
-	}
-
-	m_Components[entity - 1] = mesh;
-}
-}
+#endif

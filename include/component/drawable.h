@@ -38,10 +38,16 @@ class DrawableManager : public ComponentBaseManager<Drawable>
 {
 public:
 	void Init() override;
+
 	void Update() override;
+
 	Drawable* CreateComponent(Entity) override;
+
 	void DestroyComponent(Entity entity) override;
+
 	void OnDrawInspector(Entity entity) override;
+
+	void CreateComponent(json& componentJson, const Entity entity) override;
 private:
 };
 }

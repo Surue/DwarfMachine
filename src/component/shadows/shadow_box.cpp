@@ -38,16 +38,16 @@ void ShadowBox::Update(const Camera& camera, const glm::mat4 lightMatrix)
 	m_LightViewMatrix = lightMatrix;
 
 	m_FarWidth = m_ShadowDistance * std::tan(camera.fov * (M_PI / 180.f));
-	m_NearWidth = camera.frustumNear * std::tan(camera.fov * (M_PI / 180.f));
+	m_NearWidth = camera.nearFrustum * std::tan(camera.fov * (M_PI / 180.f));
 	m_FarHeight = m_FarWidth / camera.aspect;
 	m_NearHeight = m_NearWidth / camera.aspect;
 
 	auto forwardVector = camera.front;
 
 	auto toFar = forwardVector * m_ShadowDistance;
-	auto toNear = forwardVector * camera.frustumNear;
-	auto centreNear = toNear + camera.pos;
-	auto centreFar = toFar + camera.pos;
+	auto toNear = forwardVector * camera.nearFrustum;
+	auto centreNear = toNear + camera.position;
+	auto centreFar = toFar + camera.position;
 
 	auto points = CalculateFrustumVertices(camera, centreNear, centreFar);
 

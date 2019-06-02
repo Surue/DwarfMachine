@@ -99,8 +99,24 @@ void TransformManager::OnDrawInspector(Entity entity)
 	ImGuizmo::BeginFrame();
 	ImGuiIO& io = ImGui::GetIO();
 	ImGuizmo::SetRect(0, 0, io.DisplaySize.x, io.DisplaySize.y);
-	ImGuizmo::Manipulate(&camera->viewMatrix[0][0], &camera->proj[0][0], ImGuizmo::TRANSLATE, ImGuizmo::LOCAL, &m_Components[entity - 1].worldMatrix[0][0], NULL, NULL);
+	ImGuizmo::Manipulate(&camera->viewMatrix[0][0], &camera->projectionMatrix[0][0], ImGuizmo::TRANSLATE, ImGuizmo::LOCAL, &m_Components[entity - 1].worldMatrix[0][0], NULL, NULL);
 
 	ImGuizmo::DecomposeMatrixToComponents(&m_Components[entity - 1].worldMatrix[0][0], &m_Components[entity - 1].position[0], &m_Components[entity - 1].rotation[0], &m_Components[entity - 1].scaling[0]);
+}
+
+void TransformManager::CreateComponent(json& componentJson, Entity entity)
+{
+	Transform transform;
+
+	if (CheckJsonExists(componentJson, "position"))
+		transform.position = GetVector3FromJson(componentJson, "position");
+
+	if (CheckJsonExists(componentJson, "scale"))
+		transform.scaling = GetVector3FromJson(componentJson, "scale");
+
+	if (CheckJsonExists(componentJson, "angle"))
+		transform.rotation = GetVector3FromJson(componentJson, "angle");
+
+	m_Components[entity - 1] = transform;
 }
 }

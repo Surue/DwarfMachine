@@ -75,6 +75,8 @@ public:
 	void OnDrawInspector(Entity entity) override;
 
 	MaterialDefault* AddComponent(const Entity entity, MaterialDefault& component) override;
+
+	void CreateComponent(json& componentJson, const Entity entity) override;
 private:
 };
 }

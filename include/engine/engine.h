@@ -28,7 +28,7 @@ SOFTWARE.
 #include <engine/vector.h>
 #include <memory>
 #include <chrono>
-#include <engine/system_container.h>
+#include <engine/module_container.h>
 
 namespace dm
 {
@@ -88,7 +88,7 @@ private:
 
 	EngineSettings m_Settings;
 
-	SystemContainer m_SystemContainer;
+	ModuleContainer m_ModuleContainer;
 
 	std::unique_ptr<EngineApplication> m_App;
 

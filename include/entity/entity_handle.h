@@ -42,24 +42,16 @@ public:
 	template<class T>
 	T* AddComponent(T& component)
 	{
-		const auto oldMask = m_EntityManager->GetEntityMask(m_Entity);
 		auto result = static_cast<T*>(m_ComponentManager->AddComponent(m_Entity, component));
-		m_EntityManager->AddComponent(m_Entity, component.componentType);
-		m_SystemManager->AddComponent(m_Entity, oldMask, m_EntityManager->GetEntityMask(m_Entity));
-		if(m_RendererContainer != nullptr)
-		m_RendererContainer->AddComponent(m_Entity, oldMask, m_EntityManager->GetEntityMask(m_Entity));
+
+		AddComponentType(component.componentType);
 		return result;
 	}
 
 	template<class T>
 	T* CreateComponent(const ComponentType componentType) const
 	{
-		const auto oldMask = m_EntityManager->GetEntityMask(m_Entity);
-
-		m_EntityManager->AddComponent(m_Entity, componentType);
-		m_SystemManager->AddComponent(m_Entity, oldMask, m_EntityManager->GetEntityMask(m_Entity));
-		if (m_RendererContainer != nullptr)
-		m_RendererContainer->AddComponent(m_Entity, oldMask, m_EntityManager->GetEntityMask(m_Entity));
+		AddComponentType(componentType);
 		return static_cast<T*>(m_ComponentManager->CreateComponent(m_Entity, componentType));
 	}
 
@@ -67,6 +59,15 @@ public:
 	T* GetComponent(const ComponentType componentType)
 	{
 		return static_cast<T*>(m_ComponentManager->GetComponent(m_Entity, componentType));
+	}
+
+	void AddComponentType(const ComponentType componentType) const
+	{
+		const auto oldMask = m_EntityManager->GetEntityMask(m_Entity);
+		m_EntityManager->AddComponent(m_Entity, componentType);
+		m_SystemManager->AddComponent(m_Entity, oldMask, m_EntityManager->GetEntityMask(m_Entity));
+		if (m_RendererContainer != nullptr)
+			m_RendererContainer->AddComponent(m_Entity, oldMask, m_EntityManager->GetEntityMask(m_Entity));
 	}
 
 	bool HasComponent(ComponentType componentType) const;

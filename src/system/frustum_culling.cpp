@@ -49,7 +49,7 @@ void FrustumCulling::Update()
 
 	for (Camera& camera : cameras)
 	{
-		if(camera.isCullingCamera)
+		if(camera.isCulling)
 		{
 			m_CameraForCulling = &camera;
 			break;
@@ -81,40 +81,40 @@ void FrustumCulling::Update()
 		auto drawable = entityHandle.GetComponent<Drawable>(ComponentType::DRAWABLE);
 		drawable->isDrawable = false;
 
-		const auto cameraToSphere = transform->position - m_CameraForCulling->pos;
+		const auto cameraToSphere = transform->position - m_CameraForCulling->position;
 
 		//near culling
-		if (glm::dot(cameraToSphere, m_CameraForCulling->front) < m_CameraForCulling->frustumNear + boundingSphere->m_Radius)
+		if (glm::dot(cameraToSphere, m_CameraForCulling->front) < m_CameraForCulling->nearFrustum + boundingSphere->radius)
 		{
 			continue;
 		}
 
 		//far culling
-		if (glm::dot(cameraToSphere, m_CameraForCulling->front) > m_CameraForCulling->frustumFar - boundingSphere->m_Radius)
+		if (glm::dot(cameraToSphere, m_CameraForCulling->front) > m_CameraForCulling->farFrustum - boundingSphere->radius)
 		{
 			continue;
 		}
 
 		//left culling
-		if (glm::dot(cameraToSphere, leftNormal) < -boundingSphere->m_Radius)
+		if (glm::dot(cameraToSphere, leftNormal) < -boundingSphere->radius)
 		{
 			continue;
 		}
 
 		//right culling
-		if (glm::dot(cameraToSphere, rightNormal) < -boundingSphere->m_Radius)
+		if (glm::dot(cameraToSphere, rightNormal) < -boundingSphere->radius)
 		{
 			continue;
 		}
 
 		//up culling
-		if (glm::dot(cameraToSphere, upNormal) > boundingSphere->m_Radius)
+		if (glm::dot(cameraToSphere, upNormal) > boundingSphere->radius)
 		{
 			continue;
 		}
 
 		//down culling
-		if (glm::dot(cameraToSphere, downNormal) > boundingSphere->m_Radius)
+		if (glm::dot(cameraToSphere, downNormal) > boundingSphere->radius)
 		{
 			continue;
 		}

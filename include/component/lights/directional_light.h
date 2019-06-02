@@ -38,10 +38,16 @@ class DirectionalLightManager : public ComponentBaseManager<DirectionalLight>
 {
 public:
 	void Init() override;
+
 	void Update() override;
+
 	DirectionalLight* CreateComponent(Entity) override;
+
 	void DestroyComponent(Entity entity) override;
+
 	void OnDrawInspector(Entity entity) override;
+
+	void CreateComponent(json& componentJson, const Entity entity) override;
 };
 }
 

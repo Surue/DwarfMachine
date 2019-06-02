@@ -65,9 +65,9 @@ TEST(Models, Cube)
 
 	dm::Camera cameraInfo;
 	cameraInfo.componentType = ComponentType::CAMERA;
-	cameraInfo.isMainCamera = true;
-	cameraInfo.viewMatrix = glm::lookAt(cameraInfo.pos, cameraInfo.pos + cameraInfo.front, cameraInfo.up);
-	cameraInfo.proj = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
+	cameraInfo.isMain = true;
+	cameraInfo.viewMatrix = glm::lookAt(cameraInfo.position, cameraInfo.position + cameraInfo.front, cameraInfo.up);
+	cameraInfo.projectionMatrix = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
 
 	auto camera = entity.AddComponent<dm::Camera>(cameraInfo);
 
@@ -322,14 +322,14 @@ TEST(Models, FrustumCulling)
 
 	dm::Camera cameraInfo;
 	cameraInfo.componentType = ComponentType::CAMERA;
-	cameraInfo.isMainCamera = true;
-	cameraInfo.isCullingCamera = true;
-	cameraInfo.viewMatrix = glm::lookAt(cameraInfo.pos, cameraInfo.pos + cameraInfo.front, cameraInfo.up);
+	cameraInfo.isMain = true;
+	cameraInfo.isCulling = true;
+	cameraInfo.viewMatrix = glm::lookAt(cameraInfo.position, cameraInfo.position + cameraInfo.front, cameraInfo.up);
 	cameraInfo.fov = 45;
-	cameraInfo.frustumFar = 1024.0f;
-	cameraInfo.frustumNear = 0.1f;
+	cameraInfo.farFrustum = 1024.0f;
+	cameraInfo.nearFrustum = 0.1f;
 	cameraInfo.aspect = 800.0f / 600.0f;
-	cameraInfo.proj = glm::perspective(glm::radians(cameraInfo.fov), cameraInfo.aspect, cameraInfo.frustumNear, cameraInfo.frustumFar);
+	cameraInfo.projectionMatrix = glm::perspective(glm::radians(cameraInfo.fov), cameraInfo.aspect, cameraInfo.nearFrustum, cameraInfo.farFrustum);
 
 	auto camera = entity.AddComponent<dm::Camera>(cameraInfo);
 
@@ -393,14 +393,14 @@ TEST(Models, PBR)
 	dm::Camera cameraInfo;
 	cameraInfo.up = glm::vec3(0.0f, 1.0f, 0.0f);
 	cameraInfo.componentType = ComponentType::CAMERA;
-	cameraInfo.isMainCamera = true;
-	cameraInfo.isCullingCamera = true;
-	cameraInfo.viewMatrix = glm::lookAt(cameraInfo.pos, cameraInfo.pos + cameraInfo.front, cameraInfo.up);
+	cameraInfo.isMain = true;
+	cameraInfo.isCulling = true;
+	cameraInfo.viewMatrix = glm::lookAt(cameraInfo.position, cameraInfo.position + cameraInfo.front, cameraInfo.up);
 	cameraInfo.fov = 45;
-	cameraInfo.frustumFar = 1024.0f;
-	cameraInfo.frustumNear = 0.1f;
+	cameraInfo.farFrustum = 1024.0f;
+	cameraInfo.nearFrustum = 0.1f;
 	cameraInfo.aspect = 1024.0f / 720.0f;
-	cameraInfo.proj = glm::perspective(glm::radians(cameraInfo.fov), cameraInfo.aspect, cameraInfo.frustumNear, cameraInfo.frustumFar);
+	cameraInfo.projectionMatrix = glm::perspective(glm::radians(cameraInfo.fov), cameraInfo.aspect, cameraInfo.nearFrustum, cameraInfo.farFrustum);
 
 	auto camera = entity.AddComponent<dm::Camera>(cameraInfo);
 
@@ -467,14 +467,14 @@ TEST(Models, Lights)
 	dm::Camera cameraInfo;
 	cameraInfo.up = glm::vec3(0.0f, 1.0f, 0.0f);
 	cameraInfo.componentType = ComponentType::CAMERA;
-	cameraInfo.isMainCamera = true;
-	cameraInfo.isCullingCamera = true;
-	cameraInfo.viewMatrix = glm::lookAt(cameraInfo.pos, cameraInfo.pos + cameraInfo.front, cameraInfo.up);
+	cameraInfo.isMain = true;
+	cameraInfo.isCulling = true;
+	cameraInfo.viewMatrix = glm::lookAt(cameraInfo.position, cameraInfo.position + cameraInfo.front, cameraInfo.up);
 	cameraInfo.fov = 45;
-	cameraInfo.frustumFar = 100.0f;
-	cameraInfo.frustumNear = 0.1f;
+	cameraInfo.farFrustum = 100.0f;
+	cameraInfo.nearFrustum = 0.1f;
 	cameraInfo.aspect = 1024.0f / 720.0f;
-	cameraInfo.proj = glm::perspective(glm::radians(cameraInfo.fov), cameraInfo.aspect, cameraInfo.frustumNear, cameraInfo.frustumFar);
+	cameraInfo.projectionMatrix = glm::perspective(glm::radians(cameraInfo.fov), cameraInfo.aspect, cameraInfo.nearFrustum, cameraInfo.farFrustum);
 
 	auto camera = entity.AddComponent<dm::Camera>(cameraInfo);
 
@@ -489,7 +489,7 @@ TEST(Models, Lights)
 	materialS.color = dm::Color(1, 1, 1, 1);
 	materialS.ignoreLighting = false;
 	materialS.ignoreFog = false;
-	CreateSphere(camera->pos, entityManager, materialS);
+	CreateSphere(camera->position, entityManager, materialS);
 
 	//Sphere
 	float maxSphere = 9;

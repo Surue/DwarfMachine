@@ -52,4 +52,20 @@ void PointLightManager::OnDrawInspector(Entity entity)
 	ImGui::DragFloat("radius", &m_Components[entity - 1].radius, 0.1f);
 	ImGui::DragFloat("intensity", &m_Components[entity - 1].intensity, 0.1f, 0, 100000);
 }
+
+void PointLightManager::CreateComponent(json& componentJson, const Entity entity)
+{
+	PointLight directionalLight;
+
+	if (CheckJsonExists(componentJson, "radius"))
+		directionalLight.radius =componentJson["radius"];
+
+	if (CheckJsonExists(componentJson, "color"))
+		directionalLight.color = GetColorFromJson(componentJson, "color");
+
+	if (CheckJsonExists(componentJson, "intensity"))
+		directionalLight.intensity = componentJson["intensity"];
+
+	m_Components[entity - 1] = directionalLight;
+}
 }

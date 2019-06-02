@@ -54,6 +54,16 @@ bool CheckJsonNumber(const json& jsonObject, const std::string& parameterName)
 		   CheckJsonParameter(jsonObject, parameterName, json::value_t::number_unsigned);
 }
 
+bool GetBoolFromJson(const json& jsonObject, const std::string& parameterName)
+{
+	if(CheckJsonNumber(jsonObject, parameterName))
+	{
+		return jsonObject[parameterName] == 1;
+	}
+
+	return false;
+}
+
 glm::vec2 GetVector2FromJson(const json& jsonObject, const std::string& parameterName)
 {
 	glm::vec2 vector = glm::vec2();

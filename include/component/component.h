@@ -26,6 +26,7 @@ SOFTWARE.
 #define COMPONENT_H
 #include <entity/entity.h>
 #include <component/component_type.h>
+#include "utility/json_utility.h"
 
 #define INIT_COMPONENT_NMB 100
 
@@ -38,8 +39,14 @@ struct ComponentBase
 	//TODO corriger cette connerie qui augmente la taille de tout les components
 };
 
+class IComponentFactory
+{
+public:
+	virtual void CreateComponent(json& componentJson, const Entity entity) = 0;
+};
+
 template<typename T>
-class ComponentBaseManager
+class ComponentBaseManager : public IComponentFactory
 {
 public:
 	ComponentBaseManager() {}
@@ -59,7 +66,7 @@ public:
 		m_Components.resize(INIT_COMPONENT_NMB);
 	}
 
-	virtual T* CreateComponent(Entity) = 0;
+	virtual T* CreateComponent(Entity entity) = 0;
 	
 	virtual T* AddComponent(const Entity entity, T& component)
 	{

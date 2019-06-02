@@ -54,6 +54,8 @@ public:
 	static Shader::VertexInput GetVertexInput(const uint32_t &binding = 0) { return VertexMesh::GetVertexInput(binding); }
 	
 	void OnDrawInspector(Entity entity) override;
+
+	void CreateComponent(json& componentJson, const Entity entity) override;
 };
 }
 

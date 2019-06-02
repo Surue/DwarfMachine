@@ -33,7 +33,7 @@ BoundingSphere BoundingSphereManager::GetBoundingSphere(Mesh& mesh)
 {
 	BoundingSphere boundingSphere;
 	boundingSphere.componentType = ComponentType::BOUNDING_SPHERE;
-	boundingSphere.m_Radius = mesh.GetRadius();
+	boundingSphere.radius = mesh.GetRadius();
 	return boundingSphere;
 }
 
@@ -55,7 +55,7 @@ void BoundingSphereManager::Update()
 BoundingSphere* BoundingSphereManager::CreateComponent(const Entity entity)
 {
 	auto b = BoundingSphere();
-	b.m_Radius = 1;
+	b.radius = 1;
 	m_Components[entity - 1] = b;
 
 	return &m_Components[entity - 1];
@@ -76,6 +76,16 @@ void BoundingSphereManager::OnDrawInspector(Entity entity)
 {
 	ImGui::Separator();
 	ImGui::TextWrapped("Bounding Sphere");
-	ImGui::TextWrapped("Radius : %f ", m_Components[entity - 1].m_Radius);
+	ImGui::TextWrapped("Radius : %f ", m_Components[entity - 1].radius);
+}
+
+void BoundingSphereManager::CreateComponent(json& componentJson, const Entity entity)
+{
+	BoundingSphere boundingSphere;
+
+	if (CheckJsonExists(componentJson, "radius") && CheckJsonNumber(componentJson, "radius"))
+		boundingSphere.radius = componentJson["radius"];
+
+	m_Components[entity - 1] = boundingSphere;
 }
 }

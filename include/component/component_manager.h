@@ -55,6 +55,8 @@ public:
 
 	void Destroy();
 
+	void CreateComponent(json& componentJson, Entity entity, ComponentType componentType);
+
 	ComponentBase* CreateComponent(Entity entity, ComponentType componentType) const;
 
 	ComponentBase* AddComponent(Entity entity, ComponentBase& component) const;
@@ -91,6 +93,8 @@ private:
 	std::unique_ptr<DirectionalLightManager> m_DirectionalLightManager;
 	std::unique_ptr<SpotLightManager> m_SpotLightManager;
 	std::unique_ptr<ShadowRendererManager> m_ShadowRendererManager;
+
+	std::vector<IComponentFactory*> m_ComponentsFactory;
 };
 }
 #endif COMPONENT_MANAGER_H

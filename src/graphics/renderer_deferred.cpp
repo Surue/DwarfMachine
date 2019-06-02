@@ -160,7 +160,7 @@ void RendererDeferred::Draw(const CommandBuffer& commandBuffer)
 	};
 
 	// Project frustum corners into world space
-	glm::mat4 invCam = glm::inverse(camera->proj * camera->viewMatrix);
+	glm::mat4 invCam = glm::inverse(camera->projectionMatrix * camera->viewMatrix);
 	for (uint32_t i = 0; i < 8; i++) {
 		glm::vec4 invCorner = invCam * glm::vec4(frustumCorners[i], 1.0f);
 		frustumCorners[i] = invCorner / invCorner.w;
@@ -204,7 +204,7 @@ void RendererDeferred::Draw(const CommandBuffer& commandBuffer)
 	glm::mat4 lightProjection = glm::ortho<float>(minExtents.x, maxExtents.x, minExtents.y, maxExtents.y, -(maxExtents.z - minExtents.z), maxExtents.z - minExtents.z);
 
 	m_UniformScene.Push("view", camera->viewMatrix);
-	m_UniformScene.Push("cameraPosition", camera->pos);
+	m_UniformScene.Push("cameraPosition", camera->position);
 	m_UniformScene.Push("pointLightCount", pointLightCount);
 	m_UniformScene.Push("spotLightCount", spotLightCount);
 	//TODO créer un objet fog

@@ -206,24 +206,24 @@ void Editor::MoveEditorCamera()
 		cameraSpeed *= 2;
 
 	if (inputManager->IsKeyHeld(KeyCode::LEFT) || inputManager->IsKeyHeld(KeyCode::A))
-		camera->pos -= camera->right * cameraSpeed;
+		camera->position -= camera->right * cameraSpeed;
 
 	if (inputManager->IsKeyHeld(KeyCode::RIGHT) || inputManager->IsKeyHeld(KeyCode::D))
-		camera->pos += camera->right * cameraSpeed;
+		camera->position += camera->right * cameraSpeed;
 
 	if (inputManager->IsKeyHeld(KeyCode::DOWN) || inputManager->IsKeyHeld(KeyCode::S))
-		camera->pos -= cameraSpeed * camera->front;
+		camera->position -= cameraSpeed * camera->front;
 
 	if (inputManager->IsKeyHeld(KeyCode::UP) || inputManager->IsKeyHeld(KeyCode::W))
-		camera->pos += cameraSpeed * camera->front;
+		camera->position += cameraSpeed * camera->front;
 
 	if (inputManager->scrollY > 0.1f)
 	{
-		camera->pos += 10 * cameraSpeed * camera->front;
+		camera->position += 10 * cameraSpeed * camera->front;
 	}
 	else if (inputManager->scrollY < -0.1f)
 	{
-		camera->pos -= 10 * cameraSpeed * camera->front;
+		camera->position -= 10 * cameraSpeed * camera->front;
 	}
 
 	const auto mousePos = inputManager->GetMousePosition();
@@ -241,8 +241,8 @@ void Editor::MoveEditorCamera()
 
 	if (inputManager->IsButtonHeld(ButtonCode::MIDDLE))
 	{
-		camera->pos.x += offset.x;
-		camera->pos.y -= offset.y;
+		camera->position.x += offset.x;
+		camera->position.y -= offset.y;
 	}
 
 	if (inputManager->IsButtonHeld(ButtonCode::RIGHT)) {
@@ -265,6 +265,6 @@ void Editor::MoveEditorCamera()
 	camera->right = glm::normalize(glm::cross(camera->front, glm::vec3(0, -1, 0)));
 	
 	camera->up = glm::normalize(glm::cross(camera->right, camera->front));
-	camera->viewMatrix = glm::lookAt(camera->pos, camera->pos + camera->front, camera->up);
+	camera->viewMatrix = glm::lookAt(camera->position, camera->position + camera->front, camera->up);
 }
 }

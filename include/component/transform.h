@@ -65,6 +65,8 @@ public:
 	static glm::mat4x4 GetWorldMatrix(Transform &component);
 
 	void OnDrawInspector(Entity entity) override;
+
+	void CreateComponent(json& componentJson, Entity entity) override;
 };
 }
 

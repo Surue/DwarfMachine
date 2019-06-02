@@ -55,16 +55,16 @@ MaterialSkybox* MaterialSkyboxManager::AddComponent(const Entity entity, Materia
 	return &m_Components[entity - 1];
 } 
 
-MaterialSkybox* MaterialSkyboxManager::CreateComponent(Entity entity)
+MaterialSkybox* MaterialSkyboxManager::CreateComponent(const Entity entity)
 {
 	auto material = MaterialSkybox();
-	material.componentType = ComponentType::MATERIAL_DEFAULT;
+	material.componentType = ComponentType::MATERIAL_SKYBOX;
 
 	material.color = Color(25, 25, 25, 1);
 
 	material.image = nullptr;
 	material.blend = 1.0f;
-	material.fogLimit = glm::vec2(-10000.0f, 10000.0f);
+	material.fogLimit = glm::vec2(-1.0f, 1.0f);
 
 	material.pipelineMaterial = PipelineMaterial::Create({ 1, 0 }, //TODO trouver une manière de setter ça de manière automatique
 		PipelineGraphicsCreate(
@@ -105,7 +105,39 @@ void MaterialSkyboxManager::PushUniform(MaterialSkybox& material, const glm::mat
 	uniformObject.Push("transform", worldPos);
 	uniformObject.Push("baseColor", material.color);
 	uniformObject.Push("fogColor", material.fogColor);
-	uniformObject.Push("fogLimits", glm::vec2(material.fogLimit.x * 1024, material.fogLimit.y * 1024)); //TODO prendre en compte le scale du transform
+	uniformObject.Push("fogLimits", glm::vec2(material.fogLimit.x * 50, material.fogLimit.y * 50)); //TODO prendre en compte le scale du transform
 	uniformObject.Push("blendFactor", material.blend);
+}
+
+void MaterialSkyboxManager::CreateComponent(json& componentJson, const Entity entity)
+{
+	auto material = MaterialSkybox();
+	material.componentType = ComponentType::MATERIAL_SKYBOX;
+
+	if (CheckJsonExists(componentJson, "color"))
+		material.color = GetColorFromJson(componentJson, "color");
+
+	if (CheckJsonExists(componentJson, "fogColor"))
+		material.fogColor = GetColorFromJson(componentJson, "fogColor");
+
+	if (CheckJsonExists(componentJson, "blend"))
+		material.blend = componentJson["blend"];
+
+	if (CheckJsonExists(componentJson, "fogLimit") )
+		material.fogLimit = GetVector2FromJson(componentJson, "fogLimit");
+
+	material.pipelineMaterial = PipelineMaterial::Create({ 1, 0 }, //TODO trouver une manière de setter ça de manière automatique
+		PipelineGraphicsCreate(
+			{ "../Shaders/skybox.vert", "../Shaders/skybox.frag" },
+			{ ModelComponentManager::GetVertexInput() },
+			{},
+			PipelineGraphics::Mode::MRT,
+			PipelineGraphics::Depth::NONE,
+			VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST,
+			VK_POLYGON_MODE_FILL,
+			VK_CULL_MODE_FRONT_BIT)
+	);
+
+	m_Components[entity - 1] = std::move(material);
 }
 }

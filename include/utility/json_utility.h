@@ -41,13 +41,23 @@ using json = nlohmann::json;
 namespace dm
 {
 	bool IsJsonValueNumeric(const json::value_type& jsonValue);
+
 	bool CheckJsonExists(const json& jsonObject, const std::string& parameterName);
+
 	bool CheckJsonParameter(const json& jsonObject, const std::string& parameterName, json::value_t expectedType);
+
 	bool CheckJsonNumber(const json& jsonObject, const std::string& parameterName);
+
+	bool GetBoolFromJson(const json& jsonObject, const std::string& parameterName);
+
 	glm::vec2 GetVector2FromJson(const json& jsonObject, const std::string& parameterName);
+
 	glm::vec3 GetVector3FromJson(const json& jsonObject, const std::string& parameterName);
+
 	glm::vec4 GetVector4FromJson(const json& jsonObject, const std::string& parameterName);
+
 	Color GetColorFromJson(const json& jsonObject, const std::string& parameterName);
+
 	std::unique_ptr<json> LoadJson(std::string jsonPath);
 }
 #endif

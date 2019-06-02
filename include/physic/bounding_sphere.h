@@ -33,7 +33,7 @@ class Mesh;
 
 struct BoundingSphere : public ComponentBase
 {
-	float m_Radius = 1;
+	float radius = 1;
 };
 
 class GizmoManager;
@@ -52,7 +52,10 @@ public:
 	BoundingSphere* AddComponent(const Entity entity, BoundingSphere& component) override;
 
 	void DestroyComponent(Entity entity) override;
+
 	void OnDrawInspector(Entity entity) override;
+
+	void CreateComponent(json& componentJson, const Entity entity) override;
 private:
 };
 }

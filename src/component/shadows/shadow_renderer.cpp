@@ -34,7 +34,7 @@ void ShadowRendererManager::Update()
 {
 }
 
-ShadowRenderer* ShadowRendererManager::CreateComponent(Entity entity)
+ShadowRenderer* ShadowRendererManager::CreateComponent(const Entity entity)
 {
 	ShadowRenderer shadowRenderer;
 	m_Components[entity - 1] = std::move(shadowRenderer);
@@ -47,5 +47,11 @@ void ShadowRendererManager::DestroyComponent(Entity entity)
 
 void ShadowRendererManager::OnDrawInspector(Entity entity)
 {
+}
+
+void ShadowRendererManager::CreateComponent(json& componentJson, const Entity entity)
+{
+	ShadowRenderer shadowRenderer;
+	m_Components[entity - 1] = std::move(shadowRenderer);
 }
 }

@@ -44,7 +44,7 @@ void RendererGizmo::Update()
 void RendererGizmo::Draw(const CommandBuffer& commandBuffer)
 {
 	const auto camera = GraphicManager::Get()->GetCamera();
-	m_UniformScene.Push("projection", camera->proj);
+	m_UniformScene.Push("projection", camera->projectionMatrix);
 	m_UniformScene.Push("view", camera->viewMatrix);
 
 	const auto editor = dynamic_cast<Editor*>(Engine::Get()->GetApplication());

@@ -51,4 +51,26 @@ void SpotLightManager::OnDrawInspector(const Entity entity)
 	ImGui::DragFloat("angle", &m_Components[entity - 1].angle, 0.1f, 0, 360);
 	ImGui::DragFloat("range", &m_Components[entity - 1].range, 0.1f, 0, 360);
 }
+
+void SpotLightManager::CreateComponent(json& componentJson, const Entity entity)
+{
+	SpotLight directionalLight;
+
+	if (CheckJsonExists(componentJson, "target"))
+		directionalLight.target = GetVector3FromJson(componentJson, "target");
+
+	if (CheckJsonExists(componentJson, "angle"))
+		directionalLight.angle = componentJson["angle"];
+
+	if (CheckJsonExists(componentJson, "intensity"))
+		directionalLight.intensity = componentJson["intensity"];
+
+	if (CheckJsonExists(componentJson, "color"))
+		directionalLight.color = GetColorFromJson(componentJson, "color");
+
+	if (CheckJsonExists(componentJson, "intensity"))
+		directionalLight.intensity = componentJson["intensity"];
+
+	m_Components[entity - 1] = directionalLight;
+}
 }

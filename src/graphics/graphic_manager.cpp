@@ -405,7 +405,7 @@ void GraphicManager::UpdateMainCamera() const
 {
 	const auto windowSize = Engine::Get()->GetSettings().windowSize;
 
-	m_MainCamera->proj = glm::perspective(glm::radians(45.0f), windowSize.x / static_cast<float>(windowSize.y), 0.1f, 100.0f);
+	m_MainCamera->projectionMatrix = glm::perspective(glm::radians(45.0f), windowSize.x / static_cast<float>(windowSize.y), 0.1f, 100.0f);
 }
 
 void GraphicManager::RecreatePass(RenderStage& renderStage)

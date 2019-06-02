@@ -32,22 +32,23 @@ SOFTWARE.
 namespace dm {
 struct Camera final : ComponentBase
 {
-	glm::mat4x4 proj{};
+	glm::mat4x4 projectionMatrix{};
 	glm::mat4x4 viewMatrix{};
+
 	float yaw = 90;
 	float pitch = 0;
 	glm::vec3 front = glm::vec3(0.0f, 0.0f, -1.0f);
-	glm::vec3 pos = glm::vec3(0.0f, 0.0f, -10.0f);
+	glm::vec3 position = glm::vec3(0.0f, 0.0f, -10.0f);
 	glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
 	glm::vec3 right = glm::vec3(1.0f, 0.0f, 0.0f);
 
 	float fov = 45.0f;
 	float aspect = 800.0f / 600.0f;
-	float frustumNear = 0.1f;
-	float frustumFar = 100;
+	float nearFrustum = 0.1f;
+	float farFrustum = 100;
 
-	bool isMainCamera = false;
-	bool isCullingCamera = false;
+	bool isMain = false;
+	bool isCulling = false;
 };
 
 struct Transform;
@@ -72,6 +73,8 @@ public:
 	void OnEntityResize(int newSize) override;
 
 	void UpdateAspect(const float newAspect);
+
+	void CreateComponent(json& componentJson, const Entity entity) override;
 private:
 	GraphicManager* m_GraphicManager;
 };
