@@ -1,0 +1,6007 @@
+{
+    "entites": [
+        {
+            "components": [
+                {
+                    "aspect": 1.4222222566604614,
+                    "far": 100.0,
+                    "fov": 45.0,
+                    "front": {
+                        "x": -4.371138828673793e-08,
+                        "y": 0.0,
+                        "z": 1.0
+                    },
+                    "isCulling": 1,
+                    "isMain": 1,
+                    "near": 0.10000000149011612,
+                    "pitch": 0.0,
+                    "position": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": -10.0
+                    },
+                    "right": {
+                        "x": 1.0,
+                        "y": 0.0,
+                        "z": 4.371138828673793e-08
+                    },
+                    "type": 2,
+                    "up": {
+                        "x": 0.0,
+                        "y": -1.0,
+                        "z": 0.0
+                    },
+                    "yaw": 90.0
+                }
+            ],
+            "name": "entity 0"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 90.0,
+                        "y": 90.0,
+                        "z": 90.0
+                    },
+                    "type": 1
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "blend": 1.0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "extension": ".png",
+                    "fogColor": {
+                        "a": 1.0,
+                        "b": 0.10000000149011612,
+                        "g": 0.10000000149011612,
+                        "r": 0.10000000149011612
+                    },
+                    "fogLimit": {
+                        "x": -100.0,
+                        "y": 100.0
+                    },
+                    "image": "ressources/textures/skybox",
+                    "type": 7
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 1,
+                    "type": 8
+                }
+            ],
+            "name": "entity 1"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": -10.0
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.0,
+                    "roughness": 0.0,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 0,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 2"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": -4.5,
+                        "y": 0.0,
+                        "z": -4.5
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.0,
+                    "roughness": 0.0,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 3"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": -4.5,
+                        "y": 0.0,
+                        "z": -2.5
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.1111111119389534,
+                    "roughness": 0.0,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 4"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": -4.5,
+                        "y": 0.0,
+                        "z": -0.5
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.2222222238779068,
+                    "roughness": 0.0,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 5"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": -4.5,
+                        "y": 0.0,
+                        "z": 1.5
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.3333333432674408,
+                    "roughness": 0.0,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 6"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": -4.5,
+                        "y": 0.0,
+                        "z": 3.5
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.4444444477558136,
+                    "roughness": 0.0,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 7"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": -4.5,
+                        "y": 0.0,
+                        "z": 5.5
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.5555555820465088,
+                    "roughness": 0.0,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 8"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": -4.5,
+                        "y": 0.0,
+                        "z": 7.5
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.6666666865348816,
+                    "roughness": 0.0,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 9"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": -4.5,
+                        "y": 0.0,
+                        "z": 9.5
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.7777777910232544,
+                    "roughness": 0.0,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 10"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": -4.5,
+                        "y": 0.0,
+                        "z": 11.5
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.8888888955116272,
+                    "roughness": 0.0,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 11"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": -4.5,
+                        "y": 0.0,
+                        "z": 13.5
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 1.0,
+                    "roughness": 0.0,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 12"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": -2.5,
+                        "y": 0.0,
+                        "z": -4.5
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.0,
+                    "roughness": 0.1111111119389534,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 13"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": -2.5,
+                        "y": 0.0,
+                        "z": -2.5
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.1111111119389534,
+                    "roughness": 0.1111111119389534,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 14"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": -2.5,
+                        "y": 0.0,
+                        "z": -0.5
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.2222222238779068,
+                    "roughness": 0.1111111119389534,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 15"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": -2.5,
+                        "y": 0.0,
+                        "z": 1.5
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.3333333432674408,
+                    "roughness": 0.1111111119389534,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 16"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": -2.5,
+                        "y": 0.0,
+                        "z": 3.5
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.4444444477558136,
+                    "roughness": 0.1111111119389534,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 17"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": -2.5,
+                        "y": 0.0,
+                        "z": 5.5
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.5555555820465088,
+                    "roughness": 0.1111111119389534,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 18"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": -2.5,
+                        "y": 0.0,
+                        "z": 7.5
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.6666666865348816,
+                    "roughness": 0.1111111119389534,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 19"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": -2.5,
+                        "y": 0.0,
+                        "z": 9.5
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.7777777910232544,
+                    "roughness": 0.1111111119389534,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 20"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": -2.5,
+                        "y": 0.0,
+                        "z": 11.5
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.8888888955116272,
+                    "roughness": 0.1111111119389534,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 21"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": -2.5,
+                        "y": 0.0,
+                        "z": 13.5
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 1.0,
+                    "roughness": 0.1111111119389534,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 22"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": -0.5,
+                        "y": 0.0,
+                        "z": -4.5
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.0,
+                    "roughness": 0.2222222238779068,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 23"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": -0.5,
+                        "y": 0.0,
+                        "z": -2.5
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.1111111119389534,
+                    "roughness": 0.2222222238779068,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 24"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": -0.5,
+                        "y": 0.0,
+                        "z": -0.5
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.2222222238779068,
+                    "roughness": 0.2222222238779068,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 25"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": -0.5,
+                        "y": 0.0,
+                        "z": 1.5
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.3333333432674408,
+                    "roughness": 0.2222222238779068,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 26"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": -0.5,
+                        "y": 0.0,
+                        "z": 3.5
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.4444444477558136,
+                    "roughness": 0.2222222238779068,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 27"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": -0.5,
+                        "y": 0.0,
+                        "z": 5.5
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.5555555820465088,
+                    "roughness": 0.2222222238779068,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 28"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": -0.5,
+                        "y": 0.0,
+                        "z": 7.5
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.6666666865348816,
+                    "roughness": 0.2222222238779068,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 29"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": -0.5,
+                        "y": 0.0,
+                        "z": 9.5
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.7777777910232544,
+                    "roughness": 0.2222222238779068,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 30"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": -0.5,
+                        "y": 0.0,
+                        "z": 11.5
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.8888888955116272,
+                    "roughness": 0.2222222238779068,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 31"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": -0.5,
+                        "y": 0.0,
+                        "z": 13.5
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 1.0,
+                    "roughness": 0.2222222238779068,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 32"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": 1.5,
+                        "y": 0.0,
+                        "z": -4.5
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.0,
+                    "roughness": 0.3333333432674408,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 33"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": 1.5,
+                        "y": 0.0,
+                        "z": -2.5
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.1111111119389534,
+                    "roughness": 0.3333333432674408,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 34"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": 1.5,
+                        "y": 0.0,
+                        "z": -0.5
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.2222222238779068,
+                    "roughness": 0.3333333432674408,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 35"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": 1.5,
+                        "y": 0.0,
+                        "z": 1.5
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.3333333432674408,
+                    "roughness": 0.3333333432674408,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 36"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": 1.5,
+                        "y": 0.0,
+                        "z": 3.5
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.4444444477558136,
+                    "roughness": 0.3333333432674408,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 37"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": 1.5,
+                        "y": 0.0,
+                        "z": 5.5
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.5555555820465088,
+                    "roughness": 0.3333333432674408,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 38"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": 1.5,
+                        "y": 0.0,
+                        "z": 7.5
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.6666666865348816,
+                    "roughness": 0.3333333432674408,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 39"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": 1.5,
+                        "y": 0.0,
+                        "z": 9.5
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.7777777910232544,
+                    "roughness": 0.3333333432674408,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 40"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": 1.5,
+                        "y": 0.0,
+                        "z": 11.5
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.8888888955116272,
+                    "roughness": 0.3333333432674408,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 41"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": 1.5,
+                        "y": 0.0,
+                        "z": 13.5
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 1.0,
+                    "roughness": 0.3333333432674408,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 42"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": 3.5,
+                        "y": 0.0,
+                        "z": -4.5
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.0,
+                    "roughness": 0.4444444477558136,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 43"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": 3.5,
+                        "y": 0.0,
+                        "z": -2.5
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.1111111119389534,
+                    "roughness": 0.4444444477558136,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 44"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": 3.5,
+                        "y": 0.0,
+                        "z": -0.5
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.2222222238779068,
+                    "roughness": 0.4444444477558136,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 45"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": 3.5,
+                        "y": 0.0,
+                        "z": 1.5
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.3333333432674408,
+                    "roughness": 0.4444444477558136,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 46"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": 3.5,
+                        "y": 0.0,
+                        "z": 3.5
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.4444444477558136,
+                    "roughness": 0.4444444477558136,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 47"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": 3.5,
+                        "y": 0.0,
+                        "z": 5.5
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.5555555820465088,
+                    "roughness": 0.4444444477558136,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 48"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": 3.5,
+                        "y": 0.0,
+                        "z": 7.5
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.6666666865348816,
+                    "roughness": 0.4444444477558136,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 49"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": 3.5,
+                        "y": 0.0,
+                        "z": 9.5
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.7777777910232544,
+                    "roughness": 0.4444444477558136,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 50"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": 3.5,
+                        "y": 0.0,
+                        "z": 11.5
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.8888888955116272,
+                    "roughness": 0.4444444477558136,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 51"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": 3.5,
+                        "y": 0.0,
+                        "z": 13.5
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 1.0,
+                    "roughness": 0.4444444477558136,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 52"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": 5.5,
+                        "y": 0.0,
+                        "z": -4.5
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.0,
+                    "roughness": 0.5555555820465088,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 0,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 53"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": 5.5,
+                        "y": 0.0,
+                        "z": -2.5
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.1111111119389534,
+                    "roughness": 0.5555555820465088,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 54"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": 5.5,
+                        "y": 0.0,
+                        "z": -0.5
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.2222222238779068,
+                    "roughness": 0.5555555820465088,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 55"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": 5.5,
+                        "y": 0.0,
+                        "z": 1.5
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.3333333432674408,
+                    "roughness": 0.5555555820465088,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 56"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": 5.5,
+                        "y": 0.0,
+                        "z": 3.5
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.4444444477558136,
+                    "roughness": 0.5555555820465088,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 57"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": 5.5,
+                        "y": 0.0,
+                        "z": 5.5
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.5555555820465088,
+                    "roughness": 0.5555555820465088,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 58"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": 5.5,
+                        "y": 0.0,
+                        "z": 7.5
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.6666666865348816,
+                    "roughness": 0.5555555820465088,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 59"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": 5.5,
+                        "y": 0.0,
+                        "z": 9.5
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.7777777910232544,
+                    "roughness": 0.5555555820465088,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 60"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": 5.5,
+                        "y": 0.0,
+                        "z": 11.5
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.8888888955116272,
+                    "roughness": 0.5555555820465088,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 61"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": 5.5,
+                        "y": 0.0,
+                        "z": 13.5
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 1.0,
+                    "roughness": 0.5555555820465088,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 62"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": 7.5,
+                        "y": 0.0,
+                        "z": -4.5
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.0,
+                    "roughness": 0.6666666865348816,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 0,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 63"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": 7.5,
+                        "y": 0.0,
+                        "z": -2.5
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.1111111119389534,
+                    "roughness": 0.6666666865348816,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 0,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 64"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": 7.5,
+                        "y": 0.0,
+                        "z": -0.5
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.2222222238779068,
+                    "roughness": 0.6666666865348816,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 65"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": 7.5,
+                        "y": 0.0,
+                        "z": 1.5
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.3333333432674408,
+                    "roughness": 0.6666666865348816,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 66"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": 7.5,
+                        "y": 0.0,
+                        "z": 3.5
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.4444444477558136,
+                    "roughness": 0.6666666865348816,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 67"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": 7.5,
+                        "y": 0.0,
+                        "z": 5.5
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.5555555820465088,
+                    "roughness": 0.6666666865348816,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 68"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": 7.5,
+                        "y": 0.0,
+                        "z": 7.5
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.6666666865348816,
+                    "roughness": 0.6666666865348816,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 69"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": 7.5,
+                        "y": 0.0,
+                        "z": 9.5
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.7777777910232544,
+                    "roughness": 0.6666666865348816,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 70"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": 7.5,
+                        "y": 0.0,
+                        "z": 11.5
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.8888888955116272,
+                    "roughness": 0.6666666865348816,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 71"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": 7.5,
+                        "y": 0.0,
+                        "z": 13.5
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 1.0,
+                    "roughness": 0.6666666865348816,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 72"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": 9.5,
+                        "y": 0.0,
+                        "z": -4.5
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.0,
+                    "roughness": 0.7777777910232544,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 0,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 73"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": 9.5,
+                        "y": 0.0,
+                        "z": -2.5
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.1111111119389534,
+                    "roughness": 0.7777777910232544,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 0,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 74"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": 9.5,
+                        "y": 0.0,
+                        "z": -0.5
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.2222222238779068,
+                    "roughness": 0.7777777910232544,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 0,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 75"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": 9.5,
+                        "y": 0.0,
+                        "z": 1.5
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.3333333432674408,
+                    "roughness": 0.7777777910232544,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 0,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 76"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": 9.5,
+                        "y": 0.0,
+                        "z": 3.5
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.4444444477558136,
+                    "roughness": 0.7777777910232544,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 77"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": 9.5,
+                        "y": 0.0,
+                        "z": 5.5
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.5555555820465088,
+                    "roughness": 0.7777777910232544,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 78"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": 9.5,
+                        "y": 0.0,
+                        "z": 7.5
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.6666666865348816,
+                    "roughness": 0.7777777910232544,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 79"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": 9.5,
+                        "y": 0.0,
+                        "z": 9.5
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.7777777910232544,
+                    "roughness": 0.7777777910232544,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 80"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": 9.5,
+                        "y": 0.0,
+                        "z": 11.5
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.8888888955116272,
+                    "roughness": 0.7777777910232544,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 81"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": 9.5,
+                        "y": 0.0,
+                        "z": 13.5
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 1.0,
+                    "roughness": 0.7777777910232544,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 82"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": 11.5,
+                        "y": 0.0,
+                        "z": -4.5
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.0,
+                    "roughness": 0.8888888955116272,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 0,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 83"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": 11.5,
+                        "y": 0.0,
+                        "z": -2.5
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.1111111119389534,
+                    "roughness": 0.8888888955116272,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 0,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 84"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": 11.5,
+                        "y": 0.0,
+                        "z": -0.5
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.2222222238779068,
+                    "roughness": 0.8888888955116272,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 0,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 85"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": 11.5,
+                        "y": 0.0,
+                        "z": 1.5
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.3333333432674408,
+                    "roughness": 0.8888888955116272,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 0,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 86"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": 11.5,
+                        "y": 0.0,
+                        "z": 3.5
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.4444444477558136,
+                    "roughness": 0.8888888955116272,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 0,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 87"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": 11.5,
+                        "y": 0.0,
+                        "z": 5.5
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.5555555820465088,
+                    "roughness": 0.8888888955116272,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 88"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": 11.5,
+                        "y": 0.0,
+                        "z": 7.5
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.6666666865348816,
+                    "roughness": 0.8888888955116272,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 89"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": 11.5,
+                        "y": 0.0,
+                        "z": 9.5
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.7777777910232544,
+                    "roughness": 0.8888888955116272,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 90"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": 11.5,
+                        "y": 0.0,
+                        "z": 11.5
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.8888888955116272,
+                    "roughness": 0.8888888955116272,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 91"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": 11.5,
+                        "y": 0.0,
+                        "z": 13.5
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 1.0,
+                    "roughness": 0.8888888955116272,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 92"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": 13.5,
+                        "y": 0.0,
+                        "z": -4.5
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.0,
+                    "roughness": 1.0,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 0,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 93"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": 13.5,
+                        "y": 0.0,
+                        "z": -2.5
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.1111111119389534,
+                    "roughness": 1.0,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 0,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 94"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": 13.5,
+                        "y": 0.0,
+                        "z": -0.5
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.2222222238779068,
+                    "roughness": 1.0,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 0,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 95"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": 13.5,
+                        "y": 0.0,
+                        "z": 1.5
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.3333333432674408,
+                    "roughness": 1.0,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 0,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 96"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": 13.5,
+                        "y": 0.0,
+                        "z": 3.5
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.4444444477558136,
+                    "roughness": 1.0,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 0,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 97"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": 13.5,
+                        "y": 0.0,
+                        "z": 5.5
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.5555555820465088,
+                    "roughness": 1.0,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 0,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 98"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": 13.5,
+                        "y": 0.0,
+                        "z": 7.5
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.6666666865348816,
+                    "roughness": 1.0,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 0,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 99"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": 13.5,
+                        "y": 0.0,
+                        "z": 9.5
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.7777777910232544,
+                    "roughness": 1.0,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 100"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": 13.5,
+                        "y": 0.0,
+                        "z": 11.5
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.8888888955116272,
+                    "roughness": 1.0,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 101"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": 13.5,
+                        "y": 0.0,
+                        "z": 13.5
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 1.0,
+                    "roughness": 1.0,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 102"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": 3.799999952316284,
+                        "y": -1.5,
+                        "z": 4.5
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 20.0,
+                        "y": 1.0,
+                        "z": 20.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.0,
+                    "roughness": 0.0,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelCube",
+                    "type": 4
+                },
+                {
+                    "radius": 0.8660253882408142,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 103"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "intensity": 1.0,
+                    "radius": 1.0,
+                    "type": 9
+                }
+            ],
+            "name": "entity 104"
+        },
+        {
+            "components": [
+                {
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "direction": {
+                        "x": 0.0,
+                        "y": -1.0,
+                        "z": -1.0
+                    },
+                    "intensity": 1.0,
+                    "type": 10
+                }
+            ],
+            "name": "entity 105"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": 0.0,
+                        "y": 10.0,
+                        "z": 0.0
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "angle": 30.0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "intensity": 1.0,
+                    "range": 10.0,
+                    "target": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "type": 11
+                }
+            ],
+            "name": "entity 106"
+        }
+    ],
+    "name": "newScene"
+}

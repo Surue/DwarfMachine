@@ -125,6 +125,11 @@ void Engine::SaveScene()
 	m_SceneManager.SaveScene();
 }
 
+void Engine::LoadScene(const std::string& filename)
+{
+	m_SceneManager.LoadSceneFromPath(filename);
+}
+
 void Engine::MainLoop()
 {
 	while (!GetGraphicManager()->GetWindow()->ShouldClose())

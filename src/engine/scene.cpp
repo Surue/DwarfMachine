@@ -41,6 +41,7 @@ SceneManager::~SceneManager()
 void SceneManager::Init()
 {
 	m_EntityManager = Engine::Get()->GetEntityManager();
+	m_ComponentManager = Engine::Get()->GetComponentManager();
 
 	m_IsInited = true;
 
@@ -158,9 +159,6 @@ void SceneManager::LoadSceneFromJson(json& sceneJson)
 void SceneManager::SaveScene()
 {
 	json jsonScene;
-	jsonScene["name"] = m_SceneInfo.name;
-
-	jsonScene["entities"] = nlohmann::detail::value_t::array;
 
 	int entityCount = 0;
 	for (auto entity : m_EntityManager->GetEntities())
@@ -172,9 +170,8 @@ void SceneManager::SaveScene()
 
 		json jsonEntity;
 
-		std::string name;
-		name = "entity " + entityCount;
-		jsonEntity["name"] = "entity";
+		std::string name = "entity " + std::to_string(entityCount);
+		jsonEntity["name"] = name;
 
 		auto handle = EntityHandle(entity);
 
@@ -195,6 +192,13 @@ void SceneManager::SaveScene()
 	}
 
 	std::string sceneFilename = "../ressources/scenes/";
+	if(m_SceneInfo.name.empty())
+	{
+		m_SceneInfo.name = "newScene";
+	}
+
+	jsonScene["name"] = m_SceneInfo.name;
+	
 	sceneFilename += m_SceneInfo.name;
 	sceneFilename += ".scene";
 

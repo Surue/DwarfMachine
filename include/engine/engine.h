@@ -77,6 +77,8 @@ public:
 	EngineApplication* GetApplication() const { return m_App.get(); }
 
 	void SaveScene();
+
+	void LoadScene(const std::string& filename);
 private:
 	/**
 	 * \brief Main loop of the game
