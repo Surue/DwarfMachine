@@ -27,7 +27,9 @@ SOFTWARE.
 #include <vector>
 
 #include <component/component_type.h>
-#include "component/component_mask.h"
+#include <component/component_mask.h>
+#include <engine/module.h>
+
 #define INIT_ENTITY_NMB 100
 
 namespace dm
@@ -35,14 +37,18 @@ namespace dm
 using Entity = unsigned int ;
 const Entity INVALID_ENTITY = 0U;
 
-class EntityManager final
+class EntityManager final : public Module
 {
 public:
 	EntityManager();
 
 	~EntityManager() = default;
 
-	void Init() {};
+	void Init() override;
+
+	void Update() override;
+	void Clear() override;
+	void Draw() override;
 
 	EntityManager& operator=(const EntityManager&) = delete;
 	EntityManager(EntityManager &&) = default; //move constructor

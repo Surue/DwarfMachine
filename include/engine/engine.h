@@ -51,6 +51,8 @@ public:
 
 	void Stop() const;
 
+	void Clear();
+
 	float GetDeltaTime() const;
 
 	GraphicManager* GetGraphicManager() const;

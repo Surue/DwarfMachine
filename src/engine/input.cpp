@@ -145,6 +145,14 @@ void InputManager::Update()
 	}
 }
 
+void InputManager::Clear()
+{
+}
+
+void InputManager::Draw()
+{
+}
+
 bool InputManager::IsKeyDown(KeyCode key)
 {
 	return m_KeyPressedDown[static_cast<int>(key)];

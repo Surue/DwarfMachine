@@ -83,7 +83,7 @@ inline void DestroyDebugUtilsMessengerEXT(const VkInstance instance, const VkDeb
 	}
 }
 
-class GraphicManager
+class GraphicManager : public Module
 {
 public:
 	static GraphicManager* Get();
@@ -93,16 +93,18 @@ public:
 	/**
 	 * \brief Init graphic manager (GLFW and Vulkan)
 	 */
-	void Init();
+	void Init() override;
 
 	/**
 	 * \brief Use to cleanup vulkan's allocation
 	 */
 	void Destroy();
 
-	void Update();
+	void Update()  override;
 
-	void Draw();
+	void Draw()  override;
+
+	void Clear() override;
 
 	void SetMainCamera(Camera* camera);
 
@@ -159,9 +161,9 @@ private:
 
 	bool StartRenderpass(RenderStage &renderStage); 
 
-	void EndRenderpass(RenderStage &renderStage); 
+	void EndRenderpass(RenderStage &renderStage);
 
-
+private:
 	//WINDOW
 	std::unique_ptr<Window> m_Window;
 

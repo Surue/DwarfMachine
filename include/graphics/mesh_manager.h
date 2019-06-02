@@ -26,15 +26,22 @@ SOFTWARE.
 #define MODEL_REGISTER_H
 #include <map>
 #include <graphics/Mesh.h>
+#include <engine/module.h>
 
 namespace dm
 {
-class MeshManager
+class MeshManager : public Module
 {
 public:
 	MeshManager();
 
-	void Init(){};
+	void Init() override;
+
+	void Update() override;
+
+	void Clear() override;
+
+	void Draw() override;
 
 	Mesh* GetModel(const std::string& name);
 private:

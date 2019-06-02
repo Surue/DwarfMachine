@@ -24,18 +24,23 @@ SOFTWARE.
 
 #ifndef PHYSIC_MANAGER_H
 #define PHYSIC_MANAGER_H
+#include <engine/module.h>
 
 namespace dm
 {
-class PhysicManager
+class PhysicManager : public Module
 {
 public:
 	PhysicManager();
 	~PhysicManager() = default;
 
-	void Init();
+	void Init() override;
 
-	void Update();
+	void Update() override;
+
+	void Clear() override;
+
+	void Draw() override;
 private:
 };
 }

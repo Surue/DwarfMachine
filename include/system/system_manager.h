@@ -32,22 +32,25 @@ namespace dm
 {
 class Engine;
 
-class SystemManager final
+class SystemManager final : public Module
 {
 public:
 	SystemManager();
 	~SystemManager() = default;
 
-	void Init();
+	void Init() override;
 
-	void Update();
+	void Update() override;
+
+	void Clear() override;
+
+	void Draw() override;
 
 	void Destroy();
 
 	void AddComponent(Entity entity, ComponentMask oldMask, ComponentMask newMask);
 
 	void DestroyComponent(Entity entity, ComponentMask oldMask, ComponentMask newMask);
-
 private:
 	std::vector<std::unique_ptr<System>> m_Systems;
 

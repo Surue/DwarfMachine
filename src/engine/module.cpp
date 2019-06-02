@@ -22,31 +22,9 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#include <physic/physic_manager.h>
-#include "editor/log.h"
+#include <engine/module.h>
 
 namespace dm
 {
-PhysicManager::PhysicManager()
-{
-	
-}
 
-void PhysicManager::Init()
-{
-	
-}
-
-void PhysicManager::Update()
-{
-	
-}
-
-void PhysicManager::Clear()
-{
-}
-
-void PhysicManager::Draw()
-{
-}
 }

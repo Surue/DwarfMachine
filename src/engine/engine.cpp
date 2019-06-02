@@ -53,7 +53,7 @@ Engine::~Engine()
 
 void Engine::Init()
 {
-	m_SystemContainer.Init();
+	m_ModuleContainer.Init();
 }
 
 void Engine::Start()
@@ -67,31 +67,36 @@ void Engine::Stop() const
 	GetGraphicManager()->GetWindow()->SetShouldClose();
 }
 
+void Engine::Clear()
+{
+	m_ModuleContainer.Clear();
+}
+
 float Engine::GetDeltaTime() const { return m_DeltaTime; }
 
 GraphicManager* Engine::GetGraphicManager() const
 {
-	return m_SystemContainer.GetGraphicManager();
+	return m_ModuleContainer.GetGraphicManager();
 }
 
 InputManager* Engine::GetInputManager() const
 {
-	return m_SystemContainer.GetInputManager();
+	return m_ModuleContainer.GetInputManager();
 }
 
 EntityManager* Engine::GetEntityManager() const
 {
-	return m_SystemContainer.GetEntityManager();
+	return m_ModuleContainer.GetEntityManager();
 }
 
 ComponentManagerContainer* Engine::GetComponentManager() const
 {
-	return m_SystemContainer.GetComponentManager();
+	return m_ModuleContainer.GetComponentManager();
 }
 
 SystemManager* Engine::GetSystemManager() const
 {
-	return m_SystemContainer.GetSystemManager();
+	return m_ModuleContainer.GetSystemManager();
 }
 
 EngineSettings& Engine::GetSettings()
@@ -101,12 +106,12 @@ EngineSettings& Engine::GetSettings()
 
 MeshManager* Engine::GetModelManager() const
 {
-	return m_SystemContainer.GetModelManager();
+	return m_ModuleContainer.GetModelManager();
 }
 
 PipelineMaterialManager* Engine::GetPipelineMaterialManager() const
 {
-	return m_SystemContainer.GetPipelineMaterialManager();
+	return m_ModuleContainer.GetPipelineMaterialManager();
 }
 
 void Engine::SetApplication(EngineApplication* app)
@@ -120,11 +125,11 @@ void Engine::MainLoop()
 	{
 		CalculateDeltaTime();
 
-		m_SystemContainer.Update();
+		m_ModuleContainer.Update();
 		m_App->Update();
 
 		m_App->Draw();
-		m_SystemContainer.Draw();
+		m_ModuleContainer.Draw();
 	}
 
 }

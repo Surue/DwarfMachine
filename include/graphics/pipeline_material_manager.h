@@ -26,13 +26,22 @@ SOFTWARE.
 #define PIPELINE_MATERIAL_MANAGER_H
 
 #include<graphics/pipeline_material.h>
+#include "engine/module.h"
 
 namespace dm
 {
-class PipelineMaterialManager
+class PipelineMaterialManager : public Module
 {
 public:
 	PipelineMaterialManager();
+
+	void Init() override;
+
+	void Update() override;
+
+	void Clear() override;
+
+	void Draw() override;
 
 	PipelineMaterial* GetMaterial(const Pipeline::Stage& pipelineStage,
 	                              const PipelineGraphicsCreate& pipelineCreate);

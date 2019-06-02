@@ -28,6 +28,7 @@ SOFTWARE.
 #include <SDL.h>
 
 #include <engine/vector.h>
+#include <engine/module.h>
 
 #define KEYBOARD_SIZE 282
 
@@ -293,15 +294,19 @@ enum class ButtonCode
 	MOUSE_MAX
 };
 
-class InputManager
+class InputManager : public Module
 {
 public:
 	InputManager();
 	~InputManager() = default;
 
-	void Init();
+	void Init() override;
 
-	void Update();
+	void Update() override;
+
+	void Clear() override;
+
+	void Draw() override;
 
 	bool IsKeyDown(KeyCode key);
 

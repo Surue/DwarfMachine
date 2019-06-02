@@ -24,11 +24,10 @@ SOFTWARE.
 
 #include <graphics/mesh_manager.h>
 
-#include <utility/xxhash.hpp>
 #include <graphics/mesh_cube.h>
 #include <graphics/mesh_sphere.h>
-#include <graphics/mesh_obj.h>
 #include <graphics/mesh_plane.h>
+#include "editor/log.h"
 
 namespace dm
 {
@@ -40,14 +39,33 @@ MeshManager::MeshManager()
 	//m_RegisteredMeshes["ressources/models/chalet.obj"] = MeshObj::Create("ressources/models/chalet.obj");
 }
 
+void MeshManager::Init()
+{
+}
+
+void MeshManager::Update()
+{
+}
+
+void MeshManager::Clear()
+{
+	m_RegisteredMeshes.clear();
+}
+
+void MeshManager::Draw()
+{
+}
+
 Mesh* MeshManager::GetModel(const std::string& name)
 {
 	const auto it = m_RegisteredMeshes.find(name);
 
 	if (it == m_RegisteredMeshes.end())
 	{
+		Debug::Log("Error while loading model, seams like it's not loaded yet");
 		return nullptr;
 	}
+
 
 	return it->second.get();
 }

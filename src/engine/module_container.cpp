@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#include <engine/system_container.h>
+#include <engine/module_container.h>
 
 #include <graphics/graphic_manager.h>
 #include <engine/Input.h>
@@ -34,11 +34,11 @@ SOFTWARE.
 
 namespace dm
 {
-SystemContainer::SystemContainer()
+ModuleContainer::ModuleContainer()
 {
 }
 
-SystemContainer::~SystemContainer()
+ModuleContainer::~ModuleContainer()
 {
 	delete(m_GraphicManager);
 	delete(m_InputManager);
@@ -50,7 +50,7 @@ SystemContainer::~SystemContainer()
 	delete(m_PipelineMaterialManager);
 }
 
-void SystemContainer::Init()
+void ModuleContainer::Init()
 {
 	m_GraphicManager = new GraphicManager();
 	m_InputManager = new InputManager();
@@ -70,7 +70,7 @@ void SystemContainer::Init()
 	m_PhysicManager->Init();
 }
 
-void SystemContainer::Update() 
+void ModuleContainer::Update() 
 {
 	m_GraphicManager->Update();
 	m_InputManager->Update();
@@ -78,42 +78,54 @@ void SystemContainer::Update()
 	m_PhysicManager->Update();
 }
 
-void SystemContainer::Draw()
+void ModuleContainer::Draw()
 {
 	m_GraphicManager->Draw();
 }
 
-GraphicManager* SystemContainer::GetGraphicManager() const
+void ModuleContainer::Clear()
+{
+	m_GraphicManager->Clear();
+	m_InputManager->Clear();
+	m_EntityManager->Clear();
+	m_ComponentManager->Clear();
+	m_SystemManager->Clear();
+	m_ModelManager->Clear();
+	m_PhysicManager->Clear();
+	m_PipelineMaterialManager->Clear();
+}
+
+GraphicManager* ModuleContainer::GetGraphicManager() const
 {
 	return m_GraphicManager;
 }
 
-InputManager* SystemContainer::GetInputManager() const
+InputManager* ModuleContainer::GetInputManager() const
 {
 	return m_InputManager;
 }
 
-EntityManager* SystemContainer::GetEntityManager() const
+EntityManager* ModuleContainer::GetEntityManager() const
 {
 	return m_EntityManager;
 }
 
-ComponentManagerContainer* SystemContainer::GetComponentManager() const
+ComponentManagerContainer* ModuleContainer::GetComponentManager() const
 {
 	return m_ComponentManager;
 }
 
-SystemManager* SystemContainer::GetSystemManager() const
+SystemManager* ModuleContainer::GetSystemManager() const
 {
 	return m_SystemManager;
 }
 
-MeshManager* SystemContainer::GetModelManager() const
+MeshManager* ModuleContainer::GetModelManager() const
 {
 	return m_ModelManager;
 }
 
-PipelineMaterialManager* SystemContainer::GetPipelineMaterialManager() const
+PipelineMaterialManager* ModuleContainer::GetPipelineMaterialManager() const
 {
 	return m_PipelineMaterialManager;
 }

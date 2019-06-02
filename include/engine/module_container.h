@@ -22,31 +22,58 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#include <physic/physic_manager.h>
-#include "editor/log.h"
+#ifndef SYSTEM_CONTAINER_H
+#define SYSTEM_CONTAINER_H
 
 namespace dm
 {
-PhysicManager::PhysicManager()
+class GraphicManager;
+class InputManager;
+class EntityManager;
+class ComponentManagerContainer;
+class SystemManager;
+class MeshManager;
+class EngineApplication;
+class PhysicManager;
+class PipelineMaterialManager;
+
+class ModuleContainer
 {
-	
+public:
+	ModuleContainer();
+	~ModuleContainer();
+
+	void Init();
+
+	void Update();
+
+	void Draw();
+
+	void Clear();
+
+	GraphicManager* GetGraphicManager() const;
+
+	InputManager* GetInputManager() const;
+
+	EntityManager* GetEntityManager() const;
+
+	ComponentManagerContainer* GetComponentManager() const;
+
+	SystemManager* GetSystemManager() const;
+
+	MeshManager* GetModelManager() const;
+
+	PipelineMaterialManager* GetPipelineMaterialManager() const;
+private:
+	GraphicManager* m_GraphicManager;
+	InputManager* m_InputManager;
+	EntityManager* m_EntityManager;
+	ComponentManagerContainer* m_ComponentManager;
+	SystemManager* m_SystemManager;
+	MeshManager* m_ModelManager;
+	PhysicManager* m_PhysicManager;
+	PipelineMaterialManager* m_PipelineMaterialManager;
+};
 }
 
-void PhysicManager::Init()
-{
-	
-}
-
-void PhysicManager::Update()
-{
-	
-}
-
-void PhysicManager::Clear()
-{
-}
-
-void PhysicManager::Draw()
-{
-}
-}
+#endif SYSTEM_CONTAINER_H

@@ -42,6 +42,24 @@ EntityManager::EntityManager()
 	m_EntityMask.resize(INIT_ENTITY_NMB, emptyMask);
 }
 
+void EntityManager::Init()
+{
+}
+
+void EntityManager::Update()
+{
+}
+
+void EntityManager::Clear()
+{
+	m_EntityInfos.resize(INIT_ENTITY_NMB);
+	m_EntityMask.resize(INIT_ENTITY_NMB);
+}
+
+void EntityManager::Draw()
+{
+}
+
 Entity EntityManager::CreateEntity()
 {
 	auto newEntity = INVALID_ENTITY;

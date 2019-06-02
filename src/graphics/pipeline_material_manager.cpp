@@ -23,10 +23,29 @@ SOFTWARE.
 */
 
 #include <graphics/pipeline_material_manager.h>
+#include "editor/log.h"
 
 namespace dm
 {
 PipelineMaterialManager::PipelineMaterialManager() {}
+
+void PipelineMaterialManager::Init()
+{
+}
+
+void PipelineMaterialManager::Update()
+{
+}
+
+void PipelineMaterialManager::Clear()
+{
+	m_RegisteredMaterials.clear();
+	m_RegisteredInfos.clear();
+}
+
+void PipelineMaterialManager::Draw()
+{
+}
 
 PipelineMaterial* PipelineMaterialManager::GetMaterial(const Pipeline::Stage& pipelineStage,
                                                        const PipelineGraphicsCreate& pipelineCreate)
@@ -41,6 +60,7 @@ PipelineMaterial* PipelineMaterialManager::GetMaterial(const Pipeline::Stage& pi
 		i++;
 	}
 
+	Debug::Log("Error while loading material, the material is not loaded in the manager yet");
 	return nullptr;
 }
 
@@ -48,7 +68,7 @@ PipelineMaterial* PipelineMaterialManager::AddMaterial(const Pipeline::Stage& pi
 	const PipelineGraphicsCreate& pipelineCreate)
 {
 	m_RegisteredMaterials.push_back(std::make_unique<PipelineMaterial>(pipelineStage, pipelineCreate));
-	m_RegisteredInfos.push_back(std::make_pair(pipelineStage, pipelineCreate));
+	m_RegisteredInfos.emplace_back(pipelineStage, pipelineCreate);
 	return m_RegisteredMaterials[m_RegisteredMaterials.size() - 1].get();
 }
 }

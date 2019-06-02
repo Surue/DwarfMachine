@@ -48,6 +48,15 @@ void SystemManager::Update()
 	}
 }
 
+void SystemManager::Clear()
+{
+	m_Systems.clear();
+}
+
+void SystemManager::Draw()
+{
+}
+
 void SystemManager::Destroy()
 {
 	for (auto& system : m_Systems)

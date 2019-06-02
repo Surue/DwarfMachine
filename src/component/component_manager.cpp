@@ -43,6 +43,34 @@ ComponentManagerContainer::ComponentManagerContainer() :
 	m_ShadowRendererManager(std::make_unique<ShadowRendererManager>())
 { }
 
+void ComponentManagerContainer::Init()
+{
+}
+
+void ComponentManagerContainer::Update()
+{
+}
+
+void ComponentManagerContainer::Clear()
+{
+	m_TransformManager->Clear();
+	m_CameraManager->Clear();
+	m_MaterialDefaultManager->Clear();
+	m_MeshManager->Clear();
+	m_BoundingSphereManager->Clear();
+	m_DrawableManager->Clear();
+	m_MaterialSkyboxManager->Clear();
+	m_MeshRendererManager->Clear();
+	m_PointLightManager->Clear();
+	m_DirectionalLightManager->Clear();
+	m_SpotLightManager->Clear();
+	m_ShadowRendererManager->Clear();
+}
+
+void ComponentManagerContainer::Draw()
+{
+}
+
 void ComponentManagerContainer::Destroy()
 {
 	m_TransformManager.reset(nullptr);

@@ -22,56 +22,24 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#ifndef SYSTEM_CONTAINER_H
-#define SYSTEM_CONTAINER_H
+#ifndef MODULE_H
+#define MODULE_H
 
 namespace dm
 {
-class GraphicManager;
-class InputManager;
-class EntityManager;
-class ComponentManagerContainer;
-class SystemManager;
-class MeshManager;
-class EngineApplication;
-class PhysicManager;
-class PipelineMaterialManager;
-
-class SystemContainer
+class Module
 {
 public:
-	SystemContainer();
-	~SystemContainer();
+	virtual ~Module() = default;
 
-	void Init();
+	virtual void Init() = 0;
 
-	void Update();
+	virtual void Update() = 0;
 
-	void Draw();
+	virtual void Clear() = 0;
 
-	GraphicManager* GetGraphicManager() const;
-
-	InputManager* GetInputManager() const;
-
-	EntityManager* GetEntityManager() const;
-
-	ComponentManagerContainer* GetComponentManager() const;
-
-	SystemManager* GetSystemManager() const;
-
-	MeshManager* GetModelManager() const;
-
-	PipelineMaterialManager* GetPipelineMaterialManager() const;
-private:
-	GraphicManager* m_GraphicManager;
-	InputManager* m_InputManager;
-	EntityManager* m_EntityManager;
-	ComponentManagerContainer* m_ComponentManager;
-	SystemManager* m_SystemManager;
-	MeshManager* m_ModelManager;
-	PhysicManager* m_PhysicManager;
-	PipelineMaterialManager* m_PipelineMaterialManager;
+	virtual void Draw() = 0;
 };
 }
 
-#endif SYSTEM_CONTAINER_H
+#endif

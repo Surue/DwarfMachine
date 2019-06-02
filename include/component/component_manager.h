@@ -39,13 +39,19 @@ SOFTWARE.
 #include "shadows/shadow_renderer.h"
 
 namespace dm {
-class ComponentManagerContainer final
+class ComponentManagerContainer final : public Module
 {
 public:
 	ComponentManagerContainer();
 	~ComponentManagerContainer() = default;
 
-	void Init(){};
+	void Init() override;
+
+	void Update() override;
+
+	void Clear() override;
+
+	void Draw() override;
 
 	void Destroy();
 
@@ -72,7 +78,6 @@ public:
 	void DrawOnInspector(Entity entity) const;
 
 	void OnEntityResize(int newSize) const;
-
 private:
 	std::unique_ptr<TransformManager> m_TransformManager;
 	std::unique_ptr<CameraManager> m_CameraManager;

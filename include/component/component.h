@@ -53,6 +53,12 @@ public:
 	 
 	virtual void Update() = 0;
 
+	void Clear()
+	{
+		m_Components.clear();
+		m_Components.resize(INIT_COMPONENT_NMB);
+	}
+
 	virtual T* CreateComponent(Entity) = 0;
 	
 	virtual T* AddComponent(const Entity entity, T& component)
