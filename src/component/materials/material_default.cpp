@@ -46,7 +46,7 @@ MaterialDefault* MaterialDefaultManager::CreateComponent(const Entity entity)
 
 	material.color = Color(25, 25, 25, 1);
 
-	material.textureDiffuse = nullptr;
+	material.diffuseTexture = nullptr;
 
 	material.pipelineMaterial = PipelineMaterial::Create({ 1, 0 }, 
 		PipelineGraphicsCreate(
@@ -90,7 +90,7 @@ std::vector<Shader::Define> MaterialDefaultManager::GetDefines(const MaterialDef
 {
 	std::vector<Shader::Define> defines;
 	//TODO Changer pour mettre correctement les valeur poru les defines
-	defines.emplace_back("DIFFUSE_MAPPING", To<int32_t>(component.textureDiffuse != nullptr));
+	defines.emplace_back("DIFFUSE_MAPPING", To<int32_t>(component.diffuseTexture != nullptr));
 	defines.emplace_back("MATERIAL_MAPPING", To<int32_t>(component.materialTexture != nullptr));
 	defines.emplace_back("NORMAL_MAPPING", To<int32_t>(component.normalTexture != nullptr));
 	return defines;
@@ -98,7 +98,7 @@ std::vector<Shader::Define> MaterialDefaultManager::GetDefines(const MaterialDef
 
 void MaterialDefaultManager::PushDescriptor(MaterialDefault& material, DescriptorHandle &descriptorSet)
 {
-	descriptorSet.Push("samplerDiffuse", material.textureDiffuse);
+	descriptorSet.Push("samplerDiffuse", material.diffuseTexture);
 	descriptorSet.Push("samplerMaterial", material.materialTexture);
 	descriptorSet.Push("samplerNormal", material.normalTexture);
 }
@@ -141,7 +141,7 @@ MaterialDefault* MaterialDefaultManager::AddComponent(const Entity entity, Mater
 	return &m_Components[entity - 1];
 }
 
-void MaterialDefaultManager::CreateComponent(json& componentJson, const Entity entity)
+void MaterialDefaultManager::DecodeComponent(json& componentJson, const Entity entity)
 {
 	auto material = MaterialDefault();
 	material.componentType = ComponentType::MATERIAL_DEFAULT;
@@ -165,7 +165,7 @@ void MaterialDefaultManager::CreateComponent(json& componentJson, const Entity e
 		material.ignoreFog = GetBoolFromJson(componentJson, "ignoreFog");
 
 	if(CheckJsonExists(componentJson, "texture"))
-		material.textureDiffuse = Image2d::Create(componentJson["texture"]);
+		material.diffuseTexture = Image2d::Create(componentJson["texture"]);
 
 	if (CheckJsonExists(componentJson, "normal"))
 		material.normalTexture = Image2d::Create(componentJson["normal"]);
@@ -182,5 +182,29 @@ void MaterialDefaultManager::CreateComponent(json& componentJson, const Entity e
 	);
 
 	m_Components[entity - 1] = std::move(material);
+}
+
+void MaterialDefaultManager::EncodeComponent(json& componentJson, const Entity entity)
+{
+	componentJson["type"] = ComponentType::MATERIAL_DEFAULT;
+
+	SetColorToJson(componentJson, "color", m_Components[entity - 1].color);
+
+	componentJson["metallic"] = m_Components[entity - 1].metallic;
+
+	componentJson["roughness"] = m_Components[entity - 1].roughness;
+
+	SetBoolToJson(componentJson, "castShadow", m_Components[entity - 1].castsShadows);
+	SetBoolToJson(componentJson, "ignoreLighting", m_Components[entity - 1].ignoreLighting);
+	SetBoolToJson(componentJson, "ignoreFog", m_Components[entity - 1].ignoreFog);
+
+	if(m_Components[entity - 1].diffuseTexture != nullptr)
+	componentJson["texture"] = m_Components[entity - 1].diffuseTexture.get()->GetFilename();
+
+	if (m_Components[entity - 1].normalTexture != nullptr)
+	componentJson["normal"] = m_Components[entity - 1].normalTexture.get()->GetFilename();
+
+	if (m_Components[entity - 1].materialTexture != nullptr)
+	componentJson["material"] = m_Components[entity - 1].materialTexture.get()->GetFilename();
 }
 }

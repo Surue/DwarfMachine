@@ -109,7 +109,7 @@ void MaterialSkyboxManager::PushUniform(MaterialSkybox& material, const glm::mat
 	uniformObject.Push("blendFactor", material.blend);
 }
 
-void MaterialSkyboxManager::CreateComponent(json& componentJson, const Entity entity)
+void MaterialSkyboxManager::DecodeComponent(json& componentJson, const Entity entity)
 {
 	auto material = MaterialSkybox();
 	material.componentType = ComponentType::MATERIAL_SKYBOX;
@@ -122,6 +122,9 @@ void MaterialSkyboxManager::CreateComponent(json& componentJson, const Entity en
 
 	if (CheckJsonExists(componentJson, "blend"))
 		material.blend = componentJson["blend"];
+
+	if (CheckJsonExists(componentJson, "image") && CheckJsonExists(componentJson, "extension"))
+		material.image = ImageCube::Create(componentJson["image"], componentJson["extension"], VK_FILTER_LINEAR, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE, true, true);
 
 	if (CheckJsonExists(componentJson, "fogLimit") )
 		material.fogLimit = GetVector2FromJson(componentJson, "fogLimit");
@@ -139,5 +142,20 @@ void MaterialSkyboxManager::CreateComponent(json& componentJson, const Entity en
 	);
 
 	m_Components[entity - 1] = std::move(material);
+}
+
+void MaterialSkyboxManager::EncodeComponent(json& componentJson, const Entity entity)
+{
+	componentJson["type"] = ComponentType::MATERIAL_SKYBOX;
+
+	SetColorToJson(componentJson, "color", m_Components[entity - 1].color);
+	SetColorToJson(componentJson, "fogColor", m_Components[entity - 1].fogColor);
+
+	componentJson["blend"] = m_Components[entity - 1].blend;
+
+	SetVector2ToJson(componentJson, "fogLimit", m_Components[entity - 1].fogLimit);
+
+	componentJson["image"] = m_Components[entity - 1].image.get()->GetFilename();
+	componentJson["extension"] = m_Components[entity - 1].image.get()->GetFileSuffix();
 }
 }

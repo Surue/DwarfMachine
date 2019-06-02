@@ -76,7 +76,7 @@ TEST(Models, Cube)
 	auto cube = dm::EntityHandle(e1);
 	auto t1 = cube.CreateComponent<dm::Transform>(ComponentType::TRANSFORM);
 	t1->position = glm::vec3(0, 0, 0);
-	t1->scaling = glm::vec3(1, 1, 1);
+	t1->scale = glm::vec3(1, 1, 1);
 	dm::Model mesh;
 	mesh.componentType = ComponentType::MODEL;
 	mesh.model = dm::Engine::Get()->GetModelManager()->GetModel("ModelCube");
@@ -98,7 +98,7 @@ TEST(Models, Cube)
 	auto sphere = dm::EntityHandle(e2);
 	auto t2 = sphere.CreateComponent<dm::Transform>(ComponentType::TRANSFORM);
 	t2->position = glm::vec3(2, 0, 0);
-	t2->scaling = glm::vec3(1, 1, 1);
+	t2->scale = glm::vec3(1, 1, 1);
 	dm::Model mesh2;
 	mesh2.componentType = ComponentType::MODEL;
 	mesh2.model = dm::Engine::Get()->GetModelManager()->GetModel("ModelPlane");
@@ -117,7 +117,7 @@ TEST(Models, Cube)
 	auto plane = dm::EntityHandle(e3);
 	auto t3 = plane.CreateComponent<dm::Transform>(ComponentType::TRANSFORM);
 	t3->position = glm::vec3(-2, 0, 0); 
-	t3->scaling = glm::vec3(1, 1, 1);
+	t3->scale = glm::vec3(1, 1, 1);
 	t3->rotation = glm::vec3(180 * glm::pi<float>() / 180, 0, 0);
 	dm::Model mesh3;
 	mesh3.componentType = ComponentType::MODEL;
@@ -166,7 +166,7 @@ void CreateCube(glm::vec3 pos, dm::EntityManager* entityManager, dm::Editor* edi
 	//Transform
 	auto t1 = cube.CreateComponent<dm::Transform>(ComponentType::TRANSFORM);
 	t1->position = pos;
-	t1->scaling = glm::vec3(1, 1, 1);
+	t1->scale = glm::vec3(1, 1, 1);
 
 	//Mesh
 	dm::Model mesh;
@@ -206,7 +206,7 @@ dm::EntityHandle CreateSphere(glm::vec3 pos, dm::EntityManager* entityManager, d
 	//Transform
 	auto t1 = sphere.CreateComponent<dm::Transform>(ComponentType::TRANSFORM);
 	t1->position = pos;
-	t1->scaling = glm::vec3(1, 1, 1);
+	t1->scale = glm::vec3(1, 1, 1);
 
 	//Mesh
 	dm::Model mesh;
@@ -240,7 +240,7 @@ void CreatePlane(glm::vec3 pos, dm::EntityManager* entityManager, dm::MaterialDe
 	//Transform
 	auto t1 = sphere.CreateComponent<dm::Transform>(ComponentType::TRANSFORM);
 	t1->position = pos;
-	t1->scaling = glm::vec3(20, 1, 20);
+	t1->scale = glm::vec3(20, 1, 20);
 
 	//Mesh
 	dm::Model mesh;
@@ -272,7 +272,7 @@ void CreateSkybox(dm::EntityManager* entityManager)
 	//Transform
 	auto t1 = skybox.CreateComponent<dm::Transform>(ComponentType::TRANSFORM);
 	t1->position = glm::vec3(0.0f);
-	t1->scaling = glm::vec3(90.0f);
+	t1->scale = glm::vec3(90.0f);
 
 	//Mesh
 	dm::Model mesh;

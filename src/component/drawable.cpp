@@ -51,7 +51,7 @@ void DrawableManager::OnDrawInspector(Entity entity)
 	ImGui::Text("Is drawable : %d", m_Components[entity - 1].isDrawable);
 }
 
-void DrawableManager::CreateComponent(json& componentJson, const Entity entity)
+void DrawableManager::DecodeComponent(json& componentJson, const Entity entity)
 {
 	Drawable drawable;
 
@@ -61,5 +61,12 @@ void DrawableManager::CreateComponent(json& componentJson, const Entity entity)
 	}
 
 	m_Components[entity - 1] = drawable;
+}
+
+void DrawableManager::EncodeComponent(json& componentJson, const Entity entity)
+{
+	componentJson["type"] = ComponentType::DRAWABLE;
+
+	SetBoolToJson(componentJson, "isDrawable", m_Components[entity - 1].isDrawable);
 }
 }

@@ -31,7 +31,7 @@ SOFTWARE.
 #include <glm/vec2.hpp>
 #include <glm/detail/type_mat4x4.hpp>
 #include <graphics/buffers/uniform_handle.h>
-#include<graphics/descriptor_handle.h>
+#include <graphics/descriptor_handle.h>
 
 namespace dm
 {
@@ -63,7 +63,9 @@ public:
 
 	static void PushUniform(MaterialSkybox& material, const glm::mat4x4 worldPos, UniformHandle& uniformObject);
 
-	void CreateComponent(json& componentJson, const Entity entity) override;
+	void DecodeComponent(json& componentJson, const Entity entity) override;
+
+	void EncodeComponent(json& componentJson, const Entity entity) override;
 private:
 };
 }

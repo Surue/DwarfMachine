@@ -94,7 +94,7 @@ private:
 	std::unique_ptr<SpotLightManager> m_SpotLightManager;
 	std::unique_ptr<ShadowRendererManager> m_ShadowRendererManager;
 
-	std::vector<IComponentFactory*> m_ComponentsFactory;
+	std::vector<Metadata*> m_ComponentsFactory;
 };
 }
 #endif COMPONENT_MANAGER_H

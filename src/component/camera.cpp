@@ -110,7 +110,7 @@ void CameraManager::UpdateAspect(const float newAspect)
 	}
 }
 
-void CameraManager::CreateComponent(json& componentJson, const Entity entity)
+void CameraManager::DecodeComponent(json& componentJson, const Entity entity)
 {
 	Camera camera;
 
@@ -172,5 +172,25 @@ void CameraManager::CreateComponent(json& componentJson, const Entity entity)
 	camera.projectionMatrix = glm::perspective(glm::radians(camera.fov), camera.aspect, camera.nearFrustum, camera.farFrustum);
 
 	m_Components[entity - 1] = camera;
+}
+
+void CameraManager::EncodeComponent(json& componentJson, const Entity entity)
+{
+	componentJson["type"] = ComponentType::CAMERA;
+
+	SetVector3ToJson(componentJson, "position", m_Components[entity - 1].position);
+	SetVector3ToJson(componentJson, "up", m_Components[entity - 1].up);
+	SetVector3ToJson(componentJson, "right", m_Components[entity - 1].right);
+	SetVector3ToJson(componentJson, "front", m_Components[entity - 1].front);
+
+	componentJson["aspect"] = m_Components[entity - 1].aspect;
+	componentJson["fov"] = m_Components[entity - 1].fov;
+	componentJson["near"] = m_Components[entity - 1].nearFrustum;
+	componentJson["far"] = m_Components[entity - 1].farFrustum;
+	componentJson["yaw"] = m_Components[entity - 1].yaw;
+	componentJson["pitch"] = m_Components[entity - 1].pitch;
+
+	SetBoolToJson(componentJson, "isMain", m_Components[entity - 1].isMain);
+	SetBoolToJson(componentJson, "isCulling", m_Components[entity - 1].isCulling);
 }
 }

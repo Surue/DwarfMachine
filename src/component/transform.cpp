@@ -54,9 +54,9 @@ Transform* TransformManager::CreateComponent(const Entity entity)
 	t.rotation.y = 0;
 	t.rotation.z = 0;
 
-	t.scaling.x = 1;
-	t.scaling.y = 1;
-	t.scaling.z = 1;
+	t.scale.x = 1;
+	t.scale.y = 1;
+	t.scale.z = 1;
 
 	m_Components[entity - 1] = t;
 
@@ -79,7 +79,7 @@ glm::mat4x4 TransformManager::GetWorldMatrix(Transform& component)
 	component.worldMatrix = glm::rotate(component.worldMatrix, component.rotation.x, glm::vec3(1, 0, 0));
 	component.worldMatrix = glm::rotate(component.worldMatrix, component.rotation.y, glm::vec3(0, 1, 0));
 	component.worldMatrix = glm::rotate(component.worldMatrix, component.rotation.z, glm::vec3(0, 0, 1));
-	component.worldMatrix = glm::scale(component.worldMatrix, component.scaling);
+	component.worldMatrix = glm::scale(component.worldMatrix, component.scale);
 	return component.worldMatrix;
 }
 
@@ -89,7 +89,7 @@ void TransformManager::OnDrawInspector(Entity entity)
 	ImGui::TextWrapped("Transform");
 	ImGui::DragFloat3("Position", &m_Components[entity - 1].position[0], 0.1f);
 	ImGui::DragFloat3("Rotation", &m_Components[entity - 1].rotation[0], 0.1f);
-	ImGui::DragFloat3("Scale", &m_Components[entity - 1].scaling[0], 0.1f);
+	ImGui::DragFloat3("Scale", &m_Components[entity - 1].scale[0], 0.1f);
 
 	m_Components[entity - 1].worldMatrix = GetWorldMatrix(m_Components[entity - 1]);
 
@@ -101,10 +101,10 @@ void TransformManager::OnDrawInspector(Entity entity)
 	ImGuizmo::SetRect(0, 0, io.DisplaySize.x, io.DisplaySize.y);
 	ImGuizmo::Manipulate(&camera->viewMatrix[0][0], &camera->projectionMatrix[0][0], ImGuizmo::TRANSLATE, ImGuizmo::LOCAL, &m_Components[entity - 1].worldMatrix[0][0], NULL, NULL);
 
-	ImGuizmo::DecomposeMatrixToComponents(&m_Components[entity - 1].worldMatrix[0][0], &m_Components[entity - 1].position[0], &m_Components[entity - 1].rotation[0], &m_Components[entity - 1].scaling[0]);
+	ImGuizmo::DecomposeMatrixToComponents(&m_Components[entity - 1].worldMatrix[0][0], &m_Components[entity - 1].position[0], &m_Components[entity - 1].rotation[0], &m_Components[entity - 1].scale[0]);
 }
 
-void TransformManager::CreateComponent(json& componentJson, Entity entity)
+void TransformManager::DecodeComponent(json& componentJson, Entity entity)
 {
 	Transform transform;
 
@@ -112,11 +112,20 @@ void TransformManager::CreateComponent(json& componentJson, Entity entity)
 		transform.position = GetVector3FromJson(componentJson, "position");
 
 	if (CheckJsonExists(componentJson, "scale"))
-		transform.scaling = GetVector3FromJson(componentJson, "scale");
+		transform.scale = GetVector3FromJson(componentJson, "scale");
 
-	if (CheckJsonExists(componentJson, "angle"))
-		transform.rotation = GetVector3FromJson(componentJson, "angle");
+	if (CheckJsonExists(componentJson, "rotation"))
+		transform.rotation = GetVector3FromJson(componentJson, "rotation");
 
 	m_Components[entity - 1] = transform;
+}
+
+void TransformManager::EncodeComponent(json& componentJson, const Entity entity)
+{
+	componentJson["type"] = ComponentType::TRANSFORM;
+
+	SetVector3ToJson(componentJson, "position", m_Components[entity - 1].position);
+	SetVector3ToJson(componentJson, "scale", m_Components[entity - 1].scale);
+	SetVector3ToJson(componentJson, "rotation", m_Components[entity - 1].rotation);
 }
 }

@@ -49,9 +49,14 @@ void ShadowRendererManager::OnDrawInspector(Entity entity)
 {
 }
 
-void ShadowRendererManager::CreateComponent(json& componentJson, const Entity entity)
+void ShadowRendererManager::DecodeComponent(json& componentJson, const Entity entity)
 {
 	ShadowRenderer shadowRenderer;
 	m_Components[entity - 1] = std::move(shadowRenderer);
+}
+
+void ShadowRendererManager::EncodeComponent(json& componentJson, const Entity entity)
+{
+	componentJson["type"] = ComponentType::SHADOW_RENDERER;
 }
 }

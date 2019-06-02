@@ -47,7 +47,9 @@ public:
 
 	void OnDrawInspector(Entity entity) override;
 
-	void CreateComponent(json& componentJson, const Entity entity) override;
+	void DecodeComponent(json& componentJson, const Entity entity) override;
+
+	void EncodeComponent(json& componentJson, const Entity entity) override;
 private:
 };
 }

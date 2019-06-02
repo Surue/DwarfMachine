@@ -79,7 +79,7 @@ void BoundingSphereManager::OnDrawInspector(Entity entity)
 	ImGui::TextWrapped("Radius : %f ", m_Components[entity - 1].radius);
 }
 
-void BoundingSphereManager::CreateComponent(json& componentJson, const Entity entity)
+void BoundingSphereManager::DecodeComponent(json& componentJson, const Entity entity)
 {
 	BoundingSphere boundingSphere;
 
@@ -87,5 +87,12 @@ void BoundingSphereManager::CreateComponent(json& componentJson, const Entity en
 		boundingSphere.radius = componentJson["radius"];
 
 	m_Components[entity - 1] = boundingSphere;
+}
+
+void BoundingSphereManager::EncodeComponent(json& componentJson, const Entity entity)
+{
+	componentJson["type"] = ComponentType::BOUNDING_SPHERE;
+
+	componentJson["radius"] = m_Components[entity - 1].radius;
 }
 }

@@ -44,6 +44,8 @@ public:
 	void Draw() override;
 
 	Mesh* GetModel(const std::string& name);
+
+	std::string GetModelName(Mesh* model);
 private:
 	std::map<std::string, std::unique_ptr<Mesh>> m_RegisteredMeshes{};
 };

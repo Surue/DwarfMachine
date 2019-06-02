@@ -37,10 +37,11 @@ namespace dm
 struct MaterialDefault : public Material
 {
 	Color color = Color::White;
-	std::shared_ptr<Image2d> textureDiffuse;
 
 	float metallic = 0;
 	float roughness = 0;
+
+	std::shared_ptr<Image2d> diffuseTexture;
 	std::shared_ptr<Image2d> materialTexture;
 	std::shared_ptr<Image2d> normalTexture;
 
@@ -76,7 +77,9 @@ public:
 
 	MaterialDefault* AddComponent(const Entity entity, MaterialDefault& component) override;
 
-	void CreateComponent(json& componentJson, const Entity entity) override;
+	void DecodeComponent(json& componentJson, const Entity entity) override;
+
+	void EncodeComponent(json& componentJson, const Entity entity) override;
 private:
 };
 }

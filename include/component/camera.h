@@ -74,7 +74,9 @@ public:
 
 	void UpdateAspect(const float newAspect);
 
-	void CreateComponent(json& componentJson, const Entity entity) override;
+	void DecodeComponent(json& componentJson, const Entity entity) override;
+
+	void EncodeComponent(json& componentJson, const Entity entity) override;
 private:
 	GraphicManager* m_GraphicManager;
 };

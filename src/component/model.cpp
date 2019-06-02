@@ -53,7 +53,7 @@ Model* ModelComponentManager::CreateComponent(const Entity entity)
 void ModelComponentManager::DestroyComponent(Entity entity) {}
 void ModelComponentManager::OnDrawInspector(Entity entity) {}
 
-void ModelComponentManager::CreateComponent(json& componentJson, const Entity entity)
+void ModelComponentManager::DecodeComponent(json& componentJson, const Entity entity)
 {
 	auto mesh = Model();
 
@@ -66,5 +66,12 @@ void ModelComponentManager::CreateComponent(json& componentJson, const Entity en
 	}
 
 	m_Components[entity - 1] = mesh;
+}
+
+void ModelComponentManager::EncodeComponent(json& componentJson, const Entity entity)
+{
+	componentJson["type"] = ComponentType::MODEL;
+
+	componentJson["modelName"] = Engine::Get()->GetModelManager()->GetModelName(m_Components[entity - 1].model);
 }
 }

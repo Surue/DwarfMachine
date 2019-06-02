@@ -44,18 +44,18 @@ ComponentManagerContainer::ComponentManagerContainer() :
 {
 	m_ComponentsFactory.resize(static_cast<int>(ComponentType::LENGTH));
 
-	m_ComponentsFactory[static_cast<int>(ComponentType::TRANSFORM)] = reinterpret_cast<IComponentFactory*>(&m_TransformManager);
-	m_ComponentsFactory[static_cast<int>(ComponentType::CAMERA)] = reinterpret_cast<IComponentFactory*>(&m_CameraManager);
-	m_ComponentsFactory[static_cast<int>(ComponentType::MATERIAL_DEFAULT)] = reinterpret_cast<IComponentFactory*>(&m_MaterialDefaultManager);
-	m_ComponentsFactory[static_cast<int>(ComponentType::MATERIAL_SKYBOX)] = reinterpret_cast<IComponentFactory*>(&m_MaterialSkyboxManager);
-	m_ComponentsFactory[static_cast<int>(ComponentType::MODEL)] = reinterpret_cast<IComponentFactory*>(&m_MeshManager);
-	m_ComponentsFactory[static_cast<int>(ComponentType::BOUNDING_SPHERE)] = reinterpret_cast<IComponentFactory*>(&m_BoundingSphereManager);
-	m_ComponentsFactory[static_cast<int>(ComponentType::DRAWABLE)] = reinterpret_cast<IComponentFactory*>(&m_DrawableManager);
-	m_ComponentsFactory[static_cast<int>(ComponentType::MESH_RENDERER)] = reinterpret_cast<IComponentFactory*>(&m_MeshRendererManager);
-	m_ComponentsFactory[static_cast<int>(ComponentType::POINT_LIGHT)] = reinterpret_cast<IComponentFactory*>(&m_PointLightManager);
-	m_ComponentsFactory[static_cast<int>(ComponentType::DIRECTIONAL_LIGHT)] = reinterpret_cast<IComponentFactory*>(&m_DirectionalLightManager);
-	m_ComponentsFactory[static_cast<int>(ComponentType::SPOT_LIGHT)] = reinterpret_cast<IComponentFactory*>(&m_SpotLightManager);
-	m_ComponentsFactory[static_cast<int>(ComponentType::SHADOW_RENDERER)] = reinterpret_cast<IComponentFactory*>(&m_ShadowRendererManager);
+	m_ComponentsFactory[static_cast<int>(ComponentType::TRANSFORM)] = reinterpret_cast<Metadata*>(&m_TransformManager);
+	m_ComponentsFactory[static_cast<int>(ComponentType::CAMERA)] = reinterpret_cast<Metadata*>(&m_CameraManager);
+	m_ComponentsFactory[static_cast<int>(ComponentType::MATERIAL_DEFAULT)] = reinterpret_cast<Metadata*>(&m_MaterialDefaultManager);
+	m_ComponentsFactory[static_cast<int>(ComponentType::MATERIAL_SKYBOX)] = reinterpret_cast<Metadata*>(&m_MaterialSkyboxManager);
+	m_ComponentsFactory[static_cast<int>(ComponentType::MODEL)] = reinterpret_cast<Metadata*>(&m_MeshManager);
+	m_ComponentsFactory[static_cast<int>(ComponentType::BOUNDING_SPHERE)] = reinterpret_cast<Metadata*>(&m_BoundingSphereManager);
+	m_ComponentsFactory[static_cast<int>(ComponentType::DRAWABLE)] = reinterpret_cast<Metadata*>(&m_DrawableManager);
+	m_ComponentsFactory[static_cast<int>(ComponentType::MESH_RENDERER)] = reinterpret_cast<Metadata*>(&m_MeshRendererManager);
+	m_ComponentsFactory[static_cast<int>(ComponentType::POINT_LIGHT)] = reinterpret_cast<Metadata*>(&m_PointLightManager);
+	m_ComponentsFactory[static_cast<int>(ComponentType::DIRECTIONAL_LIGHT)] = reinterpret_cast<Metadata*>(&m_DirectionalLightManager);
+	m_ComponentsFactory[static_cast<int>(ComponentType::SPOT_LIGHT)] = reinterpret_cast<Metadata*>(&m_SpotLightManager);
+	m_ComponentsFactory[static_cast<int>(ComponentType::SHADOW_RENDERER)] = reinterpret_cast<Metadata*>(&m_ShadowRendererManager);
 }
 
 void ComponentManagerContainer::Init()
@@ -104,7 +104,7 @@ void ComponentManagerContainer::Destroy()
 
 void ComponentManagerContainer::CreateComponent(json& componentJson, const Entity entity, ComponentType componentType)
 {
-	m_ComponentsFactory[static_cast<int>(componentType)]->CreateComponent(componentJson, entity);
+	m_ComponentsFactory[static_cast<int>(componentType)]->DecodeComponent(componentJson, entity);
 }
 
 ComponentBase* ComponentManagerContainer::CreateComponent(const Entity entity, const ComponentType componentType) const

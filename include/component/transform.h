@@ -37,7 +37,7 @@ struct Transform final : ComponentBase
 {
 	glm::vec3 position = glm::vec3(0.0f);
 	glm::vec3 rotation = glm::vec3(0.0f);
-	glm::vec3 scaling = glm::vec3(1.0f);
+	glm::vec3 scale = glm::vec3(1.0f);
 	glm::mat4 worldMatrix = glm::mat4x4(1.0f);
 
 	friend std::ostream & operator<<(std::ostream & out, const Transform transform)
@@ -66,7 +66,9 @@ public:
 
 	void OnDrawInspector(Entity entity) override;
 
-	void CreateComponent(json& componentJson, Entity entity) override;
+	void DecodeComponent(json& componentJson, Entity entity) override;
+
+	void EncodeComponent(json& componentJson, const Entity entity) override;
 };
 }
 

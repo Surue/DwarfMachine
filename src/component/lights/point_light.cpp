@@ -53,7 +53,7 @@ void PointLightManager::OnDrawInspector(Entity entity)
 	ImGui::DragFloat("intensity", &m_Components[entity - 1].intensity, 0.1f, 0, 100000);
 }
 
-void PointLightManager::CreateComponent(json& componentJson, const Entity entity)
+void PointLightManager::DecodeComponent(json& componentJson, const Entity entity)
 {
 	PointLight directionalLight;
 
@@ -67,5 +67,16 @@ void PointLightManager::CreateComponent(json& componentJson, const Entity entity
 		directionalLight.intensity = componentJson["intensity"];
 
 	m_Components[entity - 1] = directionalLight;
+}
+
+void PointLightManager::EncodeComponent(json& componentJson, const Entity entity)
+{
+	componentJson["type"] = ComponentType::POINT_LIGHT;
+
+	SetColorToJson(componentJson, "color", m_Components[entity - 1].color);
+
+	componentJson["radius"] = m_Components[entity - 1].radius;
+
+	componentJson["intensity"] = m_Components[entity - 1].intensity;
 }
 }

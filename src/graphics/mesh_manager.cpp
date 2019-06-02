@@ -69,4 +69,17 @@ Mesh* MeshManager::GetModel(const std::string& name)
 
 	return it->second.get();
 }
+
+std::string MeshManager::GetModelName(Mesh* model)
+{
+	for (auto it = m_RegisteredMeshes.begin(); it != m_RegisteredMeshes.end(); ++it)
+	{
+		if(model == it->second.get())
+		{
+			return it->first;
+		}
+	}
+
+	return "";
+}
 }

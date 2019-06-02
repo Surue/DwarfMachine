@@ -53,7 +53,7 @@ void DirectionalLightManager::OnDrawInspector(Entity entity)
 	ImGui::DragFloat3("direction", &m_Components[entity - 1].direction[0], 0.1f);
 }
 
-void DirectionalLightManager::CreateComponent(json& componentJson, const Entity entity)
+void DirectionalLightManager::DecodeComponent(json& componentJson, const Entity entity)
 {
 	DirectionalLight directionalLight;
 
@@ -67,5 +67,16 @@ void DirectionalLightManager::CreateComponent(json& componentJson, const Entity 
 		directionalLight.intensity = componentJson["intensity"];
 
 	m_Components[entity - 1] = directionalLight;
+}
+
+void DirectionalLightManager::EncodeComponent(json& componentJson, const Entity entity)
+{
+	componentJson["type"] = ComponentType::DIRECTIONAL_LIGHT;
+
+	SetVector3ToJson(componentJson, "direction", m_Components[entity - 1].direction);
+
+	SetColorToJson(componentJson, "color", m_Components[entity - 1].color);
+
+	componentJson["intensity"] = m_Components[entity - 1].intensity;
 }
 }

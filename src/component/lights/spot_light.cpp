@@ -52,7 +52,7 @@ void SpotLightManager::OnDrawInspector(const Entity entity)
 	ImGui::DragFloat("range", &m_Components[entity - 1].range, 0.1f, 0, 360);
 }
 
-void SpotLightManager::CreateComponent(json& componentJson, const Entity entity)
+void SpotLightManager::DecodeComponent(json& componentJson, const Entity entity)
 {
 	SpotLight directionalLight;
 
@@ -61,6 +61,9 @@ void SpotLightManager::CreateComponent(json& componentJson, const Entity entity)
 
 	if (CheckJsonExists(componentJson, "angle"))
 		directionalLight.angle = componentJson["angle"];
+
+	if (CheckJsonExists(componentJson, "range"))
+		directionalLight.angle = componentJson["range"];
 
 	if (CheckJsonExists(componentJson, "intensity"))
 		directionalLight.intensity = componentJson["intensity"];
@@ -72,5 +75,18 @@ void SpotLightManager::CreateComponent(json& componentJson, const Entity entity)
 		directionalLight.intensity = componentJson["intensity"];
 
 	m_Components[entity - 1] = directionalLight;
+}
+
+void SpotLightManager::EncodeComponent(json& componentJson, const Entity entity)
+{
+	componentJson["type"] = ComponentType::SPOT_LIGHT;
+
+	SetVector3ToJson(componentJson, "target", m_Components[entity - 1].target);
+
+	SetColorToJson(componentJson, "color", m_Components[entity - 1].color);
+
+	componentJson["intensity"] = m_Components[entity - 1].intensity;
+	componentJson["angle"] = m_Components[entity - 1].angle;
+	componentJson["range"] = m_Components[entity - 1].range;
 }
 }
