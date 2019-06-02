@@ -81,11 +81,12 @@ void Window::SetShouldClose()
 	m_ShouldQuit = true;
 }
 
-Vec2i Window::GetSize()
+glm::vec2 Window::GetSize()
 {
-	Vec2i size;
-	SDL_GetWindowSize(m_Window, &size.x, &size.y);
-	return size;
+	int sizeX;
+	int sizeY;
+	SDL_GetWindowSize(m_Window, &sizeX, &sizeY);
+	return glm::vec2(sizeX, sizeY);
 }
 
 void Window::GetFramebufferSize(int* width, int* height) const

@@ -128,8 +128,6 @@ ComponentMask EntityManager::GetEntityMask(const Entity entity)
 
 void EntityManager::ResizeEntity()
 {
-	std::cout << "==================Resize==================\n";
-
 	ComponentMask emptyMask;
 	emptyMask.mask = static_cast<int>(ComponentType::NONE);
 

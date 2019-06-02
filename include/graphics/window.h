@@ -30,6 +30,7 @@ SOFTWARE.
 
 #include <vulkan/vulkan.h>
 #include <engine/vector.h>
+#include <glm/vec2.hpp>
 
 namespace dm
 {
@@ -53,7 +54,7 @@ public:
 
 	void SetShouldClose();
 
-	Vec2i GetSize();
+	glm::vec2 GetSize();
 
 	void GetFramebufferSize(int* width, int* height) const;
 

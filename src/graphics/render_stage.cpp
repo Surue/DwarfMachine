@@ -84,7 +84,7 @@ RenderStage::RenderStage(std::vector<Attachment> images, std::vector<SubpassType
 
 void RenderStage::Update()
 {
-	Vec2i lastSize = m_Size;
+	glm::vec2 lastSize = m_Size;
 
 	if(m_Viewport.GetSize())
 	{
@@ -94,7 +94,7 @@ void RenderStage::Update()
 		m_Size = GraphicManager::Get()->GetWindow()->GetSize();
 	}
 
-	m_Size = Vec2i(m_Viewport.GetScale().x * m_Size.x, m_Viewport.GetScale().y * m_Size.y);
+	m_Size = glm::vec2(m_Viewport.GetScale().x * m_Size.x, m_Viewport.GetScale().y * m_Size.y);
 	m_AspectRatio = static_cast<float>(m_Size.x) / static_cast<float>(m_Size.y);
 
 	m_OutOfDate = m_Size != lastSize;

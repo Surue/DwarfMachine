@@ -111,7 +111,7 @@ const Image2d* PipelineGraphics::GetTexture(const uint32_t& index, const std::op
 	return GraphicManager::Get()->GetRenderStage(stage ? *stage : m_Stage.first)->GetFramebuffers()->GetAttachment(index);
 }
 
-Vec2i PipelineGraphics::GetSize(const std::optional<uint32_t>& stage) const
+glm::vec2 PipelineGraphics::GetSize(const std::optional<uint32_t>& stage) const
 {
 	return GraphicManager::Get()->GetRenderStage(stage ? *stage : m_Stage.first)->GetSize();
 }

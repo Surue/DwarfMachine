@@ -341,7 +341,7 @@ TEST(Models, FrustumCulling)
 
 	dm::MaterialDefault material;
 	material.componentType = ComponentType::MATERIAL_DEFAULT;
-	material.color = dm::Color(0.85, 0.85, 0.85, 1);
+	material.color = dm::Color(0.85f, 0.85f, 0.85f, 1);
 
 	for(size_t i = 0; i < maxCube; i++)
 	{

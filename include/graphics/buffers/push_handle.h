@@ -64,7 +64,7 @@ public:
 
 		if (realSize == 0)
 		{
-			realSize == std::min(sizeof(object), static_cast<std::size_t>(uniform->GetSize()));
+			realSize = std::min(sizeof(object), static_cast<std::size_t>(uniform->GetSize()));
 		}
 
 		Push(object, static_cast<std::size_t>(uniform->GetOffset()), realSize);

@@ -32,6 +32,7 @@ SOFTWARE.
 #include <graphics/renderpass.h>
 #include <graphics/swapchain.h>
 #include <map>
+#include <glm/vec2.hpp>
 
 namespace dm
 {
@@ -94,27 +95,27 @@ public:
 		m_Offset(0, 0)
 	{}
 
-	explicit Viewport(const std::optional<Vec2i> &size) :
+	explicit Viewport(const glm::vec2 &size) :
 		m_Scale(1.0f, 1.0f),
 		m_Size(size),
 		m_Offset(0, 0)
 	{}
 
-	const Vec2f &GetScale() const { return m_Scale; }
+	const glm::vec2 &GetScale() const { return m_Scale; }
 
-	void SetScale(const Vec2f &scale) { m_Scale = scale; }
+	void SetScale(const glm::vec2 &scale) { m_Scale = scale; }
 
-	const std::optional<Vec2i> &GetSize() const { return m_Size; }
+	const std::optional<glm::vec2> &GetSize() const { return m_Size; }
 
-	void SetSize(const std::optional<Vec2i> &size) { m_Size = size; }
+	void SetSize(const std::optional<glm::vec2> &size) { m_Size = size; }
 
-	const Vec2i &GetOffset() const { return m_Offset; }
+	const glm::vec2 &GetOffset() const { return m_Offset; }
 
-	void SetOffset(const Vec2i &offset) { m_Offset = offset; }
+	void SetOffset(const glm::vec2 &offset) { m_Offset = offset; }
 private:
-	Vec2f m_Scale;
-	std::optional<Vec2i> m_Size;
-	Vec2i m_Offset;
+	glm::vec2 m_Scale;
+	std::optional<glm::vec2> m_Size;
+	glm::vec2 m_Offset;
 };
 
 class RenderStage
@@ -138,7 +139,7 @@ public:
 
 	void SetViewPort(const Viewport &viewport) { m_Viewport = viewport; }
 
-	const Vec2i &GetSize() const { return m_Size; }
+	const glm::vec2 &GetSize() const { return m_Size; }
 
 	const float &GetAspectRatio() const { return m_AspectRatio; }
 
@@ -184,7 +185,7 @@ private:
 	std::optional<Attachment> m_SwapchainAttachment;
 	std::vector<bool> m_SubpassMultisampled;
 
-	Vec2i m_Size;
+	glm::vec2 m_Size;
 	float m_AspectRatio;
 	bool m_OutOfDate;
 };

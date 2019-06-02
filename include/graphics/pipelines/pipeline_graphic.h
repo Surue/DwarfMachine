@@ -29,6 +29,7 @@ SOFTWARE.
 #include <vulkan/vulkan.h>
 #include <graphics/pipelines/pipeline.h>
 #include <engine/vector.h>
+#include <glm/vec2.hpp>
 
 namespace dm
 {
@@ -63,7 +64,7 @@ public:
 
 	const Image2d *GetTexture(const uint32_t &index, const std::optional<uint32_t> &stage = {}) const;
 
-	Vec2i GetSize(const std::optional<uint32_t> &stage = {}) const;
+	glm::vec2 GetSize(const std::optional<uint32_t> &stage = {}) const;
 
 	float GetAspectRatio(const std::optional<uint32_t> &stage = {}) const;
 

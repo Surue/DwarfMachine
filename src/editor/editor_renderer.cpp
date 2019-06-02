@@ -55,7 +55,7 @@ void EditorRenderManager::Start()
 	std::vector<SubpassType> renderpassSubpasses0 = {
 		SubpassType(0, { 0 }), //Shadow pass
 	};
-	renderStages.emplace_back(std::make_unique<RenderStage>(renderpassAttachment0, renderpassSubpasses0));
+	renderStages.emplace_back(std::make_unique<RenderStage>(renderpassAttachment0, renderpassSubpasses0, Viewport(glm::vec2(4096, 4096))));
 
 	std::vector<Attachment> renderpassAttachment1 = {
 		Attachment(0, "depth", Attachment::Type::DEPTH, false),
