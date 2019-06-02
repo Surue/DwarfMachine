@@ -102,9 +102,18 @@ void ComponentManagerContainer::Destroy()
 	m_ShadowRendererManager.reset(nullptr);
 }
 
-void ComponentManagerContainer::CreateComponent(json& componentJson, const Entity entity, ComponentType componentType)
+void ComponentManagerContainer::DecodeComponent(json& componentJson, const Entity entity, ComponentType componentType)
 {
 	m_ComponentsFactory[static_cast<int>(componentType)]->DecodeComponent(componentJson, entity);
+}
+
+json ComponentManagerContainer::EncodeComponent(const Entity entity, ComponentType componentType)
+{
+	json jsonComponent;
+
+	m_ComponentsFactory[static_cast<int>(componentType)]->EncodeComponent(jsonComponent, entity);
+
+	return jsonComponent;
 }
 
 ComponentBase* ComponentManagerContainer::CreateComponent(const Entity entity, const ComponentType componentType) const

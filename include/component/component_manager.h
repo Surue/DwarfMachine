@@ -55,7 +55,9 @@ public:
 
 	void Destroy();
 
-	void CreateComponent(json& componentJson, Entity entity, ComponentType componentType);
+	void DecodeComponent(json& componentJson, Entity entity, ComponentType componentType);
+
+	json EncodeComponent(Entity entity, ComponentType componentType);
 
 	ComponentBase* CreateComponent(Entity entity, ComponentType componentType) const;
 

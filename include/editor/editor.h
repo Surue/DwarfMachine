@@ -56,6 +56,8 @@ private:
 
 	void MoveEditorCamera();
 
+	void DrawSaveLoadMenu();
+
 	Entity m_CurrentEntitySelected = INVALID_ENTITY;
 
 	float lastDeltaTime;

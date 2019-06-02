@@ -58,6 +58,8 @@ public:
 
 	void LoadSceneFromJson(json& sceneJson);
 
+	void SaveScene();
+
 private:
 	void InitScenePySystems();
 

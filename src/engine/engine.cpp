@@ -54,6 +54,7 @@ Engine::~Engine()
 void Engine::Init()
 {
 	m_ModuleContainer.Init();
+	m_SceneManager.Init();
 }
 
 void Engine::Start()
@@ -117,6 +118,11 @@ PipelineMaterialManager* Engine::GetPipelineMaterialManager() const
 void Engine::SetApplication(EngineApplication* app)
 {
 	m_App.reset(app);
+}
+
+void Engine::SaveScene()
+{
+	m_SceneManager.SaveScene();
 }
 
 void Engine::MainLoop()

@@ -140,6 +140,8 @@ void Editor::DrawDock()
 			ImGui::EndMenu();
 		}
 
+		DrawSaveLoadMenu();
+
 		DrawStats();
 
 		ImGui::EndMenuBar();
@@ -266,5 +268,17 @@ void Editor::MoveEditorCamera()
 	
 	camera->up = glm::normalize(glm::cross(camera->right, camera->front));
 	camera->viewMatrix = glm::lookAt(camera->position, camera->position + camera->front, camera->up);
+}
+
+void Editor::DrawSaveLoadMenu()
+{
+	if (ImGui::BeginMenu("Files"))
+	{
+		if (ImGui::MenuItem("Save"))
+		{
+			Engine::Get()->SaveScene();
+		}
+		ImGui::EndMenu();
+	}
 }
 }

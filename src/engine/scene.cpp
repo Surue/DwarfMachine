@@ -132,7 +132,7 @@ void SceneManager::LoadSceneFromJson(json& sceneJson)
 						const ComponentType componentType = componentJson["type"];
 						const auto index = static_cast<int>(log2(static_cast<double>(componentType)));
 						
-						m_ComponentManager[index].CreateComponent(componentJson, entity, componentType);
+						m_ComponentManager[index].DecodeComponent(componentJson, entity, componentType);
 						handle.AddComponentType(componentType);
 						
 					}
@@ -153,5 +153,56 @@ void SceneManager::LoadSceneFromJson(json& sceneJson)
 		}
 	}
 
+}
+
+void SceneManager::SaveScene()
+{
+	json jsonScene;
+	jsonScene["name"] = m_SceneInfo.name;
+
+	jsonScene["entities"] = nlohmann::detail::value_t::array;
+
+	int entityCount = 0;
+	for (auto entity : m_EntityManager->GetEntities())
+	{
+		if(entity == INVALID_ENTITY)
+		{
+			continue;
+		}
+
+		json jsonEntity;
+
+		std::string name;
+		name = "entity " + entityCount;
+		jsonEntity["name"] = "entity";
+
+		auto handle = EntityHandle(entity);
+
+		auto componentCount = 0;
+
+		for(auto i = 0; i < static_cast<int>(ComponentType::LENGTH); i++)
+		{
+			if (handle.HasComponent(static_cast<ComponentType>(i)))
+			{
+				jsonEntity["components"][componentCount] = m_ComponentManager->EncodeComponent(entity, static_cast<ComponentType>(i));
+				componentCount++;
+			}
+		}
+
+		jsonScene["entites"][entityCount] = jsonEntity;
+
+		entityCount++;
+	}
+
+	std::string sceneFilename = "../ressources/scenes/";
+	sceneFilename += m_SceneInfo.name;
+	sceneFilename += ".scene";
+
+	// File write
+	std::ofstream myFile;
+	myFile.open(sceneFilename);
+	myFile.flush();
+	myFile << std::setw(4) << jsonScene << std::endl;
+	myFile.close();
 }
 }

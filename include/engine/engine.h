@@ -29,6 +29,7 @@ SOFTWARE.
 #include <memory>
 #include <chrono>
 #include <engine/module_container.h>
+#include "scene.h"
 
 namespace dm
 {
@@ -74,6 +75,8 @@ public:
 	void SetApplication(EngineApplication* app);
 
 	EngineApplication* GetApplication() const { return m_App.get(); }
+
+	void SaveScene();
 private:
 	/**
 	 * \brief Main loop of the game
@@ -89,6 +92,8 @@ private:
 	EngineSettings m_Settings;
 
 	ModuleContainer m_ModuleContainer;
+
+	SceneManager m_SceneManager;
 
 	std::unique_ptr<EngineApplication> m_App;
 
