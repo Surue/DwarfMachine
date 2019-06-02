@@ -39,7 +39,8 @@ ComponentManagerContainer::ComponentManagerContainer() :
 	m_MeshRendererManager(std::make_unique<MeshRendererManager>()),
 	m_PointLightManager(std::make_unique<PointLightManager>()),
 	m_DirectionalLightManager(std::make_unique<DirectionalLightManager>()),
-	m_SpotLightManager(std::make_unique<SpotLightManager>())
+	m_SpotLightManager(std::make_unique<SpotLightManager>()),
+	m_ShadowRendererManager(std::make_unique<ShadowRendererManager>())
 { }
 
 void ComponentManagerContainer::Destroy()
@@ -55,6 +56,7 @@ void ComponentManagerContainer::Destroy()
 	m_PointLightManager.reset(nullptr);
 	m_DirectionalLightManager.reset(nullptr);
 	m_SpotLightManager.reset(nullptr);
+	m_ShadowRendererManager.reset(nullptr);
 }
 
 ComponentBase* ComponentManagerContainer::CreateComponent(const Entity entity, const ComponentType componentType) const
@@ -85,6 +87,8 @@ ComponentBase* ComponentManagerContainer::CreateComponent(const Entity entity, c
 		return m_DirectionalLightManager->CreateComponent(entity);
 	case ComponentType::SPOT_LIGHT:
 		return m_SpotLightManager->CreateComponent(entity);
+	case ComponentType::SHADOW_RENDERER:
+		return m_ShadowRendererManager->CreateComponent(entity);
 	case ComponentType::LENGTH: break;
 	default:
 		throw std::runtime_error("Fail to bind component to its own component manager");
@@ -120,6 +124,8 @@ ComponentBase* ComponentManagerContainer::AddComponent(const Entity entity, Comp
 		return static_cast<ComponentBase*>(m_DirectionalLightManager->AddComponent(entity, static_cast<DirectionalLight&>(component)));
 	case ComponentType::SPOT_LIGHT:
 		return static_cast<ComponentBase*>(m_SpotLightManager->AddComponent(entity, static_cast<SpotLight&>(component)));
+	case ComponentType::SHADOW_RENDERER:
+		return static_cast<ComponentBase*>(m_ShadowRendererManager->AddComponent(entity, static_cast<ShadowRenderer&>(component)));
 	case ComponentType::LENGTH: break;
 	default:
 		throw std::runtime_error("Fail to bind component to its own component manager");
@@ -153,6 +159,8 @@ ComponentBase* ComponentManagerContainer::GetComponent(const Entity entity, cons
 		return m_DirectionalLightManager->GetComponent(entity);
 	case ComponentType::SPOT_LIGHT:
 		return m_SpotLightManager->GetComponent(entity);
+	case ComponentType::SHADOW_RENDERER:
+		return m_ShadowRendererManager->GetComponent(entity);
 	case ComponentType::NONE: break;
 	case ComponentType::LENGTH: break;
 	default: ;
@@ -199,6 +207,8 @@ void ComponentManagerContainer::DestroyComponent(const Entity entity, const Comp
 		break;
 	case ComponentType::SPOT_LIGHT:
 		m_SpotLightManager->DestroyComponent(entity);
+	case ComponentType::SHADOW_RENDERER:
+		m_ShadowRendererManager->DestroyComponent(entity);
 		break;
 	case ComponentType::LENGTH: break;
 	default: 
@@ -269,5 +279,6 @@ void ComponentManagerContainer::OnEntityResize(const int newSize) const
 	m_PointLightManager->OnEntityResize(newSize);
 	m_DirectionalLightManager->OnEntityResize(newSize);
 	m_SpotLightManager->OnEntityResize(newSize);
+	m_ShadowRendererManager->OnEntityResize(newSize);
 }
 }

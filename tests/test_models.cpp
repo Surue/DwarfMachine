@@ -193,15 +193,18 @@ void CreateCube(glm::vec3 pos, dm::EntityManager* entityManager, dm::Editor* edi
 
 	//MeshRenderer
 	cube.CreateComponent<dm::MeshRenderer>(ComponentType::MESH_RENDERER);
+
+	//Shadow Renderer
+	cube.CreateComponent<dm::ShadowRenderer>(ComponentType::SHADOW_RENDERER);
 }
 
 void CreateSphere(glm::vec3 pos, dm::EntityManager* entityManager, dm::MaterialDefault material)
 {
 	const auto entityHandle = entityManager->CreateEntity();
-	auto cube = dm::EntityHandle(entityHandle);
+	auto sphere = dm::EntityHandle(entityHandle);
 
 	//Transform
-	auto t1 = cube.CreateComponent<dm::Transform>(ComponentType::TRANSFORM);
+	auto t1 = sphere.CreateComponent<dm::Transform>(ComponentType::TRANSFORM);
 	t1->position = pos;
 	t1->scaling = glm::vec3(1, 1, 1);
 
@@ -209,19 +212,54 @@ void CreateSphere(glm::vec3 pos, dm::EntityManager* entityManager, dm::MaterialD
 	dm::Model mesh;
 	mesh.componentType = ComponentType::MODEL;
 	mesh.model = dm::Engine::Get()->GetModelManager()->GetModel("ModelSphere");
-	cube.AddComponent<dm::Model>(mesh);
+	sphere.AddComponent<dm::Model>(mesh);
 
 	//Material
-	cube.AddComponent<dm::MaterialDefault>(material);
+	sphere.AddComponent<dm::MaterialDefault>(material);
 
 	//Bounding sphere
-	cube.AddComponent<dm::BoundingSphere>(dm::BoundingSphereManager::GetBoundingSphere(*mesh.model));
+	sphere.AddComponent<dm::BoundingSphere>(dm::BoundingSphereManager::GetBoundingSphere(*mesh.model));
 
 	//Drawable
-	cube.CreateComponent<dm::Drawable>(ComponentType::DRAWABLE);
+	sphere.CreateComponent<dm::Drawable>(ComponentType::DRAWABLE);
 
 	//MeshRenderer
-	cube.CreateComponent<dm::MeshRenderer>(ComponentType::MESH_RENDERER);
+	sphere.CreateComponent<dm::MeshRenderer>(ComponentType::MESH_RENDERER);
+
+	//Shadow Renderer
+	sphere.CreateComponent<dm::ShadowRenderer>(ComponentType::SHADOW_RENDERER);
+}
+
+void CreatePlane(glm::vec3 pos, dm::EntityManager* entityManager, dm::MaterialDefault material)
+{
+	const auto entityHandle = entityManager->CreateEntity();
+	auto sphere = dm::EntityHandle(entityHandle);
+
+	//Transform
+	auto t1 = sphere.CreateComponent<dm::Transform>(ComponentType::TRANSFORM);
+	t1->position = pos;
+	t1->scaling = glm::vec3(20, 1, 20);
+
+	//Mesh
+	dm::Model mesh;
+	mesh.componentType = ComponentType::MODEL;
+	mesh.model = dm::Engine::Get()->GetModelManager()->GetModel("ModelCube");
+	sphere.AddComponent<dm::Model>(mesh);
+
+	//Material
+	sphere.AddComponent<dm::MaterialDefault>(material);
+
+	//Bounding sphere
+	sphere.AddComponent<dm::BoundingSphere>(dm::BoundingSphereManager::GetBoundingSphere(*mesh.model));
+
+	//Drawable
+	sphere.CreateComponent<dm::Drawable>(ComponentType::DRAWABLE);
+
+	//MeshRenderer
+	sphere.CreateComponent<dm::MeshRenderer>(ComponentType::MESH_RENDERER);
+
+	//Shadow Renderer
+	sphere.CreateComponent<dm::ShadowRenderer>(ComponentType::SHADOW_RENDERER);
 }
 
 void CreateSkybox(dm::EntityManager* entityManager)
@@ -463,6 +501,14 @@ TEST(Models, Lights)
 		}
 	}
 
+	//Plane
+	dm::MaterialDefault material;
+	material.componentType = ComponentType::MATERIAL_DEFAULT;
+	material.color = dm::Color(1, 1, 1, 1);
+	material.ignoreLighting = false;
+	material.ignoreFog = false;
+	CreatePlane(glm::vec3(3.8, -1.5, 4.5), entityManager, material);
+
 	//PointLight
 	const auto e1 = entityManager->CreateEntity();
 	auto light = dm::EntityHandle(e1);
@@ -487,6 +533,8 @@ TEST(Models, Lights)
 	spotLightComponent.target = glm::vec3(0, 0, 0);
 	spotLightComponent.componentType = ComponentType::SPOT_LIGHT;
 	spot.AddComponent(spotLightComponent);
+
+	//
 
 	try
 	{

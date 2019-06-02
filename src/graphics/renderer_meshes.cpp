@@ -163,6 +163,7 @@ void RendererMeshes::Draw(const CommandBuffer& commandBuffer)
 		// Draws the object.
 		meshRenderer->descriptorSet.BindDescriptor(commandBuffer, pipeline);
 		if (meshModel->CmdRender(commandBuffer)) {
+
 		}
 	}
 }

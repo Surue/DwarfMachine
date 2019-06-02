@@ -22,22 +22,28 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#ifndef COMPONENT_TYPE_H
-#define COMPONENT_TYPE_H
-enum class ComponentType : int {
-	NONE = 0,
-	TRANSFORM = 1,
-	CAMERA = 2,
-	MATERIAL_DEFAULT = 3,
-	MODEL = 4,
-	BOUNDING_SPHERE = 5,
-	DRAWABLE = 6,
-	MATERIAL_SKYBOX = 7,
-	MESH_RENDERER = 8,
-	POINT_LIGHT = 9, 
-	DIRECTIONAL_LIGHT = 10,
-	SPOT_LIGHT = 11,
-	SHADOW_RENDERER = 12,
-	LENGTH = 13,
+#ifndef SHADOW_RENDERER_H
+#define SHADOW_RENDERER_H
+#include "component/component.h"
+#include "graphics/descriptor_handle.h"
+
+namespace dm
+{
+struct ShadowRenderer : public ComponentBase
+{
+	DescriptorHandle descriptorSet;
+	UniformHandle uniformScene;
 };
-#endif //COMPONENT_TYPE_H
+
+class ShadowRendererManager : public ComponentBaseManager<ShadowRenderer>
+{
+public:
+	void Init() override;
+	void Update() override;
+	ShadowRenderer* CreateComponent(Entity entity) override;
+	void DestroyComponent(Entity entity) override;
+	void OnDrawInspector(Entity entity) override;
+};
+}
+
+#endif

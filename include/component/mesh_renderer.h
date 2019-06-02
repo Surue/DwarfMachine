@@ -42,6 +42,8 @@ struct MeshRenderer: public ComponentBase
 
 	DescriptorHandle descriptorSet;
 	UniformHandle uniformObject;
+
+	bool castsShadows = true;
 };
 
 class MeshRendererManager : public ComponentBaseManager<MeshRenderer>

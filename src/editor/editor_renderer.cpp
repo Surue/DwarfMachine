@@ -34,6 +34,7 @@ SOFTWARE.
 #include <graphics/filters/filter_fxaa.h>
 #include <graphics/filters/filter_ssao.h>
 #include <graphics/filters/filter_ssao_blur.h>
+#include <graphics/renderer_directional_shadow.h>
 
 namespace dm
 {
@@ -48,6 +49,15 @@ void EditorRenderManager::Start()
 	std::vector<std::unique_ptr<RenderStage>> renderStages;
 
 	std::vector<Attachment> renderpassAttachment0 = {
+		Attachment(0, "shadow", Attachment::Type::DEPTH, false)
+	};
+
+	std::vector<SubpassType> renderpassSubpasses0 = {
+		SubpassType(0, { 0 }), //Shadow pass
+	};
+	renderStages.emplace_back(std::make_unique<RenderStage>(renderpassAttachment0, renderpassSubpasses0));
+
+	std::vector<Attachment> renderpassAttachment1 = {
 		Attachment(0, "depth", Attachment::Type::DEPTH, false),
 		Attachment(1, "swapchain", Attachment::Type::SWAPCHAIN, false, VK_FORMAT_R8G8B8A8_UNORM),
 		Attachment(2, "position", Attachment::Type::IMAGE, false, VK_FORMAT_R16G16B16A16_SFLOAT),
@@ -58,30 +68,33 @@ void EditorRenderManager::Start()
 		Attachment(7, "ssao", Attachment::Type::IMAGE, false, VK_FORMAT_R8G8B8A8_UNORM)
 	};
 
-	std::vector<SubpassType> renderpassSubpasses0 = { 
+	std::vector<SubpassType> renderpassSubpasses1 = { 
 		SubpassType(0, { 0, 2, 3, 4 ,5}), //Geometry pass
 		SubpassType(1, { 0, 7}), //SSAO
 		SubpassType(2, { 0, 6}), //Light pass
 		SubpassType(3, { 0, 1}) //Post process pass
 	};
 
-	renderStages.emplace_back(std::make_unique<RenderStage>(renderpassAttachment0, renderpassSubpasses0));
+	renderStages.emplace_back(std::make_unique<RenderStage>(renderpassAttachment1, renderpassSubpasses1));
 	GraphicManager::Get()->SetRenderStages(std::move(renderStages));
 
 	auto &rendererContainer = GetRendererContainer();
 	rendererContainer.Clear();
 
-	rendererContainer.Add<RendererMeshes>(Pipeline::Stage(0, 0));
+	rendererContainer.Add<RendererDirectionalShadow>(Pipeline::Stage(0, 0));
 
-	rendererContainer.Add<FilterSsao>(Pipeline::Stage(0, 1));
-	rendererContainer.Add<FilterSsaoBlur>(Pipeline::Stage(0, 1));
 
-	rendererContainer.Add<RendererDeferred>(Pipeline::Stage(0, 2));
+	rendererContainer.Add<RendererMeshes>(Pipeline::Stage(1, 0));
 
-	rendererContainer.Add<FilterFxaa>(Pipeline::Stage(0, 3));
-	rendererContainer.Add<FilterDefault>(Pipeline::Stage(0, 3), true);
-	rendererContainer.Add<RendererGizmo>(Pipeline::Stage(0, 3));
-	rendererContainer.Add<RendererImGui>(Pipeline::Stage(0, 3)); //Must be the last one otherwise draw inside an imgui window
+	rendererContainer.Add<FilterSsao>(Pipeline::Stage(1, 1));
+	rendererContainer.Add<FilterSsaoBlur>(Pipeline::Stage(1, 1));
+
+	rendererContainer.Add<RendererDeferred>(Pipeline::Stage(1, 2));
+
+	rendererContainer.Add<FilterFxaa>(Pipeline::Stage(1, 3));
+	rendererContainer.Add<FilterDefault>(Pipeline::Stage(1, 3), true);
+	rendererContainer.Add<RendererGizmo>(Pipeline::Stage(1, 3));
+	rendererContainer.Add<RendererImGui>(Pipeline::Stage(1, 3)); //Must be the last one otherwise draw inside an imgui window
 }
 void EditorRenderManager::Update()
 {

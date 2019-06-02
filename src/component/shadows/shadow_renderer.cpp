@@ -22,22 +22,30 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#ifndef COMPONENT_TYPE_H
-#define COMPONENT_TYPE_H
-enum class ComponentType : int {
-	NONE = 0,
-	TRANSFORM = 1,
-	CAMERA = 2,
-	MATERIAL_DEFAULT = 3,
-	MODEL = 4,
-	BOUNDING_SPHERE = 5,
-	DRAWABLE = 6,
-	MATERIAL_SKYBOX = 7,
-	MESH_RENDERER = 8,
-	POINT_LIGHT = 9, 
-	DIRECTIONAL_LIGHT = 10,
-	SPOT_LIGHT = 11,
-	SHADOW_RENDERER = 12,
-	LENGTH = 13,
-};
-#endif //COMPONENT_TYPE_H
+#include <component/shadows/shadow_renderer.h>
+
+namespace dm
+{
+void ShadowRendererManager::Init()
+{
+}
+
+void ShadowRendererManager::Update()
+{
+}
+
+ShadowRenderer* ShadowRendererManager::CreateComponent(Entity entity)
+{
+	ShadowRenderer shadowRenderer;
+	m_Components[entity - 1] = std::move(shadowRenderer);
+	return &m_Components[entity - 1];
+}
+
+void ShadowRendererManager::DestroyComponent(Entity entity)
+{
+}
+
+void ShadowRendererManager::OnDrawInspector(Entity entity)
+{
+}
+}

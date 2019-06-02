@@ -33,10 +33,10 @@ SOFTWARE.
 #include "drawable.h"
 #include "materials/material_skybox.h"
 #include "mesh_renderer.h"
-#include <component/lights/light.h>
 #include "lights/point_light.h"
 #include "lights/directional_light.h"
 #include "lights/spot_light.h"
+#include "shadows/shadow_renderer.h"
 
 namespace dm {
 class ComponentManagerContainer final
@@ -85,6 +85,7 @@ private:
 	std::unique_ptr<PointLightManager> m_PointLightManager;
 	std::unique_ptr<DirectionalLightManager> m_DirectionalLightManager;
 	std::unique_ptr<SpotLightManager> m_SpotLightManager;
+	std::unique_ptr<ShadowRendererManager> m_ShadowRendererManager;
 };
 }
 #endif COMPONENT_MANAGER_H

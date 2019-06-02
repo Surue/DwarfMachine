@@ -48,7 +48,7 @@ MaterialDefault* MaterialDefaultManager::CreateComponent(const Entity entity)
 
 	material.textureDiffuse = nullptr;
 
-	material.pipelineMaterial = PipelineMaterial::Create({ 0, 0 }, 
+	material.pipelineMaterial = PipelineMaterial::Create({ 1, 0 }, 
 		PipelineGraphicsCreate(
 			{ "../Shaders/shader.vert", "../Shaders/shader.frag" }, 
 			{ ModelComponentManager::GetVertexInput() }, 
@@ -130,7 +130,7 @@ void MaterialDefaultManager::OnDrawInspector(const Entity entity)
 
 MaterialDefault* MaterialDefaultManager::AddComponent(const Entity entity, MaterialDefault& component)
 {
-	component.pipelineMaterial = PipelineMaterial::Create({ 0, 0 }, //TODO trouver une manière de setter ça de manière automatique
+	component.pipelineMaterial = PipelineMaterial::Create({ 1, 0 }, //TODO trouver une manière de setter ça de manière automatique
 		PipelineGraphicsCreate(
 			{ "../Shaders/shader.vert", "../Shaders/shader.frag" },
 			{ ModelComponentManager::GetVertexInput() },

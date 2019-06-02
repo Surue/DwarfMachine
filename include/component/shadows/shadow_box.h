@@ -22,22 +22,44 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#ifndef COMPONENT_TYPE_H
-#define COMPONENT_TYPE_H
-enum class ComponentType : int {
-	NONE = 0,
-	TRANSFORM = 1,
-	CAMERA = 2,
-	MATERIAL_DEFAULT = 3,
-	MODEL = 4,
-	BOUNDING_SPHERE = 5,
-	DRAWABLE = 6,
-	MATERIAL_SKYBOX = 7,
-	MESH_RENDERER = 8,
-	POINT_LIGHT = 9, 
-	DIRECTIONAL_LIGHT = 10,
-	SPOT_LIGHT = 11,
-	SHADOW_RENDERER = 12,
-	LENGTH = 13,
+#ifndef SHADOW_BOX_H
+#define SHADOW_BOX_H
+#include <glm/mat4x2.hpp>
+#include <array>
+
+namespace dm
+{
+struct Camera;
+
+class ShadowBox
+{
+public:
+	ShadowBox();
+
+	void Update(const Camera& camera, const glm::mat4 lightMatrix);
+
+	const glm::mat4 &GetProjectionViewMatrix() const { return m_ProjectionViewMatrix; }
+
+private:
+
+	std::array<glm::vec4, 8> CalculateFrustumVertices(const Camera& camera, const glm::vec3 &centreNear, const glm::vec3 &centreFar);
+
+	glm::vec4 CalculateLightSpaceFrustumCorner(const glm::vec3 &startPoint, const glm::vec3 &direction, const float &width) const;
+
+
+	float m_ShadowOffset;
+	float m_ShadowDistance;
+
+	glm::mat4 m_ProjectionMatrix;
+	glm::mat4 m_ProjectionViewMatrix;
+
+	glm::mat4 m_LightViewMatrix;
+
+	float m_FarHeight, m_FarWidth;
+	float m_NearHeight, m_NearWidth;
+
+	glm::vec3 m_MinExtents;
+	glm::vec3 m_MaxExtents;
 };
-#endif //COMPONENT_TYPE_H
+}
+#endif

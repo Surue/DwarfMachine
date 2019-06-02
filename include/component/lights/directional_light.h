@@ -31,7 +31,7 @@ namespace dm
 {
 struct DirectionalLight : Light
 {
-	glm::vec3 direction = glm::vec3(0, -1.0, 0);
+	glm::vec3 direction = glm::vec3(0, -1.0, -1.0);
 };
 
 class DirectionalLightManager : public ComponentBaseManager<DirectionalLight>

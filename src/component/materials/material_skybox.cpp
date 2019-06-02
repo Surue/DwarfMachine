@@ -38,7 +38,7 @@ void MaterialSkyboxManager::Update()
 
 MaterialSkybox* MaterialSkyboxManager::AddComponent(const Entity entity, MaterialSkybox& component)
 {
-	component.pipelineMaterial = PipelineMaterial::Create({ 0, 0 }, //TODO trouver une manière de setter ça de manière automatique
+	component.pipelineMaterial = PipelineMaterial::Create({ 1, 0 }, //TODO trouver une manière de setter ça de manière automatique
 		PipelineGraphicsCreate(
 			{ "../Shaders/skybox.vert", "../Shaders/skybox.frag" },
 			{ ModelComponentManager::GetVertexInput() },
@@ -66,7 +66,7 @@ MaterialSkybox* MaterialSkyboxManager::CreateComponent(Entity entity)
 	material.blend = 1.0f;
 	material.fogLimit = glm::vec2(-10000.0f, 10000.0f);
 
-	material.pipelineMaterial = PipelineMaterial::Create({ 0, 0 }, //TODO trouver une manière de setter ça de manière automatique
+	material.pipelineMaterial = PipelineMaterial::Create({ 1, 0 }, //TODO trouver une manière de setter ça de manière automatique
 		PipelineGraphicsCreate(
 			{ "../Shaders/skybox.vert", "../Shaders/skybox.frag" },
 			{ ModelComponentManager::GetVertexInput() },
