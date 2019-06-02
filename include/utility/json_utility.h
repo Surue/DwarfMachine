@@ -22,25 +22,32 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#include <editor/log.h>
-#include <iostream>
+#ifndef JSON_UTILITY_H
+#define JSON_UTILITY_H
+
+#include <string>
+#include <memory>
+
+#include <utility/json.hpp>
+#include <glm/vec4.hpp>
+#include <engine/color.h>
+using json = nlohmann::json;
+
+#include <glm/vec2.hpp>
+#include <glm/vec3.hpp>
+
+
 
 namespace dm
 {
-std::mutex Debug::m_Mutex = std::mutex();
-std::string Debug::m_Stream = std::string();
-
-void Debug::Log(const std::string& string)
-{
-	std::lock_guard<std::mutex> lock(m_Mutex);
-	m_Stream = string + "\n" + m_Stream;
-#ifndef NDEBUG
-	std::cout << string.c_str() << "\n";
+	bool IsJsonValueNumeric(const json::value_type& jsonValue);
+	bool CheckJsonExists(const json& jsonObject, const std::string& parameterName);
+	bool CheckJsonParameter(const json& jsonObject, const std::string& parameterName, json::value_t expectedType);
+	bool CheckJsonNumber(const json& jsonObject, const std::string& parameterName);
+	glm::vec2 GetVector2FromJson(const json& jsonObject, const std::string& parameterName);
+	glm::vec3 GetVector3FromJson(const json& jsonObject, const std::string& parameterName);
+	glm::vec4 GetVector4FromJson(const json& jsonObject, const std::string& parameterName);
+	Color GetColorFromJson(const json& jsonObject, const std::string& parameterName);
+	std::unique_ptr<json> LoadJson(std::string jsonPath);
+}
 #endif
-}
-
-std::string Debug::Print()
-{
-	return m_Stream;
-}
-}

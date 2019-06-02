@@ -73,7 +73,7 @@ file(GLOB_RECURSE DWARF_MACHINE_GRAPHICS_SRC src/graphics/*.cpp include/graphics
 file(GLOB_RECURSE DWARF_MACHINE_INPUT_SRC src/input/*.cpp include/input/*.h)
 file(GLOB_RECURSE DWARF_MACHINE_PHYSIC_SRC src/physic/*.cpp include/physic/*.h)
 file(GLOB_RECURSE DWARF_MACHINE_SYSTEM_SRC src/system/*.cpp include/system/*.h)
-file(GLOB_RECURSE DWARF_MACHINE_UTILITY_SRC src/utility/*.cpp include/utility/*.h)
+file(GLOB_RECURSE DWARF_MACHINE_UTILITY_SRC src/utility/*.cpp include/utility/*.h*)
 
 set_property(GLOBAL PROPERTY USE_FOLDERS On)
 SET_SOURCE_FILES_PROPERTIES( ${DWARF_MACHINE_SRC} PROPERTIES
