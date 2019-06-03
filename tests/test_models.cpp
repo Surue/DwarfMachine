@@ -45,6 +45,7 @@ SOFTWARE.
 #include "component/mesh_renderer.h"
 #include "component/lights/point_light.h"
 #include "component/lights/spot_light.h"
+#include "component/materials/material_terrain.h"
 
 TEST(Models, Cube)
 {
@@ -264,7 +265,7 @@ void CreatePlane(glm::vec3 pos, dm::EntityManager* entityManager, dm::MaterialDe
 	sphere.CreateComponent<dm::ShadowRenderer>(ComponentType::SHADOW_RENDERER);
 }
 
-void CreateTerrain(glm::vec3 pos, dm::EntityManager* entityManager, dm::MaterialDefault material)
+void CreateTerrain(glm::vec3 pos, dm::EntityManager* entityManager)
 {
 	const auto entityHandle = entityManager->CreateEntity();
 	auto terrain = dm::EntityHandle(entityHandle);
@@ -280,8 +281,13 @@ void CreateTerrain(glm::vec3 pos, dm::EntityManager* entityManager, dm::Material
 	mesh.model = dm::Engine::Get()->GetModelManager()->GetModel("ModelPlane");
 	terrain.AddComponent<dm::Model>(mesh);
 
+	//Skybox material
+	
+	auto material = dm::MaterialTerrain();
+	material.componentType = ComponentType::MATERIAL_TERRAIN;
+
 	//Material
-	terrain.AddComponent<dm::MaterialDefault>(material);
+	terrain.AddComponent<dm::MaterialTerrain>(material);
 
 	//Bounding sphere
 	terrain.AddComponent<dm::BoundingSphere>(dm::BoundingSphereManager::GetBoundingSphere(*mesh.model));
@@ -651,12 +657,7 @@ TEST(Models, Terrain)
 	CreateSkybox(entityManager);
 
 	//Plane
-	dm::MaterialDefault material;
-	material.componentType = ComponentType::MATERIAL_DEFAULT;
-	material.color = dm::Color(1, 1, 1, 1);
-	material.ignoreLighting = false;
-	material.ignoreFog = false;
-	CreateTerrain(glm::vec3(0, 0, 0), entityManager, material);
+	CreateTerrain(glm::vec3(0, 0, 0), entityManager);
 
 	//PointLight
 	const auto e1 = entityManager->CreateEntity();

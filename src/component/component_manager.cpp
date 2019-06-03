@@ -40,7 +40,8 @@ ComponentManagerContainer::ComponentManagerContainer() :
 	m_PointLightManager(std::make_unique<PointLightManager>()),
 	m_DirectionalLightManager(std::make_unique<DirectionalLightManager>()),
 	m_SpotLightManager(std::make_unique<SpotLightManager>()),
-	m_ShadowRendererManager(std::make_unique<ShadowRendererManager>())
+	m_ShadowRendererManager(std::make_unique<ShadowRendererManager>()),
+	m_MaterialTerrainManager(std::make_unique<MaterialTerrainManager>())
 {
 	m_ComponentsFactory.resize(static_cast<int>(ComponentType::LENGTH));
 
@@ -56,6 +57,7 @@ ComponentManagerContainer::ComponentManagerContainer() :
 	m_ComponentsFactory[static_cast<int>(ComponentType::DIRECTIONAL_LIGHT)] = static_cast<Metadata*>(m_DirectionalLightManager.get());
 	m_ComponentsFactory[static_cast<int>(ComponentType::SPOT_LIGHT)] = static_cast<Metadata*>(m_SpotLightManager.get());
 	m_ComponentsFactory[static_cast<int>(ComponentType::SHADOW_RENDERER)] = static_cast<Metadata*>(m_ShadowRendererManager.get());
+	m_ComponentsFactory[static_cast<int>(ComponentType::MATERIAL_TERRAIN)] = static_cast<Metadata*>(m_MaterialTerrainManager.get());
 }
 
 void ComponentManagerContainer::Init()
@@ -80,6 +82,7 @@ void ComponentManagerContainer::Clear()
 	m_DirectionalLightManager->Clear();
 	m_SpotLightManager->Clear();
 	m_ShadowRendererManager->Clear();
+	m_MaterialTerrainManager->Clear();
 }
 
 void ComponentManagerContainer::Draw()
@@ -100,6 +103,7 @@ void ComponentManagerContainer::Destroy()
 	m_DirectionalLightManager.reset(nullptr);
 	m_SpotLightManager.reset(nullptr);
 	m_ShadowRendererManager.reset(nullptr);
+	m_MaterialTerrainManager.reset(nullptr);
 }
 
 void ComponentManagerContainer::DecodeComponent(json& componentJson, const Entity entity, ComponentType componentType)
@@ -146,6 +150,8 @@ ComponentBase* ComponentManagerContainer::CreateComponent(const Entity entity, c
 		return m_SpotLightManager->CreateComponent(entity);
 	case ComponentType::SHADOW_RENDERER:
 		return m_ShadowRendererManager->CreateComponent(entity);
+	case ComponentType::MATERIAL_TERRAIN:
+		return m_MaterialTerrainManager->CreateComponent(entity);
 	case ComponentType::LENGTH: break;
 	default:
 		throw std::runtime_error("Fail to bind component to its own component manager");
@@ -183,6 +189,8 @@ ComponentBase* ComponentManagerContainer::AddComponent(const Entity entity, Comp
 		return static_cast<ComponentBase*>(m_SpotLightManager->AddComponent(entity, static_cast<SpotLight&>(component)));
 	case ComponentType::SHADOW_RENDERER:
 		return static_cast<ComponentBase*>(m_ShadowRendererManager->AddComponent(entity, static_cast<ShadowRenderer&>(component)));
+	case ComponentType::MATERIAL_TERRAIN:
+		return static_cast<ComponentBase*>(m_MaterialTerrainManager->AddComponent(entity, static_cast<MaterialTerrain&>(component)));
 	case ComponentType::LENGTH: break;
 	default:
 		throw std::runtime_error("Fail to bind component to its own component manager");
@@ -218,6 +226,8 @@ ComponentBase* ComponentManagerContainer::GetComponent(const Entity entity, cons
 		return m_SpotLightManager->GetComponent(entity);
 	case ComponentType::SHADOW_RENDERER:
 		return m_ShadowRendererManager->GetComponent(entity);
+	case ComponentType::MATERIAL_TERRAIN:
+		return m_MaterialTerrainManager->GetComponent(entity);
 	case ComponentType::NONE: break;
 	case ComponentType::LENGTH: break;
 	default: ;
@@ -264,8 +274,12 @@ void ComponentManagerContainer::DestroyComponent(const Entity entity, const Comp
 		break;
 	case ComponentType::SPOT_LIGHT:
 		m_SpotLightManager->DestroyComponent(entity);
+		break;
 	case ComponentType::SHADOW_RENDERER:
 		m_ShadowRendererManager->DestroyComponent(entity);
+		break;
+	case ComponentType::MATERIAL_TERRAIN:
+		m_MaterialTerrainManager->DestroyComponent(entity);
 		break;
 	case ComponentType::LENGTH: break;
 	default: 
@@ -321,6 +335,11 @@ void ComponentManagerContainer::DrawOnInspector(Entity entity) const
 	{
 		m_SpotLightManager->OnDrawInspector(entity);
 	}
+
+	if (entityHandle.HasComponent(ComponentType::MATERIAL_TERRAIN))
+	{
+		m_MaterialTerrainManager->OnDrawInspector(entity);
+	}
 }
 
 void ComponentManagerContainer::OnEntityResize(const int newSize) const
@@ -337,5 +356,6 @@ void ComponentManagerContainer::OnEntityResize(const int newSize) const
 	m_DirectionalLightManager->OnEntityResize(newSize);
 	m_SpotLightManager->OnEntityResize(newSize);
 	m_ShadowRendererManager->OnEntityResize(newSize);
+	m_MaterialTerrainManager->OnEntityResize(newSize);
 }
 }

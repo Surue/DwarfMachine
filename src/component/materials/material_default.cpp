@@ -125,7 +125,25 @@ void MaterialDefaultManager::OnDrawInspector(const Entity entity)
 	ImGui::ColorPicker4("diffuseColor", &m_Components[entity - 1].color[0]);
 	ImGui::DragFloat("Roughness", &m_Components[entity - 1].roughness, 0.01f, 0.0f, 1.0f);
 	ImGui::DragFloat("Metallic", &m_Components[entity - 1].metallic, 0.01f, 0.0f, 1.0f);
-	//ImGui::Text(m_Components[entity - 1].pipelineMaterial->GetPipeline()->GetShader()->ToString().c_str());
+
+	static bool showCode = true;
+	if (showCode) {
+		if (ImGui::ArrowButton("Hide shader code", ImGuiDir_Up))
+		{
+			showCode = !showCode;
+		}
+	}else
+	{
+		if (ImGui::ArrowButton("Show shader code", ImGuiDir_Down))
+		{
+			showCode = !showCode;
+		}
+	}
+
+	if(showCode)
+	{
+		ImGui::Text(m_Components[entity - 1].pipelineMaterial->GetPipeline()->GetShader()->ToString().c_str());
+	}
 }
 
 MaterialDefault* MaterialDefaultManager::AddComponent(const Entity entity, MaterialDefault& component)

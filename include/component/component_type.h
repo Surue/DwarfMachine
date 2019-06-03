@@ -38,6 +38,7 @@ enum class ComponentType : int {
 	DIRECTIONAL_LIGHT = 10,
 	SPOT_LIGHT = 11,
 	SHADOW_RENDERER = 12,
-	LENGTH = 13,
+	MATERIAL_TERRAIN = 13,
+	LENGTH = 14,
 };
 #endif //COMPONENT_TYPE_H
