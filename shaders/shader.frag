@@ -84,6 +84,5 @@ void main()
 	outPosition = vec4(inPosition, 1.0);
 	outDiffuse = diffuse;
 	outNormal = vec4(normalize(normal), 1.0f);
-//	outNormal = vec4(normalize(normal) * 0.5 + 0.5, 1.0f);
 	outMaterial = vec4(material * 2.0f, 1.0f);
 }

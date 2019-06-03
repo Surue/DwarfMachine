@@ -345,6 +345,16 @@ VkShaderStageFlagBits Shader::GetShaderStage(const std::string& filename)
 		return VK_SHADER_STAGE_FRAGMENT_BIT;
 	}
 
+	if (fileExt == ".tese")
+	{
+		return VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT;
+	}
+
+	if (fileExt == ".tesc")
+	{
+		return VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT;
+	}
+
 	std::cout << "no shader extension for " << fileExt << "\n";
 	return VK_SHADER_STAGE_ALL;
 }

@@ -26,9 +26,6 @@ SOFTWARE.
 #define MATERIAL_TERRAIN_H
 
 #include <component/materials/material.h>
-#include <graphics/image_cube.h>
-#include <engine/color.h>
-#include <glm/vec2.hpp>
 #include <glm/detail/type_mat4x4.hpp>
 #include <graphics/buffers/uniform_handle.h>
 #include <graphics/descriptor_handle.h>
@@ -37,7 +34,7 @@ namespace dm
 {
 struct MaterialTerrain : public Material
 {
-	
+	Image2d* noiseMap;
 };
 
 class MaterialTerrainManager final : public ComponentBaseManager<MaterialTerrain>
