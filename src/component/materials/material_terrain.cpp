@@ -91,24 +91,47 @@ void MaterialTerrainManager::OnDrawInspector(Entity entity)
 }
 void MaterialTerrainManager::PushDescriptor(MaterialTerrain& material, DescriptorHandle& descriptorSet)
 {
-	//descriptorSet.Push("samplerHeight", material.noiseMap);
-	//descriptorSet.Push("displacementMap", material.noiseMap);
+	descriptorSet.Push("samplerHeight", material.noiseMap);
+	descriptorSet.Push("displacementMap", material.noiseMap);
 }
 
-void ComputeFrustumPlanes(glm::mat4 &viewMatrix, glm::mat4 &projMatrix, glm::vec4 *plane)
+void ComputeFrustumPlanes(glm::mat4 &viewMatrix, glm::mat4 &projMatrix, std::vector<glm::vec4>& planes)
 {
-	glm::mat4 viewProj = projMatrix * viewMatrix;
-	plane[0] = viewProj[3] + viewProj[0];   // left
-	plane[1] = viewProj[3] - viewProj[0];   // right
-	plane[2] = viewProj[3] + viewProj[1];   // bottom
-	plane[3] = viewProj[3] - viewProj[1];   // top
-	plane[4] = viewProj[3] + viewProj[2];   // far
-	plane[5] = viewProj[3] - viewProj[2];   // near
+	glm::mat4 matrix = projMatrix * viewMatrix;
+	planes[0].x = matrix[0].w + matrix[0].x;
+	planes[0].y = matrix[1].w + matrix[1].x;
+	planes[0].z = matrix[2].w + matrix[2].x;
+	planes[0].w = matrix[3].w + matrix[3].x;
 
-	// normalize planes
-	for (int i = 0; i < 6; i++) {
-		float l = glm::length(glm::vec3(plane[i]));
-		plane[i] = plane[i] / l;
+	planes[1].x = matrix[0].w - matrix[0].x;
+	planes[1].y = matrix[1].w - matrix[1].x;
+	planes[1].z = matrix[2].w - matrix[2].x;
+	planes[1].w = matrix[3].w - matrix[3].x;
+
+	planes[2].x = matrix[0].w - matrix[0].y;
+	planes[2].y = matrix[1].w - matrix[1].y;
+	planes[2].z = matrix[2].w - matrix[2].y;
+	planes[2].w = matrix[3].w - matrix[3].y;
+
+	planes[3].x = matrix[0].w + matrix[0].y;
+	planes[3].y = matrix[1].w + matrix[1].y;
+	planes[3].z = matrix[2].w + matrix[2].y;
+	planes[3].w = matrix[3].w + matrix[3].y;
+
+	planes[4].x = matrix[0].w + matrix[0].z;
+	planes[4].y = matrix[1].w + matrix[1].z;
+	planes[4].z = matrix[2].w + matrix[2].z;
+	planes[4].w = matrix[3].w + matrix[3].z;
+
+	planes[5].x = matrix[0].w - matrix[0].z;
+	planes[5].y = matrix[1].w - matrix[1].z;
+	planes[5].z = matrix[2].w - matrix[2].z;
+	planes[5].w = matrix[3].w - matrix[3].z;
+
+	for (auto i = 0; i < planes.size(); i++)
+	{
+		float length = sqrtf(planes[i].x * planes[i].x + planes[i].y * planes[i].y + planes[i].z * planes[i].z);
+		planes[i] /= length;
 	}
 }
 
@@ -132,16 +155,17 @@ void MaterialTerrainManager::PushUniform(MaterialTerrain& material, const glm::m
 	uniformObject.Push("InvView", glm::inverse(camera->viewMatrix));
 	uniformObject.Push("eyePosWorld", glm::inverse(camera->viewMatrix) * glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));*/
 
-	glm::vec4 frustumPlanes[6];
-	ComputeFrustumPlanes(camera->viewMatrix, camera->projectionMatrix, frustumPlanes);
-	//uniformObject.Push("frustumPlanes", frustumPlanes);
-	uniformObject.Push("displacementFactor", 50);
-	uniformObject.Push("tessellationFactor", 0.75);
+	std::vector<glm::vec4> planes;
+	planes.resize(6);
+	ComputeFrustumPlanes(camera->viewMatrix, camera->projectionMatrix, planes);
+	uniformObject.Push("frustumPlanes", *planes.data(), sizeof(glm::vec4) * 6);
+	uniformObject.Push("displacementFactor", (float)50);
+	uniformObject.Push("tessellationFactor", (float)0.75);
 
 	glm::vec2 size = material.pipelineMaterial->GetPipeline()->GetSize(1);
-	uniformObject.Push("viewport", glm::vec4(0, 0, size.x, size.y));
+	uniformObject.Push("viewport", glm::vec2(size.x, size.y));
 
-	uniformObject.Push("tessellatedEdgeSize", 20);
+	uniformObject.Push("tessellatedEdgeSize", (float)20);
 
 	//int gridW, gridH;
 	//gridW = gridH = 64;

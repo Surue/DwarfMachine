@@ -11,19 +11,18 @@ layout(binding = 0) uniform UboObject
 	float tessellatedEdgeSize;
 } ubo;
 
-layout (binding = 1) uniform sampler2D displacementMap; 
+layout (binding = 4) uniform sampler2D displacementMap; 
 
 layout(quads, equal_spacing, cw) in;
 
-layout (location = 0) in vec3 inNormal[];
-layout (location = 1) in vec2 inUV[];
+layout (location = 0) in vec2 inUV[];
+layout (location = 1) in vec3 inNormal[];
  
-layout (location = 0) out vec3 outNormal;
-layout (location = 1) out vec2 outUV;
+layout (location = 0) out vec2 outUV;
+layout (location = 1) out vec3 outNormal;
 layout (location = 2) out vec3 outViewVec;
-layout (location = 3) out vec3 outLightVec;
-layout (location = 4) out vec3 outEyePos;
-layout (location = 5) out vec3 outWorldPos;
+layout (location = 3) out vec3 outEyePos;
+layout (location = 4) out vec3 outWorldPos;
 
 void main()
 {

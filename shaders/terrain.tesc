@@ -15,11 +15,11 @@ layout(binding = 1) uniform sampler2D samplerHeight;
 
 layout (vertices = 4) out;
  
-layout (location = 0) in vec3 inNormal[];
-layout (location = 1) in vec2 inUV[];
+layout (location = 0) in vec2 inUV[];
+layout (location = 1) in vec3 inNormal[];
  
-layout (location = 0) out vec3 outNormal[4];
-layout (location = 1) out vec2 outUV[4];
+layout (location = 0) out vec2 outUV[4];
+layout (location = 1) out vec3 outNormal[4];
  
 // Calculate the tessellation factor based on screen space
 // dimensions of the edge
@@ -74,17 +74,17 @@ void main()
 {
 	if (gl_InvocationID == 0)
 	{
-		if (!frustumCheck())
-		{
-			gl_TessLevelInner[0] = 0.0;
-			gl_TessLevelInner[1] = 0.0;
-			gl_TessLevelOuter[0] = 0.0;
-			gl_TessLevelOuter[1] = 0.0;
-			gl_TessLevelOuter[2] = 0.0;
-			gl_TessLevelOuter[3] = 0.0;
-		}
-		else
-		{
+//		if (!frustumCheck())
+//		{
+//			gl_TessLevelInner[0] = 0.0;
+//			gl_TessLevelInner[1] = 0.0;
+//			gl_TessLevelOuter[0] = 0.0;
+//			gl_TessLevelOuter[1] = 0.0;
+//			gl_TessLevelOuter[2] = 0.0;
+//			gl_TessLevelOuter[3] = 0.0;
+//		}
+//		else
+//		{
 			if (ubo.tessellationFactor > 0.0)
 			{
 				gl_TessLevelOuter[0] = screenSpaceTessFactor(gl_in[3].gl_Position, gl_in[0].gl_Position);
@@ -105,7 +105,7 @@ void main()
 				gl_TessLevelOuter[2] = 1.0;
 				gl_TessLevelOuter[3] = 1.0;
 			}
-		}
+//		}
 
 	}
 

@@ -355,6 +355,11 @@ VkShaderStageFlagBits Shader::GetShaderStage(const std::string& filename)
 		return VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT;
 	}
 
+	if (fileExt == ".geom")
+	{
+		return VK_SHADER_STAGE_GEOMETRY_BIT;
+	}
+
 	std::cout << "no shader extension for " << fileExt << "\n";
 	return VK_SHADER_STAGE_ALL;
 }

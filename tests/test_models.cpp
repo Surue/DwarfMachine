@@ -285,6 +285,7 @@ void CreateTerrain(glm::vec3 pos, dm::EntityManager* entityManager)
 	
 	auto material = dm::MaterialTerrain();
 	material.componentType = ComponentType::MATERIAL_TERRAIN;
+	material.noiseMap = dm::Image2d::Create("ressources/textures/heightmap.jpg");
 
 	//Material
 	terrain.AddComponent<dm::MaterialTerrain>(material);

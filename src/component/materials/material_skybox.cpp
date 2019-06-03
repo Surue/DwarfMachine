@@ -38,13 +38,13 @@ void MaterialSkyboxManager::Update()
 
 MaterialSkybox* MaterialSkyboxManager::AddComponent(const Entity entity, MaterialSkybox& component)
 {
-	component.pipelineMaterial = PipelineMaterial::Create({ 1, 0 }, //TODO trouver une manière de setter ça de manière automatique
+	component.pipelineMaterial = PipelineMaterial::Create({ 1, 3 }, //TODO trouver une manière de setter ça de manière automatique
 		PipelineGraphicsCreate(
 			{ "../Shaders/skybox.vert", "../Shaders/skybox.frag" },
 			{ ModelComponentManager::GetVertexInput() },
 			{},
 			PipelineGraphics::Mode::MRT,
-			PipelineGraphics::Depth::NONE,
+			PipelineGraphics::Depth::READ,
 			VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST,
 			VK_POLYGON_MODE_FILL,
 			VK_CULL_MODE_FRONT_BIT)
@@ -66,13 +66,13 @@ MaterialSkybox* MaterialSkyboxManager::CreateComponent(const Entity entity)
 	material.blend = 1.0f;
 	material.fogLimit = glm::vec2(-1.0f, 1.0f);
 
-	material.pipelineMaterial = PipelineMaterial::Create({ 1, 0 }, //TODO trouver une manière de setter ça de manière automatique
+	material.pipelineMaterial = PipelineMaterial::Create({ 1, 3 }, //TODO trouver une manière de setter ça de manière automatique
 		PipelineGraphicsCreate(
 			{ "../Shaders/skybox.vert", "../Shaders/skybox.frag" },
 			{ ModelComponentManager::GetVertexInput() },
 			{},
 			PipelineGraphics::Mode::MRT, 
-			PipelineGraphics::Depth::NONE, 
+			PipelineGraphics::Depth::READ, 
 			VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST, 
 			VK_POLYGON_MODE_FILL, 
 			VK_CULL_MODE_FRONT_BIT)
@@ -129,13 +129,13 @@ void MaterialSkyboxManager::DecodeComponent(json& componentJson, const Entity en
 	if (CheckJsonExists(componentJson, "fogLimit") )
 		material.fogLimit = GetVector2FromJson(componentJson, "fogLimit");
 
-	material.pipelineMaterial = PipelineMaterial::Create({ 1, 0 }, //TODO trouver une manière de setter ça de manière automatique
+	material.pipelineMaterial = PipelineMaterial::Create({ 1, 3 }, //TODO trouver une manière de setter ça de manière automatique
 		PipelineGraphicsCreate(
 			{ "../Shaders/skybox.vert", "../Shaders/skybox.frag" },
 			{ ModelComponentManager::GetVertexInput() },
 			{},
 			PipelineGraphics::Mode::MRT,
-			PipelineGraphics::Depth::NONE,
+			PipelineGraphics::Depth::READ,
 			VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST,
 			VK_POLYGON_MODE_FILL,
 			VK_CULL_MODE_FRONT_BIT)

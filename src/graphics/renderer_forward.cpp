@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#include <graphics/renderer_meshes.h>
+#include <graphics/renderer_forward.h>
 #include <graphics/graphic_manager.h>
 #include "entity/entity_handle.h"
 #include "component/model.h"
@@ -32,7 +32,7 @@ SOFTWARE.
 
 namespace dm
 {
-RendererMeshes::RendererMeshes(const Pipeline::Stage& pipelineStage) : 
+RendererForward::RendererForward(const Pipeline::Stage& pipelineStage) :
 	RenderPipeline(pipelineStage),
 	m_UniformScene(true)
 {
@@ -40,10 +40,10 @@ RendererMeshes::RendererMeshes(const Pipeline::Stage& pipelineStage) :
 	m_Signature.AddComponent(ComponentType::MODEL);
 	m_Signature.AddComponent(ComponentType::TRANSFORM);
 	m_Signature.AddComponent(ComponentType::DRAWABLE);
-	m_Signature.AddComponent(ComponentType::MATERIAL_DEFAULT);
+	m_Signature.AddComponent(ComponentType::MATERIAL_SKYBOX);
 }
 
-void RendererMeshes::Update()
+void RendererForward::Update()
 {
 	for (const auto &meshRender : m_RegisteredEntities)
 	{
@@ -51,12 +51,12 @@ void RendererMeshes::Update()
 		const auto transform = entity.GetComponent<Transform>(ComponentType::TRANSFORM);
 		const auto meshRenderer = entity.GetComponent<MeshRenderer>(ComponentType::MESH_RENDERER);
 
-		const auto material = entity.GetComponent<MaterialDefault>(ComponentType::MATERIAL_DEFAULT);
-		MaterialDefaultManager::PushUniform(*material, TransformManager::GetWorldMatrix(*transform), meshRenderer->uniformObject);
+		const auto material = entity.GetComponent<MaterialSkybox>(ComponentType::MATERIAL_SKYBOX);
+		MaterialSkyboxManager::PushUniform(*material, TransformManager::GetWorldMatrix(*transform), meshRenderer->uniformObject);
 	}
 }
 
-void RendererMeshes::Draw(const CommandBuffer& commandBuffer)
+void RendererForward::Draw(const CommandBuffer& commandBuffer)
 {
 	const auto camera = GraphicManager::Get()->GetCamera();
 	m_UniformScene.Push("projection", camera->projectionMatrix);
@@ -67,7 +67,7 @@ void RendererMeshes::Draw(const CommandBuffer& commandBuffer)
 	{
 		auto entityHandle = EntityHandle(entity);
 		const auto drawable = entityHandle.GetComponent<Drawable>(ComponentType::DRAWABLE);
-		if(!drawable->isDrawable)
+		if (!drawable->isDrawable)
 		{
 			continue;
 		}
@@ -75,7 +75,7 @@ void RendererMeshes::Draw(const CommandBuffer& commandBuffer)
 		const auto meshRenderer = entityHandle.GetComponent<MeshRenderer>(ComponentType::MESH_RENDERER);
 		const auto mesh = entityHandle.GetComponent<Model>(ComponentType::MODEL);
 
-		MaterialDefault* material = entityHandle.GetComponent<MaterialDefault>(ComponentType::MATERIAL_DEFAULT);
+		MaterialSkybox* material = entityHandle.GetComponent<MaterialSkybox>(ComponentType::MATERIAL_SKYBOX);
 
 
 		if (material == nullptr || mesh == nullptr)
@@ -90,13 +90,15 @@ void RendererMeshes::Draw(const CommandBuffer& commandBuffer)
 		if (meshModel == nullptr || materialPipeline == nullptr || materialPipeline->GetStage() != GetStage())
 		{
 			std::cout << "Missing model or material pipeline or stage is not the same : \n";
-			if(meshModel == nullptr)
+			if (meshModel == nullptr)
 			{
 				std::cout << "	- Missing model\n";
-			}else if (materialPipeline == nullptr)
+			}
+			else if (materialPipeline == nullptr)
 			{
 				std::cout << "	- Missing materialPipeline\n";
-			}else 
+			}
+			else
 			{
 				std::cout << "	- MaterialPipeline->GetStage() != GetStage()\n";
 			}
@@ -116,11 +118,11 @@ void RendererMeshes::Draw(const CommandBuffer& commandBuffer)
 		meshRenderer->descriptorSet.Push("UboScene", m_UniformScene);
 		meshRenderer->descriptorSet.Push("UboObject", meshRenderer->uniformObject);
 
-		MaterialDefaultManager::PushDescriptor(*entityHandle.GetComponent<MaterialDefault>(ComponentType::MATERIAL_DEFAULT), meshRenderer->descriptorSet);
+		MaterialSkyboxManager::PushDescriptor(*entityHandle.GetComponent<MaterialSkybox>(ComponentType::MATERIAL_SKYBOX), meshRenderer->descriptorSet);
 
 		const auto updateSuccess = meshRenderer->descriptorSet.Update(pipeline);
 
-		
+
 		if (!updateSuccess)
 		{
 			continue;
@@ -134,9 +136,9 @@ void RendererMeshes::Draw(const CommandBuffer& commandBuffer)
 	}
 }
 
-void RendererMeshes::RegisterEntity(const Entity entity)
+void RendererForward::RegisterEntity(const Entity entity)
 {
 	m_RegisteredEntities.push_back(entity);
-	
+
 }
 }

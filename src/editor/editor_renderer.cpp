@@ -35,6 +35,7 @@ SOFTWARE.
 #include <graphics/filters/filter_ssao.h>
 #include <graphics/filters/filter_ssao_blur.h>
 #include <graphics/renderer_directional_shadow.h>
+#include "graphics/renderer_forward.h"
 
 namespace dm
 {
@@ -72,7 +73,8 @@ void EditorRenderManager::Start()
 		SubpassType(0, { 0, 2, 3, 4 ,5}), //Geometry pass
 		SubpassType(1, { 0, 7}), //SSAO
 		SubpassType(2, { 0, 6}), //Light pass
-		SubpassType(3, { 0, 1}) //Post process pass
+		SubpassType(3, { 0, 6}), //Forward pass
+		SubpassType(4, { 0, 1}) //Post process pass
 	};
 
 	renderStages.emplace_back(std::make_unique<RenderStage>(renderpassAttachment1, renderpassSubpasses1));
@@ -91,10 +93,12 @@ void EditorRenderManager::Start()
 
 	rendererContainer.Add<RendererDeferred>(Pipeline::Stage(1, 2));
 
-	rendererContainer.Add<FilterFxaa>(Pipeline::Stage(1, 3));
-	rendererContainer.Add<FilterDefault>(Pipeline::Stage(1, 3), true);
-	rendererContainer.Add<RendererGizmo>(Pipeline::Stage(1, 3));
-	rendererContainer.Add<RendererImGui>(Pipeline::Stage(1, 3)); //Must be the last one otherwise draw inside an imgui window
+	rendererContainer.Add<RendererForward>(Pipeline::Stage(1, 3));
+
+	rendererContainer.Add<FilterFxaa>(Pipeline::Stage(1, 4));
+	rendererContainer.Add<FilterDefault>(Pipeline::Stage(1, 4), true);
+	rendererContainer.Add<RendererGizmo>(Pipeline::Stage(1, 4));
+	rendererContainer.Add<RendererImGui>(Pipeline::Stage(1, 4)); //Must be the last one otherwise draw inside an imgui window
 }
 void EditorRenderManager::Update()
 {
