@@ -526,7 +526,7 @@ TEST(Models, Lights)
 	//Cube
 	dm::MaterialDefault materialS;
 	materialS.componentType = ComponentType::MATERIAL_DEFAULT;
-	materialS.color = dm::Color(1, 1, 1, 1);
+	materialS.color = dm::Color(1, 0, 0, 1);
 	materialS.ignoreLighting = false;
 	materialS.ignoreFog = false;
 	CreateSphere(camera->position, entityManager, materialS);

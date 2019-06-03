@@ -36,6 +36,7 @@ SOFTWARE.
 #include <graphics/filters/filter_ssao_blur.h>
 #include <graphics/renderer_directional_shadow.h>
 #include "graphics/renderer_forward.h"
+#include "graphics/filters/filter_fog.h"
 
 namespace dm
 {
@@ -95,6 +96,7 @@ void EditorRenderManager::Start()
 
 	rendererContainer.Add<RendererForward>(Pipeline::Stage(1, 3));
 
+	rendererContainer.Add<FilterFog>(Pipeline::Stage(1, 4));
 	rendererContainer.Add<FilterFxaa>(Pipeline::Stage(1, 4));
 	rendererContainer.Add<FilterDefault>(Pipeline::Stage(1, 4), true);
 	rendererContainer.Add<RendererGizmo>(Pipeline::Stage(1, 4));
