@@ -34,7 +34,7 @@ namespace dm
 {
 struct MaterialTerrain : public Material
 {
-	Image2d* noiseMap;
+	std::shared_ptr<Image2d> noiseMap = nullptr;
 };
 
 class MaterialTerrainManager final : public ComponentBaseManager<MaterialTerrain>

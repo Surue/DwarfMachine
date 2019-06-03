@@ -62,6 +62,11 @@ void RendererMeshes::Update()
 			MaterialSkyboxManager::PushUniform(*material, TransformManager::GetWorldMatrix(*transform), meshRenderer->uniformObject);
 			}
 			break;
+		case MeshRenderer::MaterialType::TERRAIN: {
+			const auto material = entity.GetComponent<MaterialTerrain>(ComponentType::MATERIAL_TERRAIN);
+			MaterialTerrainManager::PushUniform(*material, TransformManager::GetWorldMatrix(*transform), meshRenderer->uniformObject);
+		}
+			break;
 		default: ;
 		}
 	}
@@ -92,11 +97,12 @@ void RendererMeshes::Draw(const CommandBuffer& commandBuffer)
 		{
 		case MeshRenderer::MaterialType::DEFAULT: 
 			material = static_cast<Material*>(entityHandle.GetComponent<MaterialDefault>(ComponentType::MATERIAL_DEFAULT));
-		
-			 break;
+			break;
 		case MeshRenderer::MaterialType::SKYBOX: 
 			material = static_cast<Material*>(entityHandle.GetComponent<MaterialSkybox>(ComponentType::MATERIAL_SKYBOX));
-		
+			break;
+		case MeshRenderer::MaterialType::TERRAIN:
+			material = static_cast<Material*>(entityHandle.GetComponent<MaterialTerrain>(ComponentType::MATERIAL_TERRAIN));
 			break;
 		default:;
 		}
@@ -147,6 +153,9 @@ void RendererMeshes::Draw(const CommandBuffer& commandBuffer)
 			break;
 		case MeshRenderer::MaterialType::SKYBOX:
 			MaterialSkyboxManager::PushDescriptor(*entityHandle.GetComponent<MaterialSkybox>(ComponentType::MATERIAL_SKYBOX), meshRenderer->descriptorSet);
+			break;
+		case MeshRenderer::MaterialType::TERRAIN:
+			MaterialTerrainManager::PushDescriptor(*entityHandle.GetComponent<MaterialTerrain>(ComponentType::MATERIAL_TERRAIN), meshRenderer->descriptorSet);
 			break;
 		default:;
 		}

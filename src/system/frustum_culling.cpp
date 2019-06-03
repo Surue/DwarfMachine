@@ -79,7 +79,7 @@ void FrustumCulling::Update()
 		auto boundingSphere = entityHandle.GetComponent<BoundingSphere>(ComponentType::BOUNDING_SPHERE);
 		auto transform = entityHandle.GetComponent<Transform>(ComponentType::TRANSFORM);
 		auto drawable = entityHandle.GetComponent<Drawable>(ComponentType::DRAWABLE);
-		drawable->isDrawable = false;
+		drawable->isDrawable = true;
 
 		const auto cameraToSphere = transform->position - m_CameraForCulling->position;
 

@@ -35,7 +35,8 @@ struct MeshRenderer: public ComponentBase
 	enum class MaterialType
 	{
 		DEFAULT,
-		SKYBOX
+		SKYBOX,
+		TERRAIN
 	};
 
 	MaterialType materialType = MaterialType::DEFAULT;

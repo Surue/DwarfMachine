@@ -26,6 +26,7 @@ SOFTWARE.
 #define IMAGE_2D_H
 
 #include <graphics/image.h>
+#include <glm/vec2.hpp>
 
 namespace dm
 {
@@ -33,6 +34,8 @@ class Image2d : public Descriptor
 {
 public:
 	static std::shared_ptr<Image2d> Create(const std::string &filename, const VkFilter &filter = VK_FILTER_LINEAR, const VkSamplerAddressMode &addressMode = VK_SAMPLER_ADDRESS_MODE_REPEAT, const bool &anisotropic = true, const bool &mipmap = true);
+
+	static std::shared_ptr<Image2d> CreateNoiseTexture(glm::vec2 size, const VkFilter &filter = VK_FILTER_LINEAR, const VkSamplerAddressMode &addressMode = VK_SAMPLER_ADDRESS_MODE_REPEAT, const bool &mipmap = false);
 
 	explicit Image2d(std::string filename, const VkFilter &filter = VK_FILTER_LINEAR, const VkSamplerAddressMode &addressMode = VK_SAMPLER_ADDRESS_MODE_REPEAT, const bool &anisotropic = true, const bool &mipmap = true, const bool &load = true);
 

@@ -34,6 +34,26 @@ std::shared_ptr<Image2d> Image2d::Create(const std::string& filename, const VkFi
 	return std::make_shared<Image2d>(filename, filter, addressMode, anisotropic, mipmap, true);
 }
 
+float frand()
+{
+	return rand() / (float)255;
+}
+
+std::shared_ptr<Image2d> Image2d::CreateNoiseTexture(glm::vec2 size, const VkFilter& filter,
+	const VkSamplerAddressMode& addressMode, const bool& mipmap)
+{
+	//std::unique_ptr<uint8_t[]> data;
+	float *data = new float[size.x * size.y];
+	for (auto y = 0; y < size.y; y++) {
+		for (auto x = 0; x < size.x; x++) {
+			const int index = y * size.x + x;
+			data[index] = frand();
+		}
+	}
+
+	return std::make_shared<Image2d>(size.x, size.y, std::unique_ptr<uint8_t[]>(reinterpret_cast<uint8_t *>(data)), VK_FORMAT_R16G16B16A16_SFLOAT, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL, VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_STORAGE_BIT, filter, addressMode);
+}
+
 Image2d::Image2d(std::string filename, const VkFilter& filter, const VkSamplerAddressMode& addressMode,
 	const bool& anisotropic, const bool& mipmap, const bool& load) :
 	m_Filename(std::move(filename)),

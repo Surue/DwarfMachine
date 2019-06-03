@@ -296,7 +296,8 @@ void CreateTerrain(glm::vec3 pos, dm::EntityManager* entityManager)
 	terrain.CreateComponent<dm::Drawable>(ComponentType::DRAWABLE);
 
 	//MeshRenderer
-	terrain.CreateComponent<dm::MeshRenderer>(ComponentType::MESH_RENDERER);
+	auto meshRenderer = terrain.CreateComponent<dm::MeshRenderer>(ComponentType::MESH_RENDERER);
+	meshRenderer->materialType = dm::MeshRenderer::MaterialType::TERRAIN;
 
 	//Shadow Renderer
 	terrain.CreateComponent<dm::ShadowRenderer>(ComponentType::SHADOW_RENDERER);
