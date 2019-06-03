@@ -22,25 +22,24 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#ifndef MODEL_PLANE_H
-#define MODEL_PLANE_H
+#ifndef MODEL_QUAD_H
+#define MODEL_QUAD_H
 #include "Mesh.h"
 
 namespace dm
 {
-class MeshPlane : public Mesh
+class MeshQuad : public Mesh
 {
 public:
-	static std::unique_ptr<MeshPlane> Create(glm::vec2 extent = glm::vec2(10.0f, 10.0f), int patchSize = 64);
+	static std::unique_ptr<MeshQuad> Create(glm::vec2 extent = glm::vec2(1.0f, 1.0f));
 
-	MeshPlane(glm::vec2 extent = glm::vec2(10.0f, 10.0f), int patchSize = 64);
+	MeshQuad(glm::vec2 extent = glm::vec2(1.0f, 1.0f));
 
-	~MeshPlane() override;
+	~MeshQuad() override;
 
 	void Load() override;
 private:
 	glm::vec2 m_Extent;
-	int m_PatchSize;
 };
 }
 

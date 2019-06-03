@@ -22,26 +22,34 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#ifndef MODEL_PLANE_H
-#define MODEL_PLANE_H
-#include "Mesh.h"
+#include <graphics/mesh_quad.h>
 
 namespace dm
 {
-class MeshPlane : public Mesh
-{
-public:
-	static std::unique_ptr<MeshPlane> Create(glm::vec2 extent = glm::vec2(10.0f, 10.0f), int patchSize = 64);
+	std::unique_ptr<MeshQuad> MeshQuad::Create(glm::vec2 extent)
+	{
+		return std::make_unique<MeshQuad>(extent);
+	}
 
-	MeshPlane(glm::vec2 extent = glm::vec2(10.0f, 10.0f), int patchSize = 64);
+	MeshQuad::MeshQuad(const glm::vec2 extent) :
+		m_Extent(extent)
+	{
+		MeshQuad::Load();
+	}
 
-	~MeshPlane() override;
+	MeshQuad::~MeshQuad() {}
 
-	void Load() override;
-private:
-	glm::vec2 m_Extent;
-	int m_PatchSize;
-};
+	void MeshQuad::Load()
+	{
+		std::vector<VertexMesh> vertices = {
+			VertexMesh(glm::vec3(-m_Extent.x, -m_Extent.y, 0.0f), glm::vec2(0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f)),
+			VertexMesh(glm::vec3(m_Extent.x, -m_Extent.y, 0.0f), glm::vec2(1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f)),
+			VertexMesh(glm::vec3(m_Extent.x, m_Extent.y, 0.0f), glm::vec2(1.0f, 1.0f), glm::vec3(0.0f, 0.0f, 0.0f)),
+			VertexMesh(glm::vec3(-m_Extent.x, m_Extent.y, 0.0f), glm::vec2(0.0f, 1.0f), glm::vec3(0.0f, 0.0f, 0.0f)),
+		};
+
+		std::vector<uint32_t> indices = { 0, 1, 2, 2, 3, 0 };
+
+		Initialize(vertices, indices);
+	}
 }
-
-#endif

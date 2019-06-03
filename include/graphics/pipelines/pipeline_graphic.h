@@ -28,7 +28,6 @@ SOFTWARE.
 #include <vector>
 #include <vulkan/vulkan.h>
 #include <graphics/pipelines/pipeline.h>
-#include <engine/vector.h>
 #include <glm/vec2.hpp>
 
 namespace dm

@@ -27,7 +27,8 @@ SOFTWARE.
 #include <graphics/mesh_cube.h>
 #include <graphics/mesh_sphere.h>
 #include <graphics/mesh_plane.h>
-#include "editor/log.h"
+#include <editor/log.h>
+#include <graphics/mesh_quad.h>
 
 namespace dm
 {
@@ -41,6 +42,7 @@ void MeshManager::Init()
 	m_RegisteredMeshes["ModelCube"] = MeshCube::Create();
 	m_RegisteredMeshes["ModelSphere"] = MeshSphere::Create();
 	m_RegisteredMeshes["ModelPlane"] = MeshPlane::Create();
+	m_RegisteredMeshes["ModelQuad"] = MeshQuad::Create();
 }
 
 void MeshManager::Update()
@@ -54,6 +56,7 @@ void MeshManager::Clear()
 	m_RegisteredMeshes["ModelCube"] = MeshCube::Create();
 	m_RegisteredMeshes["ModelSphere"] = MeshSphere::Create();
 	m_RegisteredMeshes["ModelPlane"] = MeshPlane::Create();
+	m_RegisteredMeshes["ModelQuad"] = MeshQuad::Create();
 }
 
 void MeshManager::Draw()

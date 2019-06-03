@@ -28,8 +28,7 @@ SOFTWARE.
 #include "component/model.h"
 #include <component/materials/material_default.h>
 
-#include <glm/gtx/string_cast.hpp>
-#include "component/mesh_renderer.h"
+#include <component/mesh_renderer.h>>
 
 namespace dm
 {
@@ -73,7 +72,7 @@ void RendererMeshes::Draw(const CommandBuffer& commandBuffer)
 	const auto camera = GraphicManager::Get()->GetCamera();
 	m_UniformScene.Push("projection", camera->projectionMatrix);
 	m_UniformScene.Push("view", camera->viewMatrix);
-	m_UniformScene.Push("cameraPos", camera->position); //TODO la position de la caméra ne passe pas
+	m_UniformScene.Push("cameraPos", camera->position);
 
 	for (const auto &entity : m_RegisteredEntities)
 	{

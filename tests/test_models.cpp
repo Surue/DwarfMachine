@@ -264,6 +264,38 @@ void CreatePlane(glm::vec3 pos, dm::EntityManager* entityManager, dm::MaterialDe
 	sphere.CreateComponent<dm::ShadowRenderer>(ComponentType::SHADOW_RENDERER);
 }
 
+void CreateTerrain(glm::vec3 pos, dm::EntityManager* entityManager, dm::MaterialDefault material)
+{
+	const auto entityHandle = entityManager->CreateEntity();
+	auto terrain = dm::EntityHandle(entityHandle);
+
+	//Transform
+	auto t1 = terrain.CreateComponent<dm::Transform>(ComponentType::TRANSFORM);
+	t1->position = pos;
+	t1->scale = glm::vec3(1, 1, 1);
+
+	//Mesh
+	dm::Model mesh;
+	mesh.componentType = ComponentType::MODEL;
+	mesh.model = dm::Engine::Get()->GetModelManager()->GetModel("ModelPlane");
+	terrain.AddComponent<dm::Model>(mesh);
+
+	//Material
+	terrain.AddComponent<dm::MaterialDefault>(material);
+
+	//Bounding sphere
+	terrain.AddComponent<dm::BoundingSphere>(dm::BoundingSphereManager::GetBoundingSphere(*mesh.model));
+
+	//Drawable
+	terrain.CreateComponent<dm::Drawable>(ComponentType::DRAWABLE);
+
+	//MeshRenderer
+	terrain.CreateComponent<dm::MeshRenderer>(ComponentType::MESH_RENDERER);
+
+	//Shadow Renderer
+	terrain.CreateComponent<dm::ShadowRenderer>(ComponentType::SHADOW_RENDERER);
+}
+
 void CreateSkybox(dm::EntityManager* entityManager)
 {
 	const auto entityHandle = entityManager->CreateEntity();
@@ -573,6 +605,83 @@ TEST(Models, Scene)
 	engine.SetApplication(new dm::Editor());
 
 	engine.LoadScene("../ressources/scenes/newScene.scene");
+
+	try
+	{
+		engine.Start();
+	}
+	catch (const std::exception& e)
+	{
+		std::cerr << e.what() << "\n";
+	}
+}
+
+TEST(Models, Terrain)
+{
+	dm::EngineSettings settings;
+	settings.windowSize = dm::Vec2i(1024, 720);
+	dm::Engine engine = dm::Engine(settings);
+	engine.Init();
+
+	engine.SetApplication(new dm::Editor());
+
+	auto entityManager = engine.GetEntityManager();
+
+	//Camera
+	const auto e0 = entityManager->CreateEntity();
+	auto entity = dm::EntityHandle(e0);
+
+	dm::Camera cameraInfo;
+	cameraInfo.up = glm::vec3(0.0f, 1.0f, 0.0f);
+	cameraInfo.componentType = ComponentType::CAMERA;
+	cameraInfo.isMain = true;
+	cameraInfo.isCulling = true;
+	cameraInfo.viewMatrix = glm::lookAt(cameraInfo.position, cameraInfo.position + cameraInfo.front, cameraInfo.up);
+	cameraInfo.fov = 45;
+	cameraInfo.farFrustum = 100.0f;
+	cameraInfo.nearFrustum = 0.1f;
+	cameraInfo.aspect = 1024.0f / 720.0f;
+	cameraInfo.projectionMatrix = glm::perspective(glm::radians(cameraInfo.fov), cameraInfo.aspect, cameraInfo.nearFrustum, cameraInfo.farFrustum);
+
+	auto camera = entity.AddComponent<dm::Camera>(cameraInfo);
+
+	std::shared_ptr<dm::GizmoType> gizmoType = dm::GizmoType::Create(dm::Engine::Get()->GetModelManager()->GetModel("ModelSphere"), 1, dm::Color::White);
+
+	//Skybox
+	CreateSkybox(entityManager);
+
+	//Plane
+	dm::MaterialDefault material;
+	material.componentType = ComponentType::MATERIAL_DEFAULT;
+	material.color = dm::Color(1, 1, 1, 1);
+	material.ignoreLighting = false;
+	material.ignoreFog = false;
+	CreateTerrain(glm::vec3(0, 0, 0), entityManager, material);
+
+	//PointLight
+	const auto e1 = entityManager->CreateEntity();
+	auto light = dm::EntityHandle(e1);
+	light.CreateComponent<dm::Transform>(ComponentType::TRANSFORM);
+	dm::PointLight lightComponent;
+	lightComponent.componentType = ComponentType::POINT_LIGHT;
+	light.AddComponent(lightComponent);
+
+	//DirectionalLight
+	const auto e2 = entityManager->CreateEntity();
+	auto sun = dm::EntityHandle(e2);
+	dm::DirectionalLight sunLightComponent;
+	sunLightComponent.componentType = ComponentType::DIRECTIONAL_LIGHT;
+	sun.AddComponent(sunLightComponent);
+
+	//SpotLight
+	const auto e3 = entityManager->CreateEntity();
+	auto spot = dm::EntityHandle(e3);
+	auto spotPos = spot.CreateComponent<dm::Transform>(ComponentType::TRANSFORM);
+	spotPos->position = glm::vec3(0, 10, 0);
+	dm::SpotLight spotLightComponent;
+	spotLightComponent.target = glm::vec3(0, 0, 0);
+	spotLightComponent.componentType = ComponentType::SPOT_LIGHT;
+	spot.AddComponent(spotLightComponent);
 
 	try
 	{
