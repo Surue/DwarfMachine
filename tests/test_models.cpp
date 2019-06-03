@@ -563,48 +563,23 @@ TEST(Models, Lights)
 	}
 }
 
-void Test()
+TEST(Models, Scene)
 {
-	//long long time = 0;
+	dm::EngineSettings settings;
+	settings.windowSize = dm::Vec2i(1024, 720);
+	dm::Engine engine = dm::Engine(settings);
+	engine.Init();
 
-	//int a = 0;
-	//for (int i = 0; i < 100000; i++) {
+	engine.SetApplication(new dm::Editor());
 
-	//	std::chrono::high_resolution_clock::time_point before = std::chrono::high_resolution_clock::now();
-	//	a += sqrt(i);
-	//	std::chrono::high_resolution_clock::time_point after = std::chrono::high_resolution_clock::now();
+	engine.LoadScene("../ressources/scenes/newScene.scene");
 
-	//	time += std::chrono::duration_cast<std::chrono::duration<long long, std::chrono::nanoseconds>>(after - before).count();
-	//}
-
-	//time /= 100000;
-
-	//std::cout << time << "\n";
-}
-
-void Start()
-{
-	/*float time = 0;
-	for (int i = 0; i < 100000; i++) {
-		std::thread myThread(Test);
-
-		std::chrono::high_resolution_clock::time_point before = std::chrono::high_resolution_clock::now();
-		myThread.join();
-		std::chrono::high_resolution_clock::time_point after = std::chrono::high_resolution_clock::now();
-
-		time += std::chrono::duration_cast<std::chrono::duration<float, std::milli>>(after - before).count() / 1000.0f;
+	try
+	{
+		engine.Start();
 	}
-
-	time /= 100000;
-
-	std::cout << time << "\n";*/
-
-	Test();
-}
-
-TEST(Models, thread)
-{
-	Start();
-
-	system("pause");
+	catch (const std::exception& e)
+	{
+		std::cerr << e.what() << "\n";
+	}
 }

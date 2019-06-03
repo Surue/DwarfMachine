@@ -44,11 +44,6 @@ void SceneManager::Init()
 	m_ComponentManager = Engine::Get()->GetComponentManager();
 
 	m_IsInited = true;
-
-	if(!m_CurrentScenePath.empty())
-	{
-		LoadSceneFromPath(m_CurrentScenePath);
-	}
 }
 
 void SceneManager::Update()
@@ -65,16 +60,21 @@ void SceneManager::LoadSceneFromPath(const std::string& scenePath)
 	std::ostringstream oss;
 	oss << "Loading scene from: " << scenePath;
 	Debug::Log(oss.str());
-	
-	const auto sceneJsonPtr = LoadJson(scenePath);
 
-	if (sceneJsonPtr != nullptr)
-	{
-		LoadSceneFromJson(*sceneJsonPtr);
-	}
-	else
-	{
-		Debug::Log("Invalid JSON format for scene");
+	m_CurrentScenePath = scenePath;
+	
+	if (m_IsInited) {
+
+		const auto sceneJsonPtr = LoadJson(scenePath);
+
+		if (sceneJsonPtr != nullptr)
+		{
+			LoadSceneFromJson(*sceneJsonPtr);
+		}
+		else
+		{
+			Debug::Log("Invalid JSON format for scene");
+		}
 	}
 }
 
@@ -131,9 +131,8 @@ void SceneManager::LoadSceneFromJson(json& sceneJson)
 					if (CheckJsonExists(componentJson, "type"))
 					{
 						const ComponentType componentType = componentJson["type"];
-						const auto index = static_cast<int>(log2(static_cast<double>(componentType)));
 						
-						m_ComponentManager[index].DecodeComponent(componentJson, entity, componentType);
+						m_ComponentManager->DecodeComponent(componentJson, entity, componentType);
 						handle.AddComponentType(componentType);
 						
 					}
@@ -186,7 +185,7 @@ void SceneManager::SaveScene()
 			}
 		}
 
-		jsonScene["entites"][entityCount] = jsonEntity;
+		jsonScene["entities"][entityCount] = jsonEntity;
 
 		entityCount++;
 	}

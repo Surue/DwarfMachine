@@ -153,7 +153,7 @@ void MaterialDefaultManager::DecodeComponent(json& componentJson, const Entity e
 		material.metallic = componentJson["metallic"];
 
 	if (CheckJsonExists(componentJson, "roughness") && CheckJsonNumber(componentJson, "roughness"))
-		material.metallic = componentJson["roughness"];
+		material.roughness = componentJson["roughness"];
 
 	if (CheckJsonExists(componentJson, "castShadow"))
 		material.castsShadows = GetBoolFromJson(componentJson, "castShadow");

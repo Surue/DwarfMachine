@@ -51,6 +51,8 @@ void SystemManager::Update()
 void SystemManager::Clear()
 {
 	m_Systems.clear();
+
+	m_Systems.push_back(std::make_unique<FrustumCulling>());
 }
 
 void SystemManager::Draw()
