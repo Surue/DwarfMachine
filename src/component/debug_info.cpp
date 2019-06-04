@@ -58,7 +58,7 @@ void DebugInfoManager::DecodeComponent(json& componentJson, const Entity entity)
 
 	if (CheckJsonExists(componentJson, "name"))
 	{
-		debugInfo.name = componentJson["name"].dump();
+		debugInfo.name = componentJson["name"].get<std::string>();
 	}
 
 	m_Components[entity - 1] = debugInfo;

@@ -3,7 +3,7 @@
 #extension GL_ARB_shading_language_420pack : enable
 
 const int SSAO_KERNEL_SIZE = 64;
-const float SSAO_RADIUS = 0.5f;
+const float SSAO_RADIUS = 0.3f;
 
 layout(binding = 0) uniform UniformScene
 {

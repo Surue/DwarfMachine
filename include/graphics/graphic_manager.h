@@ -36,6 +36,7 @@ SOFTWARE.
 #include <graphics/swapchain.h>
 #include <graphics/render_stage.h>
 #include <graphics/render_manager.h>
+#include "texture_manager.h"
 
 namespace dm
 {
@@ -144,6 +145,8 @@ public:
 
 	static void CheckVk(const VkResult &result);
 
+	TextureManager* GetTextureManager() { return m_TextureManager.get(); };
+
 private:
 	void CreatePipelineCache();
 	/**
@@ -189,7 +192,9 @@ private:
 
 	std::vector<std::unique_ptr<RenderStage>> m_RenderStages; 
 	std::map<std::string, const Descriptor *> m_Attachments; 
-	std::unique_ptr<RenderManager> m_RenderManager; 
+	std::unique_ptr<RenderManager> m_RenderManager;
+
+	std::unique_ptr<TextureManager> m_TextureManager;
 };
 }
 

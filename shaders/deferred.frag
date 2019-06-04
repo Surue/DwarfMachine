@@ -264,7 +264,7 @@ void main()
 
 	vec3 material = texture(samplerMaterial, inUV).rgb;
 	float ssao = texture(samplerSsao, inUV).r;
-	diffuse *= ssao;
+	//diffuse *= ssao;
 	
 	float metallic = material.r;
 	float roughness = material.g;
@@ -323,7 +323,7 @@ void main()
 		
 		vec3 kD = 1.0f - F;
 		kD *= 1.0f - metallic;
-		vec3 ambient = (kD * albedo + specular);
+		vec3 ambient = (kD * albedo + specular) * ssao;
 
 		// Directional light
 		vec3 L = normalize(vec3(-scene.directionalLightDirection));

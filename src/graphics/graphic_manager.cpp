@@ -189,7 +189,7 @@ void GraphicManager::FrameBufferResizeCallback(SDL_Window* window, int width, in
 
 void GraphicManager::Init()
 {
-	
+	m_TextureManager = std::make_unique<TextureManager>();
 }
 
 void GraphicManager::Destroy()

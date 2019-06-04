@@ -22,49 +22,26 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#ifndef EDITOR_H
-#define EDITOR_H
-#include <engine/engine_application.h>
-#include "entity/entity.h"
-#include "graphics/Gizmos/gizmo_manager.h"
+#ifndef TEXTURE_MANAGER_H
+#define TEXTURE_MANAGER_H
+
+#include "image_2d.h"
 
 namespace dm
 {
-class Editor : public EngineApplication
+class TextureManager
 {
 public:
-	Editor();
+	static TextureManager* Get();
 
-	void Awake() override;
-	void Start() override;
-	void Update() override;
-	void Draw() override;
+	TextureManager()
+	{
+		rock1Diffuse = Image2d::Create("ressources/textures/rocks_01_model/rocks_01_dif.tga");
+		rock1Normal = Image2d::Create("ressources/textures/rocks_01_model/rocks_01_nm.tga");
+	}
 
-	GizmoManager* GetGizmoManager() { return &m_GizmoManager; }
-private:
-	void DrawInspector();
-
-	void DrawDock();
-
-	void DrawHierarchy();
-
-	void DrawTransformHandle();
-
-	void DrawStats();
-
-	void DrawConsole();
-
-	void MoveEditorCamera();
-
-	void DrawSaveLoadMenu();
-
-	void DrawAddMenu();
-
-	Entity m_CurrentEntitySelected = INVALID_ENTITY;
-
-	float lastDeltaTime;
-
-	GizmoManager m_GizmoManager;
+	std::shared_ptr<Image2d> rock1Diffuse;
+	std::shared_ptr<Image2d> rock1Normal;
 };
 }
 

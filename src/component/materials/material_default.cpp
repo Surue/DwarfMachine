@@ -156,6 +156,8 @@ MaterialDefault* MaterialDefaultManager::AddComponent(const Entity entity, Mater
 			PipelineGraphics::Mode::MRT)
 	);
 	m_Components[entity - 1] = component;
+	m_Components[entity - 1].diffuseTexture = component.diffuseTexture;
+	m_Components[entity - 1].normalTexture = component.normalTexture;
 	return &m_Components[entity - 1];
 }
 

@@ -549,12 +549,12 @@ TEST(Models, Lights)
 			glm::vec3 pos = glm::vec3(i - maxSphere / 2.0f + i * 1.0f, 0, j - maxSphere / 2.0f + j * 1.0f);
 			auto sphere = CreateSphere(pos, entityManager, material);
 
-			//dm::Gizmo gizmo;
-			//gizmo.transform = sphere.GetComponent<dm::Transform>(ComponentType::TRANSFORM);
-			//gizmo.color = dm::Color(100, 0, 0, 1);
-			//gizmo.gizmoType = gizmoType;
-			//gizmo.entity = sphere.GetEntity();
-			//editor->GetGizmoManager()->AddGizmo(gizmo);
+			dm::Gizmo gizmo;
+			gizmo.transform = sphere.GetComponent<dm::Transform>(ComponentType::TRANSFORM);
+			gizmo.color = dm::Color(100, 0, 0, 1);
+			gizmo.gizmoType = gizmoType;
+			gizmo.entity = sphere.GetEntity();
+			editor->GetGizmoManager()->AddGizmo(gizmo);
 		}
 	}
 

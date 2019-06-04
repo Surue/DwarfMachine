@@ -22,50 +22,13 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#ifndef EDITOR_H
-#define EDITOR_H
-#include <engine/engine_application.h>
-#include "entity/entity.h"
-#include "graphics/Gizmos/gizmo_manager.h"
+#include <graphics/texture_manager.h>
+#include "graphics/graphic_manager.h"
 
 namespace dm
 {
-class Editor : public EngineApplication
+TextureManager* TextureManager::Get()
 {
-public:
-	Editor();
-
-	void Awake() override;
-	void Start() override;
-	void Update() override;
-	void Draw() override;
-
-	GizmoManager* GetGizmoManager() { return &m_GizmoManager; }
-private:
-	void DrawInspector();
-
-	void DrawDock();
-
-	void DrawHierarchy();
-
-	void DrawTransformHandle();
-
-	void DrawStats();
-
-	void DrawConsole();
-
-	void MoveEditorCamera();
-
-	void DrawSaveLoadMenu();
-
-	void DrawAddMenu();
-
-	Entity m_CurrentEntitySelected = INVALID_ENTITY;
-
-	float lastDeltaTime;
-
-	GizmoManager m_GizmoManager;
-};
+	return GraphicManager::Get()->GetTextureManager();
 }
-
-#endif
+}

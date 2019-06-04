@@ -61,5 +61,6 @@ void EntityHandle::Destroy()
 
 	m_EntityManager->DestroyEntity(m_Entity);
 	m_SystemManager->DestroyComponent(m_Entity, oldMask, m_EntityManager->GetEntityMask(m_Entity));
+	m_RendererContainer->DestroyComponent(m_Entity, oldMask, m_EntityManager->GetEntityMask(m_Entity));
 }
 }

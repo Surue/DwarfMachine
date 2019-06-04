@@ -7,31 +7,31 @@
                     "far": 100.0,
                     "fov": 45.0,
                     "front": {
-                        "x": -4.371138828673793e-08,
-                        "y": 0.0,
-                        "z": 1.0
+                        "x": 0.6276957392692566,
+                        "y": -0.6142851114273071,
+                        "z": 0.4781755805015564
                     },
                     "isCulling": 1,
                     "isMain": 1,
                     "near": 0.10000000149011612,
-                    "pitch": 0.0,
+                    "pitch": -37.899993896484375,
                     "position": {
-                        "x": 0.0,
-                        "y": 0.0,
-                        "z": -10.0
+                        "x": -17.945796966552734,
+                        "y": 18.417444229125977,
+                        "z": -14.23548698425293
                     },
                     "right": {
-                        "x": 1.0,
+                        "x": 0.6059880256652832,
                         "y": 0.0,
-                        "z": 4.371138828673793e-08
+                        "z": -0.7954737544059753
                     },
                     "type": 2,
                     "up": {
-                        "x": 0.0,
-                        "y": -1.0,
-                        "z": 0.0
+                        "x": -0.4886476695537567,
+                        "y": -0.7890841960906982,
+                        "z": -0.37224942445755005
                     },
-                    "yaw": 90.0
+                    "yaw": 37.29997253417969
                 }
             ],
             "name": "entity 0"
@@ -137,7 +137,7 @@
                     "type": 5
                 },
                 {
-                    "isDrawable": 0,
+                    "isDrawable": 1,
                     "type": 6
                 },
                 {
@@ -3044,7 +3044,7 @@
                     "type": 5
                 },
                 {
-                    "isDrawable": 0,
+                    "isDrawable": 1,
                     "type": 6
                 },
                 {
@@ -3614,7 +3614,7 @@
                     "type": 5
                 },
                 {
-                    "isDrawable": 0,
+                    "isDrawable": 1,
                     "type": 6
                 },
                 {
@@ -3671,7 +3671,7 @@
                     "type": 5
                 },
                 {
-                    "isDrawable": 0,
+                    "isDrawable": 1,
                     "type": 6
                 },
                 {
@@ -4184,7 +4184,7 @@
                     "type": 5
                 },
                 {
-                    "isDrawable": 0,
+                    "isDrawable": 1,
                     "type": 6
                 },
                 {
@@ -4241,7 +4241,7 @@
                     "type": 5
                 },
                 {
-                    "isDrawable": 0,
+                    "isDrawable": 1,
                     "type": 6
                 },
                 {
@@ -4298,7 +4298,7 @@
                     "type": 5
                 },
                 {
-                    "isDrawable": 0,
+                    "isDrawable": 1,
                     "type": 6
                 },
                 {
@@ -4355,7 +4355,7 @@
                     "type": 5
                 },
                 {
-                    "isDrawable": 0,
+                    "isDrawable": 1,
                     "type": 6
                 },
                 {
@@ -4754,7 +4754,7 @@
                     "type": 5
                 },
                 {
-                    "isDrawable": 0,
+                    "isDrawable": 1,
                     "type": 6
                 },
                 {
@@ -4811,7 +4811,7 @@
                     "type": 5
                 },
                 {
-                    "isDrawable": 0,
+                    "isDrawable": 1,
                     "type": 6
                 },
                 {
@@ -4868,7 +4868,7 @@
                     "type": 5
                 },
                 {
-                    "isDrawable": 0,
+                    "isDrawable": 1,
                     "type": 6
                 },
                 {
@@ -4925,7 +4925,7 @@
                     "type": 5
                 },
                 {
-                    "isDrawable": 0,
+                    "isDrawable": 1,
                     "type": 6
                 },
                 {
@@ -4982,7 +4982,7 @@
                     "type": 5
                 },
                 {
-                    "isDrawable": 0,
+                    "isDrawable": 1,
                     "type": 6
                 },
                 {
@@ -5324,7 +5324,7 @@
                     "type": 5
                 },
                 {
-                    "isDrawable": 0,
+                    "isDrawable": 1,
                     "type": 6
                 },
                 {
@@ -5381,7 +5381,7 @@
                     "type": 5
                 },
                 {
-                    "isDrawable": 0,
+                    "isDrawable": 1,
                     "type": 6
                 },
                 {
@@ -5438,7 +5438,7 @@
                     "type": 5
                 },
                 {
-                    "isDrawable": 0,
+                    "isDrawable": 1,
                     "type": 6
                 },
                 {
@@ -5495,7 +5495,7 @@
                     "type": 5
                 },
                 {
-                    "isDrawable": 0,
+                    "isDrawable": 1,
                     "type": 6
                 },
                 {
@@ -5552,7 +5552,7 @@
                     "type": 5
                 },
                 {
-                    "isDrawable": 0,
+                    "isDrawable": 1,
                     "type": 6
                 },
                 {
@@ -5609,7 +5609,7 @@
                     "type": 5
                 },
                 {
-                    "isDrawable": 0,
+                    "isDrawable": 1,
                     "type": 6
                 },
                 {
@@ -5666,7 +5666,7 @@
                     "type": 5
                 },
                 {
-                    "isDrawable": 0,
+                    "isDrawable": 1,
                     "type": 6
                 },
                 {
@@ -5861,7 +5861,7 @@
                     },
                     "rotation": {
                         "x": 0.0,
-                        "y": 0.0,
+                        "y": -0.0,
                         "z": 0.0
                     },
                     "scale": {
@@ -5913,12 +5913,12 @@
                 {
                     "position": {
                         "x": 0.0,
-                        "y": 0.0,
+                        "y": 1.7999999523162842,
                         "z": 0.0
                     },
                     "rotation": {
                         "x": 0.0,
-                        "y": 0.0,
+                        "y": -0.0,
                         "z": 0.0
                     },
                     "scale": {
@@ -5931,13 +5931,17 @@
                 {
                     "color": {
                         "a": 1.0,
-                        "b": 1.0,
-                        "g": 1.0,
+                        "b": 0.0,
+                        "g": 0.0,
                         "r": 1.0
                     },
-                    "intensity": 1.0,
-                    "radius": 1.0,
+                    "intensity": 36.0,
+                    "radius": 32.70000076293945,
                     "type": 9
+                },
+                {
+                    "name": "PointLight",
+                    "type": 14
                 }
             ],
             "name": "entity 104"
@@ -5961,46 +5965,6 @@
                 }
             ],
             "name": "entity 105"
-        },
-        {
-            "components": [
-                {
-                    "position": {
-                        "x": 0.0,
-                        "y": 10.0,
-                        "z": 0.0
-                    },
-                    "rotation": {
-                        "x": 0.0,
-                        "y": 0.0,
-                        "z": 0.0
-                    },
-                    "scale": {
-                        "x": 1.0,
-                        "y": 1.0,
-                        "z": 1.0
-                    },
-                    "type": 1
-                },
-                {
-                    "angle": 30.0,
-                    "color": {
-                        "a": 1.0,
-                        "b": 1.0,
-                        "g": 1.0,
-                        "r": 1.0
-                    },
-                    "intensity": 1.0,
-                    "range": 10.0,
-                    "target": {
-                        "x": 0.0,
-                        "y": 0.0,
-                        "z": 0.0
-                    },
-                    "type": 11
-                }
-            ],
-            "name": "entity 106"
         }
     ],
     "name": "newScene"
