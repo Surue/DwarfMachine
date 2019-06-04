@@ -131,7 +131,7 @@ void RendererDeferred::Draw(const CommandBuffer& commandBuffer)
 
 			DeferredSpotLight deferredLight = {};
 			deferredLight.color = light->color * light->intensity;
-			deferredLight.target = light->target;
+			deferredLight.target = light->target + transform->position;
 			deferredLight.range = light->range;
 			deferredLight.position = transform->position;
 			deferredLight.angle = light->angle;

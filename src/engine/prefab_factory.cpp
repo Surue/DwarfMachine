@@ -233,4 +233,37 @@ void PrefabFactor::CreatePlane(const glm::vec3 pos)
 	//Shadow Renderer
 	plane.CreateComponent<dm::ShadowRenderer>(ComponentType::SHADOW_RENDERER);
 }
+
+void PrefabFactor::CreatePointLight(glm::vec3 pos)
+{
+	auto entityManager = Engine::Get()->GetEntityManager();
+	const auto e1 = entityManager->CreateEntity();
+	auto light = dm::EntityHandle(e1);
+
+	//Transform
+	auto transform = light.CreateComponent<dm::Transform>(ComponentType::TRANSFORM);
+	transform->position = pos;
+	
+	//Point light
+	dm::PointLight lightComponent;
+	lightComponent.componentType = ComponentType::POINT_LIGHT;
+	light.AddComponent(lightComponent);
+}
+
+void PrefabFactor::CreateSpotLight(glm::vec3 pos)
+{
+	auto entityManager = Engine::Get()->GetEntityManager();
+	const auto e3 = entityManager->CreateEntity();
+	auto spot = dm::EntityHandle(e3);
+
+	//Transform
+	auto transform = spot.CreateComponent<dm::Transform>(ComponentType::TRANSFORM);
+	transform->position = pos;
+
+	//Spot light
+	dm::SpotLight spotLightComponent;
+	spotLightComponent.target = glm::vec3(0, -10, 0);
+	spotLightComponent.componentType = ComponentType::SPOT_LIGHT;
+	spot.AddComponent(spotLightComponent);
+}
 }

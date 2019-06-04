@@ -328,31 +328,51 @@ void Editor::DrawAddMenu()
 	const auto camera = GraphicManager::Get()->GetCamera();
 	if (ImGui::BeginMenu("Prefabs"))
 	{
-		ImGui::Text("Primitive");
-		if(ImGui::Button("Sphere"))
-		{
-			PrefabFactor::CreateSphere(camera->position + camera->front * 5.0f);
+		//Primitives
+		if (ImGui::BeginMenu("Primitive")) {
+			if (ImGui::Button("Sphere"))
+			{
+				PrefabFactor::CreateSphere(camera->position + camera->front * 5.0f);
+			}
+
+			if (ImGui::Button("Cube"))
+			{
+				PrefabFactor::CreateCube(camera->position + camera->front * 5.0f);
+			}
+
+			if (ImGui::Button("Plane"))
+			{
+				PrefabFactor::CreatePlane(camera->position + camera->front * 5.0f);
+			}
+			ImGui::EndMenu();
 		}
 
-		if (ImGui::Button("Cube"))
-		{
-			PrefabFactor::CreateCube(camera->position + camera->front * 5.0f);
+		//Lights
+		if (ImGui::BeginMenu("Light")) {
+			if (ImGui::Button("Point Light"))
+			{
+				PrefabFactor::CreatePointLight(camera->position + camera->front * 5.0f);
+			}
+
+			if (ImGui::Button("Spot Light"))
+			{
+				PrefabFactor::CreateSpotLight(camera->position + camera->front * 5.0f);
+			}
+			ImGui::EndMenu();
 		}
 
-		if (ImGui::Button("Plane"))
-		{
-			PrefabFactor::CreatePlane(camera->position + camera->front * 5.0f);
-		}
+		//Obj
+		if (ImGui::BeginMenu("Obj")) {
+			if (ImGui::Button("Rock 1"))
+			{
+				PrefabFactor::CreateRock1(camera->position + camera->front * 5.0f);
+			}
 
-		ImGui::Text("Obj");
-		if (ImGui::Button("Rock 1"))
-		{
-			PrefabFactor::CreateRock1(camera->position + camera->front * 5.0f);
-		}
-
-		if (ImGui::Button("Rock 2"))
-		{
-			PrefabFactor::CreateRock2(camera->position + camera->front * 5.0f);
+			if (ImGui::Button("Rock 2"))
+			{
+				PrefabFactor::CreateRock2(camera->position + camera->front * 5.0f);
+			}
+			ImGui::EndMenu();
 		}
 		ImGui::EndMenu();
 	}

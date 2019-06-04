@@ -62,6 +62,10 @@ public:
 	static void CreateCube(glm::vec3 pos);
 
 	static void CreatePlane(glm::vec3 pos);
+
+	static void CreatePointLight(glm::vec3 pos);
+
+	static void CreateSpotLight(glm::vec3 pos);
 };
 }
 
