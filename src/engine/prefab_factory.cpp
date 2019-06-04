@@ -266,4 +266,40 @@ void PrefabFactor::CreateSpotLight(glm::vec3 pos)
 	spotLightComponent.componentType = ComponentType::SPOT_LIGHT;
 	spot.AddComponent(spotLightComponent);
 }
+
+void PrefabFactor::CreateTerrain(glm::vec3 pos)
+{
+	auto entityManager = Engine::Get()->GetEntityManager();
+	const auto entityHandle = entityManager->CreateEntity();
+	auto terrain = dm::EntityHandle(entityHandle);
+
+	//Transform
+	auto t1 = terrain.CreateComponent<dm::Transform>(ComponentType::TRANSFORM);
+	t1->position = pos;
+	t1->scale = glm::vec3(10, 1, 10);
+
+	//Mesh
+	dm::Model mesh;
+	mesh.componentType = ComponentType::MODEL;
+	mesh.model = dm::Engine::Get()->GetModelManager()->GetModel("ModelPlane");
+	terrain.AddComponent<dm::Model>(mesh);
+
+	//Material
+	auto material = MaterialTerrain();
+	material.componentType = ComponentType::MATERIAL_TERRAIN;
+	material.noiseMap = Image2d::CreateNoiseTexture(glm::vec2(256, 256));
+	terrain.AddComponent<MaterialTerrain>(material);
+
+	//Bounding sphere
+	terrain.AddComponent<BoundingSphere>(BoundingSphereManager::GetBoundingSphere(*mesh.model));
+
+	//Drawable
+	terrain.CreateComponent<Drawable>(ComponentType::DRAWABLE);
+
+	//MeshRenderer
+	terrain.CreateComponent<MeshRenderer>(ComponentType::MESH_RENDERER);
+
+	//Shadow Renderer
+	terrain.CreateComponent<ShadowRenderer>(ComponentType::SHADOW_RENDERER);
+}
 }

@@ -37,7 +37,7 @@ MaterialTerrain* MaterialTerrainManager::AddComponent(const Entity entity, Mater
 {
 	component.pipelineMaterial = PipelineMaterial::Create({ 1, 0 }, //TODO trouver une manière de setter ça de manière automatique
 		PipelineGraphicsCreate(
-			{ "../Shaders/terrain.vert", "../Shaders/terrain.tesc", "../Shaders/terrain.tese", "../Shaders/terrain.frag" },
+			{ "../Shaders/terrain.vert", "../Shaders/terrain.frag" },
 			{ ModelComponentManager::GetVertexInput() },
 			{},
 			PipelineGraphics::Mode::MRT)
@@ -49,11 +49,11 @@ MaterialTerrain* MaterialTerrainManager::AddComponent(const Entity entity, Mater
 MaterialTerrain* MaterialTerrainManager::CreateComponent(const Entity entity)
 {
 	MaterialTerrain material;
-	material.componentType = ComponentType::MATERIAL_DEFAULT;
+	material.componentType = ComponentType::MATERIAL_TERRAIN;
 
-	material.pipelineMaterial = PipelineMaterial::Create({ 1, 0 },
+	material.pipelineMaterial = PipelineMaterial::Create({ 1, 0 }, //TODO trouver une manière de setter ça de manière automatique
 		PipelineGraphicsCreate(
-			{ "../Shaders/terrain.vert", "../Shaders/terrain.tesc", "../Shaders/terrain.tese", "../Shaders/terrain.frag" },
+			{ "../Shaders/terrain.vert", "../Shaders/terrain.frag" },
 			{ ModelComponentManager::GetVertexInput() },
 			{},
 			PipelineGraphics::Mode::MRT)
@@ -78,8 +78,6 @@ void MaterialTerrainManager::OnDrawInspector(Entity entity)
 		{
 			showCode = !showCode;
 		}
-
-		ImGui::Text(m_Components[entity - 1].pipelineMaterial->GetPipeline()->GetShader()->ToString().c_str());
 	}
 	else
 	{
@@ -87,6 +85,11 @@ void MaterialTerrainManager::OnDrawInspector(Entity entity)
 		{
 			showCode = !showCode;
 		}
+	}
+
+	if (showCode)
+	{
+		ImGui::Text(m_Components[entity - 1].pipelineMaterial->GetPipeline()->GetShader()->ToString().c_str());
 	}
 }
 void MaterialTerrainManager::PushDescriptor(MaterialTerrain& material, DescriptorHandle& descriptorSet)
@@ -186,7 +189,7 @@ void MaterialTerrainManager::DecodeComponent(json& componentJson, const Entity e
 
 	material.pipelineMaterial = PipelineMaterial::Create({ 1, 0 }, //TODO trouver une manière de setter ça de manière automatique
 		PipelineGraphicsCreate(
-			{ "../Shaders/terrain.vert", "../Shaders/terrain.tesc", "../Shaders/terrain.tese", "../Shaders/terrain.frag" },
+			{ "../Shaders/terrain.vert", "../Shaders/terrain.frag" },
 			{ ModelComponentManager::GetVertexInput() },
 			{},
 			PipelineGraphics::Mode::MRT)

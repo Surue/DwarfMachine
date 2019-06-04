@@ -22,53 +22,30 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#ifndef PREFAB_FACTORY_H
-#define PREFAB_FACTORY_H
-#include <glm/vec3.hpp>
-#include <engine/engine.h>
-#include <entity/entity_handle.h>
-#include <graphics/mesh_manager.h>
-#include <graphics/texture_manager.h>
+#ifndef RENDERER_TERRAIN_H
+#define RENDERER_TERRAIN_H
+#include <graphics/render_pipeline.h>
+#include <system/system.h>
+#include <graphics/buffers/uniform_handle.h>
+#include "descriptor_handle.h"
 
 namespace dm
 {
-struct MaterialDefault;
-class EntityManager;
-
-class PrefabFactor
+class RendererTerrain : public RenderPipeline
 {
 public:
-	static void CreateRock1(const glm::vec3 pos);
+	explicit RendererTerrain(const Pipeline::Stage &pipelineStage);
 
-	static void CreateRock2(glm::vec3 pos);
+	~RendererTerrain() = default;
 
-	static void CreateRock3(glm::vec3 pos)
-	{
+	void Update() override;
 
-	}
+	void Draw(const CommandBuffer &commandBuffer) override;
 
-	static void CreateTree1(glm::vec3 pos)
-	{
-
-	}
-
-	static void CreateTree2(glm::vec3 pos)
-	{
-
-	}
-
-	static void CreateSphere(glm::vec3 pos);
-
-	static void CreateCube(glm::vec3 pos);
-
-	static void CreatePlane(glm::vec3 pos);
-
-	static void CreatePointLight(glm::vec3 pos);
-
-	static void CreateSpotLight(glm::vec3 pos);
-
-	static void CreateTerrain(glm::vec3 pos);
+	void RegisterEntity(const Entity entity) override;
+private:
+	UniformHandle m_UniformScene;
 };
 }
 
-#endif
+#endif RENDERER_MESHES_H

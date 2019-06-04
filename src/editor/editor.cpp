@@ -374,6 +374,15 @@ void Editor::DrawAddMenu()
 			}
 			ImGui::EndMenu();
 		}
+
+		//Terrain
+		if (ImGui::BeginMenu("Terrain")) {
+			if (ImGui::Button("Terrain"))
+			{
+				PrefabFactor::CreateTerrain(camera->position + camera->front * 5.0f);
+			}
+			ImGui::EndMenu();
+		}
 		ImGui::EndMenu();
 	}
 }
