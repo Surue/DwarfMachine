@@ -26,6 +26,94 @@ SOFTWARE.
 
 namespace dm
 {
+void PrefabFactor::CreateRock1(const glm::vec3 pos)
+{
+	auto entityManager = Engine::Get()->GetEntityManager();
+	const auto entityHandle = entityManager->CreateEntity();
+	auto rock1 = EntityHandle(entityHandle);
+
+	//Transform
+	auto t1 = rock1.CreateComponent<Transform>(ComponentType::TRANSFORM);
+	t1->position = pos;
+	t1->scale = glm::vec3(0.01, 0.01, 0.01);
+
+	//Mesh
+	Model mesh;
+	mesh.componentType = ComponentType::MODEL;
+	mesh.model = Engine::Get()->GetModelManager()->GetModel("ressources/models/rocks_01_model.obj");
+	rock1.AddComponent<Model>(mesh);
+
+	//Material
+	auto material = MaterialDefault();
+	material.componentType = ComponentType::MATERIAL_DEFAULT;
+	material.castsShadows = true;
+	material.ignoreLighting = false;
+	material.ignoreFog = false;
+	material.metallic = 0;
+	material.roughness = 0;
+	material.diffuseTexture = TextureManager::Get()->GetTextureByName(
+		"ressources/textures/rocks_01_model/rocks_01_dif.tga");
+	material.normalTexture = TextureManager::Get()->GetTextureByName(
+		"ressources/textures/rocks_01_model/rocks_01_nm.tga");
+	rock1.AddComponent<MaterialDefault>(material);
+
+	//Bounding sphere
+	rock1.AddComponent<BoundingSphere>(BoundingSphereManager::GetBoundingSphere(*mesh.model));
+
+	//Drawable
+	rock1.CreateComponent<Drawable>(ComponentType::DRAWABLE);
+
+	//MeshRenderer
+	rock1.CreateComponent<MeshRenderer>(ComponentType::MESH_RENDERER);
+
+	//Shadow Renderer
+	rock1.CreateComponent<ShadowRenderer>(ComponentType::SHADOW_RENDERER);
+}
+
+void PrefabFactor::CreateRock2(const glm::vec3 pos)
+{
+	auto entityManager = Engine::Get()->GetEntityManager();
+	const auto entityHandle = entityManager->CreateEntity();
+	auto rock1 = EntityHandle(entityHandle);
+
+	//Transform
+	auto t1 = rock1.CreateComponent<Transform>(ComponentType::TRANSFORM);
+	t1->position = pos;
+	t1->scale = glm::vec3(0.1, 0.1, 0.1);
+
+	//Mesh
+	Model mesh;
+	mesh.componentType = ComponentType::MODEL;
+	mesh.model = Engine::Get()->GetModelManager()->GetModel("ressources/models/rock_v2.obj");
+	rock1.AddComponent<Model>(mesh);
+
+	//Material
+	auto material = MaterialDefault();
+	material.componentType = ComponentType::MATERIAL_DEFAULT;
+	material.castsShadows = true;
+	material.ignoreLighting = false;
+	material.ignoreFog = false;
+	material.metallic = 0;
+	material.roughness = 0;
+	material.diffuseTexture = TextureManager::Get()->GetTextureByName(
+		"ressources/textures/rock_v2/rock_v2_obj_lambert2SG_BaseColor.png");
+	material.normalTexture = TextureManager::Get()->GetTextureByName(
+		"ressources/textures/rock_v2/rock_v2_obj_lambert2SG_Normal.png");
+	rock1.AddComponent<MaterialDefault>(material);
+
+	//Bounding sphere
+	rock1.AddComponent<BoundingSphere>(BoundingSphereManager::GetBoundingSphere(*mesh.model));
+
+	//Drawable
+	rock1.CreateComponent<Drawable>(ComponentType::DRAWABLE);
+
+	//MeshRenderer
+	rock1.CreateComponent<MeshRenderer>(ComponentType::MESH_RENDERER);
+
+	//Shadow Renderer
+	rock1.CreateComponent<ShadowRenderer>(ComponentType::SHADOW_RENDERER);
+}
+
 void PrefabFactor::CreateSphere(const glm::vec3 pos)
 {
 	auto entityManager = Engine::Get()->GetEntityManager();

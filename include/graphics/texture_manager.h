@@ -26,6 +26,7 @@ SOFTWARE.
 #define TEXTURE_MANAGER_H
 
 #include "image_2d.h"
+#include <map>
 
 namespace dm
 {
@@ -36,12 +37,22 @@ public:
 
 	TextureManager()
 	{
-		rock1Diffuse = Image2d::Create("ressources/textures/rocks_01_model/rocks_01_dif.tga");
-		rock1Normal = Image2d::Create("ressources/textures/rocks_01_model/rocks_01_nm.tga");
 	}
 
-	std::shared_ptr<Image2d> rock1Diffuse;
-	std::shared_ptr<Image2d> rock1Normal;
+	std::shared_ptr<Image2d> GetTextureByName(const std::string& name)
+	{
+		auto it = m_Textures.find(name);
+
+		if(it != m_Textures.end())
+		{
+			return it->second;
+		}
+
+		m_Textures.emplace(name, Image2d::Create(name));
+		return (--m_Textures.end())->second;
+	}
+private:
+	std::map<std::string, std::shared_ptr<Image2d>> m_Textures;
 };
 }
 

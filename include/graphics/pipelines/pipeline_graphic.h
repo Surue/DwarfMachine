@@ -202,9 +202,7 @@ public:
 
 	bool operator==(const PipelineGraphicsCreate &other) const
 	{
-		//TODO ajouter les operator pour les vertexInput et les defines
 		return m_ShaderStages == other.m_ShaderStages &&
-			/*m_VertexInputs == other.m_VertexInputs &&*/
 			m_Defines == other.m_Defines &&
 			m_Mode == other.m_Mode &&
 			m_Depth == other.m_Depth &&
