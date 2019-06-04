@@ -46,6 +46,12 @@ void MeshManager::Init()
 	m_RegisteredMeshes["ModelQuad"] = MeshQuad::Create();
 	m_RegisteredMeshes["ressources/models/rocks_01_model.obj"] = MeshObj::Create("ressources/models/rocks_01_model.obj");
 	m_RegisteredMeshes["ressources/models/rock_v2.obj"] = MeshObj::Create("ressources/models/rock_v2.obj");
+	m_RegisteredMeshes["ressources/models/tree_1.obj"] = MeshObj::Create("ressources/models/tree_1.obj");
+	m_RegisteredMeshes["ressources/models/tree_2.obj"] = MeshObj::Create("ressources/models/tree_2.obj");
+	m_RegisteredMeshes["ressources/models/tree_3.obj"] = MeshObj::Create("ressources/models/tree_3.obj");
+	m_RegisteredMeshes["ressources/models/tree_4.obj"] = MeshObj::Create("ressources/models/tree_4.obj");
+	m_RegisteredMeshes["ressources/models/tree_5.obj"] = MeshObj::Create("ressources/models/tree_5.obj");
+	m_RegisteredMeshes["ressources/models/mountain.obj"] = MeshObj::Create("ressources/models/mountain.obj");
 }
 
 void MeshManager::Update()
@@ -62,6 +68,12 @@ void MeshManager::Clear()
 	m_RegisteredMeshes["ModelQuad"] = MeshQuad::Create();
 	m_RegisteredMeshes["ressources/models/rocks_01_model.obj"] = MeshObj::Create("ressources/models/rocks_01_model.obj");
 	m_RegisteredMeshes["ressources/models/rock_v2.obj"] = MeshObj::Create("ressources/models/rock_v2.obj");
+	m_RegisteredMeshes["ressources/models/tree_1.obj"] = MeshObj::Create("ressources/models/tree_1.obj");
+	m_RegisteredMeshes["ressources/models/tree_2.obj"] = MeshObj::Create("ressources/models/tree_2.obj");
+	m_RegisteredMeshes["ressources/models/tree_3.obj"] = MeshObj::Create("ressources/models/tree_3.obj");
+	m_RegisteredMeshes["ressources/models/tree_4.obj"] = MeshObj::Create("ressources/models/tree_4.obj");
+	m_RegisteredMeshes["ressources/models/tree_5.obj"] = MeshObj::Create("ressources/models/tree_5.obj");
+	m_RegisteredMeshes["ressources/models/mountain.obj"] = MeshObj::Create("ressources/models/mountain.obj");
 }
 
 void MeshManager::Draw()

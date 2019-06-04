@@ -94,8 +94,8 @@ void MaterialTerrainManager::OnDrawInspector(Entity entity)
 }
 void MaterialTerrainManager::PushDescriptor(MaterialTerrain& material, DescriptorHandle& descriptorSet)
 {
+	descriptorSet.Push("samplerGrass", material.grassSampler);
 	descriptorSet.Push("samplerHeight", material.noiseMap);
-	descriptorSet.Push("displacementMap", material.noiseMap);
 }
 
 void ComputeFrustumPlanes(glm::mat4 &viewMatrix, glm::mat4 &projMatrix, std::vector<glm::vec4>& planes)
@@ -141,45 +141,10 @@ void ComputeFrustumPlanes(glm::mat4 &viewMatrix, glm::mat4 &projMatrix, std::vec
 void MaterialTerrainManager::PushUniform(MaterialTerrain& material, const glm::mat4x4 worldPos,
 	UniformHandle& uniformObject)
 {
-	//uniformObject.Push("innerTessFactor", 64.0f);
-	//uniformObject.Push("outerTessFactor", 64.0f);
-	//uniformObject.Push("noiseFreq", 2.0f);
-	//uniformObject.Push("noiseOctave", 10.0f);
-	//uniformObject.Push("invNoiseSize", 1 / material.noiseMap->GetHeight());
-	//float heightScale = 0.1f;
-	//uniformObject.Push("heightScale", heightScale);
-	//uniformObject.Push("triSize", 1.0f);
-
 	auto camera = GraphicManager::Get()->GetCamera();
-	uniformObject.Push("ModelView", camera->viewMatrix); 
-	//uniformObject.Push("ModelViewProjection", camera->projectionMatrix * camera->viewMatrix); 
-	uniformObject.Push("Projection", camera->projectionMatrix); 
-	/*uniformObject.Push("InvProjection", glm::inverse(camera->projectionMatrix)); 
-	uniformObject.Push("InvView", glm::inverse(camera->viewMatrix));
-	uniformObject.Push("eyePosWorld", glm::inverse(camera->viewMatrix) * glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));*/
-
-	std::vector<glm::vec4> planes;
-	planes.resize(6);
-	ComputeFrustumPlanes(camera->viewMatrix, camera->projectionMatrix, planes);
-	uniformObject.Push("frustumPlanes", *planes.data(), sizeof(glm::vec4) * 6);
-	uniformObject.Push("displacementFactor", (float)50);
-	uniformObject.Push("tessellationFactor", (float)0.75);
-
-	glm::vec2 size = material.pipelineMaterial->GetPipeline()->GetSize(1);
-	uniformObject.Push("viewport", glm::vec2(size.x, size.y));
-
-	uniformObject.Push("tessellatedEdgeSize", (float)20);
-
-	//int gridW, gridH;
-	//gridW = gridH = 64;
-	//uniformObject.Push("gridW", gridW);
-	//uniformObject.Push("gridH", gridH);
-	//glm::vec3 tileSize = glm::vec3(0.25f, 0.0f, 0.25f);
-	//uniformObject.Push("tileSize", tileSize);
-	//uniformObject.Push("gridOrigin", glm::vec3(-tileSize.x * gridW * 0.5f, 0.0f, -tileSize.z * gridH * 0.5f));
-
-	//glm::vec3 halfTileSize = glm::vec3(tileSize.x, heightScale, tileSize.z)*0.5f;
-	//uniformObject.Push("tileBoundingSphereR", glm::length(halfTileSize));
+	uniformObject.Push("view", camera->viewMatrix); 
+	uniformObject.Push("projection", camera->projectionMatrix); 
+	uniformObject.Push("transform", worldPos);
 }
 
 void MaterialTerrainManager::DecodeComponent(json& componentJson, const Entity entity)

@@ -114,6 +114,216 @@ void PrefabFactor::CreateRock2(const glm::vec3 pos)
 	rock1.CreateComponent<ShadowRenderer>(ComponentType::SHADOW_RENDERER);
 }
 
+void PrefabFactor::CreateTree1(glm::vec3 pos)
+{
+	auto entityManager = Engine::Get()->GetEntityManager();
+	const auto entityHandle = entityManager->CreateEntity();
+	auto rock1 = EntityHandle(entityHandle);
+
+	//Transform
+	auto t1 = rock1.CreateComponent<Transform>(ComponentType::TRANSFORM);
+	t1->position = pos;
+	t1->scale = glm::vec3(0.01, 0.01, 0.01);
+	t1->rotation = glm::vec3(4.7f, 0, 0);
+
+	//Mesh
+	Model mesh;
+	mesh.componentType = ComponentType::MODEL;
+	mesh.model = Engine::Get()->GetModelManager()->GetModel("ressources/models/tree_1.obj");
+	rock1.AddComponent<Model>(mesh);
+
+	//Material
+	auto material = MaterialDefault();
+	material.componentType = ComponentType::MATERIAL_DEFAULT;
+	material.castsShadows = true;
+	material.ignoreLighting = false;
+	material.ignoreFog = false;
+	material.metallic = 0;
+	material.roughness = 0;
+	material.diffuseTexture = TextureManager::Get()->GetTextureByName("ressources/textures/tree_1.jpg");
+	rock1.AddComponent<MaterialDefault>(material);
+
+	//Bounding sphere
+	rock1.AddComponent<BoundingSphere>(BoundingSphereManager::GetBoundingSphere(*mesh.model));
+
+	//Drawable
+	rock1.CreateComponent<Drawable>(ComponentType::DRAWABLE);
+
+	//MeshRenderer
+	rock1.CreateComponent<MeshRenderer>(ComponentType::MESH_RENDERER);
+
+	//Shadow Renderer
+	rock1.CreateComponent<ShadowRenderer>(ComponentType::SHADOW_RENDERER);
+}
+
+void PrefabFactor::CreateTree2(glm::vec3 pos)
+{
+	auto entityManager = Engine::Get()->GetEntityManager();
+	const auto entityHandle = entityManager->CreateEntity();
+	auto rock1 = EntityHandle(entityHandle);
+
+	//Transform
+	auto t1 = rock1.CreateComponent<Transform>(ComponentType::TRANSFORM);
+	t1->position = pos;
+	t1->scale = glm::vec3(0.01, 0.01, 0.01);
+	t1->rotation = glm::vec3(4.7f, 0, 0);
+
+	//Mesh
+	Model mesh;
+	mesh.componentType = ComponentType::MODEL;
+	mesh.model = Engine::Get()->GetModelManager()->GetModel("ressources/models/tree_2.obj");
+	rock1.AddComponent<Model>(mesh);
+
+	//Material
+	auto material = MaterialDefault();
+	material.componentType = ComponentType::MATERIAL_DEFAULT;
+	material.castsShadows = true;
+	material.ignoreLighting = false;
+	material.ignoreFog = false;
+	material.metallic = 0;
+	material.roughness = 0;
+	material.diffuseTexture = TextureManager::Get()->GetTextureByName("ressources/textures/tree_2.jpg");
+	rock1.AddComponent<MaterialDefault>(material);
+
+	//Bounding sphere
+	rock1.AddComponent<BoundingSphere>(BoundingSphereManager::GetBoundingSphere(*mesh.model));
+
+	//Drawable
+	rock1.CreateComponent<Drawable>(ComponentType::DRAWABLE);
+
+	//MeshRenderer
+	rock1.CreateComponent<MeshRenderer>(ComponentType::MESH_RENDERER);
+
+	//Shadow Renderer
+	rock1.CreateComponent<ShadowRenderer>(ComponentType::SHADOW_RENDERER);
+}
+
+void PrefabFactor::CreateTree3(glm::vec3 pos)
+{
+	auto entityManager = Engine::Get()->GetEntityManager();
+	const auto entityHandle = entityManager->CreateEntity();
+	auto rock1 = EntityHandle(entityHandle);
+
+	//Transform
+	auto t1 = rock1.CreateComponent<Transform>(ComponentType::TRANSFORM);
+	t1->position = pos;
+	t1->scale = glm::vec3(0.01, 0.01, 0.01);
+	t1->rotation = glm::vec3(4.7f, 0, 0);
+
+	//Mesh
+	Model mesh;
+	mesh.componentType = ComponentType::MODEL;
+	mesh.model = Engine::Get()->GetModelManager()->GetModel("ressources/models/tree_3.obj");
+	rock1.AddComponent<Model>(mesh);
+
+	//Material
+	auto material = MaterialDefault();
+	material.componentType = ComponentType::MATERIAL_DEFAULT;
+	material.castsShadows = true;
+	material.ignoreLighting = false;
+	material.ignoreFog = false;
+	material.metallic = 0;
+	material.roughness = 0;
+	material.diffuseTexture = TextureManager::Get()->GetTextureByName("ressources/textures/tree_3.jpg");
+	rock1.AddComponent<MaterialDefault>(material);
+
+	//Bounding sphere
+	rock1.AddComponent<BoundingSphere>(BoundingSphereManager::GetBoundingSphere(*mesh.model));
+
+	//Drawable
+	rock1.CreateComponent<Drawable>(ComponentType::DRAWABLE);
+
+	//MeshRenderer
+	rock1.CreateComponent<MeshRenderer>(ComponentType::MESH_RENDERER);
+
+	//Shadow Renderer
+	rock1.CreateComponent<ShadowRenderer>(ComponentType::SHADOW_RENDERER);
+}
+
+void PrefabFactor::CreateTree4(glm::vec3 pos)
+{
+	auto entityManager = Engine::Get()->GetEntityManager();
+	const auto entityHandle = entityManager->CreateEntity();
+	auto rock1 = EntityHandle(entityHandle);
+
+	//Transform
+	auto t1 = rock1.CreateComponent<Transform>(ComponentType::TRANSFORM);
+	t1->position = pos;
+	t1->scale = glm::vec3(0.01, 0.01, 0.01);
+	t1->rotation = glm::vec3(4.7f, 0, 0);
+
+	//Mesh
+	Model mesh;
+	mesh.componentType = ComponentType::MODEL;
+	mesh.model = Engine::Get()->GetModelManager()->GetModel("ressources/models/tree_4.obj");
+	rock1.AddComponent<Model>(mesh);
+
+	//Material
+	auto material = MaterialDefault();
+	material.componentType = ComponentType::MATERIAL_DEFAULT;
+	material.castsShadows = true;
+	material.ignoreLighting = false;
+	material.ignoreFog = false;
+	material.metallic = 0;
+	material.roughness = 0;
+	material.diffuseTexture = TextureManager::Get()->GetTextureByName("ressources/textures/tree_4.jpg");
+	rock1.AddComponent<MaterialDefault>(material);
+
+	//Bounding sphere
+	rock1.AddComponent<BoundingSphere>(BoundingSphereManager::GetBoundingSphere(*mesh.model));
+
+	//Drawable
+	rock1.CreateComponent<Drawable>(ComponentType::DRAWABLE);
+
+	//MeshRenderer
+	rock1.CreateComponent<MeshRenderer>(ComponentType::MESH_RENDERER);
+
+	//Shadow Renderer
+	rock1.CreateComponent<ShadowRenderer>(ComponentType::SHADOW_RENDERER);
+}
+
+void PrefabFactor::CreateTree5(glm::vec3 pos)
+{
+	auto entityManager = Engine::Get()->GetEntityManager();
+	const auto entityHandle = entityManager->CreateEntity();
+	auto rock1 = EntityHandle(entityHandle);
+
+	//Transform
+	auto t1 = rock1.CreateComponent<Transform>(ComponentType::TRANSFORM);
+	t1->position = pos;
+	t1->scale = glm::vec3(0.01, 0.01, 0.01);
+	t1->rotation = glm::vec3(4.7f, 0, 0);
+
+	//Mesh
+	Model mesh;
+	mesh.componentType = ComponentType::MODEL;
+	mesh.model = Engine::Get()->GetModelManager()->GetModel("ressources/models/tree_5.obj");
+	rock1.AddComponent<Model>(mesh);
+
+	//Material
+	auto material = MaterialDefault();
+	material.componentType = ComponentType::MATERIAL_DEFAULT;
+	material.castsShadows = true;
+	material.ignoreLighting = false;
+	material.ignoreFog = false;
+	material.metallic = 0;
+	material.roughness = 0;
+	material.diffuseTexture = TextureManager::Get()->GetTextureByName("ressources/textures/tree_5.jpg");
+	rock1.AddComponent<MaterialDefault>(material);
+
+	//Bounding sphere
+	rock1.AddComponent<BoundingSphere>(BoundingSphereManager::GetBoundingSphere(*mesh.model));
+
+	//Drawable
+	rock1.CreateComponent<Drawable>(ComponentType::DRAWABLE);
+
+	//MeshRenderer
+	rock1.CreateComponent<MeshRenderer>(ComponentType::MESH_RENDERER);
+
+	//Shadow Renderer
+	rock1.CreateComponent<ShadowRenderer>(ComponentType::SHADOW_RENDERER);
+}
+
 void PrefabFactor::CreateSphere(const glm::vec3 pos)
 {
 	auto entityManager = Engine::Get()->GetEntityManager();
@@ -276,7 +486,7 @@ void PrefabFactor::CreateTerrain(glm::vec3 pos)
 	//Transform
 	auto t1 = terrain.CreateComponent<dm::Transform>(ComponentType::TRANSFORM);
 	t1->position = pos;
-	t1->scale = glm::vec3(10, 1, 10);
+	t1->scale = glm::vec3(1, 1, 1);
 
 	//Mesh
 	dm::Model mesh;
@@ -287,7 +497,9 @@ void PrefabFactor::CreateTerrain(glm::vec3 pos)
 	//Material
 	auto material = MaterialTerrain();
 	material.componentType = ComponentType::MATERIAL_TERRAIN;
-	material.noiseMap = Image2d::CreateNoiseTexture(glm::vec2(256, 256));
+	//material.noiseMap = Image2d::CreateNoiseTexture(glm::vec2(256, 256));
+	material.noiseMap = TextureManager::Get()->GetTextureByName("ressources/textures/heightmap.jpg");
+	material.grassSampler = TextureManager::Get()->GetTextureByName("ressources/textures/grass/grass1-albedo3.png");
 	terrain.AddComponent<MaterialTerrain>(material);
 
 	//Bounding sphere
@@ -301,5 +513,46 @@ void PrefabFactor::CreateTerrain(glm::vec3 pos)
 
 	//Shadow Renderer
 	terrain.CreateComponent<ShadowRenderer>(ComponentType::SHADOW_RENDERER);
+}
+
+void PrefabFactor::CreateTerrainPrefab(glm::vec3 pos)
+{
+	auto entityManager = Engine::Get()->GetEntityManager();
+	const auto entityHandle = entityManager->CreateEntity();
+	auto rock1 = EntityHandle(entityHandle);
+
+	//Transform
+	auto t1 = rock1.CreateComponent<Transform>(ComponentType::TRANSFORM);
+	t1->position = pos;
+	t1->scale = glm::vec3(0.1, 0.1, 0.1);
+
+	//Mesh
+	Model mesh;
+	mesh.componentType = ComponentType::MODEL;
+	mesh.model = Engine::Get()->GetModelManager()->GetModel("ressources/models/mountain.obj");
+	rock1.AddComponent<Model>(mesh);
+
+	//Material
+	auto material = MaterialDefault();
+	material.componentType = ComponentType::MATERIAL_DEFAULT;
+	material.castsShadows = true;
+	material.ignoreLighting = false;
+	material.ignoreFog = false;
+	material.metallic = 0;
+	material.roughness = 0;
+	material.diffuseTexture = TextureManager::Get()->GetTextureByName("ressources/textures/grass/grass1-albedo3.png");
+	rock1.AddComponent<MaterialDefault>(material);
+
+	//Bounding sphere
+	rock1.AddComponent<BoundingSphere>(BoundingSphereManager::GetBoundingSphere(*mesh.model));
+
+	//Drawable
+	rock1.CreateComponent<Drawable>(ComponentType::DRAWABLE);
+
+	//MeshRenderer
+	rock1.CreateComponent<MeshRenderer>(ComponentType::MESH_RENDERER);
+
+	//Shadow Renderer
+	rock1.CreateComponent<ShadowRenderer>(ComponentType::SHADOW_RENDERER);
 }
 }

@@ -73,9 +73,12 @@ void MeshObj::Load()
 				attrib.vertices[3 * index.vertex_index + 2]);
 
 			//UV
-			glm::vec2 uv = glm::vec2(
-				attrib.texcoords[2 * index.texcoord_index + 0], 
-				1.0f - attrib.texcoords[2 * index.texcoord_index + 1]);
+			glm::vec2 uv;
+			if (index.texcoord_index > 0) {
+				uv = glm::vec2(
+					attrib.texcoords[2 * index.texcoord_index + 0],
+					1.0f - attrib.texcoords[2 * index.texcoord_index + 1]);
+			}
 
 			//Normal
 			glm::vec3 normal;

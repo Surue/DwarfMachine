@@ -99,9 +99,9 @@ void TransformManager::OnDrawInspector(Entity entity)
 	ImGuizmo::BeginFrame();
 	ImGuiIO& io = ImGui::GetIO();
 	ImGuizmo::SetRect(0, 0, io.DisplaySize.x, io.DisplaySize.y);
-	ImGuizmo::Manipulate(&camera->viewMatrix[0][0], &camera->projectionMatrix[0][0], ImGuizmo::TRANSLATE, ImGuizmo::LOCAL, &m_Components[entity - 1].worldMatrix[0][0], NULL, NULL);
+	//ImGuizmo::Manipulate(&camera->viewMatrix[0][0], &camera->projectionMatrix[0][0], ImGuizmo::TRANSLATE, ImGuizmo::LOCAL, &m_Components[entity - 1].worldMatrix[0][0], NULL, NULL);
 
-	ImGuizmo::DecomposeMatrixToComponents(&m_Components[entity - 1].worldMatrix[0][0], &m_Components[entity - 1].position[0], &m_Components[entity - 1].rotation[0], &m_Components[entity - 1].scale[0]);
+	//ImGuizmo::DecomposeMatrixToComponents(&m_Components[entity - 1].worldMatrix[0][0], &m_Components[entity - 1].position[0], &m_Components[entity - 1].rotation[0], &m_Components[entity - 1].scale[0]);
 }
 
 void TransformManager::DecodeComponent(json& componentJson, Entity entity)

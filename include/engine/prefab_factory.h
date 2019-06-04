@@ -47,15 +47,15 @@ public:
 
 	}
 
-	static void CreateTree1(glm::vec3 pos)
-	{
+	static void CreateTree1(glm::vec3 pos);
 
-	}
+	static void CreateTree2(glm::vec3 pos);
 
-	static void CreateTree2(glm::vec3 pos)
-	{
+	static void CreateTree3(glm::vec3 pos);
 
-	}
+	static void CreateTree4(glm::vec3 pos);
+
+	static void CreateTree5(glm::vec3 pos);
 
 	static void CreateSphere(glm::vec3 pos);
 
@@ -68,6 +68,8 @@ public:
 	static void CreateSpotLight(glm::vec3 pos);
 
 	static void CreateTerrain(glm::vec3 pos);
+
+	static void CreateTerrainPrefab(glm::vec3 pos);
 };
 }
 

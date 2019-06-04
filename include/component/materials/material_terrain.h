@@ -34,6 +34,7 @@ namespace dm
 {
 struct MaterialTerrain : public Material
 {
+	std::shared_ptr<Image2d> grassSampler = nullptr;
 	std::shared_ptr<Image2d> noiseMap = nullptr;
 };
 

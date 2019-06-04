@@ -372,6 +372,36 @@ void Editor::DrawAddMenu()
 			{
 				PrefabFactor::CreateRock2(camera->position + camera->front * 5.0f);
 			}
+
+			if (ImGui::Button("Tree 1"))
+			{
+				PrefabFactor::CreateTree1(camera->position + camera->front * 5.0f);
+			}
+
+			if (ImGui::Button("Tree 2"))
+			{
+				PrefabFactor::CreateTree2(camera->position + camera->front * 5.0f);
+			}
+
+			if (ImGui::Button("Tree 3"))
+			{
+				PrefabFactor::CreateTree3(camera->position + camera->front * 5.0f);
+			}
+
+			if (ImGui::Button("Tree 4"))
+			{
+				PrefabFactor::CreateTree4(camera->position + camera->front * 5.0f);
+			}
+
+			if (ImGui::Button("Tree 5"))
+			{
+				PrefabFactor::CreateTree5(camera->position + camera->front * 5.0f);
+			}
+
+			if (ImGui::Button("Terrain 1"))
+			{
+				PrefabFactor::CreateTerrainPrefab(camera->position + camera->front * 5.0f);
+			}
 			ImGui::EndMenu();
 		}
 

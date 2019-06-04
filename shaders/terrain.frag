@@ -1,19 +1,20 @@
 #version 450
 
-layout(binding = 3) uniform UboScene
+layout(binding = 0) uniform UboScene
 {
 	mat4 projection;
 	mat4 view;
 	vec3 cameraPos;
+	mat4 transform;
 } scene;
 
-layout (binding = 1) uniform sampler2D samplerHeight; 
 
-layout (location = 0) in vec2 inUV;
-layout (location = 1) in vec3 inNormal;
-layout (location = 2) in vec3 inViewVec;
-layout (location = 3) in vec3 inEyePos;
-layout (location = 4) in vec3 inWorldPos;
+layout(binding = 1) uniform sampler2D samplerHeight;
+layout (binding = 2) uniform sampler2D samplerGrass; 
+
+layout(location = 0) in vec3 inPosition;
+layout(location = 1) in vec2 inUV;
+layout(location = 2) in vec3 inNormal;
 
 layout(location = 0) out vec4 outPosition;
 layout(location = 1) out vec4 outDiffuse;
@@ -33,16 +34,16 @@ vec3 sampleTerrainLayer()
 
 	vec3 color = vec3(0.0);
 	
-	// Get height from displacement map
-	float height = textureLod(samplerHeight, inUV, 0.0).r * 255.0;
-	
-	for (int i = 0; i < 6; i++)
-	{
-		float range = layers[i].y - layers[i].x;
-		float weight = (range - abs(height - layers[i].y)) / range;
-		weight = max(0.0, weight);
-		color += weight * texture(samplerHeight, (inUV * 16.0)).rgb;
-	}
+//	// Get height from displacement map
+//	float height = textureLod(samplerHeight, inUV, 0.0).r * 255.0;
+//	
+//	for (int i = 0; i < 6; i++)
+//	{
+//		float range = layers[i].y - layers[i].x;
+//		float weight = (range - abs(height - layers[i].y)) / range;
+//		weight = max(0.0, weight);
+//		color += weight * texture(samplerHeight, (inUV * 16.0)).rgb;
+//	}
 
 	return color;
 }
@@ -51,11 +52,19 @@ void main()
 {
 	vec3 N = normalize(inNormal);
 	vec3 ambient = vec3(0.5);
-
+	vec3 normal = normalize(inNormal);
 	vec4 color = vec4(ambient * sampleTerrainLayer(), 1.0);
 
-	outDiffuse = color;	
-	outNormal = vec4(inNormal, 1.0);
-	outPosition = scene.view * vec4(inWorldPos, 1.0);
+	// Fragment coords
+	vec2 xy = inUV.xy;
+	// Tile coords
+	vec2 phase = fract(xy / vec2(1, 1));
+
+	vec3 position = inPosition;
+//	position.y = texture(samplerHeight, inUV).r;
+
+	outDiffuse = texture(samplerGrass, inUV);	
+	outNormal = vec4(normalize(normal), 1.0f);
+	outPosition = vec4(position, 1.0);
 	outMaterial = vec4(0.0);
 }

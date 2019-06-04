@@ -606,7 +606,7 @@ TEST(Models, Lights)
 TEST(Models, Scene)
 {
 	dm::EngineSettings settings;
-	settings.windowSize = dm::Vec2i(1024, 720);
+	settings.windowSize = dm::Vec2i(1920, 1080);
 	dm::Engine engine = dm::Engine(settings);
 	engine.Init();
 
@@ -671,7 +671,7 @@ void LoadObj(glm::vec3 pos, glm::vec3 scale, dm::EntityManager* entityManager, s
 TEST(Models, Terrain)
 {
 	dm::EngineSettings settings;
-	settings.windowSize = dm::Vec2i(1024, 720);
+	settings.windowSize = dm::Vec2i(1920, 1080);
 	dm::Engine engine = dm::Engine(settings);
 	engine.Init();
 
@@ -684,6 +684,7 @@ TEST(Models, Terrain)
 	auto entity = dm::EntityHandle(e0);
 
 	dm::Camera cameraInfo;
+	cameraInfo.componentType = ComponentType::CAMERA;
 	cameraInfo.up = glm::vec3(0.0f, 1.0f, 0.0f);
 	cameraInfo.componentType = ComponentType::CAMERA;
 	cameraInfo.isMain = true;
@@ -692,7 +693,7 @@ TEST(Models, Terrain)
 	cameraInfo.fov = 45;
 	cameraInfo.farFrustum = 100.0f;
 	cameraInfo.nearFrustum = 0.1f;
-	cameraInfo.aspect = 1024.0f / 720.0f;
+	cameraInfo.aspect = (1920/ 1080);
 	cameraInfo.projectionMatrix = glm::perspective(glm::radians(cameraInfo.fov), cameraInfo.aspect, cameraInfo.nearFrustum, cameraInfo.farFrustum);
 
 	auto camera = entity.AddComponent<dm::Camera>(cameraInfo);
@@ -701,20 +702,6 @@ TEST(Models, Terrain)
 
 	//Skybox
 	CreateSkybox(entityManager);
-
-	////Plane
-	//CreateTerrain(glm::vec3(0, 0, 0), entityManager);
-
-	//Load rock 1
-	std::string modelPath = "ressources/models/rocks_01_model.obj";
-	std::string diffusePath = "ressources/textures/rocks_01_model/rocks_01_dif.tga";
-	std::string normalPath = "ressources/textures/rocks_01_model/rocks_01_nm.tga";
-	LoadObj(glm::vec3(10, 0, 0), glm::vec3(0.01, 0.01, 0.01), entityManager, modelPath, diffusePath, normalPath);
-
-	modelPath = "ressources/models/rock_v2.obj";
-	diffusePath = "ressources/textures/rock_v2/rock_v2_obj_lambert2SG_BaseColor.png";
-	normalPath = "ressources/textures/rock_v2/rock_v2_obj_lambert2SG_Normal.png";
-	LoadObj(glm::vec3(0, 0, 0), glm::vec3(0.1, 0.1, 0.1), entityManager, modelPath, diffusePath, normalPath);
 
 	//PointLight
 	const auto e1 = entityManager->CreateEntity();

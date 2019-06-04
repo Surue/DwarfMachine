@@ -45,7 +45,7 @@ RendererTerrain::RendererTerrain(const Pipeline::Stage& pipelineStage) :
 
 void RendererTerrain::Update()
 {
-	for (const auto &meshRender : m_RegisteredEntities)
+	/*for (const auto &meshRender : m_RegisteredEntities)
 	{
 		auto entity = EntityHandle(meshRender);
 		const auto transform = entity.GetComponent<Transform>(ComponentType::TRANSFORM);
@@ -53,7 +53,7 @@ void RendererTerrain::Update()
 
 		const auto material = entity.GetComponent<MaterialTerrain>(ComponentType::MATERIAL_TERRAIN);
 		MaterialTerrainManager::PushUniform(*material, TransformManager::GetWorldMatrix(*transform), meshRenderer->uniformObject);
-	}
+	}*/
 }
 
 void RendererTerrain::Draw(const CommandBuffer& commandBuffer)
@@ -61,7 +61,6 @@ void RendererTerrain::Draw(const CommandBuffer& commandBuffer)
 	const auto camera = GraphicManager::Get()->GetCamera();
 	m_UniformScene.Push("projection", camera->projectionMatrix);
 	m_UniformScene.Push("view", camera->viewMatrix);
-	m_UniformScene.Push("cameraPos", camera->position);
 
 	for (const auto &entity : m_RegisteredEntities)
 	{
@@ -114,9 +113,9 @@ void RendererTerrain::Draw(const CommandBuffer& commandBuffer)
 		}
 
 		auto &pipeline = *materialPipeline->GetPipeline();
+		m_UniformScene.Push("transform", TransformManager::GetWorldMatrix(*entityHandle.GetComponent<Transform>(ComponentType::TRANSFORM)));
 
 		meshRenderer->descriptorSet.Push("UboScene", m_UniformScene);
-		meshRenderer->descriptorSet.Push("UboObject", meshRenderer->uniformObject);
 
 		MaterialTerrainManager::PushDescriptor(*entityHandle.GetComponent<MaterialTerrain>(ComponentType::MATERIAL_TERRAIN), meshRenderer->descriptorSet);
 

@@ -82,7 +82,7 @@ void RendererDeferred::Draw(const CommandBuffer& commandBuffer)
 	uint32_t pointLightCount = 0;
 	uint32_t spotLightCount = 0;
 
-	glm::vec3 directionalDirection;
+	glm::vec3 directionalDirection = glm::vec3(-1.0f, -1.0f, 0.0f);
 	glm::vec4 directionalColor;
 
 	for(auto entity : Engine::Get()->GetEntityManager()->GetEntities())
