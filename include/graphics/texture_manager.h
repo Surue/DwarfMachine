@@ -49,7 +49,12 @@ public:
 		}
 
 		m_Textures.emplace(name, Image2d::Create(name));
-		return m_Textures.begin()->second;
+		auto it3 = m_Textures.find(name);
+
+		if (it3 != m_Textures.end())
+		{
+			return it3->second;
+		}
 	}
 private:
 	std::map<std::string, std::shared_ptr<Image2d>> m_Textures;

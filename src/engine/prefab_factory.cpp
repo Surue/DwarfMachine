@@ -413,7 +413,7 @@ void PrefabFactor::CreatePlane(const glm::vec3 pos)
 	//Transform
 	auto t1 = plane.CreateComponent<dm::Transform>(ComponentType::TRANSFORM);
 	t1->position = pos;
-	t1->scale = glm::vec3(1, 1, 1);
+	t1->scale = glm::vec3(2, 2, 2);
 
 	//Mesh
 	dm::Model mesh;
@@ -429,7 +429,8 @@ void PrefabFactor::CreatePlane(const glm::vec3 pos)
 	material.ignoreFog = false;
 	material.metallic = 0;
 	material.roughness = 0;
-	plane.AddComponent<dm::MaterialDefault>(material);
+	material.diffuseTexture = TextureManager::Get()->GetTextureByName("ressources/textures/grass/grass1-albedo3.png");
+	plane.AddComponent<MaterialDefault>(material);
 
 	//Bounding sphere
 	plane.AddComponent<dm::BoundingSphere>(dm::BoundingSphereManager::GetBoundingSphere(*mesh.model));

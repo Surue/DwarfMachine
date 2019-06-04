@@ -7,31 +7,31 @@
                     "far": 100.0,
                     "fov": 45.0,
                     "front": {
-                        "x": -4.371138828673793e-08,
-                        "y": 0.0,
-                        "z": 1.0
+                        "x": 0.018824150785803795,
+                        "y": -0.8503516912460327,
+                        "z": -0.5258780121803284
                     },
                     "isCulling": 1,
                     "isMain": 1,
                     "near": 0.10000000149011612,
-                    "pitch": 0.0,
+                    "pitch": -58.249942779541016,
                     "position": {
-                        "x": 0.0,
-                        "y": 0.0,
-                        "z": -10.0
+                        "x": 1.4959512948989868,
+                        "y": 22.61933708190918,
+                        "z": 13.99392032623291
                     },
                     "right": {
-                        "x": 1.0,
-                        "y": 0.0,
-                        "z": 4.371138828673793e-08
+                        "x": -0.9993600249290466,
+                        "y": -0.0,
+                        "z": -0.03577275201678276
                     },
                     "type": 2,
                     "up": {
-                        "x": 0.0,
-                        "y": -1.0,
-                        "z": 0.0
+                        "x": -0.03041941672563553,
+                        "y": -0.5262148380279541,
+                        "z": 0.8498073816299438
                     },
-                    "yaw": 90.0
+                    "yaw": -87.94993591308594
                 }
             ],
             "name": "entity 0"
@@ -115,18 +115,483 @@
                     "type": 1
                 },
                 {
+                    "castShadow": 1,
                     "color": {
                         "a": 1.0,
                         "b": 1.0,
                         "g": 1.0,
                         "r": 1.0
                     },
-                    "intensity": 1.0,
-                    "radius": 1.0,
-                    "type": 9
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.0,
+                    "roughness": 0.0,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelPlane",
+                    "type": 4
+                },
+                {
+                    "radius": 7.071067810058594,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
                 }
             ],
             "name": "entity 2"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": 1.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 0.009999999776482582,
+                        "y": 0.009999999776482582,
+                        "z": 0.009999999776482582
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 1,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.0,
+                    "normal": "ressources/textures/rocks_01_model/rocks_01_dif.tga",
+                    "roughness": 0.0,
+                    "texture": "ressources/textures/rocks_01_model/rocks_01_dif.tga",
+                    "type": 3
+                },
+                {
+                    "modelName": "ressources/models/rocks_01_model.obj",
+                    "type": 4
+                },
+                {
+                    "radius": 448.99127197265625,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 3"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": 5.0,
+                        "y": 0.0,
+                        "z": 2.0
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 0.10000000149011612,
+                        "y": 0.10000000149011612,
+                        "z": 0.10000000149011612
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 1,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.0,
+                    "normal": "ressources/textures/rock_v2/rock_v2_obj_lambert2SG_BaseColor.png",
+                    "roughness": 0.0,
+                    "texture": "ressources/textures/rock_v2/rock_v2_obj_lambert2SG_BaseColor.png",
+                    "type": 3
+                },
+                {
+                    "modelName": "ressources/models/rock_v2.obj",
+                    "type": 4
+                },
+                {
+                    "radius": 27.50674819946289,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 4"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": -3.0,
+                        "y": 0.0,
+                        "z": 4.0
+                    },
+                    "rotation": {
+                        "x": 4.699999809265137,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 0.009999999776482582,
+                        "y": 0.009999999776482582,
+                        "z": 0.009999999776482582
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 1,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.0,
+                    "roughness": 0.0,
+                    "texture": "ressources/textures/rock_v2/rock_v2_obj_lambert2SG_BaseColor.png",
+                    "type": 3
+                },
+                {
+                    "modelName": "ressources/models/tree_1.obj",
+                    "type": 4
+                },
+                {
+                    "radius": 1048.9832763671875,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 5"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": 2.0,
+                        "y": 0.0,
+                        "z": -1.0
+                    },
+                    "rotation": {
+                        "x": 4.699999809265137,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 0.009999999776482582,
+                        "y": 0.009999999776482582,
+                        "z": 0.009999999776482582
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 1,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.0,
+                    "roughness": 0.0,
+                    "texture": "ressources/textures/rock_v2/rock_v2_obj_lambert2SG_BaseColor.png",
+                    "type": 3
+                },
+                {
+                    "modelName": "ressources/models/tree_2.obj",
+                    "type": 4
+                },
+                {
+                    "radius": 569.4591674804688,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 6"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": 4.0,
+                        "y": 0.0,
+                        "z": 2.0
+                    },
+                    "rotation": {
+                        "x": 4.699999809265137,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 0.009999999776482582,
+                        "y": 0.009999999776482582,
+                        "z": 0.009999999776482582
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 1,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.0,
+                    "roughness": 0.0,
+                    "texture": "ressources/textures/rock_v2/rock_v2_obj_lambert2SG_BaseColor.png",
+                    "type": 3
+                },
+                {
+                    "modelName": "ressources/models/tree_3.obj",
+                    "type": 4
+                },
+                {
+                    "radius": 719.51708984375,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 7"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": 1.0,
+                        "y": 0.0,
+                        "z": -7.0
+                    },
+                    "rotation": {
+                        "x": 4.699999809265137,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 0.009999999776482582,
+                        "y": 0.009999999776482582,
+                        "z": 0.009999999776482582
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 1,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.0,
+                    "roughness": 0.0,
+                    "texture": "ressources/textures/rock_v2/rock_v2_obj_lambert2SG_BaseColor.png",
+                    "type": 3
+                },
+                {
+                    "modelName": "ressources/models/tree_4.obj",
+                    "type": 4
+                },
+                {
+                    "radius": 374.07440185546875,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 8"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": 8.0,
+                        "y": 0.0,
+                        "z": -2.0
+                    },
+                    "rotation": {
+                        "x": 4.699999809265137,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 0.009999999776482582,
+                        "y": 0.009999999776482582,
+                        "z": 0.009999999776482582
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 1,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.0,
+                    "roughness": 0.0,
+                    "texture": "ressources/textures/rock_v2/rock_v2_obj_lambert2SG_BaseColor.png",
+                    "type": 3
+                },
+                {
+                    "modelName": "ressources/models/tree_5.obj",
+                    "type": 4
+                },
+                {
+                    "radius": 615.4286499023438,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 9"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": 0.0,
+                        "y": 2.5999999046325684,
+                        "z": 0.0
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "color": {
+                        "a": 1.0,
+                        "b": 0.0,
+                        "g": 0.0,
+                        "r": 1.0
+                    },
+                    "intensity": 16.899999618530273,
+                    "radius": 8.100000381469727,
+                    "type": 9
+                }
+            ],
+            "name": "entity 10"
         },
         {
             "components": [
@@ -142,19 +607,19 @@
                         "y": -1.0,
                         "z": -1.0
                     },
-                    "intensity": 1.0,
+                    "intensity": 1.100000023841858,
                     "type": 10
                 }
             ],
-            "name": "entity 3"
+            "name": "entity 11"
         },
         {
             "components": [
                 {
                     "position": {
-                        "x": 0.0,
-                        "y": 10.0,
-                        "z": 0.0
+                        "x": -9.300000190734863,
+                        "y": 10.300000190734863,
+                        "z": 0.699999988079071
                     },
                     "rotation": {
                         "x": 0.0,
@@ -173,10 +638,10 @@
                     "color": {
                         "a": 1.0,
                         "b": 1.0,
-                        "g": 1.0,
-                        "r": 1.0
+                        "g": 0.0,
+                        "r": 0.1190190315246582
                     },
-                    "intensity": 1.0,
+                    "intensity": 58.79999923706055,
                     "range": 10.0,
                     "target": {
                         "x": 0.0,
@@ -186,7 +651,7 @@
                     "type": 11
                 }
             ],
-            "name": "entity 4"
+            "name": "entity 12"
         }
     ],
     "name": "newScene"

@@ -46,6 +46,7 @@ SOFTWARE.
 #include "component/lights/point_light.h"
 #include "component/lights/spot_light.h"
 #include "component/materials/material_terrain.h"
+#include "engine/prefab_factory.h"
 
 TEST(Models, Cube)
 {
@@ -702,6 +703,20 @@ TEST(Models, Terrain)
 
 	//Skybox
 	CreateSkybox(entityManager);
+
+	dm::PrefabFactor::CreatePlane(glm::vec3(0, 0, 0));
+
+
+	dm::PrefabFactor::CreateRock1(glm::vec3(1, 0, 0));
+	dm::PrefabFactor::CreateRock2(glm::vec3(5, 0, 2));
+	dm::PrefabFactor::CreateTree1(glm::vec3(-3, 0, 4));
+	dm::PrefabFactor::CreateTree2(glm::vec3(2, 0, -1));
+	dm::PrefabFactor::CreateTree3(glm::vec3(4, 0, 2));
+	dm::PrefabFactor::CreateTree4(glm::vec3(1, 0, -7));
+	dm::PrefabFactor::CreateTree5(glm::vec3(8, 0, -2));
+
+
+
 
 	//PointLight
 	const auto e1 = entityManager->CreateEntity();

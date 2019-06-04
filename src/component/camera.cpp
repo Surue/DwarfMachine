@@ -172,6 +172,11 @@ void CameraManager::DecodeComponent(json& componentJson, const Entity entity)
 	camera.projectionMatrix = glm::perspective(glm::radians(camera.fov), camera.aspect, camera.nearFrustum, camera.farFrustum);
 
 	m_Components[entity - 1] = camera;
+
+	if(camera.isMain)
+	{
+		m_GraphicManager->SetMainCamera(&camera);
+	}
 }
 
 void CameraManager::EncodeComponent(json& componentJson, const Entity entity)
