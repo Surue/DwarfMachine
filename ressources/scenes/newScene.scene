@@ -16,9 +16,9 @@
                     "near": 0.10000000149011612,
                     "pitch": -37.899993896484375,
                     "position": {
-                        "x": -17.945796966552734,
-                        "y": 18.417444229125977,
-                        "z": -14.23548698425293
+                        "x": -22.29944610595703,
+                        "y": 22.678077697753906,
+                        "z": -17.55207633972168
                     },
                     "right": {
                         "x": 0.6059880256652832,
@@ -5965,6 +5965,65 @@
                 }
             ],
             "name": "entity 105"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": -14.807317733764648,
+                        "y": 15.34601879119873,
+                        "z": -11.844609260559082
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 0.009999999776482582,
+                        "y": 0.009999999776482582,
+                        "z": 0.009999999776482582
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 1,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.0,
+                    "normal": "ressources/textures/rocks_01_model/rocks_01_nm.tga",
+                    "roughness": 0.0,
+                    "texture": "ressources/textures/rocks_01_model/rocks_01_dif.tga",
+                    "type": 3
+                },
+                {
+                    "modelName": "ressources/models/rocks_01_model.obj",
+                    "type": 4
+                },
+                {
+                    "radius": 448.99127197265625,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 106"
         }
     ],
     "name": "newScene"
