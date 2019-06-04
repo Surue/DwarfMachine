@@ -25,6 +25,7 @@ SOFTWARE.
 #include <component/materials/material_default.h>
 #include "imgui.h"
 #include "component/model.h"
+#include "graphics/texture_manager.h"
 
 namespace dm
 {
@@ -156,8 +157,6 @@ MaterialDefault* MaterialDefaultManager::AddComponent(const Entity entity, Mater
 			PipelineGraphics::Mode::MRT)
 	);
 	m_Components[entity - 1] = component;
-	m_Components[entity - 1].diffuseTexture = component.diffuseTexture;
-	m_Components[entity - 1].normalTexture = component.normalTexture;
 	return &m_Components[entity - 1];
 }
 
@@ -185,13 +184,13 @@ void MaterialDefaultManager::DecodeComponent(json& componentJson, const Entity e
 		material.ignoreFog = GetBoolFromJson(componentJson, "ignoreFog");
 
 	if(CheckJsonExists(componentJson, "texture"))
-		material.diffuseTexture = Image2d::Create(componentJson["texture"]);
+		material.diffuseTexture = TextureManager::Get()->GetTextureByName(componentJson["texture"]);
 
 	if (CheckJsonExists(componentJson, "normal"))
-		material.normalTexture = Image2d::Create(componentJson["normal"]);
+		material.normalTexture = TextureManager::Get()->GetTextureByName(componentJson["normal"]);
 
 	if (CheckJsonExists(componentJson, "material"))
-		material.materialTexture = Image2d::Create(componentJson["material"]);
+		material.materialTexture = TextureManager::Get()->GetTextureByName(componentJson["material"]);
 
 	material.pipelineMaterial = PipelineMaterial::Create({ 1, 0 },
 		PipelineGraphicsCreate(

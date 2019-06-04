@@ -7,31 +7,31 @@
                     "far": 100.0,
                     "fov": 45.0,
                     "front": {
-                        "x": 0.6276957392692566,
-                        "y": -0.6142851114273071,
-                        "z": 0.4781755805015564
+                        "x": 0.5883070230484009,
+                        "y": -0.47485610842704773,
+                        "z": 0.6545277237892151
                     },
                     "isCulling": 1,
                     "isMain": 1,
                     "near": 0.10000000149011612,
-                    "pitch": -37.899993896484375,
+                    "pitch": -28.3499813079834,
                     "position": {
-                        "x": -22.29944610595703,
-                        "y": 22.678077697753906,
-                        "z": -17.55207633972168
+                        "x": -42.13758850097656,
+                        "y": 30.24101448059082,
+                        "z": -31.44057846069336
                     },
                     "right": {
-                        "x": 0.6059880256652832,
+                        "x": 0.7437279224395752,
                         "y": 0.0,
-                        "z": -0.7954737544059753
+                        "z": -0.6684825420379639
                     },
                     "type": 2,
                     "up": {
-                        "x": -0.4886476695537567,
-                        "y": -0.7890841960906982,
-                        "z": -0.37224942445755005
+                        "x": -0.3174329996109009,
+                        "y": -0.8800634145736694,
+                        "z": -0.3531637191772461
                     },
-                    "yaw": 37.29997253417969
+                    "yaw": 48.049949645996094
                 }
             ],
             "name": "entity 0"
@@ -1130,7 +1130,7 @@
                     },
                     "rotation": {
                         "x": 0.0,
-                        "y": 0.0,
+                        "y": -0.0,
                         "z": 0.0
                     },
                     "scale": {
@@ -6024,6 +6024,478 @@
                 }
             ],
             "name": "entity 106"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": -25.133222579956055,
+                        "y": 19.724586486816406,
+                        "z": -10.895158767700195
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 0.009999999776482582,
+                        "y": 0.009999999776482582,
+                        "z": 0.009999999776482582
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 1,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.0,
+                    "normal": "ressources/textures/rocks_01_model/rocks_01_nm.tga",
+                    "roughness": 0.0,
+                    "texture": "ressources/textures/rocks_01_model/rocks_01_dif.tga",
+                    "type": 3
+                },
+                {
+                    "modelName": "ressources/models/rocks_01_model.obj",
+                    "type": 4
+                },
+                {
+                    "radius": 448.99127197265625,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 107"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": -25.133222579956055,
+                        "y": 19.724586486816406,
+                        "z": -10.895158767700195
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 0.009999999776482582,
+                        "y": 0.009999999776482582,
+                        "z": 0.009999999776482582
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 1,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.0,
+                    "normal": "ressources/textures/rocks_01_model/rocks_01_nm.tga",
+                    "roughness": 0.0,
+                    "texture": "ressources/textures/rocks_01_model/rocks_01_dif.tga",
+                    "type": 3
+                },
+                {
+                    "modelName": "ressources/models/rocks_01_model.obj",
+                    "type": 4
+                },
+                {
+                    "radius": 448.99127197265625,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 108"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": -32.28617858886719,
+                        "y": 22.743207931518555,
+                        "z": -14.18653678894043
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 0.009999999776482582,
+                        "y": 0.009999999776482582,
+                        "z": 0.009999999776482582
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 1,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.0,
+                    "normal": "ressources/textures/rocks_01_model/rocks_01_nm.tga",
+                    "roughness": 0.0,
+                    "texture": "ressources/textures/rocks_01_model/rocks_01_dif.tga",
+                    "type": 3
+                },
+                {
+                    "modelName": "ressources/models/rocks_01_model.obj",
+                    "type": 4
+                },
+                {
+                    "radius": 448.99127197265625,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 109"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": -28.036928176879883,
+                        "y": 21.667999267578125,
+                        "z": -11.698770523071289
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": -0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 0.009999999776482582,
+                        "y": 0.009999999776482582,
+                        "z": 0.009999999776482582
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 1,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.0,
+                    "normal": "ressources/textures/rocks_01_model/rocks_01_nm.tga",
+                    "roughness": 0.0,
+                    "texture": "ressources/textures/rocks_01_model/rocks_01_dif.tga",
+                    "type": 3
+                },
+                {
+                    "modelName": "ressources/models/rocks_01_model.obj",
+                    "type": 4
+                },
+                {
+                    "radius": 448.99127197265625,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 110"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": -26.610252380371094,
+                        "y": 25.07200050354004,
+                        "z": -20.164974212646484
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": -0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 0.009999999776482582,
+                        "y": 0.009999999776482582,
+                        "z": 0.009999999776482582
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 1,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.0,
+                    "normal": "ressources/textures/rocks_01_model/rocks_01_nm.tga",
+                    "roughness": 0.0,
+                    "texture": "ressources/textures/rocks_01_model/rocks_01_dif.tga",
+                    "type": 3
+                },
+                {
+                    "modelName": "ressources/models/rocks_01_model.obj",
+                    "type": 4
+                },
+                {
+                    "radius": 448.99127197265625,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 111"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": -21.39971160888672,
+                        "y": 19.406761169433594,
+                        "z": -17.943668365478516
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 0.10000000149011612,
+                        "y": 0.10000000149011612,
+                        "z": 0.10000000149011612
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 1,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.0,
+                    "normal": "ressources/textures/rock_v2/rock_v2_obj_lambert2SG_Normal.png",
+                    "roughness": 0.0,
+                    "texture": "ressources/textures/rock_v2/rock_v2_obj_lambert2SG_BaseColor.png",
+                    "type": 3
+                },
+                {
+                    "modelName": "ressources/models/rock_v2.obj",
+                    "type": 4
+                },
+                {
+                    "radius": 27.50674819946289,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 112"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": -19.637338638305664,
+                        "y": 20.576753616333008,
+                        "z": -26.167131423950195
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 0.10000000149011612,
+                        "y": 0.10000000149011612,
+                        "z": 0.10000000149011612
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 1,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.0,
+                    "normal": "ressources/textures/rock_v2/rock_v2_obj_lambert2SG_Normal.png",
+                    "roughness": 0.0,
+                    "texture": "ressources/textures/rock_v2/rock_v2_obj_lambert2SG_BaseColor.png",
+                    "type": 3
+                },
+                {
+                    "modelName": "ressources/models/rock_v2.obj",
+                    "type": 4
+                },
+                {
+                    "radius": 27.50674819946289,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 113"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": -16.706335067749023,
+                        "y": 15.900579452514648,
+                        "z": -18.071258544921875
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 0.10000000149011612,
+                        "y": 0.10000000149011612,
+                        "z": 0.10000000149011612
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 1,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.0,
+                    "normal": "ressources/textures/rock_v2/rock_v2_obj_lambert2SG_Normal.png",
+                    "roughness": 0.0,
+                    "texture": "ressources/textures/rock_v2/rock_v2_obj_lambert2SG_BaseColor.png",
+                    "type": 3
+                },
+                {
+                    "modelName": "ressources/models/rock_v2.obj",
+                    "type": 4
+                },
+                {
+                    "radius": 27.50674819946289,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 114"
         }
     ],
     "name": "newScene"
