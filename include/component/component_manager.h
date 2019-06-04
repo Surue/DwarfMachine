@@ -38,6 +38,7 @@ SOFTWARE.
 #include "lights/spot_light.h"
 #include "shadows/shadow_renderer.h"
 #include "materials/material_terrain.h"
+#include "debug_info.h"
 
 namespace dm {
 class ComponentManagerContainer final : public Module
@@ -97,6 +98,7 @@ private:
 	std::unique_ptr<SpotLightManager> m_SpotLightManager;
 	std::unique_ptr<ShadowRendererManager> m_ShadowRendererManager;
 	std::unique_ptr<MaterialTerrainManager> m_MaterialTerrainManager;
+	std::unique_ptr<DebugInfoManager> m_DebugInfoManager;
 
 	std::vector<Metadata*> m_ComponentsFactory;
 };

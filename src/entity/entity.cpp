@@ -109,6 +109,7 @@ void EntityManager::DestroyEntity(const Entity entity)
 
 	//Remove entity
 	m_EntityMask[entity - 1].mask = static_cast<int>(ComponentType::NONE);
+	m_EntityInfos[entity - 1] = INVALID_ENTITY;
 	m_LastEntity = entity - 1;
 }
 

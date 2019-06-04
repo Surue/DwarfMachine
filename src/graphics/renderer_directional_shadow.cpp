@@ -50,7 +50,7 @@ void RendererDirectionalShadow::Update()
 void RendererDirectionalShadow::Draw(const CommandBuffer& commandBuffer)
 {
 	//Get Directional Light
-	glm::vec3 lightDirection;
+	glm::vec3 lightDirection = glm::vec3(0, -1, 0);
 
 	auto entities = Engine::Get()->GetEntityManager()->GetEntities();
 

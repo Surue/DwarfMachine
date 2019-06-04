@@ -33,6 +33,8 @@ SOFTWARE.
 #include <engine/Input.h>
 #include <editor/log.h>
 #include <engine/engine.h>
+#include "engine/prefab_factory.h"
+#include "component/debug_info.h"
 
 namespace dm
 {
@@ -60,6 +62,13 @@ void Editor::Update()
 	MoveEditorCamera();
 
 	m_GizmoManager.Update();
+
+	auto* inputManager = Engine::Get()->GetInputManager();
+
+	if(inputManager->IsKeyDown(KeyCode::SPACE))
+	{
+		PrefabFactor::CreateCube(Engine::Get()->GetGraphicManager()->GetCamera()->position + Engine::Get()->GetGraphicManager()->GetCamera()->front * 5.0f);
+	}
 }
 
 void Editor::Draw()
@@ -82,6 +91,27 @@ void Editor::DrawInspector()
 	if(m_CurrentEntitySelected != INVALID_ENTITY)
 	{
 		Engine::Get()->GetComponentManager()->DrawOnInspector(m_CurrentEntitySelected);
+		ImGui::Separator();
+
+		auto entityHandle = EntityHandle(m_CurrentEntitySelected);
+		static bool showMenu = true;
+		if(ImGui::BeginMenu("Add Component", showMenu))
+		{
+
+			if(!entityHandle.HasComponent(ComponentType::DEBUG_INFO) && ImGui::Button("Add debug info"))
+			{
+				entityHandle.CreateComponent<DebugInfo>(ComponentType::DEBUG_INFO);
+			}
+
+			ImGui::EndMenu();
+		}
+
+		if(ImGui::Button("Destroy"))
+		{
+			entityHandle.Destroy();
+			m_CurrentEntitySelected = INVALID_ENTITY;
+		}
+		
 	}
 
 	ImGui::End();
@@ -159,7 +189,15 @@ void Editor::DrawHierarchy()
 	for (auto entity : manager->GetEntities())
 	{
 		if (entity == INVALID_ENTITY) continue;
-		std::string oss = "entity " + std::to_string(entity);
+		auto entityhandle = EntityHandle(entity);
+
+		std::string oss;
+		if (entityhandle.HasComponent(ComponentType::DEBUG_INFO)) {
+			oss = entityhandle.GetComponent<DebugInfo>(ComponentType::DEBUG_INFO)->name;
+		}else
+		{
+			oss = "entity " + std::to_string(entity);
+		}
 		if (ImGui::Selectable(oss.c_str(), m_CurrentEntitySelected == entity))
 		{
 			m_CurrentEntitySelected = entity;

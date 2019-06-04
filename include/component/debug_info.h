@@ -22,24 +22,35 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#ifndef COMPONENT_TYPE_H
-#define COMPONENT_TYPE_H
-enum class ComponentType : int {
-	NONE = 0,
-	TRANSFORM = 1,
-	CAMERA = 2,
-	MATERIAL_DEFAULT = 3,
-	MODEL = 4,
-	BOUNDING_SPHERE = 5,
-	DRAWABLE = 6,
-	MATERIAL_SKYBOX = 7,
-	MESH_RENDERER = 8,
-	POINT_LIGHT = 9, 
-	DIRECTIONAL_LIGHT = 10,
-	SPOT_LIGHT = 11,
-	SHADOW_RENDERER = 12,
-	MATERIAL_TERRAIN = 13,
-	DEBUG_INFO = 14,
-	LENGTH = 15,
+#ifndef DEBUG_INFO_H
+#define DEBUG_INFO_H
+#include <component/component.h>
+
+namespace dm
+{
+struct DebugInfo : public ComponentBase
+{
+	std::string name;
 };
-#endif //COMPONENT_TYPE_H
+
+class DebugInfoManager : public ComponentBaseManager<DebugInfo>
+{
+public:
+	void Init() override;
+
+	void Update() override;
+
+	DebugInfo* CreateComponent(Entity) override;
+
+	void DestroyComponent(Entity entity) override;
+
+	void OnDrawInspector(Entity entity) override;
+
+	void DecodeComponent(json& componentJson, const Entity entity) override;
+
+	void EncodeComponent(json& componentJson, const Entity entity) override;
+private:
+};
+}
+
+#endif
