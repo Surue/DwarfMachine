@@ -29,6 +29,7 @@ SOFTWARE.
 #include <graphics/mesh_plane.h>
 #include <editor/log.h>
 #include <graphics/mesh_quad.h>
+#include "graphics/mesh_obj.h"
 
 namespace dm
 {
@@ -43,6 +44,8 @@ void MeshManager::Init()
 	m_RegisteredMeshes["ModelSphere"] = MeshSphere::Create();
 	m_RegisteredMeshes["ModelPlane"] = MeshPlane::Create();
 	m_RegisteredMeshes["ModelQuad"] = MeshQuad::Create();
+	m_RegisteredMeshes["ressources/models/rocks_01_model.obj"] = MeshObj::Create("ressources/models/rocks_01_model.obj");
+	m_RegisteredMeshes["ressources/models/rock_v2.obj"] = MeshObj::Create("ressources/models/rock_v2.obj");
 }
 
 void MeshManager::Update()
@@ -57,6 +60,8 @@ void MeshManager::Clear()
 	m_RegisteredMeshes["ModelSphere"] = MeshSphere::Create();
 	m_RegisteredMeshes["ModelPlane"] = MeshPlane::Create();
 	m_RegisteredMeshes["ModelQuad"] = MeshQuad::Create();
+	m_RegisteredMeshes["ressources/models/rocks_01_model.obj"] = MeshObj::Create("ressources/models/rocks_01_model.obj");
+	m_RegisteredMeshes["ressources/models/rock_v2.obj"] = MeshObj::Create("ressources/models/rock_v2.obj");
 }
 
 void MeshManager::Draw()

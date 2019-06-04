@@ -23,14 +23,14 @@ const float fogExp = 0.05;
 
 vec3 applyFog(vec3 col, float dist, vec3 viewDir)
 {
-    float fogAmount = exp(-dist*fogExp);
-    float sunAmount = max(dot(viewDir, vec3(0.0, -1.0, -1.0)), 0.0);
-    sunAmount = pow(sunAmount, 8.0);
-    vec3 fogCol = mix(fogColor, sunColor, sunAmount);
-    return mix(fogCol, col, fogAmount);
-
 //    float fogAmount = exp(-dist*fogExp);
-//    return mix(fogColor, col, fogAmount);
+//    float sunAmount = max(dot(viewDir, vec3(0.0, -1.0, -1.0)), 0.0);
+//    sunAmount = pow(sunAmount, 8.0);
+//    vec3 fogCol = mix(fogColor, sunColor, sunAmount);
+//    return mix(fogCol, col, fogAmount);
+
+    float fogAmount = exp(-dist*fogExp);
+    return mix(fogColor, col, fogAmount);
 }
 
 void main() 

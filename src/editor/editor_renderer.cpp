@@ -96,7 +96,7 @@ void EditorRenderManager::Start()
 
 	rendererContainer.Add<RendererForward>(Pipeline::Stage(1, 3));
 
-	rendererContainer.Add<FilterFog>(Pipeline::Stage(1, 4));
+	//rendererContainer.Add<FilterFog>(Pipeline::Stage(1, 4));
 	rendererContainer.Add<FilterFxaa>(Pipeline::Stage(1, 4));
 	rendererContainer.Add<FilterDefault>(Pipeline::Stage(1, 4), true);
 	rendererContainer.Add<RendererGizmo>(Pipeline::Stage(1, 4));

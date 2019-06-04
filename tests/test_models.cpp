@@ -624,6 +624,50 @@ TEST(Models, Scene)
 	}
 }
 
+//Obj
+void LoadObj(glm::vec3 pos, glm::vec3 scale, dm::EntityManager* entityManager, std::string& modelPath, std::string& diffusePath, std::string& normalPath)
+{
+	//Obj
+	const auto entity = entityManager->CreateEntity();
+	auto obj = dm::EntityHandle(entity);
+
+	//Transform
+	auto t4 = obj.CreateComponent<dm::Transform>(ComponentType::TRANSFORM);
+	t4->position = pos;
+	t4->scale = scale;
+
+	//Model
+	dm::Model mesh4;
+	mesh4.componentType = ComponentType::MODEL;
+	mesh4.model = dm::Engine::Get()->GetModelManager()->GetModel(modelPath);
+	obj.AddComponent<dm::Model>(mesh4);
+
+	//Material
+	dm::MaterialDefault material;
+	material.componentType = ComponentType::MATERIAL_DEFAULT;
+	material.color = dm::Color(1, 1, 1, 1);
+	if(!diffusePath.empty())
+	material.diffuseTexture = dm::Image2d::Create(diffusePath);
+
+	if(!normalPath.empty())
+	material.normalTexture = dm::Image2d::Create(normalPath);
+	//material1.materialTexture = dm::Image2d::Create("ressources/textures/rocks_01_model/rocks_01_spec.tga");
+	obj.AddComponent<dm::MaterialDefault>(material);
+
+	//Bounding sphere
+	obj.AddComponent<dm::BoundingSphere>(dm::BoundingSphereManager::GetBoundingSphere(*mesh4.model));
+
+	//Drawable
+	obj.CreateComponent<dm::Drawable>(ComponentType::DRAWABLE);
+
+	//MeshRenderer
+	auto meshRenderer = obj.CreateComponent<dm::MeshRenderer>(ComponentType::MESH_RENDERER);
+	meshRenderer->materialType = dm::MeshRenderer::MaterialType::DEFAULT;
+
+	//Shadow Renderer
+	obj.CreateComponent<dm::ShadowRenderer>(ComponentType::SHADOW_RENDERER);
+}
+
 TEST(Models, Terrain)
 {
 	dm::EngineSettings settings;
@@ -658,8 +702,19 @@ TEST(Models, Terrain)
 	//Skybox
 	CreateSkybox(entityManager);
 
-	//Plane
-	CreateTerrain(glm::vec3(0, 0, 0), entityManager);
+	////Plane
+	//CreateTerrain(glm::vec3(0, 0, 0), entityManager);
+
+	//Load rock 1
+	std::string modelPath = "ressources/models/rocks_01_model.obj";
+	std::string diffusePath = "ressources/textures/rocks_01_model/rocks_01_dif.tga";
+	std::string normalPath = "ressources/textures/rocks_01_model/rocks_01_nm.tga";
+	LoadObj(glm::vec3(10, 0, 0), glm::vec3(0.01, 0.01, 0.01), entityManager, modelPath, diffusePath, normalPath);
+
+	modelPath = "ressources/models/rock_v2.obj";
+	diffusePath = "ressources/textures/rock_v2/rock_v2_obj_lambert2SG_BaseColor.png";
+	normalPath = "ressources/textures/rock_v2/rock_v2_obj_lambert2SG_Normal.png";
+	LoadObj(glm::vec3(0, 0, 0), glm::vec3(0.1, 0.1, 0.1), entityManager, modelPath, diffusePath, normalPath);
 
 	//PointLight
 	const auto e1 = entityManager->CreateEntity();
