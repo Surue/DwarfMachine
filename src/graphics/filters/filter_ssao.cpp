@@ -43,12 +43,14 @@ FilterSsao::FilterSsao(const Pipeline::Stage& pipelineStage) :
 {
 	for(uint32_t i = 0; i < 64; ++i)
 	{
-		glm::vec3 sample = glm::vec3(RandomFloat(-1.0f, 1.0f), RandomFloat(-1.0f, 1.0f), RandomFloat(-1.0f, 1.0f));
+		glm::vec3 sample = glm::vec3(RandomFloat(-1.0f, 1.0f), RandomFloat(-1.0f, 1.0f), RandomFloat(0.0f, 1.0f));
 		sample = glm::normalize(sample);
 		sample *= RandomFloat(0.0f, 1.0f);
-		float scale = static_cast<float>(i) / static_cast<float>(64);
+
+		auto scale = i / 64.0f;
 		scale = glm::mix(0.1f, 1.0f, scale * scale);
-		m_Kernel[i] = glm::vec4(sample, 1.0f);
+
+		m_Kernel[i] = glm::vec4(sample * scale, 0.0f);
 	}
 }
 

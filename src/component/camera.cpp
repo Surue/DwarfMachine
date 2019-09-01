@@ -84,6 +84,9 @@ void CameraManager::OnDrawInspector(const Entity entity)
 
 	ImGui::InputFloat("Near", &m_Components[entity - 1].nearFrustum);
 	ImGui::InputFloat("Far", &m_Components[entity - 1].farFrustum);
+	ImGui::DragFloat3("pos", &m_Components[entity - 1].position[0]);
+	ImGui::Checkbox("isMain", &m_Components[entity - 1].isMain);
+	ImGui::Checkbox("isCulling", &m_Components[entity - 1].isCulling);
 }
 
 void CameraManager::OnEntityResize(const int newSize)

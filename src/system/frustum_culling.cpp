@@ -119,7 +119,7 @@ void FrustumCulling::Update()
 			continue;
 		}
 
-		//drawable->isDrawable = true;
+		drawable->isDrawable = true;
 	}
 }
 }

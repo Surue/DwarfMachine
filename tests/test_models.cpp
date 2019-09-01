@@ -506,18 +506,38 @@ TEST(Models, Lights)
 	auto entity = dm::EntityHandle(e0);
 
 	dm::Camera cameraInfo;
+	cameraInfo.componentType = ComponentType::CAMERA;
 	cameraInfo.up = glm::vec3(0.0f, 1.0f, 0.0f);
 	cameraInfo.componentType = ComponentType::CAMERA;
 	cameraInfo.isMain = true;
-	cameraInfo.isCulling = true;
+	cameraInfo.isCulling = false;
 	cameraInfo.viewMatrix = glm::lookAt(cameraInfo.position, cameraInfo.position + cameraInfo.front, cameraInfo.up);
 	cameraInfo.fov = 45;
 	cameraInfo.farFrustum = 100.0f;
 	cameraInfo.nearFrustum = 0.1f;
-	cameraInfo.aspect = 1024.0f / 720.0f;
+	cameraInfo.aspect = (1920 / 1080);
 	cameraInfo.projectionMatrix = glm::perspective(glm::radians(cameraInfo.fov), cameraInfo.aspect, cameraInfo.nearFrustum, cameraInfo.farFrustum);
 
 	auto camera = entity.AddComponent<dm::Camera>(cameraInfo);
+
+	//Camera
+	const auto e1 = entityManager->CreateEntity();
+	auto entity1 = dm::EntityHandle(e1);
+
+	dm::Camera cameraInfo1;
+	cameraInfo1.componentType = ComponentType::CAMERA;
+	cameraInfo1.up = glm::vec3(0.0f, 1.0f, 0.0f);
+	cameraInfo1.componentType = ComponentType::CAMERA;
+	cameraInfo1.isMain = false;
+	cameraInfo1.isCulling = true;
+	cameraInfo1.viewMatrix = glm::lookAt(cameraInfo.position, cameraInfo.position + cameraInfo.front, cameraInfo.up);
+	cameraInfo1.fov = 45;
+	cameraInfo1.farFrustum = 100.0f;
+	cameraInfo1.nearFrustum = 0.1f;
+	cameraInfo1.aspect = (1920 / 1080);
+	cameraInfo1.projectionMatrix = glm::perspective(glm::radians(cameraInfo.fov), cameraInfo.aspect, cameraInfo.nearFrustum, cameraInfo.farFrustum);
+
+	auto camera1 = entity1.AddComponent<dm::Camera>(cameraInfo1);
 
 	std::shared_ptr<dm::GizmoType> gizmoType = dm::GizmoType::Create(dm::Engine::Get()->GetModelManager()->GetModel("ModelSphere"), 1, dm::Color::White);
 
@@ -533,7 +553,7 @@ TEST(Models, Lights)
 	CreateSphere(camera->position, entityManager, materialS);
 
 	//Sphere
-	float maxSphere = 9;
+	float maxSphere = 0;
 
 	for (size_t i = 0; i <= maxSphere; i++)
 	{
@@ -550,12 +570,12 @@ TEST(Models, Lights)
 			glm::vec3 pos = glm::vec3(i - maxSphere / 2.0f + i * 1.0f, 0, j - maxSphere / 2.0f + j * 1.0f);
 			auto sphere = CreateSphere(pos, entityManager, material);
 
-			dm::Gizmo gizmo;
-			gizmo.transform = sphere.GetComponent<dm::Transform>(ComponentType::TRANSFORM);
-			gizmo.color = dm::Color(100, 0, 0, 1);
-			gizmo.gizmoType = gizmoType;
-			gizmo.entity = sphere.GetEntity();
-			editor->GetGizmoManager()->AddGizmo(gizmo);
+			//dm::Gizmo gizmo;
+			//gizmo.transform = sphere.GetComponent<dm::Transform>(ComponentType::TRANSFORM);
+			//gizmo.color = dm::Color(100, 0, 0, 1);
+			//gizmo.gizmoType = gizmoType;
+			//gizmo.entity = sphere.GetEntity();
+			//editor->GetGizmoManager()->AddGizmo(gizmo);
 		}
 	}
 
@@ -568,8 +588,8 @@ TEST(Models, Lights)
 	CreatePlane(glm::vec3(3.8, -1.5, 4.5), entityManager, material);
 
 	//PointLight
-	const auto e1 = entityManager->CreateEntity();
-	auto light = dm::EntityHandle(e1);
+	const auto e4 = entityManager->CreateEntity();
+	auto light = dm::EntityHandle(e4);
 	light.CreateComponent<dm::Transform>(ComponentType::TRANSFORM);
 	dm::PointLight lightComponent;
 	lightComponent.componentType = ComponentType::POINT_LIGHT;
@@ -699,6 +719,25 @@ TEST(Models, Terrain)
 
 	auto camera = entity.AddComponent<dm::Camera>(cameraInfo);
 
+	////Camera
+	//const auto e1 = entityManager->CreateEntity();
+	//auto entity1 = dm::EntityHandle(e1);
+
+	//dm::Camera cameraInfo1;
+	//cameraInfo1.componentType = ComponentType::CAMERA;
+	//cameraInfo1.up = glm::vec3(0.0f, 1.0f, 0.0f);
+	//cameraInfo1.componentType = ComponentType::CAMERA;
+	//cameraInfo1.isMain = true;
+	//cameraInfo1.isCulling = true;
+	//cameraInfo1.viewMatrix = glm::lookAt(cameraInfo.position, cameraInfo.position + cameraInfo.front, cameraInfo.up);
+	//cameraInfo1.fov = 45;
+	//cameraInfo1.farFrustum = 100.0f;
+	//cameraInfo1.nearFrustum = 0.1f;
+	//cameraInfo1.aspect = (1920 / 1080);
+	//cameraInfo1.projectionMatrix = glm::perspective(glm::radians(cameraInfo.fov), cameraInfo.aspect, cameraInfo.nearFrustum, cameraInfo.farFrustum);
+
+	//auto camera1 = entity1.AddComponent<dm::Camera>(cameraInfo1);
+
 	std::shared_ptr<dm::GizmoType> gizmoType = dm::GizmoType::Create(dm::Engine::Get()->GetModelManager()->GetModel("ModelSphere"), 1, dm::Color::White);
 
 	//Skybox
@@ -719,8 +758,8 @@ TEST(Models, Terrain)
 
 
 	//PointLight
-	const auto e1 = entityManager->CreateEntity();
-	auto light = dm::EntityHandle(e1);
+	const auto e4 = entityManager->CreateEntity();
+	auto light = dm::EntityHandle(e4);
 	light.CreateComponent<dm::Transform>(ComponentType::TRANSFORM);
 	dm::PointLight lightComponent;
 	lightComponent.componentType = ComponentType::POINT_LIGHT;

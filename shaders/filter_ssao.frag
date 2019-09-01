@@ -43,7 +43,7 @@ void main()
 
 	float occlusion = 0.0f;
 
-	for(int i = 0; i < SSAO_KERNEL_SIZE; i++)
+	for(int i = 0; i < SSAO_KERNEL_SIZE; ++i)
 	{
 		vec3 samplePos = TBN * ssaoKernel.kernel[i].rgb;
 		samplePos = samplePos * SSAO_RADIUS + worldPosition;
@@ -56,7 +56,7 @@ void main()
 		float sampleDepth = texture(samplerPosition, offset.xy).z; 
 
 		float rangeCheck = smoothstep(0.0f, 1.0f, SSAO_RADIUS / abs(worldPosition.z - sampleDepth));
-		occlusion += (sampleDepth >= samplePos.z ? 1.0f : 0.0f);
+		occlusion += (sampleDepth >= samplePos.z ? 1.0f : 0.0f) * rangeCheck;
 	}
 
 	occlusion = 1.0f - (occlusion / float(SSAO_KERNEL_SIZE));
