@@ -28,6 +28,8 @@ SOFTWARE.
 #include <vulkan/vulkan.h>
 #include <graphics/command_buffer.h>
 #include <graphics/descriptor.h>
+#include <string>
+#include <vector>
 
 namespace dm
 {

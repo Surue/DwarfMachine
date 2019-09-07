@@ -25,7 +25,7 @@ SOFTWARE.
 #ifndef TEXTURE_MANAGER_H
 #define TEXTURE_MANAGER_H
 
-#include "image_2d.h"
+#include <graphics/image_2d.h>
 #include <map>
 
 namespace dm
