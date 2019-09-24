@@ -322,7 +322,7 @@ void CreateSkybox(dm::EntityManager* entityManager)
 	skybox.AddComponent<dm::Model>(mesh);
 
 	//Skybox material
-	auto image = dm::ImageCube::Create("ressources/textures/skybox", ".png", VK_FILTER_LINEAR, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE, true, true);
+	auto image = dm::ImageCube::Create("ressources/textures/SkyboxChapel", ".png", VK_FILTER_LINEAR, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE, true, true);
 	auto material = dm::MaterialSkybox();
 	material.image = image;
 	material.color = dm::Color::White;
@@ -545,29 +545,29 @@ TEST(Models, Lights)
 	CreateSkybox(entityManager);
 
 	//Cube
-	dm::MaterialDefault materialS;
-	materialS.componentType = ComponentType::MATERIAL_DEFAULT;
-	materialS.color = dm::Color(1, 0, 0, 1);
-	materialS.ignoreLighting = false;
-	materialS.ignoreFog = false;
-	CreateSphere(camera->position, entityManager, materialS);
+	//dm::MaterialDefault materialS;
+	//materialS.componentType = ComponentType::MATERIAL_DEFAULT;
+	//materialS.color = dm::Color(1, 0, 0, 1);
+	//materialS.ignoreLighting = false;
+	//materialS.ignoreFog = false;
+	//CreateSphere(camera->position, entityManager, materialS);
 
 	//Sphere
 	float maxSphere = 0;
 
-	for (size_t i = 0; i <= maxSphere; i++)
+	for (size_t i = 0; i < maxSphere; i++)
 	{
-		for (size_t j = 0; j <= maxSphere; j++)
+		for (size_t j = 0; j < maxSphere; j++)
 		{
 			dm::MaterialDefault material;
 			material.componentType = ComponentType::MATERIAL_DEFAULT;
 			material.color = dm::Color(1, 1, 1, 1);
-			material.roughness = i / maxSphere;
-			material.metallic = j / maxSphere;
+			material.roughness = (i / maxSphere + 0.05f) / 2.0f;
+			material.metallic = j / maxSphere + 0.05f;
 			material.ignoreLighting = false;
 			material.ignoreFog = false;
 
-			glm::vec3 pos = glm::vec3(i - maxSphere / 2.0f + i * 1.0f, 0, j - maxSphere / 2.0f + j * 1.0f);
+			glm::vec3 pos = glm::vec3(i - maxSphere / 2.0f + i * 1.2f, j - maxSphere / 2.0f + j * 1.2f, 0);
 			auto sphere = CreateSphere(pos, entityManager, material);
 
 			//dm::Gizmo gizmo;
@@ -580,12 +580,12 @@ TEST(Models, Lights)
 	}
 
 	//Plane
-	dm::MaterialDefault material;
-	material.componentType = ComponentType::MATERIAL_DEFAULT;
-	material.color = dm::Color(1, 1, 1, 1);
-	material.ignoreLighting = false;
-	material.ignoreFog = false;
-	CreatePlane(glm::vec3(3.8, -1.5, 4.5), entityManager, material);
+	//dm::MaterialDefault material;
+	//material.componentType = ComponentType::MATERIAL_DEFAULT;
+	//material.color = dm::Color(1, 1, 1, 1);
+	//material.ignoreLighting = false;
+	//material.ignoreFog = false;
+	//CreatePlane(glm::vec3(3.8, -1.5, 4.5), entityManager, material);
 
 	//PointLight
 	const auto e4 = entityManager->CreateEntity();
@@ -603,14 +603,14 @@ TEST(Models, Lights)
 	sun.AddComponent(sunLightComponent);
 
 	//SpotLight
-	const auto e3 = entityManager->CreateEntity();
+	/*const auto e3 = entityManager->CreateEntity();
 	auto spot = dm::EntityHandle(e3);
 	auto spotPos = spot.CreateComponent<dm::Transform>(ComponentType::TRANSFORM);
 	spotPos->position = glm::vec3(0, 10, 0);
 	dm::SpotLight spotLightComponent;
 	spotLightComponent.target = glm::vec3(0, 0, 0);
 	spotLightComponent.componentType = ComponentType::SPOT_LIGHT;
-	spot.AddComponent(spotLightComponent);
+	spot.AddComponent(spotLightComponent);*/
 
 	//
 
@@ -712,9 +712,9 @@ TEST(Models, Terrain)
 	cameraInfo.isCulling = true;
 	cameraInfo.viewMatrix = glm::lookAt(cameraInfo.position, cameraInfo.position + cameraInfo.front, cameraInfo.up);
 	cameraInfo.fov = 45;
-	cameraInfo.farFrustum = 100.0f;
+	cameraInfo.farFrustum = 1000.0f;
 	cameraInfo.nearFrustum = 0.1f;
-	cameraInfo.aspect = (1920/ 1080);
+	cameraInfo.aspect = (1920.0f/ 1080.0f);
 	cameraInfo.projectionMatrix = glm::perspective(glm::radians(cameraInfo.fov), cameraInfo.aspect, cameraInfo.nearFrustum, cameraInfo.farFrustum);
 
 	auto camera = entity.AddComponent<dm::Camera>(cameraInfo);

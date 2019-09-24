@@ -38,6 +38,7 @@ SOFTWARE.
 #include <graphics/renderer_forward.h>
 #include <graphics/filters/filter_fog.h>
 #include <graphics/renderer_terrain.h>
+#include "graphics/renderer_meshes_pbr.h"
 
 namespace dm
 {
@@ -87,9 +88,9 @@ void EditorRenderManager::Start()
 
 	rendererContainer.Add<RendererDirectionalShadow>(Pipeline::Stage(0, 0));
 
-
 	rendererContainer.Add<RendererTerrain>(Pipeline::Stage(1, 0));
 	rendererContainer.Add<RendererMeshes>(Pipeline::Stage(1, 0));
+	rendererContainer.Add<RendererMeshesPBR>(Pipeline::Stage(1, 0));
 
 	rendererContainer.Add<FilterSsao>(Pipeline::Stage(1, 1));
 	rendererContainer.Add<FilterSsaoBlur>(Pipeline::Stage(1, 1));

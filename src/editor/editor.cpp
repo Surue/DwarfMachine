@@ -413,6 +413,15 @@ void Editor::DrawAddMenu()
 			}
 			ImGui::EndMenu();
 		}
+
+		//PBR
+		if (ImGui::BeginMenu("PBR")) {
+			if (ImGui::Button("SpherePBR"))
+			{
+				PrefabFactor::CreateSpherePBR(camera->position + camera->front * 5.0f);
+			}
+			ImGui::EndMenu();
+		}
 		ImGui::EndMenu();
 	}
 }

@@ -50,7 +50,7 @@ void Window::Init()
 		SDL_WINDOWPOS_UNDEFINED,					// initial y position
 		windowSize.x,                               // width, in pixels
 		windowSize.y,                               // height, in pixels
-		SDL_WINDOW_VULKAN | SDL_WINDOW_RESIZABLE    // flags - see below
+		SDL_WINDOW_VULKAN /*| SDL_WINDOW_FULLSCREEN*/    // flags - see below
 	);
 
 	if (m_Window == nullptr) {

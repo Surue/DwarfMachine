@@ -116,7 +116,7 @@ void RendererMeshes::Draw(const CommandBuffer& commandBuffer)
 		meshRenderer->descriptorSet.Push("UboScene", m_UniformScene);
 		meshRenderer->descriptorSet.Push("UboObject", meshRenderer->uniformObject);
 
-		MaterialDefaultManager::PushDescriptor(*entityHandle.GetComponent<MaterialDefault>(ComponentType::MATERIAL_DEFAULT), meshRenderer->descriptorSet);
+		MaterialDefaultManager::PushDescriptor(*material, meshRenderer->descriptorSet);
 
 		const auto updateSuccess = meshRenderer->descriptorSet.Update(pipeline);
 

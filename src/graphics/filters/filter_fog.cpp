@@ -57,7 +57,7 @@ void FilterFog::Draw(const CommandBuffer& commandBuffer)
 		{
 			const auto light = entityHandle.GetComponent<DirectionalLight>(ComponentType::DIRECTIONAL_LIGHT);
 
-			m_UniformScene.Push("lightDir", light->direction);
+			m_UniformScene.Push("lightDir", light->direction * (-1.0f));
 			break;
 		}
 	}

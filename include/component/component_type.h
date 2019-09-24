@@ -40,6 +40,7 @@ enum class ComponentType : int {
 	SHADOW_RENDERER = 12,
 	MATERIAL_TERRAIN = 13,
 	DEBUG_INFO = 14,
-	LENGTH = 15,
+	MATERIAL_METAL_ROUGHNESS = 15,
+	LENGTH = 16,
 };
 #endif //COMPONENT_TYPE_H

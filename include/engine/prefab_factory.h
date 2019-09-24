@@ -70,6 +70,8 @@ public:
 	static void CreateTerrain(glm::vec3 pos);
 
 	static void CreateTerrainPrefab(glm::vec3 pos);
+
+	static void CreateSpherePBR(glm::vec3 pos);
 };
 }
 

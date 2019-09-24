@@ -556,4 +556,48 @@ void PrefabFactor::CreateTerrainPrefab(glm::vec3 pos)
 	//Shadow Renderer
 	rock1.CreateComponent<ShadowRenderer>(ComponentType::SHADOW_RENDERER);
 }
+
+void PrefabFactor::CreateSpherePBR(const glm::vec3 pos)
+{
+	auto entityManager = Engine::Get()->GetEntityManager();
+	const auto entityHandle = entityManager->CreateEntity();
+	auto sphere = dm::EntityHandle(entityHandle);
+
+	//Transform
+	auto t1 = sphere.CreateComponent<dm::Transform>(ComponentType::TRANSFORM);
+	t1->position = pos;
+	t1->scale = glm::vec3(1, 1, 1);
+
+	//Mesh
+	dm::Model mesh;
+	mesh.componentType = ComponentType::MODEL;
+	mesh.model = dm::Engine::Get()->GetModelManager()->GetModel("ModelSphere");
+	sphere.AddComponent<dm::Model>(mesh);
+
+	//Material
+	auto material = MaterialMetalRoughness();
+	material.componentType = ComponentType::MATERIAL_METAL_ROUGHNESS;
+	material.castsShadows = true;
+	material.ignoreLighting = false;
+	material.ignoreFog = false;
+	material.metallic = 0;
+	material.roughness = 0;
+	material.diffuseTexture = TextureManager::Get()->GetTextureByName("ressources/textures/PBR/copper-rock1-alb.png");
+	material.normalTexture = TextureManager::Get()->GetTextureByName("ressources/textures/PBR/copper-rock1-normal.png");
+	material.metalTexture = TextureManager::Get()->GetTextureByName("ressources/textures/PBR/copper-rock1-metal.png");
+	material.roughnessTexture = TextureManager::Get()->GetTextureByName("ressources/textures/PBR/copper-rock1-rough.png");
+	sphere.AddComponent<MaterialMetalRoughness>(material);
+
+	//Bounding sphere
+	sphere.AddComponent<BoundingSphere>(BoundingSphereManager::GetBoundingSphere(*mesh.model));
+
+	//Drawable
+	sphere.CreateComponent<Drawable>(ComponentType::DRAWABLE);
+
+	//MeshRenderer
+	sphere.CreateComponent<MeshRenderer>(ComponentType::MESH_RENDERER);
+
+	//Shadow Renderer
+	sphere.CreateComponent<ShadowRenderer>(ComponentType::SHADOW_RENDERER);
+}
 }

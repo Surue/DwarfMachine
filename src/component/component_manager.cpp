@@ -42,7 +42,8 @@ ComponentManagerContainer::ComponentManagerContainer() :
 	m_SpotLightManager(std::make_unique<SpotLightManager>()),
 	m_ShadowRendererManager(std::make_unique<ShadowRendererManager>()),
 	m_MaterialTerrainManager(std::make_unique<MaterialTerrainManager>()),
-	m_DebugInfoManager(std::make_unique<DebugInfoManager>())
+	m_DebugInfoManager(std::make_unique<DebugInfoManager>()),
+	m_MaterialMetalRoughnessManager(std::make_unique<MaterialMetalRoughnessManager>())
 {
 	m_ComponentsFactory.resize(static_cast<int>(ComponentType::LENGTH));
 
@@ -60,6 +61,7 @@ ComponentManagerContainer::ComponentManagerContainer() :
 	m_ComponentsFactory[static_cast<int>(ComponentType::SHADOW_RENDERER)] = static_cast<Metadata*>(m_ShadowRendererManager.get());
 	m_ComponentsFactory[static_cast<int>(ComponentType::MATERIAL_TERRAIN)] = static_cast<Metadata*>(m_MaterialTerrainManager.get());
 	m_ComponentsFactory[static_cast<int>(ComponentType::DEBUG_INFO)] = static_cast<Metadata*>(m_DebugInfoManager.get());
+	m_ComponentsFactory[static_cast<int>(ComponentType::MATERIAL_METAL_ROUGHNESS)] = static_cast<Metadata*>(m_MaterialMetalRoughnessManager.get());
 }
 
 void ComponentManagerContainer::Init()
@@ -86,6 +88,7 @@ void ComponentManagerContainer::Clear()
 	m_ShadowRendererManager->Clear();
 	m_MaterialTerrainManager->Clear();
 	m_DebugInfoManager->Clear();
+	m_MaterialMetalRoughnessManager->Clear();
 }
 
 void ComponentManagerContainer::Draw()
@@ -108,6 +111,7 @@ void ComponentManagerContainer::Destroy()
 	m_ShadowRendererManager.reset(nullptr);
 	m_MaterialTerrainManager.reset(nullptr);
 	m_DebugInfoManager.reset(nullptr);
+	m_MaterialMetalRoughnessManager.reset(nullptr);
 }
 
 void ComponentManagerContainer::DecodeComponent(json& componentJson, const Entity entity, ComponentType componentType)
@@ -158,6 +162,8 @@ ComponentBase* ComponentManagerContainer::CreateComponent(const Entity entity, c
 		return m_MaterialTerrainManager->CreateComponent(entity);
 	case ComponentType::DEBUG_INFO:
 		return m_DebugInfoManager->CreateComponent(entity);
+	case ComponentType::MATERIAL_METAL_ROUGHNESS:
+		return m_MaterialMetalRoughnessManager->CreateComponent(entity);
 	case ComponentType::LENGTH: break;
 	default:
 		throw std::runtime_error("Fail to bind component to its own component manager");
@@ -199,6 +205,8 @@ ComponentBase* ComponentManagerContainer::AddComponent(const Entity entity, Comp
 		return static_cast<ComponentBase*>(m_MaterialTerrainManager->AddComponent(entity, static_cast<MaterialTerrain&>(component)));
 	case ComponentType::DEBUG_INFO:
 		return static_cast<ComponentBase*>(m_DebugInfoManager->AddComponent(entity, static_cast<DebugInfo&>(component)));
+	case ComponentType::MATERIAL_METAL_ROUGHNESS:
+		return static_cast<ComponentBase*>(m_MaterialMetalRoughnessManager->AddComponent(entity, static_cast<MaterialMetalRoughness&>(component)));
 	case ComponentType::LENGTH: break;
 	default:
 		throw std::runtime_error("Fail to bind component to its own component manager");
@@ -238,6 +246,8 @@ ComponentBase* ComponentManagerContainer::GetComponent(const Entity entity, cons
 		return m_MaterialTerrainManager->GetComponent(entity);
 	case ComponentType::DEBUG_INFO:
 		return m_DebugInfoManager->GetComponent(entity);
+	case ComponentType::MATERIAL_METAL_ROUGHNESS:
+		return m_MaterialMetalRoughnessManager->GetComponent(entity);
 	case ComponentType::NONE: break;
 	case ComponentType::LENGTH: break;
 	default: ;
@@ -293,6 +303,9 @@ void ComponentManagerContainer::DestroyComponent(const Entity entity, const Comp
 		break;
 	case ComponentType::DEBUG_INFO:
 		m_DebugInfoManager->DestroyComponent(entity);
+		break;
+	case ComponentType::MATERIAL_METAL_ROUGHNESS:
+		m_MaterialMetalRoughnessManager->DestroyComponent(entity);
 		break;
 	case ComponentType::LENGTH: break;
 	default: 
@@ -358,6 +371,11 @@ void ComponentManagerContainer::DrawOnInspector(Entity entity) const
 	{
 		m_DebugInfoManager->OnDrawInspector(entity);
 	}
+
+	if (entityHandle.HasComponent(ComponentType::MATERIAL_METAL_ROUGHNESS))
+	{
+		m_MaterialMetalRoughnessManager->OnDrawInspector(entity);
+	}
 }
 
 void ComponentManagerContainer::OnEntityResize(const int newSize) const
@@ -376,5 +394,6 @@ void ComponentManagerContainer::OnEntityResize(const int newSize) const
 	m_ShadowRendererManager->OnEntityResize(newSize);
 	m_MaterialTerrainManager->OnEntityResize(newSize);
 	m_DebugInfoManager->OnEntityResize(newSize);
+	m_MaterialMetalRoughnessManager->OnEntityResize(newSize);
 }
 }

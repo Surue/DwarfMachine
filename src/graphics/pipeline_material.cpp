@@ -25,7 +25,7 @@ SOFTWARE.
 #include <graphics/pipeline_material.h>
 
 #include <graphics/graphic_manager.h>
-#include "engine/engine.h"
+#include <engine/engine.h>
 #include <graphics/pipeline_material_manager.h>
 
 namespace dm

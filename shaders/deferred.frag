@@ -105,9 +105,9 @@ float sqr(float x)
 
 float attenuation(float Dl, float radius)
 {
-	if(radius <= 0.0f)
+	if(radius <= 0.0)
 	{
-		return 1.0f;
+		return 1.0;
 	}
 
 	float lightInvRadius = 1 / radius;
@@ -118,31 +118,37 @@ float attenuation(float Dl, float radius)
     return (smoothFactor * smoothFactor) / max(distanceSquare, 1e-4);
 }
 
-float D_GGX(float dotNH, float roughness)
+float D_GGX(vec3 N, vec3 H, float roughness)
 {
-	float alpha = roughness * roughness;
-	float alpha2 = alpha * alpha;
-	float denom = dotNH * dotNH * (alpha2 - 1.0f) + 1.0f;
-	return alpha2 / (PI * denom * denom);
+	float a = roughness*roughness;
+    float a2 = a*a;
+    float NdotH = max(dot(N, H), 0.0);
+    float NdotH2 = NdotH*NdotH;
+
+    float nom   = a2;
+    float denom = (NdotH2 * (a2 - 1.0) + 1.0);
+    denom = PI * denom * denom;
+
+    return nom / denom;
 }
 
 float G_SchlocksmithGGX(float dotNL, float dotNV, float roughness)
 {
-	float r = roughness + 1.0f;
-	float k = (r * r) / 8.0f;
-	float GL = dotNL / (dotNL * (1.0f - k) + k);
-	float GV = dotNV / (dotNV * (1.0f - k) + k);
+	float r = roughness + 1.0;
+	float k = (r * r) / 8.0;
+	float GL = dotNL / (dotNL * (1.0 - k) + k);
+	float GV = dotNV / (dotNV * (1.0 - k) + k);
 	return GL * GV;
 }
 
 vec3 F_Schlick(float cosTheta, vec3 F0)
 {
-	return F0 + (1.0f - F0) * pow(1.0f - cosTheta, 5.0f);
+	return F0 + (1.0 - F0) * pow(1.0 - cosTheta, 5.0);
 }
 
 vec3 F_SchlickR(float cosTheta, vec3 F0, float roughness)
 {
-	return F0 + (max(vec3(1.0f - roughness), F0) - F0) * pow(1.0f - cosTheta, 5.0f);
+	return F0 + (max(vec3(1.0 - roughness), F0) - F0) * pow(1.0 - cosTheta, 5.0);
 }
 
 vec3 prefilteredReflection(vec3 R, float roughness)
@@ -158,21 +164,21 @@ vec3 prefilteredReflection(vec3 R, float roughness)
 vec3 specularContribution(vec3 diffuse, vec3 L, vec3 V, vec3 N, vec3 F0, float metallic, float roughness)
 {
 	vec3 H = normalize(V + L);
-	float dotNH = clamp(dot(N, H), 0.0f, 1.0f);
-	float dotNV = clamp(dot(N, V), 0.0f, 1.0f);
-	float dotNL = clamp(dot(N, L), 0.0f, 1.0f);
+	float dotNH = clamp(dot(N, H), 0.0, 1.0);
+	float dotNV = clamp(dot(N, V), 0.0, 1.0);
+	float dotNL = clamp(dot(N, L), 0.0, 1.0);
 	
-	vec3 color = vec3(0.0f);
+	vec3 color = vec3(0.0);
 	
-	if(dotNL > 0.0f)
+	if(dotNL > 0.0)
 	{
-		float D = D_GGX(dotNH, roughness);
+		float D = D_GGX(N, H, roughness);
 		
 		float G = G_SchlocksmithGGX(dotNL, dotNV, roughness);
 		
 		vec3 F = F_Schlick(dotNV, F0);
-		vec3 spec = D * F * G / (4.0f * dotNL * dotNV  + 0.001f);
-		vec3 kD = (vec3(1.0f) - F) * (1.0f - metallic);
+		vec3 spec = D * F * G / (4 * max(dot(N, V), 0.0) * max(dot(N, L), 0.0) + 0.001);
+		vec3 kD = (vec3(1.0) - F) * (1.0 - metallic);
 		color += (kD * diffuse / PI + spec) * dotNL;
 	}
 	
@@ -268,18 +274,18 @@ void main()
 	
 	float metallic = material.r;
 	float roughness = material.g;
-	bool ignoreFog = material.b == (1.0f / 3.0f) || material.b == (3.0f / 3.0f);
-	bool ignoreLighting = material.b == (2.0f / 3.0f) || material.b == (3.0f / 3.0f);
+	bool ignoreFog = material.b == (1.0 / 3.0) || material.b == (3.0 / 3.0);
+	bool ignoreLighting = material.b == (2.0 / 3.0) || material.b == (3.0 / 3.0);
 	
 	vec3 N = normalize(normal);
 	vec3 V = normalize(scene.cameraPosition - worldPosition);
 	vec3 R = reflect(-V, N);
 	
-	if(!ignoreLighting && normal != vec3(0.0f))
+	if(!ignoreLighting && normal != vec3(0.0))
 	{
-		vec3 F0 = vec3(0.04f);
+		vec3 F0 = vec3(0.04);
 		F0 = mix(F0, diffuse.rgb, metallic);
-		vec3 Lo = vec3(0.0f);
+		vec3 Lo = vec3(0.0);
 		
 		for(int i = 0; i < scene.pointLightCount; i++)
 		{
@@ -306,23 +312,23 @@ void main()
 			// Dual cone spot light with smooth transition between inner and outer angle
 			float cosDir = dot(L, dir);
 			float spotEffect = smoothstep(lightCosOuterAngle, lightCosInnerAngle, cosDir);
-			float heightAttenuation = smoothstep(light.range, 0.0f, Dl);
+			float heightAttenuation = smoothstep(light.range, 0.0, Dl);
 
 			Lo += spotEffect * heightAttenuation * light.color.rgb * specularContribution(diffuse.rgb, L, V, N, F0, metallic, roughness);
 		}
 				
-		vec2 brdf = texture(samplerBRDF, vec2(max(dot(N, V), 0.0f), roughness)).rg;
+		vec2 brdf = texture(samplerBRDF, vec2(max(dot(N, V), 0.0), roughness)).rg;
 		vec3 reflection = prefilteredReflection(R, roughness).rgb;
 		vec3 irradiance = texture(samplerIrradiance, N).rgb;
 		
 		vec3 albedo = irradiance * diffuse.rgb;
 		
-		vec3 F = F_SchlickR(max(dot(N, V), 0.0f), F0, roughness);
+		vec3 F = F_SchlickR(max(dot(N, V), 0.0), F0, roughness);
 		
 		vec3 specular = reflection * (F * brdf.r + brdf.g);
 		
-		vec3 kD = 1.0f - F;
-		kD *= 1.0f - metallic;
+		vec3 kD = 1.0 - F;
+		kD *= 1.0 - metallic;
 		vec3 ambient = (kD * albedo + specular) * ssao;
 
 		// Directional light
@@ -340,23 +346,23 @@ void main()
 
 		// Tone mapping
 		color = Uncharted2Tonemap(color * 4.5f);
-		color = color * (1.0f / Uncharted2Tonemap(vec3(11.2f)));	
+		color = color * (1.0 / Uncharted2Tonemap(vec3(11.2f)));	
 
 		// Gamma correction
 		color = color / (color + vec3(1.0));
-		color = pow(color, vec3(1.0f / 2.2f));
+		color = pow(color, vec3(1.0 / 2.2f));
 
-		outColor = vec4(color, 1.0f);
+		outColor = vec4(color, 1.0);
 	}
 	else
 	{
-		outColor = vec4(diffuse.rgb, 1.0f);
+		outColor = vec4(diffuse.rgb, 1.0);
 	}
 	
-	if(!ignoreFog && normal != vec3(0.0f))
+	if(!ignoreFog && normal != vec3(0.0))
 	{
 		float fogFactor = exp(-pow(length(screenPosition.xyz) * scene.fogDensity, scene.fogGradient));
-		fogFactor = clamp(fogFactor, 0.0f, 1.0f);
+		fogFactor = clamp(fogFactor, 0.0, 1.0);
 		outColor = mix(scene.fogColor, outColor, fogFactor);
 	}
 }

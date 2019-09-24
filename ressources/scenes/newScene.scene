@@ -3,35 +3,35 @@
         {
             "components": [
                 {
-                    "aspect": 1.0,
+                    "aspect": 1.4222222566604614,
                     "far": 100.0,
                     "fov": 45.0,
                     "front": {
-                        "x": 0.018824150785803795,
-                        "y": -0.8503516912460327,
-                        "z": -0.5258780121803284
+                        "x": 0.676143229007721,
+                        "y": -0.30070579051971436,
+                        "z": -0.672611653804779
                     },
                     "isCulling": 1,
                     "isMain": 1,
                     "near": 0.10000000149011612,
-                    "pitch": -58.249942779541016,
+                    "pitch": -17.499998092651367,
                     "position": {
-                        "x": 1.4959512948989868,
-                        "y": 22.61933708190918,
-                        "z": 13.99392032623291
+                        "x": -4.772709369659424,
+                        "y": 4.038328170776367,
+                        "z": 20.786277770996094
                     },
                     "right": {
-                        "x": -0.9993600249290466,
+                        "x": -0.7052528262138367,
                         "y": -0.0,
-                        "z": -0.03577275201678276
+                        "z": -0.7089558243751526
                     },
                     "type": 2,
                     "up": {
-                        "x": -0.03041941672563553,
-                        "y": -0.5262148380279541,
-                        "z": 0.8498073816299438
+                        "x": -0.21318712830543518,
+                        "y": -0.9537169933319092,
+                        "z": 0.21207360923290253
                     },
-                    "yaw": -87.94993591308594
+                    "yaw": -44.849979400634766
                 }
             ],
             "name": "entity 0"
@@ -83,7 +83,7 @@
                         "x": -100.0,
                         "y": 100.0
                     },
-                    "image": "ressources/textures/skybox",
+                    "image": "ressources/textures/SkyboxChapel",
                     "type": 7
                 },
                 {
@@ -98,8 +98,8 @@
             "components": [
                 {
                     "position": {
-                        "x": 0.0,
-                        "y": 0.0,
+                        "x": -2.5,
+                        "y": -2.5,
                         "z": 0.0
                     },
                     "rotation": {
@@ -115,7 +115,7 @@
                     "type": 1
                 },
                 {
-                    "castShadow": 1,
+                    "castShadow": 0,
                     "color": {
                         "a": 1.0,
                         "b": 1.0,
@@ -124,16 +124,16 @@
                     },
                     "ignoreFog": 0,
                     "ignoreLighting": 0,
-                    "metallic": 0.0,
-                    "roughness": 0.0,
+                    "metallic": 0.05000000074505806,
+                    "roughness": 0.02500000037252903,
                     "type": 3
                 },
                 {
-                    "modelName": "ModelPlane",
+                    "modelName": "ModelSphere",
                     "type": 4
                 },
                 {
-                    "radius": 7.071067810058594,
+                    "radius": 1.7320507764816284,
                     "type": 5
                 },
                 {
@@ -155,8 +155,8 @@
             "components": [
                 {
                     "position": {
-                        "x": 1.0,
-                        "y": 0.0,
+                        "x": -2.5,
+                        "y": -0.2999999523162842,
                         "z": 0.0
                     },
                     "rotation": {
@@ -165,14 +165,14 @@
                         "z": 0.0
                     },
                     "scale": {
-                        "x": 0.009999999776482582,
-                        "y": 0.009999999776482582,
-                        "z": 0.009999999776482582
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
                     },
                     "type": 1
                 },
                 {
-                    "castShadow": 1,
+                    "castShadow": 0,
                     "color": {
                         "a": 1.0,
                         "b": 1.0,
@@ -181,18 +181,16 @@
                     },
                     "ignoreFog": 0,
                     "ignoreLighting": 0,
-                    "metallic": 0.0,
-                    "normal": "ressources/textures/rocks_01_model/rocks_01_dif.tga",
-                    "roughness": 0.0,
-                    "texture": "ressources/textures/rocks_01_model/rocks_01_dif.tga",
+                    "metallic": 0.25,
+                    "roughness": 0.02500000037252903,
                     "type": 3
                 },
                 {
-                    "modelName": "ressources/models/rocks_01_model.obj",
+                    "modelName": "ModelSphere",
                     "type": 4
                 },
                 {
-                    "radius": 448.99127197265625,
+                    "radius": 1.7320507764816284,
                     "type": 5
                 },
                 {
@@ -214,9 +212,9 @@
             "components": [
                 {
                     "position": {
-                        "x": 5.0,
-                        "y": 0.0,
-                        "z": 2.0
+                        "x": -2.5,
+                        "y": 1.9000000953674316,
+                        "z": 0.0
                     },
                     "rotation": {
                         "x": 0.0,
@@ -224,14 +222,14 @@
                         "z": 0.0
                     },
                     "scale": {
-                        "x": 0.10000000149011612,
-                        "y": 0.10000000149011612,
-                        "z": 0.10000000149011612
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
                     },
                     "type": 1
                 },
                 {
-                    "castShadow": 1,
+                    "castShadow": 0,
                     "color": {
                         "a": 1.0,
                         "b": 1.0,
@@ -240,18 +238,16 @@
                     },
                     "ignoreFog": 0,
                     "ignoreLighting": 0,
-                    "metallic": 0.0,
-                    "normal": "ressources/textures/rock_v2/rock_v2_obj_lambert2SG_BaseColor.png",
-                    "roughness": 0.0,
-                    "texture": "ressources/textures/rock_v2/rock_v2_obj_lambert2SG_BaseColor.png",
+                    "metallic": 0.45000001788139343,
+                    "roughness": 0.02500000037252903,
                     "type": 3
                 },
                 {
-                    "modelName": "ressources/models/rock_v2.obj",
+                    "modelName": "ModelSphere",
                     "type": 4
                 },
                 {
-                    "radius": 27.50674819946289,
+                    "radius": 1.7320507764816284,
                     "type": 5
                 },
                 {
@@ -273,24 +269,24 @@
             "components": [
                 {
                     "position": {
-                        "x": -3.0,
-                        "y": 0.0,
-                        "z": 4.0
+                        "x": -2.5,
+                        "y": 4.100000381469727,
+                        "z": 0.0
                     },
                     "rotation": {
-                        "x": 4.699999809265137,
+                        "x": 0.0,
                         "y": 0.0,
                         "z": 0.0
                     },
                     "scale": {
-                        "x": 0.009999999776482582,
-                        "y": 0.009999999776482582,
-                        "z": 0.009999999776482582
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
                     },
                     "type": 1
                 },
                 {
-                    "castShadow": 1,
+                    "castShadow": 0,
                     "color": {
                         "a": 1.0,
                         "b": 1.0,
@@ -299,17 +295,16 @@
                     },
                     "ignoreFog": 0,
                     "ignoreLighting": 0,
-                    "metallic": 0.0,
-                    "roughness": 0.0,
-                    "texture": "ressources/textures/rock_v2/rock_v2_obj_lambert2SG_BaseColor.png",
+                    "metallic": 0.6500000357627869,
+                    "roughness": 0.02500000037252903,
                     "type": 3
                 },
                 {
-                    "modelName": "ressources/models/tree_1.obj",
+                    "modelName": "ModelSphere",
                     "type": 4
                 },
                 {
-                    "radius": 1048.9832763671875,
+                    "radius": 1.7320507764816284,
                     "type": 5
                 },
                 {
@@ -331,24 +326,24 @@
             "components": [
                 {
                     "position": {
-                        "x": 2.0,
-                        "y": 0.0,
-                        "z": -1.0
+                        "x": -2.5,
+                        "y": 6.300000190734863,
+                        "z": 0.0
                     },
                     "rotation": {
-                        "x": 4.699999809265137,
+                        "x": 0.0,
                         "y": 0.0,
                         "z": 0.0
                     },
                     "scale": {
-                        "x": 0.009999999776482582,
-                        "y": 0.009999999776482582,
-                        "z": 0.009999999776482582
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
                     },
                     "type": 1
                 },
                 {
-                    "castShadow": 1,
+                    "castShadow": 0,
                     "color": {
                         "a": 1.0,
                         "b": 1.0,
@@ -357,17 +352,16 @@
                     },
                     "ignoreFog": 0,
                     "ignoreLighting": 0,
-                    "metallic": 0.0,
-                    "roughness": 0.0,
-                    "texture": "ressources/textures/rock_v2/rock_v2_obj_lambert2SG_BaseColor.png",
+                    "metallic": 0.8500000238418579,
+                    "roughness": 0.02500000037252903,
                     "type": 3
                 },
                 {
-                    "modelName": "ressources/models/tree_2.obj",
+                    "modelName": "ModelSphere",
                     "type": 4
                 },
                 {
-                    "radius": 569.4591674804688,
+                    "radius": 1.7320507764816284,
                     "type": 5
                 },
                 {
@@ -389,24 +383,24 @@
             "components": [
                 {
                     "position": {
-                        "x": 4.0,
-                        "y": 0.0,
-                        "z": 2.0
+                        "x": -0.2999999523162842,
+                        "y": -2.5,
+                        "z": 0.0
                     },
                     "rotation": {
-                        "x": 4.699999809265137,
+                        "x": 0.0,
                         "y": 0.0,
                         "z": 0.0
                     },
                     "scale": {
-                        "x": 0.009999999776482582,
-                        "y": 0.009999999776482582,
-                        "z": 0.009999999776482582
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
                     },
                     "type": 1
                 },
                 {
-                    "castShadow": 1,
+                    "castShadow": 0,
                     "color": {
                         "a": 1.0,
                         "b": 1.0,
@@ -415,17 +409,16 @@
                     },
                     "ignoreFog": 0,
                     "ignoreLighting": 0,
-                    "metallic": 0.0,
-                    "roughness": 0.0,
-                    "texture": "ressources/textures/rock_v2/rock_v2_obj_lambert2SG_BaseColor.png",
+                    "metallic": 0.05000000074505806,
+                    "roughness": 0.125,
                     "type": 3
                 },
                 {
-                    "modelName": "ressources/models/tree_3.obj",
+                    "modelName": "ModelSphere",
                     "type": 4
                 },
                 {
-                    "radius": 719.51708984375,
+                    "radius": 1.7320507764816284,
                     "type": 5
                 },
                 {
@@ -447,24 +440,24 @@
             "components": [
                 {
                     "position": {
-                        "x": 1.0,
-                        "y": 0.0,
-                        "z": -7.0
+                        "x": -0.2999999523162842,
+                        "y": -0.2999999523162842,
+                        "z": 0.0
                     },
                     "rotation": {
-                        "x": 4.699999809265137,
+                        "x": 0.0,
                         "y": 0.0,
                         "z": 0.0
                     },
                     "scale": {
-                        "x": 0.009999999776482582,
-                        "y": 0.009999999776482582,
-                        "z": 0.009999999776482582
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
                     },
                     "type": 1
                 },
                 {
-                    "castShadow": 1,
+                    "castShadow": 0,
                     "color": {
                         "a": 1.0,
                         "b": 1.0,
@@ -473,17 +466,16 @@
                     },
                     "ignoreFog": 0,
                     "ignoreLighting": 0,
-                    "metallic": 0.0,
-                    "roughness": 0.0,
-                    "texture": "ressources/textures/rock_v2/rock_v2_obj_lambert2SG_BaseColor.png",
+                    "metallic": 0.25,
+                    "roughness": 0.125,
                     "type": 3
                 },
                 {
-                    "modelName": "ressources/models/tree_4.obj",
+                    "modelName": "ModelSphere",
                     "type": 4
                 },
                 {
-                    "radius": 374.07440185546875,
+                    "radius": 1.7320507764816284,
                     "type": 5
                 },
                 {
@@ -505,24 +497,24 @@
             "components": [
                 {
                     "position": {
-                        "x": 8.0,
-                        "y": 0.0,
-                        "z": -2.0
+                        "x": -0.2999999523162842,
+                        "y": 1.9000000953674316,
+                        "z": 0.0
                     },
                     "rotation": {
-                        "x": 4.699999809265137,
+                        "x": 0.0,
                         "y": 0.0,
                         "z": 0.0
                     },
                     "scale": {
-                        "x": 0.009999999776482582,
-                        "y": 0.009999999776482582,
-                        "z": 0.009999999776482582
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
                     },
                     "type": 1
                 },
                 {
-                    "castShadow": 1,
+                    "castShadow": 0,
                     "color": {
                         "a": 1.0,
                         "b": 1.0,
@@ -531,17 +523,16 @@
                     },
                     "ignoreFog": 0,
                     "ignoreLighting": 0,
-                    "metallic": 0.0,
-                    "roughness": 0.0,
-                    "texture": "ressources/textures/rock_v2/rock_v2_obj_lambert2SG_BaseColor.png",
+                    "metallic": 0.45000001788139343,
+                    "roughness": 0.125,
                     "type": 3
                 },
                 {
-                    "modelName": "ressources/models/tree_5.obj",
+                    "modelName": "ModelSphere",
                     "type": 4
                 },
                 {
-                    "radius": 615.4286499023438,
+                    "radius": 1.7320507764816284,
                     "type": 5
                 },
                 {
@@ -563,8 +554,8 @@
             "components": [
                 {
                     "position": {
-                        "x": 0.0,
-                        "y": 2.5999999046325684,
+                        "x": -0.2999999523162842,
+                        "y": 4.100000381469727,
                         "z": 0.0
                     },
                     "rotation": {
@@ -580,15 +571,38 @@
                     "type": 1
                 },
                 {
+                    "castShadow": 0,
                     "color": {
                         "a": 1.0,
-                        "b": 0.0,
-                        "g": 0.0,
+                        "b": 1.0,
+                        "g": 1.0,
                         "r": 1.0
                     },
-                    "intensity": 16.899999618530273,
-                    "radius": 8.100000381469727,
-                    "type": 9
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.6500000357627869,
+                    "roughness": 0.125,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
                 }
             ],
             "name": "entity 10"
@@ -596,19 +610,56 @@
         {
             "components": [
                 {
+                    "position": {
+                        "x": -0.2999999523162842,
+                        "y": 6.300000190734863,
+                        "z": 0.0
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
                     "color": {
                         "a": 1.0,
                         "b": 1.0,
                         "g": 1.0,
                         "r": 1.0
                     },
-                    "direction": {
-                        "x": 0.0,
-                        "y": -1.0,
-                        "z": -1.0
-                    },
-                    "intensity": 1.100000023841858,
-                    "type": 10
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.8500000238418579,
+                    "roughness": 0.125,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
                 }
             ],
             "name": "entity 11"
@@ -617,9 +668,941 @@
             "components": [
                 {
                     "position": {
-                        "x": -9.300000190734863,
-                        "y": 10.300000190734863,
-                        "z": 0.699999988079071
+                        "x": 1.9000000953674316,
+                        "y": -2.5,
+                        "z": 0.0
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.05000000074505806,
+                    "roughness": 0.22500000894069672,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 12"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": 1.9000000953674316,
+                        "y": -0.2999999523162842,
+                        "z": 0.0
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.25,
+                    "roughness": 0.22500000894069672,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 13"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": 1.9000000953674316,
+                        "y": 1.9000000953674316,
+                        "z": 0.0
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.45000001788139343,
+                    "roughness": 0.22500000894069672,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 14"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": 1.9000000953674316,
+                        "y": 4.100000381469727,
+                        "z": 0.0
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.6500000357627869,
+                    "roughness": 0.22500000894069672,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 15"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": 1.9000000953674316,
+                        "y": 6.300000190734863,
+                        "z": 0.0
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.8500000238418579,
+                    "roughness": 0.22500000894069672,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 16"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": 4.100000381469727,
+                        "y": -2.5,
+                        "z": 0.0
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.05000000074505806,
+                    "roughness": 0.32500001788139343,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 17"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": 4.100000381469727,
+                        "y": -0.2999999523162842,
+                        "z": 0.0
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.25,
+                    "roughness": 0.32500001788139343,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 18"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": 4.100000381469727,
+                        "y": 1.9000000953674316,
+                        "z": 0.0
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.45000001788139343,
+                    "roughness": 0.32500001788139343,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 19"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": 4.100000381469727,
+                        "y": 4.100000381469727,
+                        "z": 0.0
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.6500000357627869,
+                    "roughness": 0.32500001788139343,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 20"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": 4.100000381469727,
+                        "y": 6.300000190734863,
+                        "z": 0.0
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.8500000238418579,
+                    "roughness": 0.32500001788139343,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 21"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": 6.300000190734863,
+                        "y": -2.5,
+                        "z": 0.0
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.05000000074505806,
+                    "roughness": 0.42500001192092896,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 22"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": 6.300000190734863,
+                        "y": -0.2999999523162842,
+                        "z": 0.0
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.25,
+                    "roughness": 0.42500001192092896,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 23"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": 6.300000190734863,
+                        "y": 1.9000000953674316,
+                        "z": 0.0
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.45000001788139343,
+                    "roughness": 0.42500001192092896,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 24"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": 6.300000190734863,
+                        "y": 4.100000381469727,
+                        "z": 0.0
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.6500000357627869,
+                    "roughness": 0.42500001192092896,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 25"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": 6.300000190734863,
+                        "y": 6.300000190734863,
+                        "z": 0.0
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 0,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.8500000238418579,
+                    "roughness": 0.42500001192092896,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelSphere",
+                    "type": 4
+                },
+                {
+                    "radius": 1.7320507764816284,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 26"
+        },
+        {
+            "components": [
+                {
+                    "color": {
+                        "a": 1.0,
+                        "b": 6.008148193359375e-05,
+                        "g": 0.0,
+                        "r": 1.0
+                    },
+                    "direction": {
+                        "x": 0.0,
+                        "y": -1.0,
+                        "z": -1.0
+                    },
+                    "intensity": 26.899999618530273,
+                    "type": 10
+                }
+            ],
+            "name": "entity 27"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": -0.4709184765815735,
+                        "y": 1.702178955078125,
+                        "z": 15.544508934020996
+                    },
+                    "rotation": {
+                        "x": 0.0,
+                        "y": 0.0,
+                        "z": 0.0
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "type": 1
+                },
+                {
+                    "castShadow": 1,
+                    "color": {
+                        "a": 1.0,
+                        "b": 1.0,
+                        "g": 1.0,
+                        "r": 1.0
+                    },
+                    "ignoreFog": 0,
+                    "ignoreLighting": 0,
+                    "metallic": 0.0,
+                    "roughness": 0.0,
+                    "type": 3
+                },
+                {
+                    "modelName": "ModelCube",
+                    "type": 4
+                },
+                {
+                    "radius": 0.8660253882408142,
+                    "type": 5
+                },
+                {
+                    "isDrawable": 1,
+                    "type": 6
+                },
+                {
+                    "castShadow": 1,
+                    "materialType": 0,
+                    "type": 8
+                },
+                {
+                    "type": 12
+                }
+            ],
+            "name": "entity 28"
+        },
+        {
+            "components": [
+                {
+                    "position": {
+                        "x": 0.0627143383026123,
+                        "y": 1.674054503440857,
+                        "z": 14.660268783569336
                     },
                     "rotation": {
                         "x": 0.0,
@@ -637,21 +1620,21 @@
                     "angle": 30.0,
                     "color": {
                         "a": 1.0,
-                        "b": 1.0,
-                        "g": 0.0,
-                        "r": 0.1190190315246582
+                        "b": 0.9999899864196777,
+                        "g": 1.0,
+                        "r": 0.9999927878379822
                     },
-                    "intensity": 58.79999923706055,
+                    "intensity": 42.400001525878906,
                     "range": 10.0,
                     "target": {
                         "x": 0.0,
-                        "y": 0.0,
-                        "z": 0.0
+                        "y": 2.0999999046325684,
+                        "z": 15.0
                     },
                     "type": 11
                 }
             ],
-            "name": "entity 12"
+            "name": "entity 29"
         }
     ],
     "name": "newScene"
