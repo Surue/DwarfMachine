@@ -25,12 +25,13 @@ SOFTWARE.
 #include <editor/renderer_imgui.h>
 
 #include <imgui.h>
-#include "imgui_impl_sdl.h"
-#include "imgui_impl_vulkan.h"
+#include <imgui_impl_sdl.h>
+#include <imgui_impl_vulkan.h>
+#include <imgui_internal.h>
+
 #include <graphics/graphic_manager.h>
 #include <graphics/mesh_vertex.h>
 #include <graphics/window.h>
-#include <imgui_internal.h>
 
 namespace dm
 {

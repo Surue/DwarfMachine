@@ -29,7 +29,6 @@ SOFTWARE.
 #include <SDL_vulkan.h>
 
 #include <vulkan/vulkan.h>
-#include <engine/vector.h>
 #include <glm/vec2.hpp>
 
 namespace dm

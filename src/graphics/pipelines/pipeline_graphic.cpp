@@ -206,8 +206,8 @@ void PipelineGraphics::CreatePipelineLayout()
 
 void PipelineGraphics::CreateAttributes()
 {
-	auto logicalDevice = GraphicManager::Get()->GetLogicalDevice();
-	auto physicalDevice = GraphicManager::Get()->GetPhysicalDevice();
+	const auto logicalDevice = GraphicManager::Get()->GetLogicalDevice();
+	const auto physicalDevice = GraphicManager::Get()->GetPhysicalDevice();
 
 	if(m_PolygonMode == VK_POLYGON_MODE_LINE && !logicalDevice->GetEnabledFeatures().fillModeNonSolid)
 	{

@@ -110,7 +110,7 @@ public:
 		std::string ToString() const
 		{
 			std::stringstream stream;
-			stream << "Uniform(binding " << m_Binding << ", offset " << m_Offset << ", size " << m_Size << ", glType " << m_GlType << ")";
+			stream << "Uniform(binding " << m_Binding << ", offset " << m_Offset << ", size " << m_Size << ", glType " << m_GlType << " , stage " << m_StageFlags << ")";
 			return stream.str();
 		}
 	private:
@@ -175,7 +175,7 @@ public:
 		std::string ToString() const
 		{
 			std::stringstream stream;
-			stream << "UniformBlock(binding " << m_Binding << ", size " << m_Size << ", type " << static_cast<uint32_t>(m_Type) << ")";
+			stream << "UniformBlock(binding " << m_Binding << ", size " << m_Size << ", type " << static_cast<uint32_t>(m_Type) << " , stage " << m_StageFlags <<")";
 			return stream.str();
 		}
 	private:

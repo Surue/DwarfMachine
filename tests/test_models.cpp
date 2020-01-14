@@ -692,7 +692,7 @@ void LoadObj(glm::vec3 pos, glm::vec3 scale, dm::EntityManager* entityManager, s
 TEST(Models, Terrain)
 {
 	dm::EngineSettings settings;
-	settings.windowSize = dm::Vec2i(1920, 1080);
+	settings.windowSize = dm::Vec2i(720, 640);
 	dm::Engine engine = dm::Engine(settings);
 	engine.Init();
 

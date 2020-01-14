@@ -25,6 +25,7 @@ SOFTWARE.
 #include <component/materials/material_skybox.h>
 #include "component/model.h"
 #include "imgui.h"
+#include "editor/log.h"
 
 namespace dm
 {

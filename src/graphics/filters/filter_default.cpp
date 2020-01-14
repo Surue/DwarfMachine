@@ -23,6 +23,7 @@ SOFTWARE.
 */
 
 #include <graphics/filters/filter_default.h>
+#include "editor/log.h"
 
 namespace dm
 {
@@ -30,6 +31,7 @@ FilterDefault::FilterDefault(const Pipeline::Stage& pipelineStage, const bool& l
 	PostFilter(pipelineStage, {"../Shaders/filter_default.vert", "../Shaders/filter_default.frag"}, {}),
 	m_LastFilter(lastFilter)
 {
+	Debug::Log(m_Pipeline.GetShader()->ToString());
 }
 
 void FilterDefault::Draw(const CommandBuffer& commandBuffer)

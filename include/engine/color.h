@@ -31,11 +31,7 @@ namespace dm
 class Color
 {
 public:
-	explicit Color() :
-		Color(1, 1, 1, 1)
-	{
-		
-	}
+	Color() = default;
 
 	/**
 	 * \brief 
@@ -44,13 +40,12 @@ public:
 	 * \param blue 
 	 * \param alpha 
 	 */
-	explicit Color(const float& red = 1.0f, const float& green = 1.0f, const float& blue = 1.0f,
-	               const float alpha = 1.0f);
+	explicit Color(float red, float green, float blue, float alpha = 1.0f);
 
-	float r;
-	float g;
-	float b;
-	float a;
+	float r = 0.0f;
+	float g = 0.0f;
+	float b = 0.0f;
+	float a = 1.0f;
 
 	bool operator==(const Color &other) const;
 

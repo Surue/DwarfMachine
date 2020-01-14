@@ -29,7 +29,7 @@ namespace dm
 {
 const Color Color::White = Color(1.0f, 1.0f, 1.0f);
 
-Color::Color(const float& red, const float& green, const float& blue, const float alpha):
+Color::Color(const float red, const float green, const float blue, const float alpha):
 	r(red),
 	g(green),
 	b(blue),

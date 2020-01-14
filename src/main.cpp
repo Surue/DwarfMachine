@@ -30,9 +30,11 @@ SOFTWARE.
 #include <graphics/graphic_manager.h>
 //#include <editor/editor_renderer.h>
 #include <engine/engine.h>
+#include "editor/editor_renderer.h"
 
 int main()
 {
+	
 	dm::Engine engine;
 	engine.Init();
 
@@ -49,11 +51,11 @@ int main()
 	//cameraInfo.componentType = ComponentType::CAMERA;
 	//cameraInfo.isMain = true;
 	//cameraInfo.viewMatrix = dm::Matrix4::ViewMatrix(t->position, t->rotation);
-	//cameraInfo.projectionMatrix = dm::Matrix4::PerspectiveMatrix(45.0f  * (3.14f / 180), 800.0f / 600.0f, 0.1f, 100.0f);
+	//cameraInfo.projectionMatrix = glm::PerspectiveMatrix(45.0f * (3.14f / 180), 800.0f / 600.0f, 0.1f, 100.0f);
 
 	//auto camera = entity.AddComponent<dm::Camera>(cameraInfo);
 
-	//engine.GetGraphicManager()->SetManager(new dm::EditorRenderManager());
+	engine.GetGraphicManager()->SetManager(std::make_unique<dm::EditorRenderManager>());
 
 	try
 	{

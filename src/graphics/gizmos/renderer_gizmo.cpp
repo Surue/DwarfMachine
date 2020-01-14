@@ -34,7 +34,7 @@ RendererGizmo::RendererGizmo(const Pipeline::Stage& stage):
 	RenderPipeline(stage),
 	m_Pipeline(stage, {"Shaders/gizmo.vert", "Shaders/gizmo.frag"}, {VertexMesh::GetVertexInput(0), GizmoType::Instance::GetVertexInput(1)}, {}, PipelineGraphics::Mode::POLYGON, PipelineGraphics::Depth::READ_WRITE, VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST, VK_POLYGON_MODE_LINE, VK_CULL_MODE_NONE)
 {
-
+	
 }
 
 void RendererGizmo::Update()

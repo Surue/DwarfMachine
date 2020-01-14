@@ -335,10 +335,9 @@ Window* GraphicManager::GetWindow() const
 	return m_Window.get();
 }
 
-void GraphicManager::SetManager(RenderManager* managerRender)
+void GraphicManager::SetManager(std::unique_ptr<RenderManager> &&renderer)
 {
-	vkDeviceWaitIdle(*m_LogicalDevice);
-	m_RenderManager.reset(managerRender);
+	m_RenderManager = std::move(renderer);
 }
 
 void GraphicManager::SetRenderStages(std::vector<std::unique_ptr<RenderStage>> renderStages)
@@ -390,7 +389,7 @@ void GraphicManager::SetRenderStages(std::vector<std::unique_ptr<RenderStage>> r
 
 const std::shared_ptr<CommandPool> &GraphicManager::GetCommandPool(const std::thread::id &threadId)
 {
-	auto it = m_CommandPools.find(threadId);
+	const auto it = m_CommandPools.find(threadId);
 
 	if (it != m_CommandPools.end())
 	{

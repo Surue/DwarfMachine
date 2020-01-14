@@ -42,6 +42,7 @@ struct Transform final : ComponentBase
 
 	friend std::ostream & operator<<(std::ostream & out, const Transform transform)
 	{
+		
 		out << "(" << transform.position.x << ", " << transform.position.y << ", "<< transform.position.z << ")";
 		return out;
 	}

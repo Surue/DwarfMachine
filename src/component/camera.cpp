@@ -46,7 +46,7 @@ Camera* CameraManager::CreateComponent(const Entity entity)
 {
 	auto c = Camera();
 	c.componentType = ComponentType::CAMERA;
-	c.viewMatrix = glm::lookAt(c.position, c.position + c.front, c.up);
+	c.viewMatrix = glm::lookAt(c.position, c.front, c.up);
 	c.projectionMatrix = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
 	c.isMain = false;
 

@@ -68,7 +68,7 @@ RenderStage::RenderStage(std::vector<Attachment> images, std::vector<SubpassType
 			}
 			break;
 		case Attachment::Type::DEPTH: 
-			clearValue.color = { 1.0f, 0.0f };
+			clearValue.color = { static_cast<uint32_t>(1.0f), static_cast<uint32_t>(0.0f) };
 			m_DepthAttachment = image;
 			break;
 		case Attachment::Type::SWAPCHAIN: 

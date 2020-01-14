@@ -28,6 +28,7 @@ SOFTWARE.
 #include <vulkan/vulkan.h>
 #include <memory>
 #include <optional>
+#include <iostream>
 
 namespace dm
 {
@@ -38,6 +39,12 @@ public:
 		m_Offset(offset),
 		m_Size(offset)
 	{
+		std::cout << offset << ", " << size << "\n";
+
+		if(offset > size)
+		{
+			m_Size = offset;
+		}
 	}
 
 	const uint32_t &GetOffset() const { return m_Offset; }

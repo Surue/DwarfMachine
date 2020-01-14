@@ -40,7 +40,7 @@ namespace dm
 {
 Editor::Editor()
 {
-	GraphicManager::Get()->SetManager(new EditorRenderManager());
+	GraphicManager::Get()->SetManager(std::make_unique<EditorRenderManager>());
 
 	ImGuizmo::SetOrthographic(false);
 

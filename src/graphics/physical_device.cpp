@@ -26,6 +26,7 @@ SOFTWARE.
 #include <graphics/instance.h>
 #include <map>
 #include <algorithm>
+#include <stdexcept>
 
 namespace  dm
 {

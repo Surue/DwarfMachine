@@ -28,13 +28,13 @@ SOFTWARE.
 #include "component/model.h"
 #include <component/materials/material_default.h>
 
-#include <component/mesh_renderer.h>>
+#include <component/mesh_renderer.h>
 
 namespace dm
 {
 RendererMeshes::RendererMeshes(const Pipeline::Stage& pipelineStage) : 
 	RenderPipeline(pipelineStage),
-	m_UniformScene(true)
+	m_UniformScene(false)
 {
 	m_Signature.AddComponent(ComponentType::MESH_RENDERER);
 	m_Signature.AddComponent(ComponentType::MODEL);

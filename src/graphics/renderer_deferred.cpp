@@ -268,7 +268,7 @@ void RendererDeferred::Draw(const CommandBuffer& commandBuffer)
 	}
 
 	m_Pipeline.BindPipeline(commandBuffer);
-
+		
 	m_DescriptorSet.BindDescriptor(commandBuffer, m_Pipeline);
 	vkCmdDraw(commandBuffer, 3, 1, 0, 0);
 }
@@ -278,9 +278,7 @@ std::unique_ptr<Image2d> RendererDeferred::ComputeBRDF(const uint32_t& size)
 	auto brdfImage = std::make_unique<Image2d>(size, size, nullptr, VK_FORMAT_R16G16_SFLOAT, VK_IMAGE_LAYOUT_GENERAL);
 
 	CommandBuffer commandBuffer = CommandBuffer(true, VK_QUEUE_COMPUTE_BIT);
-	PipelineCompute computePipeline = PipelineCompute("Shaders/brdf.comp");
-
-	computePipeline.BindPipeline(commandBuffer);
+	PipelineCompute computePipeline = PipelineCompute("Shaders/brdf.comp");	computePipeline.BindPipeline(commandBuffer);
 
 	DescriptorHandle descriptorSet = DescriptorHandle(computePipeline);
 	descriptorSet.Push("outColor", brdfImage.get());
